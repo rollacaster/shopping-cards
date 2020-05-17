@@ -9,9 +9,6 @@
 (def board-url "https://api.trello.com/1/members/me/boards")
 (def creds-file (read-string (slurp ".creds.edn")))
 
-(def res (:body (client/get (str trello-api "/cards/" "OT6HW1Ik")
-                            {:query-params {:key (:trello-key creds-file) :token (:trello-token creds-file)} :as :json})))
-
 (defn meal-line->clj [meal-line]
   (let [meal (apply str (drop 2 meal-line))]
     meal
@@ -20,12 +17,13 @@
         {:name meal-name :link link})
       {:name meal})))
 
-(def recipes
-  (->> (:desc res)
-       s/split-lines
-       (filter not-empty)
-       (take-while #(not= % "Schnell Gerichte"))
-       (map meal-line->clj)))
+(defn load-trello-recipes []
+  (let [recipes-card-description (:desc (:body (client/get (str trello-api "/cards/" "OT6HW1Ik") {:query-params {:key (:trello-key creds-file) :token (:trello-token creds-file)} :as :json})))]
+    (->> recipes-card-description
+         s/split-lines
+         (filter not-empty)
+         (take-while #(not= % "Schnell Gerichte"))
+         (map meal-line->clj))))
 
 (defn is-link? [node]
   (= (:tag node) :a))
@@ -70,4 +68,21 @@
          (map #(zipmap [:amount-desc :name] %))
          (map #(assoc % :amount (parse-int (:amount-desc %)))))))
 
+(defn add-ingredients [recipes]
+  (->> recipes
+       (map #(if (and (:link %) (s/includes? (:link %) "chefkoch"))
+               (assoc % :ingredients (scrape-chefkoch-ingredients (:link %)))
+               %))))
 
+(defn load-recipes []
+  (read-string (slurp "resources/recipes.edn")))
+
+
+(defn write-recipes [recipes]
+  (spit "resources/recipes.edn" (prn-str (vec recipes))))
+
+(comment
+  (->> (load-trello-recipes)
+       add-ingredients
+       write-recipes)
+  (load-recipes))
