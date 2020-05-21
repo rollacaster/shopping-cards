@@ -3,7 +3,8 @@
             [clojure.string :as s]
             [clojure.walk :as w]
             [hickory.core :as html]
-            [hickory.select :as select]))
+            [hickory.select :as select]
+            [tech.thomas-sojka.ingredients.auth :refer [access-token]]))
 
 (def trello-api "https://api.trello.com/1")
 (def board-url "https://api.trello.com/1/members/me/boards")
@@ -25,11 +26,9 @@
          (take-while #(not= % "Schnell Gerichte"))
          (map meal-line->clj))))
 
-(defn is-link? [node]
-  (= (:tag node) :a))
+(defn is-link? [node] (= (:tag node) :a))
 
-(defn transform-link [node]
-  (first (:content node)))
+(defn transform-link [node] (first (:content node)))
 
 (defn walk [node]
   (cond
@@ -77,12 +76,33 @@
 (defn load-recipes []
   (read-string (slurp "resources/recipes.edn")))
 
+(defn write-edn [path data]
+  (spit path (prn-str data)))
 
 (defn write-recipes [recipes]
-  (spit "resources/recipes.edn" (prn-str (vec recipes))))
+  (write-edn "resources/recipes.edn" (vec recipes)))
 
 (comment
   (->> (load-trello-recipes)
        add-ingredients
        write-recipes)
   (load-recipes))
+
+
+
+(def drive-api-url "https://www.googleapis.com/drive/v3")
+
+(defn load-drive-files []
+  (:body (client/get (str drive-api-url "/files")
+                     {:oauth-token (access-token {:client-id (:drive-client-id creds-file)
+                                                  :client-secret (:drive-client-secret creds-file)
+                                                  :redirect-uri "http://localhost:8080"
+                                                  :scope ["https://www.googleapis.com/auth/drive"
+                                                          "https://www.googleapis.com/auth/drive.file"]})
+                      :as :json
+                      :throw-entire-message? true})))
+
+
+
+
+
