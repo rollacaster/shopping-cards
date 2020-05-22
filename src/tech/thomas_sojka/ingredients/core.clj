@@ -19,7 +19,10 @@
       {:name meal})))
 
 (defn load-trello-recipes []
-  (let [recipes-card-description (:desc (:body (client/get (str trello-api "/cards/" "OT6HW1Ik") {:query-params {:key (:trello-key creds-file) :token (:trello-token creds-file)} :as :json})))]
+  (let [recipes-card-description (:desc (:body (client/get (str trello-api "/cards/" "OT6HW1Ik")
+                                                           {:query-params {:key (:trello-key creds-file)
+                                                                           :token (:trello-token creds-file)}
+                                                            :as :json})))]
     (->> recipes-card-description
          s/split-lines
          (filter not-empty)
@@ -67,11 +70,33 @@
          (map #(zipmap [:amount-desc :name] %))
          (map #(assoc % :amount (parse-int (:amount-desc %)))))))
 
+(def drive-api-url "https://www.googleapis.com/drive/v3")
+
+(defn oauth-token []
+  (access-token {:client-id (:drive-client-id creds-file)
+                 :client-secret (:drive-client-secret creds-file)
+                 :redirect-uri "http://localhost:8080"
+                 :scope ["https://www.googleapis.com/auth/drive"
+                         "https://www.googleapis.com/auth/drive.file"]}))
+
+(defn scrape-gdrive-ingredient [ingredient-line]
+  (let [ingredient (s/split (apply str (drop 2 ingredient-line)) #" ")]
+    (if (and (> (count ingredient) 1) (parse-int (first ingredient)))
+      {:amount-desc (first ingredient) :name (last ingredient) :amount (parse-int (first ingredient))}
+      {:amount-desc nil :name (s/join " "ingredient) :amount nil})))
+
+(defn scrape-gdrive-ingredients [link]
+  (let [recipe-id ((s/split link #"/") 5)
+        recipe-text (:body (client/get (str drive-api-url "/files/" recipe-id "/export")
+                                       {:oauth-token (oauth-token) :query-params {:mimeType "text/plain"}}))]
+    (map scrape-gdrive-ingredient (take-while #(not= "" %) (drop 1 (s/split-lines recipe-text))))))
+
+
 (defn add-ingredients [recipes]
   (->> recipes
-       (map #(if (and (:link %) (s/includes? (:link %) "chefkoch"))
-               (assoc % :ingredients (scrape-chefkoch-ingredients (:link %)))
-               %))))
+       (map #(cond (and (:link %) (s/includes? (:link %) "chefkoch")) (assoc % :ingredients (scrape-chefkoch-ingredients (:link %)))
+                   (and (:link %) (s/includes? (:link %) "docs.google")) (assoc % :ingredients (scrape-gdrive-ingredients (:link %)))
+                   :else %))))
 
 (defn load-recipes []
   (read-string (slurp "resources/recipes.edn")))
@@ -87,22 +112,5 @@
        add-ingredients
        write-recipes)
   (load-recipes))
-
-
-
-(def drive-api-url "https://www.googleapis.com/drive/v3")
-
-(defn load-drive-files []
-  (:body (client/get (str drive-api-url "/files")
-                     {:oauth-token (access-token {:client-id (:drive-client-id creds-file)
-                                                  :client-secret (:drive-client-secret creds-file)
-                                                  :redirect-uri "http://localhost:8080"
-                                                  :scope ["https://www.googleapis.com/auth/drive"
-                                                          "https://www.googleapis.com/auth/drive.file"]})
-                      :as :json
-                      :throw-entire-message? true})))
-
-
-
 
 
