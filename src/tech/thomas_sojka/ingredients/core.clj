@@ -91,12 +91,43 @@
                                        {:oauth-token (oauth-token) :query-params {:mimeType "text/plain"}}))]
     (map scrape-gdrive-ingredient (take-while #(s/starts-with? % "*") (drop 1 (s/split-lines recipe-text))))))
 
+(defn scrape-eat-this-span [class spans]
+  (first (:content (some #(when (= (get-in % [:attrs :class]) class) %) spans))))
+
+(defn scrape-eath-this-ingredient [ingredient-li]
+  (let [spans
+        (->> ingredient-li
+             :content
+             (filter #(not= % " ")))
+        amount (parse-int (scrape-eat-this-span "wprm-recipe-ingredient-amount" spans))
+        unit (scrape-eat-this-span "wprm-recipe-ingredient-unit" spans)]
+    {:amount amount
+     :amount-desc (str (or (and amount unit (str amount " " unit))
+                        amount
+                        unit
+                        nil))
+     :name (scrape-eat-this-span "wprm-recipe-ingredient-name" spans)
+     :unit unit}))
+
+(defn scrape-eat-this-ingredients [link]
+  (let [recipe-html (:body (client/get link))]
+    (->> recipe-html
+         html/parse
+         html/as-hickory
+         (select/select
+          (select/child
+           (select/class "wprm-recipe-ingredient")))
+         (w/postwalk walk)
+         (map scrape-eath-this-ingredient))))
+
 (defn add-ingredients [recipes]
   (->> recipes
        (map #(cond (and (:link %) (s/includes? (:link %) "chefkoch") (not (:ingredients %)))
                    (assoc % :ingredients (scrape-chefkoch-ingredients (:link %)))
                    (and (:link %) (s/includes? (:link %) "docs.google") (not (:ingredients %)))
                    (assoc % :ingredients (scrape-gdrive-ingredients (:link %)))
+                   (and (:link %) (s/includes? (:link %) "eat-this") (not (:ingredients %)))
+                   (assoc % :ingredients (scrape-eat-this-ingredients (:link %)))
                    :else %))))
 
 (defn load-recipes []
