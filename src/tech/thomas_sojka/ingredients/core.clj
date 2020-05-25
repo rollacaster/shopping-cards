@@ -89,13 +89,14 @@
   (let [recipe-id ((s/split link #"/") 5)
         recipe-text (:body (client/get (str drive-api-url "/files/" recipe-id "/export")
                                        {:oauth-token (oauth-token) :query-params {:mimeType "text/plain"}}))]
-    (map scrape-gdrive-ingredient (take-while #(not= "" %) (drop 1 (s/split-lines recipe-text))))))
-
+    (map scrape-gdrive-ingredient (take-while #(s/starts-with? % "*") (drop 1 (s/split-lines recipe-text))))))
 
 (defn add-ingredients [recipes]
   (->> recipes
-       (map #(cond (and (:link %) (s/includes? (:link %) "chefkoch")) (assoc % :ingredients (scrape-chefkoch-ingredients (:link %)))
-                   (and (:link %) (s/includes? (:link %) "docs.google")) (assoc % :ingredients (scrape-gdrive-ingredients (:link %)))
+       (map #(cond (and (:link %) (s/includes? (:link %) "chefkoch") (not (:ingredients %)))
+                   (assoc % :ingredients (scrape-chefkoch-ingredients (:link %)))
+                   (and (:link %) (s/includes? (:link %) "docs.google") (not (:ingredients %)))
+                   (assoc % :ingredients (scrape-gdrive-ingredients (:link %)))
                    :else %))))
 
 (defn load-recipes []
