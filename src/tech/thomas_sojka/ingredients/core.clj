@@ -165,6 +165,7 @@
 (comment
   (->> (merge-recipe-lists (load-trello-recipes) (load-recipes))
        add-ingredients
+       (map #(assoc % :image (find-recipe-image (:name %))))
        write-recipes)
   (load-recipes))
 
