@@ -9,6 +9,7 @@
 (def trello-api "https://api.trello.com/1")
 (def board-url "https://api.trello.com/1/members/me/boards")
 (def creds-file (read-string (slurp ".creds.edn")))
+(def search-engine-cx "005510767845232759155:zdkkvfzersx")
 
 (defn meal-line->clj [meal-line]
   (let [meal (apply str (drop 2 meal-line))]
@@ -129,6 +130,22 @@
                    (and (:link %) (s/includes? (:link %) "eat-this") (not (:ingredients %)))
                    (assoc % :ingredients (scrape-eat-this-ingredients (:link %)))
                    :else %))))
+
+(defn find-recipe-image [recipe-name]
+  (-> "https://customsearch.googleapis.com/customsearch/v1"
+      (client/get
+       {:query-params {:q (s/replace recipe-name " " "+")
+                       :num 1
+                       :start 1
+                       :imgSize "medium"
+                       :searchType "image"
+                       :cx search-engine-cx
+                       :key (:google-key creds-file)}
+        :as :json :throw-entire-message? true})
+      :body
+      :items
+      first
+      :link))
 
 (defn load-recipes []
   (read-string (slurp "resources/recipes.edn")))
