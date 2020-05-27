@@ -147,6 +147,12 @@
       first
       :link))
 
+(defn vec->map [key-name vec]
+  (zipmap (map key-name vec) vec))
+
+(defn merge-recipe-lists [a b]
+  (map (fn [[_ val]] val) (merge-with merge (vec->map :name a) (vec->map :name b))))
+
 (defn load-recipes []
   (read-string (slurp "resources/recipes.edn")))
 
@@ -157,7 +163,7 @@
   (write-edn "resources/recipes.edn" (vec recipes)))
 
 (comment
-  (->> (load-trello-recipes)
+  (->> (merge-recipe-lists (load-trello-recipes) (load-recipes))
        add-ingredients
        write-recipes)
   (load-recipes))
