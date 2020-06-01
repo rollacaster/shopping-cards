@@ -5,5 +5,8 @@
         ring/ring-core {:mvn/version "1.8.0"}
         ring/ring-jetty-adapter {:mvn/version "1.8.0"}
         org.clojure/core.async {:mvn/version "1.2.603"}
-        tick {:mvn/version "0.4.23-alpha"}}
+        tick {:mvn/version "0.4.23-alpha"}
+        clj-fuzzy {:mvn/version "0.4.1"}
+        org.clojure/math.combinatorics {:mvn/version "0.1.6"}
+        hashp {:mvn/version "0.1.1"}}
  :paths ["src" "target" "resources"]}

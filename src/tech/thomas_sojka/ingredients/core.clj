@@ -1,10 +1,13 @@
 (ns tech.thomas-sojka.ingredients.core
   (:require [clj-http.client :as client]
+            clojure.java.io
+            clojure.pprint
             [clojure.string :as s]
             [clojure.walk :as w]
             [hickory.core :as html]
             [hickory.select :as select]
-            [tech.thomas-sojka.ingredients.auth :refer [access-token]]))
+            [tech.thomas-sojka.ingredients.auth :refer [access-token]]
+            hashp.core))
 
 (def trello-api "https://api.trello.com/1")
 (def board-url "https://api.trello.com/1/members/me/boards")
@@ -104,9 +107,9 @@
         unit (scrape-eat-this-span "wprm-recipe-ingredient-unit" spans)]
     {:amount amount
      :amount-desc (str (or (and amount unit (str amount " " unit))
-                        amount
-                        unit
-                        nil))
+                           amount
+                           unit
+                           nil))
      :name (scrape-eat-this-span "wprm-recipe-ingredient-name" spans)
      :unit unit}))
 
@@ -157,7 +160,7 @@
   (read-string (slurp "resources/recipes.edn")))
 
 (defn write-edn [path data]
-  (spit path (prn-str data)))
+  (clojure.pprint/pprint data (clojure.java.io/writer path)))
 
 (defn write-recipes [recipes]
   (write-edn "resources/recipes.edn" (vec recipes)))
@@ -169,4 +172,28 @@
        write-recipes)
   (load-recipes))
 
+(def categories ["Obst"
+                 "Gemüse"
+                 "Gewürze"
+                 "Tiefkühl"
+                 "Brot & Co"
+                 "Müsli"
+                 "Konserven"
+                 "Beilage"
+                 "Backen"
+                 "Fleisch"
+                 "Wursttheke"
+                 "Milch & Co"
+                 "Getränke"
+                 "Käse & Co"
+                 "Bad"
+                 "Süßigkeiten"
+                 "Eier"])
 
+(defn all-ingredients [recipes]
+  (->> recipes
+       (map :ingredients)
+       flatten
+       (filter some?)
+       (map :name)
+       distinct))

@@ -1,0 +1,68 @@
+[{:category "Backen", :name "Zucker"}
+ {:category "Backen", :name "Mehl"}
+ {:category "Backen", :name "Semmelbrösel"}
+ {:category "Backen", :name "Paniermehl"}
+ {:category "Beilage", :name "Lasagneplatten"}
+ {:category "Beilage", :name "Reis"}
+ {:category "Beilage", :name "Nudeln"}
+ {:category "Brot & Co", :name "Weißbrot"}
+ {:category "Eier", :name "Eier"}
+ {:category "Fleisch", :name "Hackfleisch"}
+ {:category "Gemüse", :name "Zwiebel"}
+ {:category "Gemüse", :name "Knoblauch"}
+ {:category "Gemüse", :name "Zucchini"}
+ {:category "Gemüse", :name "Tomate"}
+ {:category "Gemüse", :name "Paprika"}
+ {:category "Gemüse", :name "Ingwer"}
+ {:category "Gemüse", :name "Limettensaft"}
+ {:category "Gemüse", :name "Karotte"}
+ {:category "Gemüse", :name "Sellerie"}
+ {:category "Gemüse", :name "Aubergine"}
+ {:category "Gemüse", :name "Grünkohl"}
+ {:category "Gemüse", :name "Avocado"}
+ {:category "Gemüse", :name "Zitrone"}
+ {:category "Gemüse", :name "Kartoffeln"}
+ {:category "Gemüse", :name "Brokkoli"}
+ {:category "Gemüse", :name "Chinakohl"}
+ {:category "Gemüse", :name "Champignons"}
+ {:category "Getränke", :name "Wasser"}
+ {:category "Gewürze", :name "Tomatenmark"}
+ {:category "Gewürze", :name "Kräuter"}
+ {:category "Gewürze", :name "Pfeffer"}
+ {:category "Gewürze", :name "Muskat"}
+ {:category "Gewürze", :name "Paprikapulver"}
+ {:category "Gewürze", :name "Salz"}
+ {:category "Gewürze", :name "Thymian"}
+ {:category "Gewürze", :name "Basilikum"}
+ {:category "Gewürze", :name "Petersilie"}
+ {:category "Gewürze", :name "Gemüsebrühe"}
+ {:category "Gewürze", :name "Sojasoße"}
+ {:category "Gewürze", :name "Oregano"}
+ {:category "Gewürze", :name "Rosmarin"}
+ {:category "Gewürze", :name "Chilli"}
+ {:category "Gewürze", :name "Currypaste"}
+ {:category "Gewürze", :name "Kokosmilch"}
+ {:category "Gewürze", :name "Pizzagewürz"}
+ {:category "Gewürze", :name "Peperoni"}
+ {:category "Konserven", :name "Passierte Tomaten"}
+ {:category "Konserven", :name "Öl"}
+ {:category "Konserven", :name "Mais"}
+ {:category "Käse & Co", :name "Hefe"}
+ {:category "Käse & Co", :name "Frischkäse"}
+ {:category "Käse & Co", :name "Parmesan"}
+ {:category "Käse & Co", :name "Joghurt"}
+ {:category "Käse & Co", :name "Geriebener Käse"}
+ {:category "Käse & Co", :name "Milch"}
+ {:category "Käse & Co", :name "Butter"}
+ {:category "Käse & Co", :name "Crème fraîche"}
+ {:category "Käse & Co", :name "Sahne"}
+ {:category "Käse & Co", :name "Schmand"}
+ {:category "Käse & Co", :name "Feta"}
+ {:category "Käse & Co", :name "Mozzarella"}
+ {:category "Käse & Co", :name "Schmelzkäse"}
+ {:category "Milch & Co", :name "Spätzle"}
+ {:category "Milch & Co", :name "Gnocchi"}
+ {:category "Müsli & Co", :name "Erdnussbutter"}
+ {:category "Tiefkühl", :name "Spinat"}
+ {:category "Wursttheke", :name "Salami"}
+ {:category "Wursttheke", :name "Schinken"}]
