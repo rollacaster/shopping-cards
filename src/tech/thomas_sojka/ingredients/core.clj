@@ -156,39 +156,39 @@
 (defn merge-recipe-lists [a b]
   (map (fn [[_ val]] val) (merge-with merge (vec->map :name a) (vec->map :name b))))
 
-(defn load-recipes []
-  (read-string (slurp "resources/recipes.edn")))
+(defn load-edn-file [path] (read-string (slurp path)))
+
+(defn load-recipes [] (load-edn-file "resources/recipes.edn"))
 
 (defn write-edn [path data]
   (clojure.pprint/pprint data (clojure.java.io/writer path)))
 
-(defn write-recipes [recipes]
-  (write-edn "resources/recipes.edn" (vec recipes)))
-
-(comment
+(defn write-recipes []
   (->> (merge-recipe-lists (load-trello-recipes) (load-recipes))
        add-ingredients
        (map #(assoc % :image (find-recipe-image (:name %))))
-       write-recipes)
-  (load-recipes))
+       vec
+       (write-edn "resources/recipes.edn")))
 
-(def categories ["Obst"
-                 "Gemüse"
-                 "Gewürze"
-                 "Tiefkühl"
-                 "Brot & Co"
-                 "Müsli"
-                 "Konserven"
-                 "Beilage"
-                 "Backen"
-                 "Fleisch"
-                 "Wursttheke"
-                 "Milch & Co"
-                 "Getränke"
-                 "Käse & Co"
-                 "Bad"
-                 "Süßigkeiten"
-                 "Eier"])
+(defn normalize-ingredients [duplicated-ingredients ingredients]
+  (map (fn [{:keys [name] :as ingredient}]
+                (assoc ingredient :name
+                       (or
+                        (some (fn [[ingredient-group-name duplicated-name]]
+                                (when (or (= name ingredient-group-name)
+                                          (contains? duplicated-name name))
+                                  ingredient-group-name))
+                              duplicated-ingredients)
+                        name)))
+       ingredients))
+
+(defn ingredient-list [recipes]
+  (let [duplicated-ingredients (load-edn-file "resources/duplicated-ingredients.edn")]
+    (->> recipes
+         (map :ingredients)
+         flatten
+         (normalize-ingredients duplicated-ingredients)
+         (group-by :name))))
 
 (defn all-ingredients [recipes]
   (->> recipes

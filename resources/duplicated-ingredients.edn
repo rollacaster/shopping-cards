@@ -10,6 +10,7 @@
  "Butter" #{"Butter zum Fetten der Form"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne"}
  "Tomate" #{"Tomate(n), getrocknete" "getrocknete Tomaten" "Pizzatomaten" "Cherrytomate(n)"}
+ "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
  "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"}
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener"
@@ -41,11 +42,14 @@
  "Tomaten" #{"Tomate(n), getrocknete"}
  "Chilli" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch"}
  "Brokkoli" #{"Brokkoli, ca. 350 g"}
- "Zitrone"#{"Saft von 1 Zitrone"}
+ "Zitrone"#{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon"}
  "Feta" #{"Schafskäse"}
- "Weißbrot" #{"Brötchen" "Weißbrot, altbackenes"}
+ "Weißbrot" #{"Brötchen" "Weißbrot, altbackenes" "als Beilage Semmeln oder Brot"}
  "Salami" #{"Sucuk"}
  "Karotte" #{"Möhre(n)"}
  "Sellerie" #{"Staudensellerie, mit Blättern"}
  "Aubergine" #{"Aubergine(n)"}
- "Currypaste" #{"Thai-Currypaste, grün"}}
+ "Currypaste" #{"Thai-Currypaste, grün"}
+ "Milch" #{"etwas Milch zum verdünnen von Schmand"}
+ "Zucker"#{"evtl. Zucker"}
+ "Zucchini" #{" Zucchini"}}
