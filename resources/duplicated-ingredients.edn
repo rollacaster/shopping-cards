@@ -30,6 +30,7 @@
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche"}
+ "Crème fraîche" #{"Creme fraiche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
  "Champignons" #{"Champignons, frisch, nicht zu groß"}
@@ -52,4 +53,5 @@
  "Currypaste" #{"Thai-Currypaste, grün"}
  "Milch" #{"etwas Milch zum verdünnen von Schmand"}
  "Zucker"#{"evtl. Zucker"}
- "Zucchini" #{" Zucchini"}}
+ "Zucchini" #{" Zucchini"}
+ "Cabanossi" #{"Cabanossi)"}}
