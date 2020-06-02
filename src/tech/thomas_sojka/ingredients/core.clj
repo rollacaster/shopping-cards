@@ -190,6 +190,13 @@
          (normalize-ingredients duplicated-ingredients)
          (group-by :name))))
 
+(defn shopping-list [recipe-ingredients]
+  (let [ingredients (load-edn-file "resources/ingredients.edn")]
+    (->> recipe-ingredients
+         (map (fn [[name shopping]] (merge {:shopping shopping} (first ((group-by :name ingredients) name)))))
+         (remove #(= (:category %) "Gewürze"))
+         (remove #(= (:category %) "Backen")))))
+
 (defn all-ingredients [recipes]
   (->> recipes
        (map :ingredients)
