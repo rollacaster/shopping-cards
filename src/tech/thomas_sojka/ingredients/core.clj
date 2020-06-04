@@ -158,7 +158,7 @@
 
 (defn load-edn-file [path] (read-string (slurp path)))
 
-(defn load-recipes [] (load-edn-file "resources/recipes.edn"))
+(defn load-recipes [] (load-edn-file "resources/public/recipes.edn"))
 
 (defn write-edn [path data]
   (clojure.pprint/pprint data (clojure.java.io/writer path)))
@@ -168,7 +168,7 @@
        add-ingredients
        (map #(assoc % :image (find-recipe-image (:name %))))
        vec
-       (write-edn "resources/recipes.edn")))
+       (write-edn "resources/public/recipes.edn")))
 
 (defn normalize-ingredients [duplicated-ingredients ingredients]
   (map (fn [{:keys [name] :as ingredient}]
@@ -191,7 +191,7 @@
          (group-by :name))))
 
 (defn shopping-list [recipe-ingredients]
-  (let [ingredients (load-edn-file "resources/ingredients.edn")]
+  (let [ingredients (load-edn-file "resources/public/ingredients.edn")]
     (->> recipe-ingredients
          (map (fn [[name shopping]] (merge {:shopping shopping} (first ((group-by :name ingredients) name)))))
          (remove #(= (:category %) "Gewürze"))
