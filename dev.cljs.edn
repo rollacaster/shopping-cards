@@ -1,0 +1,4 @@
+^{:ring-server-options {:port 9504}}
+{:main tech.thomas-sojka.ingredients.core
+ :target :bundle
+ :bundle-cmd {:none ["npx" "webpack" "--mode=development" :output-to "-o" :final-output-to]}}

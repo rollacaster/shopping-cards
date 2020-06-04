@@ -1,3 +1,5 @@
 /.cpcache/
 /.nrepl-port
 /.creds.edn
+/target/
+/node_modules/
