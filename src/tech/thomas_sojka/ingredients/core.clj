@@ -23,10 +23,12 @@
       {:name meal})))
 
 (defn load-trello-recipes []
-  (let [recipes-card-description (:desc (:body (client/get (str trello-api "/cards/" "OT6HW1Ik")
-                                                           {:query-params {:key (:trello-key creds-file)
-                                                                           :token (:trello-token creds-file)}
-                                                            :as :json})))]
+  (let [recipes-card-description
+        (:desc (:body (client/get (str trello-api "/cards/" "OT6HW1Ik")
+                                  {:query-params
+                                   {:key (:trello-key creds-file)
+                                    :token (:trello-token creds-file)}
+                                   :as :json})))]
     (->> recipes-card-description
          s/split-lines
          (filter not-empty)
@@ -86,24 +88,35 @@
 (defn scrape-gdrive-ingredient [ingredient-line]
   (let [ingredient (s/split (apply str (drop 2 ingredient-line)) #" ")]
     (if (and (> (count ingredient) 1) (parse-int (first ingredient)))
-      {:amount-desc (first ingredient) :name (last ingredient) :amount (parse-int (first ingredient))}
+      {:amount-desc (first ingredient)
+       :name (last ingredient)
+       :amount (parse-int (first ingredient))}
       {:amount-desc nil :name (s/join " "ingredient) :amount nil})))
 
 (defn scrape-gdrive-ingredients [link]
   (let [recipe-id ((s/split link #"/") 5)
-        recipe-text (:body (client/get (str drive-api-url "/files/" recipe-id "/export")
-                                       {:oauth-token (oauth-token) :query-params {:mimeType "text/plain"}}))]
-    (map scrape-gdrive-ingredient (take-while #(s/starts-with? % "*") (drop 1 (s/split-lines recipe-text))))))
+        recipe-text
+        (:body (client/get (str drive-api-url "/files/" recipe-id "/export")
+                           {:oauth-token (oauth-token)
+                            :query-params {:mimeType "text/plain"}}))]
+    (map scrape-gdrive-ingredient
+         (->> recipe-text
+              s/split-lines
+              (drop 1)
+              (take-while #(s/starts-with? % "*"))))))
 
 (defn scrape-eat-this-span [class spans]
-  (first (:content (some #(when (= (get-in % [:attrs :class]) class) %) spans))))
+  (first (:content (some
+                    #(when (= (get-in % [:attrs :class]) class) %)
+                    spans))))
 
 (defn scrape-eath-this-ingredient [ingredient-li]
   (let [spans
         (->> ingredient-li
              :content
              (filter #(not= % " ")))
-        amount (parse-int (scrape-eat-this-span "wprm-recipe-ingredient-amount" spans))
+        amount (parse-int (scrape-eat-this-span
+                           "wprm-recipe-ingredient-amount" spans))
         unit (scrape-eat-this-span "wprm-recipe-ingredient-unit" spans)]
     {:amount amount
      :amount-desc (str (or (and amount unit (str amount " " unit))
@@ -126,12 +139,21 @@
 
 (defn add-ingredients [recipes]
   (->> recipes
-       (map #(cond (and (:link %) (s/includes? (:link %) "chefkoch") (not (:ingredients %)))
-                   (assoc % :ingredients (scrape-chefkoch-ingredients (:link %)))
-                   (and (:link %) (s/includes? (:link %) "docs.google") (not (:ingredients %)))
-                   (assoc % :ingredients (scrape-gdrive-ingredients (:link %)))
-                   (and (:link %) (s/includes? (:link %) "eat-this") (not (:ingredients %)))
-                   (assoc % :ingredients (scrape-eat-this-ingredients (:link %)))
+       (map #(cond (and (:link %)
+                        (s/includes? (:link %) "chefkoch")
+                        (not (:ingredients %)))
+                   (assoc %
+                          :ingredients (scrape-chefkoch-ingredients (:link %)))
+                   (and (:link %)
+                        (s/includes? (:link %) "docs.google")
+                        (not (:ingredients %)))
+                   (assoc %
+                          :ingredients (scrape-gdrive-ingredients (:link %)))
+                   (and (:link %)
+                        (s/includes? (:link %) "eat-this")
+                        (not (:ingredients %)))
+                   (assoc %
+                          :ingredients (scrape-eat-this-ingredients (:link %)))
                    :else %))))
 
 (defn find-recipe-image [recipe-name]
@@ -145,16 +167,15 @@
                        :cx search-engine-cx
                        :key (:google-key creds-file)}
         :as :json :throw-entire-message? true})
-      :body
-      :items
-      first
-      :link))
+      :body :items first :link))
 
 (defn vec->map [key-name vec]
   (zipmap (map key-name vec) vec))
 
 (defn merge-recipe-lists [a b]
-  (map (fn [[_ val]] val) (merge-with merge (vec->map :name a) (vec->map :name b))))
+  (map (fn [[_ val]] val) (merge-with merge
+                                     (vec->map :name a)
+                                     (vec->map :name b))))
 
 (defn load-edn-file [path] (read-string (slurp path)))
 
@@ -183,7 +204,8 @@
        ingredients))
 
 (defn ingredient-list [recipes]
-  (let [duplicated-ingredients (load-edn-file "resources/duplicated-ingredients.edn")]
+  (let [duplicated-ingredients
+        (load-edn-file "resources/duplicated-ingredients.edn")]
     (->> recipes
          (map :ingredients)
          flatten
@@ -193,7 +215,9 @@
 (defn shopping-list [recipe-ingredients]
   (let [ingredients (load-edn-file "resources/public/ingredients.edn")]
     (->> recipe-ingredients
-         (map (fn [[name shopping]] (merge {:shopping shopping} (first ((group-by :name ingredients) name)))))
+         (map (fn [[name shopping]]
+                (merge {:shopping shopping}
+                       (first ((group-by :name ingredients) name)))))
          (remove #(= (:category %) "Gewürze"))
          (remove #(= (:category %) "Backen")))))
 
