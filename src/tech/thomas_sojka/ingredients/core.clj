@@ -169,62 +169,89 @@
         :as :json :throw-entire-message? true})
       :body :items first :link))
 
-(defn vec->map [key-name vec]
-  (zipmap (map key-name vec) vec))
-
-(defn merge-recipe-lists [a b]
-  (map (fn [[_ val]] val) (merge-with merge
-                                     (vec->map :name a)
-                                     (vec->map :name b))))
-
-(defn load-edn-file [path] (read-string (slurp path)))
-
-(defn load-recipes [] (load-edn-file "resources/public/recipes.edn"))
+(defn load-edn [path] (read-string (slurp (str "resources/" path))))
+(defn load-recipes [] (load-edn "recipes.edn"))
+(defn load-ingredients [] (load-edn "ingredients.edn"))
+(defn load-cooked-with [] (load-edn "cooked-with.edn"))
 
 (defn write-edn [path data]
-  (clojure.pprint/pprint data (clojure.java.io/writer path)))
+  (clojure.pprint/pprint data (clojure.java.io/writer (str "resources/" path))))
 
-(defn write-recipes []
-  (->> (merge-recipe-lists (load-trello-recipes) (load-recipes))
-       add-ingredients
-       (map #(assoc % :image (find-recipe-image (:name %))))
-       vec
-       (write-edn "resources/public/recipes.edn")))
+(comment
+  (defn uuid [] (str (java.util.UUID/randomUUID)))
 
-(defn normalize-ingredients [duplicated-ingredients ingredients]
-  (map (fn [{:keys [name] :as ingredient}]
-                (assoc ingredient :name
-                       (or
-                        (some (fn [[ingredient-group-name duplicated-name]]
-                                (when (or (= name ingredient-group-name)
-                                          (contains? duplicated-name name))
-                                  ingredient-group-name))
-                              duplicated-ingredients)
-                        name)))
-       ingredients))
+  (defn vec->map [key-name vec]
+    (zipmap (map key-name vec) vec))
 
-(defn ingredient-list [recipes]
-  (let [duplicated-ingredients
-        (load-edn-file "resources/duplicated-ingredients.edn")]
-    (->> recipes
-         (map :ingredients)
-         flatten
-         (normalize-ingredients duplicated-ingredients)
-         (group-by :name))))
+  (defn merge-recipe-lists [a b]
+    (map (fn [[_ val]] val) (merge-with merge
+                                       (vec->map :name a)
+                                       (vec->map :name b))))
 
-(defn shopping-list [recipe-ingredients]
-  (let [ingredients (load-edn-file "resources/public/ingredients.edn")]
-    (->> recipe-ingredients
-         (map (fn [[name shopping]]
-                (merge {:shopping shopping}
-                       (first ((group-by :name ingredients) name)))))
-         (remove #(= (:category %) "Gewürze"))
-         (remove #(= (:category %) "Backen")))))
+  (defn write-recipes []
+    (->> (merge-recipe-lists (load-trello-recipes) (vals (load-recipes)))
+         add-ingredients
+         (map #(if (:image %)
+                 %
+                 (assoc % :image (find-recipe-image (:name %)))))
+         vec))
 
-(defn all-ingredients [recipes]
-  (->> recipes
-       (map :ingredients)
-       flatten
-       (filter some?)
-       (map :name)
-       distinct))
+  (defn normalize-ingredients [duplicated-ingredients ingredients]
+    (map (fn [{:keys [name] :as ingredient}]
+           (assoc ingredient :name
+                  (or
+                   (some (fn [[ingredient-group-name duplicated-name]]
+                           (when (or (= name ingredient-group-name)
+                                     (contains? duplicated-name name))
+                             ingredient-group-name))
+                         duplicated-ingredients)
+                   name)))
+         ingredients))
+
+  (defn ingredient-list [recipes]
+    (let [duplicated-ingredients
+          (load-edn "duplicated-ingredients.edn")]
+      (->> recipes
+           (map :ingredients)
+           flatten
+           (normalize-ingredients duplicated-ingredients)
+           (group-by :name)))))
+
+(defn ingredient-text [[ingredient-name ingredients]]
+  (str (count ingredients)
+       " " ingredient-name
+       " (" (s/join ", " (map :amount-desc ingredients)) ")"))
+
+(def penny-order
+  ["Gemüse"
+   "Gewürze"
+   "Tiefkühl"
+   "Brot & Co"
+   "Müsli & Co"
+   "Konserven"
+   "Beilage"
+   "Backen"
+   "Fleisch"
+   "Wursttheke"
+   "Milch & Co"
+   "Käse & Co"
+   "Eier"
+   "Getränke"])
+
+(defn ingredients-for-recipes [selected-recipe-ids]
+  (->> (load-cooked-with)
+       (filter #(contains? selected-recipe-ids (:recipe-id %)))
+       (map (fn [{:keys [ingredient-id amount-desc amount]}]
+              (merge {:amount-desc amount-desc
+                      :amount amount}
+                     (some #(when (= (:id %) ingredient-id) %) (load-ingredients)))))
+       (remove #(= (:category %) "Gewürze"))
+       (remove #(= (:category %) "Backen"))
+       (group-by :category)
+       (map (fn [[category ingredients]] {:category category
+                                         :ingredients (->> ingredients
+                                                           (group-by :name)
+                                                           (map ingredient-text))}))
+       (sort-by :category (fn [a b] (< (.indexOf penny-order a) (.indexOf penny-order b))))))
+
+
