@@ -7,7 +7,7 @@
             [hickory.core :as html]
             [hickory.select :as select]
             [tech.thomas-sojka.ingredients.auth :refer [access-token]]
-            hashp.core))
+            [tick.core :refer [now]]))
 
 (def trello-api "https://api.trello.com/1")
 (def board-url "https://api.trello.com/1/members/me/boards")
@@ -217,9 +217,9 @@
            (normalize-ingredients duplicated-ingredients)
            (group-by :name)))))
 
-(defn ingredient-text [[ingredient-name ingredients]]
+(defn ingredient-text [ingredients]
   (str (count ingredients)
-       " " ingredient-name
+       " " (:name (first ingredients))
        " (" (s/join ", " (map :amount-desc ingredients)) ")"))
 
 (def penny-order
@@ -248,11 +248,11 @@
        (remove #(= (:category %) "Gewürze"))
        (remove #(= (:category %) "Backen"))
        (group-by :category)
-       (map (fn [[category ingredients]] {:category category
-                                         :ingredients (->> ingredients
-                                                           (group-by :name)
-                                                           (map ingredient-text))}))
-       (sort-by :category (fn [a b] (< (.indexOf penny-order a) (.indexOf penny-order b))))))
+       (sort-by :category (fn [a b] (< (.indexOf penny-order a) (.indexOf penny-order b))))
+       (map second)
+       flatten
+       (group-by :id)
+       (map (fn [[id ingredients]] (vector id (ingredient-text ingredients))))))
 
 (defn category-ingredients->str [{:keys [ingredients]}]
   (->> ingredients
