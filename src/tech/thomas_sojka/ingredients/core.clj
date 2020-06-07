@@ -254,4 +254,57 @@
                                                            (map ingredient-text))}))
        (sort-by :category (fn [a b] (< (.indexOf penny-order a) (.indexOf penny-order b))))))
 
+(defn category-ingredients->str [{:keys [ingredients]}]
+  (->> ingredients
+       (map #(str "- " %))
+       (s/join "\n")))
+
+(def klaka-board-id "48aas65T")
+
+(defn load-trello-lists [board-id]
+  (client/get (str trello-api "/boards/" board-id "/lists")
+              {:query-params
+               {:key (:trello-key creds-file)
+                :token (:trello-token creds-file)}
+               :as :json
+               :throw-entire-message? true}))
+
+(defn create-trello-shopping-card [list-id]
+  (:body (client/post (str trello-api "/cards/")
+                      {:query-params
+                       {:key (:trello-key creds-file)
+                        :token (:trello-token creds-file)
+                        :name (str "Einkaufen " (apply str (take 10 (str (now)))))
+                        :idList list-id}
+                       :as :json
+                       :throw-entire-message? true})))
+
+(defn create-trello-checklist [card-id]
+  (:body
+   (client/post (str trello-api "/checklists")
+                {:query-params
+                 {:key (:trello-key creds-file)
+                  :token (:trello-token creds-file)
+                  :idCard card-id}
+                 :as :json
+                 :throw-entire-message? true})))
+
+(defn create-trell-checklist-item [checklist-id item]
+  (:body (client/post (str trello-api (str "/checklists/" checklist-id "/checkItems"))
+                      {:query-params
+                       {:key (:trello-key creds-file)
+                        :token (:trello-token creds-file)
+                        :name item}
+                       :as :json
+                       :throw-entire-message? true})))
+
+(defn create-klaka-shopping-card [ingredients]
+  (let [list-id (:id (first (:body (load-trello-lists "G2Ysmygl")))) ;; TODO Replace with Klaka-Id
+        card-id (:id (create-trello-shopping-card list-id))
+        checklist-id (:id (create-trello-checklist card-id))]
+    (map #(create-trell-checklist-item checklist-id %) ingredients)))
+
+
+
+
 
