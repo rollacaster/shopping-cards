@@ -252,7 +252,8 @@
        (map second)
        flatten
        (group-by :id)
-       (map (fn [[id ingredients]] (vector id (ingredient-text ingredients))))))
+       (map (fn [[id ingredients]] (vector id (ingredient-text ingredients))))
+       vec))
 
 (defn category-ingredients->str [{:keys [ingredients]}]
   (->> ingredients
@@ -302,7 +303,10 @@
   (let [list-id (:id (first (:body (load-trello-lists "G2Ysmygl")))) ;; TODO Replace with Klaka-Id
         card-id (:id (create-trello-shopping-card list-id))
         checklist-id (:id (create-trello-checklist card-id))]
-    (map #(create-trell-checklist-item checklist-id %) ingredients)))
+    (doseq [ingredient ingredients]
+      (create-trell-checklist-item checklist-id ingredient))))
+
+
 
 
 
