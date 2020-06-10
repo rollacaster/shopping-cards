@@ -304,7 +304,8 @@
         card-id (:id (create-trello-shopping-card list-id))
         checklist-id (:id (create-trello-checklist card-id))]
     (doseq [ingredient ingredients]
-      (create-trell-checklist-item checklist-id ingredient))))
+      (create-trell-checklist-item checklist-id ingredient))
+    card-id))
 
 
 
