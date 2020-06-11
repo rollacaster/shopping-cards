@@ -6,9 +6,9 @@
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
 
-(defn icon [name]
+(defn icon [{:keys [color]} name]
   [:svg {:viewBox "0 0 24 24"}
-   [:path {:d (icons name)}]])
+   [:path {:d (icons name) :fill color}]])
 
 (defn recipe [{:keys [name image selected? on-click]}]
   [:button.bn.bg-transparent.outline-transparent {:on-click on-click}
@@ -40,52 +40,56 @@
         (.then #(js->clj % :keywordize-keys true))
         (.then #(reset! recipes %)))
     (fn []
-      [:div.sans-serif
-       [:header.bg-dark-gray.white.pv3.ph4
-        [:div.ml2 [:h1.ma0
-                   (case @step
-                     "SELECT_RECIPE" "Select Recipes"
-                     "DESELECT_INGREDIENTS" "Remove available ingredients"
-                     "TODO")]]]
-       [:main
-        (case @step
-          "SELECT_RECIPE"
-          [:div.flex.flex-wrap.justify-center.justify-start-ns.ph4.pb6.mt3
-           (doall
-            (map (fn [{:keys [id name link image]}]
-                   [recipe (let [selected? (contains? @selected-recipes id)]
-                             {:key id
-                              :name name
-                              :link link
-                              :image image
-                              :selected? selected?
-                              :on-click #(swap! selected-recipes
-                                                (fn [selected-recipes]
-                                                  ((if selected? disj conj)
-                                                   selected-recipes id)))})])
-                 @recipes))]
-          "DESELECT_INGREDIENTS"
-          [:ul.list.pl0.mv0
-           (doall
-            (map-indexed (fn [i [id content]]
-                           [ingredient
-                            (let [selected?
-                                  (contains? @selected-ingredients id)]
+      [:div.sans-serif.near-black
+       [:header.bg-gold
+        [:div.mw9.center
+         [:div.pv3.ph4
+          [:div.ml2
+           [:h1.ma0
+            (case @step
+              "SELECT_RECIPE" "Select Recipes"
+              "DESELECT_INGREDIENTS" "Remove available ingredients"
+              "TODO")]]]]]
+       [:main.bg-light-gray        
+        [:div.mw9.center
+         (case @step
+           "SELECT_RECIPE"
+           [:div.flex.flex-wrap.justify-center.justify-start-ns.ph4.pb6.pt3
+            (doall
+             (map (fn [{:keys [id name link image]}]
+                    [recipe (let [selected? (contains? @selected-recipes id)]
                               {:key id
-                               :i i
-                               :id id
+                               :name name
+                               :link link
+                               :image image
                                :selected? selected?
-                               :on-change
-                               #(swap! selected-ingredients
-                                       (fn [selected-ingredients]
-                                         ((if selected? disj conj)
-                                          selected-ingredients id)))})
-                            content])
-                         @ingredients))]
-          "TODO")]
+                               :on-click #(swap! selected-recipes
+                                                 (fn [selected-recipes]
+                                                   ((if selected? disj conj)
+                                                    selected-recipes id)))})])
+                  @recipes))]
+           "DESELECT_INGREDIENTS"
+           [:ul.list.pl0.mv0
+            (doall
+             (map-indexed (fn [i [id content]]
+                            [ingredient
+                             (let [selected?
+                                   (contains? @selected-ingredients id)]
+                               {:key id
+                                :i i
+                                :id id
+                                :selected? selected?
+                                :on-change
+                                #(swap! selected-ingredients
+                                        (fn [selected-ingredients]
+                                          ((if selected? disj conj)
+                                           selected-ingredients id)))})
+                             content])
+                          @ingredients))]
+           "TODO")]]
        (when (and (> (count @selected-recipes) 0))
-         [:footer.fixed.bottom-0.w-100.bg-dark-gray.flex.justify-center.pa3
-          [:button.br2.bg-light-gray.pointer
+         [:footer.fixed.bottom-0.w-100.bg-gold.flex.justify-center.pa3
+          [:button.br3.bg-gray.pointer.bn.shadow-3.ph3.pv2.white
            {:on-click (fn []
                         (case @step
                           "SELECT_RECIPE"
@@ -108,7 +112,7 @@
                               (.then #(.open js/window (str "https://trello.com/c/" %) "_blank")))))}
            [:div.flex.items-center
             [:span.f2.mr2 "Fertig"]
-            [:span.w2.h2 [icon :check-mark]]]]])])))
+            [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]]]])])))
 
 
 (dom/render [app] (.getElementById js/document "app"))
