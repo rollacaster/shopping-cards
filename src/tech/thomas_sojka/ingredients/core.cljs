@@ -15,7 +15,7 @@
    [:div.w5.h5.relative.ma2.shadow-3 {:class (when selected? "o-50")}
     (when selected?
       [:div.w4.h4.absolute {:style {:top "50%" :left "50%" :transform "translate(-50%,-50%)"}}
-       [icon :check-mark]])
+       [icon {:color "white"} :check-mark]])
     [:img.br2.w-100.h-100 {:style {:object-fit "cover"} :src image}]
     [:div.bg-dark-gray.absolute.pa2.mh2.mb2.bottom-0.o-50.br2
      [:span.white.f4 name]]
@@ -23,7 +23,7 @@
      [:span.white.f4 name]]]])
 
 (defn ingredient [{:keys [i id selected? on-change]} children]
-  [:li.flex.items-center.ph4.pv3 {:class (if (= (mod i 2) 0) "bg-light-gray near-black" "bg-gray white")}
+  [:li.flex.items-center.ph4.pv3 {:class (if (= (mod i 2) 0) "bg-light-gray near-black" "bg-orange white")}
    [:input.pointer.mh2
     {:id id :type "checkbox" :checked selected? :on-change on-change}]
    [:label.pointer.f4 {:for id} children]])
@@ -32,10 +32,19 @@
 (def selected-recipes (r/atom #{"dd3fa340-a54a-4dc8-aea2-68cdc3656608"}))
 (def selected-ingredients (r/atom #{}))
 (def ingredients (r/atom []))
+(def loading (r/atom false))
+
+(defn open-tab [url]
+  (let [a (.createElement js/document "a")
+        e (.createEvent js/document "MouseEvents")]
+    (set! (.-target a) "_blank")
+    (set! (.-href a) url)
+    (.initMouseEvent e "click", true, true, js/window, 0, 0, 0, 0, 0, false, false, false, false, 0, nil)
+    (.dispatchEvent a e)))
 
 (defn app []
   (let [step (r/atom "SELECT_RECIPE")]
-    (-> (.fetch js/window "http://localhost:3000/recipes")
+    (-> (.fetch js/window "http://192.168.178.20:3000/recipes")
         (.then #(.json %))
         (.then #(js->clj % :keywordize-keys true))
         (.then #(reset! recipes %)))
@@ -69,7 +78,7 @@
                                                     selected-recipes id)))})])
                   @recipes))]
            "DESELECT_INGREDIENTS"
-           [:ul.list.pl0.mv0
+           [:ul.list.pl0.mv0.pb6
             (doall
              (map-indexed (fn [i [id content]]
                             [ingredient
@@ -93,26 +102,51 @@
            {:on-click (fn []
                         (case @step
                           "SELECT_RECIPE"
-                          (-> (.fetch js/window (str "http://localhost:3000/ingredients?"
-                                                    (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
-                              (.then #(.text %))
-                              (.then read-string)
-                              (.then #(do
-                                        (reset! step "DESELECT_INGREDIENTS")
-                                        (reset! ingredients %)
-                                        (reset! selected-ingredients (set (map first %))))))
+                          (do
+                            (reset! loading true)
+                            (-> (.fetch js/window (str "http://192.168.178.20:3000/ingredients?"
+                                                        (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
+                                 (.then #(.text %))
+                                 (.then read-string)
+                                 (.then #(do
+                                           (reset! loading false)
+                                           (reset! step "DESELECT_INGREDIENTS")
+                                           (reset! ingredients %)
+                                           (reset! selected-ingredients (set (map first %)))
+                                           (.scrollTo js/window 0 0)))))
                           "DESELECT_INGREDIENTS"
-                          (-> (.fetch js/window "http://localhost:3000/shopping-card"
-                                      (clj->js {:method "POST"
-                                                :headers {"Content-type" "application/edn"}
-                                                :body (pr-str (->> @ingredients
-                                                                   (filter #(contains? @selected-ingredients (first %)))
-                                                                   (map second)))}))
-                              (.then #(.text %))
-                              (.then #(.open js/window (str "https://trello.com/c/" %) "_blank")))))}
+                          (do
+                            (reset! loading true)
+                            (-> (.fetch js/window "http://192.168.178.20:3000/shopping-card"
+                                         (clj->js {:method "POST"
+                                                   :headers {"Content-type" "application/edn"}
+                                                   :body (pr-str (->> @ingredients
+                                                                      (filter #(contains? @selected-ingredients (first %)))
+                                                                      (map second)))}))
+                                 (.then #(.text %))
+                                 (.then #(do
+                                           (reset! loading false)
+                                           (open-tab (str "https://trello.com/c/" %))))))))}
            [:div.flex.items-center
-            [:span.f2.mr2 "Fertig"]
-            [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]]]])])))
+            (if @loading
+              [:div {:style {:width 128}}
+               [:svg {:width 38 :height 38
+                      :viewBox "0 0 100 100"
+                      :style {:transform "scale(1.8)"}
+                      :preserveAspectRatio "xMidYMid"}
+                [:g
+                 [:circle {:cx "78.0502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "-0.67s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "-0.67s"}]]
+                 [:circle {:cx "38.4502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "-0.33s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "-0.33s"}]]
+                 [:circle {:cx "58.2502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "0s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "0s"}]]]
+                [:g {:transform "translate(-15 0)"}
+                 [:path {:d "M50 50L20 50A30 30 0 0 0 80 50Z" :fill "#f8b26a" :transform "rotate(90 50 50)"}]
+                 [:path {:d "M50 50L20 50A30 30 0 0 0 80 50Z" :fill "#f8b26a" :transform "rotate(34.8753 50 50)"}
+                  [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]
+                 [:path {:d "M50 50L20 50A30 30 0 0 1 80 50Z" :fill "#f8b26a" :transform "rotate(-34.8753 50 50)"}
+                  [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;-45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]]]]
+              [:<>
+               [:span.f2.mr2 "Fertig"]
+               [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])]]])])))
 
 
 (dom/render [app] (.getElementById js/document "app"))
