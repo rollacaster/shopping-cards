@@ -37,7 +37,7 @@
                     :content-types          true
                     :default-charset        "utf-8"}})
       wrap-format
-      (wrap-cors  :access-control-allow-origin [#"http://localhost:9504"]
+      (wrap-cors  :access-control-allow-origin [#"http://localhost:9504" #"http://192.168.178.20:9504"]
                   :access-control-allow-methods [:get :put :post :delete])))
 
 

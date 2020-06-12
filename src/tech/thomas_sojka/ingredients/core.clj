@@ -300,7 +300,7 @@
                        :throw-entire-message? true})))
 
 (defn create-klaka-shopping-card [ingredients]
-  (let [list-id (:id (first (:body (load-trello-lists "G2Ysmygl")))) ;; TODO Replace with Klaka-Id
+  (let [list-id (:id (first (:body (load-trello-lists klaka-board-id)))) ;; TODO Replace with Klaka-Id
         card-id (:id (create-trello-shopping-card list-id))
         checklist-id (:id (create-trello-checklist card-id))]
     (doseq [ingredient ingredients]
