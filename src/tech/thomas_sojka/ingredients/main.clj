@@ -1,4 +1,5 @@
 (ns tech.thomas-sojka.ingredients.main
+  (:gen-class)
   (:require [ring.adapter.jetty :refer [run-jetty]]
             [tech.thomas-sojka.ingredients.handler :refer [app]]))
 

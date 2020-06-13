@@ -3,3 +3,5 @@
 /.creds.edn
 /target/
 /node_modules/
+/classes/
+/resources/public/cljs-out/
