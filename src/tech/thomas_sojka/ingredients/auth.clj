@@ -1,10 +1,10 @@
 (ns tech.thomas-sojka.ingredients.auth
-  (:require [clojure.string :as s]
+  (:require [clj-http.client :as client]
+            [clojure.core.async :refer [<!! >! chan go]]
+            [clojure.java.shell :refer [sh]]
+            [clojure.string :as s]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.params :refer [wrap-params]]
-            [clojure.core.async :refer [chan go >! <!!]]
-            [clj-http.client :as client]
-            [clojure.java.shell :refer [sh]]
             [tick.core :as t]))
 
 (def oauth-creds-path (str (System/getProperty "user.home") "/.google-oauth-creds"))

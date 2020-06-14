@@ -10,10 +10,16 @@
         ring {:mvn/version "1.8.0"}
         metosin/muuntaja {:mvn/version "0.6.6"}
         ring-cors {:mvn/version "0.1.13"}}
- :paths ["src" "resources" "test" "classes"]
+ :paths ["src" "classes" "resources"]
  :aliases {:uberdeps {:extra-deps {uberdeps {:mvn/version "0.1.10"}}
                       :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.ingredients.main"]}
-           :fe {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.6"}
+           :dev {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.8"}
                              reagent {:mvn/version "0.10.0"}
-                             org.clojure/clojurescript {:mvn/version "1.10.773"}}}
-           :dev {:extra-deps {hashp {:mvn/version "0.1.1"}}}}}
+                             org.clojure/clojurescript {:mvn/version "1.10.773"}
+                             hashp {:mvn/version "0.1.1"}}
+                :extra-paths ["target"]}
+           :fe-build {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.8"}
+                                   reagent {:mvn/version "0.10.0"}
+                                   org.clojure/clojurescript {:mvn/version "1.10.773"}}
+                      :extra-paths ["target"]
+                      :main-opts ["-m" "figwheel.main" "-O" "advanced" "--clean""-bo" "dev"]}}}

@@ -29,7 +29,7 @@
    [:label.pointer.f4 {:for id} children]])
 
 (def recipes (r/atom []))
-(def selected-recipes (r/atom #{"dd3fa340-a54a-4dc8-aea2-68cdc3656608"}))
+(def selected-recipes (r/atom #{}))
 (def selected-ingredients (r/atom #{}))
 (def ingredients (r/atom []))
 (def loading (r/atom false))
@@ -44,7 +44,7 @@
 
 (defn app []
   (let [step (r/atom "SELECT_RECIPE")]
-    (-> (.fetch js/window "http://192.168.178.50:3000/recipes")
+    (-> (.fetch js/window "/recipes")
         (.then #(.json %))
         (.then #(js->clj % :keywordize-keys true))
         (.then #(reset! recipes %)))
@@ -104,7 +104,7 @@
                           "SELECT_RECIPE"
                           (do
                             (reset! loading true)
-                            (-> (.fetch js/window (str "http://192.168.178.50:3000/ingredients?"
+                            (-> (.fetch js/window (str "/ingredients?"
                                                         (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
                                  (.then #(.text %))
                                  (.then read-string)
@@ -117,7 +117,7 @@
                           "DESELECT_INGREDIENTS"
                           (do
                             (reset! loading true)
-                            (-> (.fetch js/window "http://192.168.178.50:3000/shopping-card"
+                            (-> (.fetch js/window "/shopping-card"
                                          (clj->js {:method "POST"
                                                    :headers {"Content-type" "application/edn"}
                                                    :body (pr-str (->> @ingredients
