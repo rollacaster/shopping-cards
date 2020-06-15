@@ -20,22 +20,23 @@
       [:div.w4.h4.absolute {:style {:top "50%" :left "50%" :transform "translate(-50%,-50%)"}}
        [icon {:color "white"} :check-mark]])
     [:img.br2.w-100.h-100 {:style {:object-fit "cover"} :src image}]
-    [:div.bg-dark-gray.absolute.pa2.mh2.mb2.bottom-0.o-50.br2
+    [:div.bg-gray-700.absolute.pa2.mh2.mb2.bottom-0.o-50.br2
      [:span.white.f4 name]]
     [:div.absolute.pa2.mh2.mb2.bottom-0
      [:span.white.f4 name]]]])
 
 (defn ingredient [{:keys [i id selected? on-change]} children]
-  [:li.flex.items-center.ph4.pv3 {:class (if (= (mod i 2) 0) "bg-light-gray near-black" "bg-orange white")}
-   [:input.pointer.mh2
-    {:id id :type "checkbox" :checked selected? :on-change on-change}]
-   [:label.pointer.f4 {:for id} children]])
+  [:li.mh2.mh5-ns.ph4.pv3.mv3.br2 {:class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")}
+   [:label.flex.items-center.pointer.f4 {:for id}
+    [:input.pointer.mr3.w2.h2
+     {:id id :type "checkbox" :checked selected? :on-change on-change}]
+    children]])
 
 (defn finish [match]
   (let [{:keys [path]} (:parameters match)
         {:keys [card-id]} path]
     [:div.flex.justify-center.pv5
-     [:a.link.shadow-3.bn.pv2.ph3.br2.bg-gold.f3.near-black
+     [:a.link.shadow-3.bn.pv2.ph3.br2.bg-orange-400.f3.gray-800
       {:href (str "https://trello.com/c/" card-id)}
       "In Trello anzeigen"]]))
 
@@ -46,7 +47,7 @@
 (def loading (r/atom false))
 
 (defn select-recipes []
-  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph4.pb6.pt3
+  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3
    (doall
     (map (fn [{:keys [id name link image]}]
            [recipe (let [selected? (contains? @selected-recipes id)]
@@ -62,6 +63,10 @@
          @recipes))])
 
 (defn deselect-ingredients []
+  (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
+                       (.then #(.text %))
+                       (.then read-string)
+                       (.then #(reset! ingredients %)))
   [:ul.list.pl0.mv0.pb6
    (doall
     (map-indexed (fn [i [id content]]
@@ -83,12 +88,11 @@
 (defonce match (r/atom nil))
 
 (defn header []
-  [:header.bg-gold
+  [:header.bg-orange-400
    [:div.mw9.center
-    [:div.pv3.ph4
-     [:div.ml2
-      [:h1.ma0
-       (:title (:data @match))]]]]])
+    [:div.pv3.ph5-ns.ph3
+     [:h1.ma0.gray-800.ml2-ns
+      (:title (:data @match))]]]])
 
 (defn spinner []
   [:svg {:width 38 :height 38
@@ -108,8 +112,8 @@
 
 (defn footer []
   (when (and (> (count @selected-recipes) 0))
-    [:footer.fixed.bottom-0.w-100.bg-gold.flex.justify-center.pa3
-     [:button.br3.bg-gray.pointer.bn.shadow-3.ph3.pv2.white
+    [:footer.fixed.bottom-0.w-100.bg-orange-400.flex.justify-center.pa3
+     [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
       {:on-click (:action (:data @match))}
       [:div.flex.items-center
        (if @loading
@@ -125,9 +129,9 @@
       (.then #(js->clj % :keywordize-keys true))
       (.then #(reset! recipes %)))
   (fn []
-    [:div.sans-serif.near-black.h-100
+    [:div.sans-serif.h-100.bg-gray-200
      [header]
-     [:main.h-100.bg-light-gray
+     [:main.h-100
       [:div.mw9.center
        [(:view (:data @match)) @match]]]
      [footer]]))
