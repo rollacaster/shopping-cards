@@ -31,19 +31,19 @@
     {:id id :type "checkbox" :checked selected? :on-change on-change}]
    [:label.pointer.f4 {:for id} children]])
 
+(defn finish [match]
+  (let [{:keys [path]} (:parameters match)
+        {:keys [card-id]} path]
+    [:div.flex.justify-center.pv5
+     [:a.link.shadow-3.bn.pv2.ph3.br2.bg-gold.f3.near-black
+      {:href (str "https://trello.com/c/" card-id)}
+      "In Trello anzeigen"]]))
+
 (def recipes (r/atom []))
 (def selected-recipes (r/atom #{}))
 (def selected-ingredients (r/atom #{}))
 (def ingredients (r/atom []))
 (def loading (r/atom false))
-
-(defn open-tab [url]
-  (let [a (.createElement js/document "a")
-        e (.createEvent js/document "MouseEvents")]
-    (set! (.-target a) "_blank")
-    (set! (.-href a) url)
-    (.initMouseEvent e "click", true, true, js/window, 0, 0, 0, 0, 0, false, false, false, false, 0, nil)
-    (.dispatchEvent a e)))
 
 (defn select-recipes []
   [:div.flex.flex-wrap.justify-center.justify-start-ns.ph4.pb6.pt3
@@ -90,6 +90,22 @@
       [:h1.ma0
        (:title (:data @match))]]]]])
 
+(defn spinner []
+  [:svg {:width 38 :height 38
+         :viewBox "0 0 100 100"
+         :style {:transform "scale(1.8)"}
+         :preserveAspectRatio "xMidYMid"}
+   [:g
+    [:circle {:cx "78.0502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "-0.67s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "-0.67s"}]]
+    [:circle {:cx "38.4502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "-0.33s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "-0.33s"}]]
+    [:circle {:cx "58.2502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "0s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "0s"}]]]
+   [:g {:transform "translate(-15 0)"}
+    [:path {:d "M50 50L20 50A30 30 0 0 0 80 50Z" :fill "#f8b26a" :transform "rotate(90 50 50)"}]
+    [:path {:d "M50 50L20 50A30 30 0 0 0 80 50Z" :fill "#f8b26a" :transform "rotate(34.8753 50 50)"}
+     [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]
+    [:path {:d "M50 50L20 50A30 30 0 0 1 80 50Z" :fill "#f8b26a" :transform "rotate(-34.8753 50 50)"}
+     [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;-45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]]])
+
 (defn footer []
   (when (and (> (count @selected-recipes) 0))
     [:footer.fixed.bottom-0.w-100.bg-gold.flex.justify-center.pa3
@@ -98,20 +114,7 @@
       [:div.flex.items-center
        (if @loading
          [:div {:style {:width 128}}
-          [:svg {:width 38 :height 38
-                 :viewBox "0 0 100 100"
-                 :style {:transform "scale(1.8)"}
-                 :preserveAspectRatio "xMidYMid"}
-           [:g
-            [:circle {:cx "78.0502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "-0.67s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "-0.67s"}]]
-            [:circle {:cx "38.4502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "-0.33s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "-0.33s"}]]
-            [:circle {:cx "58.2502" :cy "50" :r "4" :fill "#e15b64"} [:animate {:attributeName "cx" :repeatCount "indefinite" :dur "1s" :values "95;35" :keyTimes "0;1" :begin "0s"}] [:animate {:attributeName "fill-opacity" :repeatCount "indefinite" :dur "1s" :values "0;1;1" :keyTimes "0;0.2;1" :begin "0s"}]]]
-           [:g {:transform "translate(-15 0)"}
-            [:path {:d "M50 50L20 50A30 30 0 0 0 80 50Z" :fill "#f8b26a" :transform "rotate(90 50 50)"}]
-            [:path {:d "M50 50L20 50A30 30 0 0 0 80 50Z" :fill "#f8b26a" :transform "rotate(34.8753 50 50)"}
-             [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]
-            [:path {:d "M50 50L20 50A30 30 0 0 1 80 50Z" :fill "#f8b26a" :transform "rotate(-34.8753 50 50)"}
-             [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;-45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]]]]
+          [spinner]]
          [:<>
           [:span.f2.mr2 "Fertig"]
           [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])]]]))
@@ -122,9 +125,9 @@
       (.then #(js->clj % :keywordize-keys true))
       (.then #(reset! recipes %)))
   (fn []
-    [:div.sans-serif.near-black
-     [header]     
-     [:main.bg-light-gray        
+    [:div.sans-serif.near-black.h-100
+     [header]
+     [:main.h-100.bg-light-gray
       [:div.mw9.center
        [(:view (:data @match)) @match]]]
      [footer]]))
@@ -132,11 +135,10 @@
 (def routes
   [["/" {:name ::main
          :view select-recipes
-         :title "Recipes"
+         :title "Rezepte"
          :action (fn []
                    (reset! loading true)
-                   (-> (.fetch js/window (str "/ingredients?"
-                                              (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
+                   (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
                        (.then #(.text %))
                        (.then read-string)
                        (.then #(do
@@ -147,7 +149,7 @@
                                  (.scrollTo js/window 0 0)))))}]
    ["/deselect-ingredients" {:name ::deselect-ingredients
                              :view deselect-ingredients
-                             :title "Remove available ingredients"
+                             :title "Zutaten auswählen"
                              :action (fn []
                                        (reset! loading true)
                                        (-> (.fetch js/window "/shopping-card"
@@ -159,7 +161,14 @@
                                            (.then #(.text %))
                                            (.then #(do
                                                      (reset! loading false)
-                                                     (open-tab (str "https://trello.com/c/" %))))))}]])
+                                                     (rfe/push-state ::finish {:card-id %})))))}]
+   ["/finish/:card-id" {:name ::finish
+               :view finish
+               :title "Einkaufszettel erstellt"
+               :parameters {:path {:card-id string?}}
+               :action (fn []
+                         (reset! selected-ingredients #{})
+                         (rfe/push-state ::main))}]])
 
 (defn init! []
   (rfe/start!
@@ -169,6 +178,3 @@
   (dom/render [app] (.getElementById js/document "app")))
 
 (init!)
-
-
-
