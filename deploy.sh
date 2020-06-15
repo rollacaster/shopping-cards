@@ -1,4 +1,4 @@
-mkdir classes;
+mkdir -p classes;
 clj -e "(compile 'tech.thomas-sojka.ingredients.main)";
 clj -A:fe-build;
 clj -A:uberdeps;

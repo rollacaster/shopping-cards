@@ -7,7 +7,7 @@
 
 (defn -main []
     (reset! server
-          (run-jetty app {:port 3000 :join? false})))
+          (run-jetty app {:port 80 :join? false})))
 
 (defn restart-server []
   (when @server
