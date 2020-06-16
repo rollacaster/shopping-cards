@@ -231,4 +231,10 @@
   :name "Käseaufschnitt"}
  {:id "9e0c19af-f27f-4b04-99fd-689357ee1be8",
   :category "Beilage",
-  :name "Reis"}]
+  :name "Reis"}
+ {:id "1d89bbb9-3052-45f7-9be9-d7a0c54c9b45",
+  :category "Gewürze",
+  :name "Zimt"}
+ {:id "60e4faa4-b39a-4539-b516-cdeceffd5541",
+  :category "Käse & Co",
+  :name "Tofu"}]

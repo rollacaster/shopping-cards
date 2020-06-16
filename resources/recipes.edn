@@ -1,4 +1,10 @@
-({:id "dd3fa340-a54a-4dc8-aea2-68cdc3656608",
+({:id "91801559-4b7c-4a1a-8d60-8c4df6f6b435",
+  :name "Vegetarisches Pastizio",
+  :link
+  "https://www.chefkoch.de/rezepte/1414951246382895/Vegetarisches-Pastizio.html",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1414951246382895/bilder/990583/crop-360x240/vegetarisches-pastizio.jpg"}
+ {:id "dd3fa340-a54a-4dc8-aea2-68cdc3656608",
   :name "Pizza",
   :link
   "https://www.chefkoch.de/rezepte/1151011221381450/Der-beste-Pizzateig.html",
@@ -7,8 +13,9 @@
  {:id "309b346f-7863-4f3b-a121-9eb5939938d1",
   :name "Krumplisteszta",
   :link
-  "https://docs.google.com/document/d/1muuRIAhG1Yhtt43HBtyvcTA1Bfvz8YbTnoK_Qb2kELc/edit"
-  :image "https://www.nosalty.hu/files/imagecache/recept/recept_kepek/273486_295059_krumplisteszta01x.jpg_.crop_display_0.jpg"}
+  "https://docs.google.com/document/d/1muuRIAhG1Yhtt43HBtyvcTA1Bfvz8YbTnoK_Qb2kELc/edit",
+  :image
+  "https://www.nosalty.hu/files/imagecache/recept/recept_kepek/273486_295059_krumplisteszta01x.jpg_.crop_display_0.jpg"}
  {:id "f0d25872-8874-4aff-819d-08861577401c",
   :name "Nudelpesto",
   :link

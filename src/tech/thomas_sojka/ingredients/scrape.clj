@@ -2,6 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
             clojure.pprint
+            [clojure.set :refer [difference]]
             [clojure.string :as s]
             [clojure.walk :as w]
             [hickory.core :as html]
@@ -16,7 +17,9 @@
 (def creds-file (read-string (slurp (io/resource ".creds.edn"))))
 
 (defn write-edn [path data]
-  (clojure.pprint/pprint data (clojure.java.io/writer (str "resources/" path))))
+  (binding [*print-level* nil
+            *print-length* nil]
+    (clojure.pprint/pprint data (clojure.java.io/writer (str "resources/" path)))))
 
 (defn oauth-token []
   (access-token {:client-id (:drive-client-id creds-file)
@@ -118,37 +121,37 @@
          (w/postwalk walk)
          (map scrape-eath-this-ingredient))))
 
-(defn add-ingredients [recipes]
-  (->> recipes
-       (map #(cond (and (:link %)
-                        (s/includes? (:link %) "chefkoch")
-                        (not (:ingredients %)))
-                   (assoc %
-                          :ingredients (scrape-chefkoch-ingredients (:link %)))
-                   (and (:link %)
-                        (s/includes? (:link %) "docs.google")
-                        (not (:ingredients %)))
-                   (assoc %
-                          :ingredients (scrape-gdrive-ingredients (:link %)))
-                   (and (:link %)
-                        (s/includes? (:link %) "eat-this")
-                        (not (:ingredients %)))
-                   (assoc %
-                          :ingredients (scrape-eat-this-ingredients (:link %)))
-                   :else %))))
+(defn add-ingredients [recipe]
+  (cond (and (:link recipe)
+             (s/includes? (:link recipe) "chefkoch")
+             (not (:ingredients recipe)))
+        (assoc recipe
+               :ingredients (scrape-chefkoch-ingredients (:link recipe)))
+        (and (:link recipe)
+             (s/includes? (:link recipe) "docs.google")
+             (not (:ingredients recipe)))
+        (assoc recipe
+               :ingredients (scrape-gdrive-ingredients (:link recipe)))
+        (and (:link recipe)
+             (s/includes? (:link recipe) "eat-this")
+             (not (:ingredients recipe)))
+        (assoc recipe
+               :ingredients (scrape-eat-this-ingredients (:link recipe)))
+        :else recipe))
 
-(defn find-recipe-image [recipe-name]
-  (-> "https://customsearch.googleapis.com/customsearch/v1"
-      (client/get
-       {:query-params {:q (s/replace recipe-name " " "+")
-                       :num 1
-                       :start 1
-                       :imgSize "medium"
-                       :searchType "image"
-                       :cx search-engine-cx
-                       :key (:google-key creds-file)}
-        :as :json :throw-entire-message? true})
-      :body :items first :link))
+(defn find-image [recipe]
+  (assoc recipe :image
+         (-> "https://customsearch.googleapis.com/customsearch/v1"
+             (client/get
+              {:query-params {:q (s/replace (:name recipe) " " "+")
+                              :num 1
+                              :start 1
+                              :imgSize "medium"
+                              :searchType "image"
+                              :cx search-engine-cx
+                              :key (:google-key creds-file)}
+               :as :json :throw-entire-message? true})
+             :body :items first :link)))
 
 (defn meal-line->clj [meal-line]
   (let [meal (apply str (drop 2 meal-line))]
@@ -171,43 +174,60 @@
          (take-while #(not= % "Schnell Gerichte"))
          (map meal-line->clj))))
 
+(defn dedup-ingredients [recipe]
+  (update recipe :ingredients (fn [ingredients]
+                                (map (fn [{:keys [name] :as ingredient}]
+                                       (let [ingredient-name (or
+                                                              (some (fn [[ingredient-group-name duplicated-name]]
+                                                                      (when (or (= name ingredient-group-name)
+                                                                                (contains? duplicated-name name))
+                                                                        ingredient-group-name))
+                                                                    (load-edn "duplicated-ingredients.edn"))
+                                                              name)]
+                                         (assoc ingredient
+                                                :name ingredient-name
+                                                :id (some #(when (= (:name %) ingredient-name) (:id %)) (load-edn "ingredients.edn")))))
+                                     ingredients))))
 
-(comment
-  (defn uuid [] (str (java.util.UUID/randomUUID)))
+(defn load-new-recipes []
+  (let [new-recipes (difference
+                     (->> (load-trello-recipes)
+                          (map :name)
+                          set)
+                     (->> (load-recipes)
+                          (map :name)
+                          set))]
+    (->> new-recipes
+         (map (fn [new-recipe] (some #(when (= (:name %) new-recipe) %) (load-trello-recipes))))
+         (map add-ingredients)
+         (map find-image)
+         (map dedup-ingredients))))
 
-  (defn vec->map [key-name vec]
-    (zipmap (map key-name vec) vec))
+;; TODO Handle new ingredients before adding recipe
+(defn new-ingredients [new-recipes]
+  (->> new-recipes
+       (map :ingredients)
+       flatten
+       (remove :id)))
 
-  (defn merge-recipe-lists [a b]
-    (map (fn [[_ val]] val) (merge-with merge
-                                       (vec->map :name a)
-                                       (vec->map :name b))))
+(defn uuid [] (str (java.util.UUID/randomUUID)))
 
-  (defn write-recipes []
-    (->> (merge-recipe-lists (load-trello-recipes) (vals (load-recipes)))
-         add-ingredients
-         (map #(if (:image %)
-                 %
-                 (assoc % :image (find-recipe-image (:name %)))))
-         vec))
+(defn add-new-recipe [{:keys [name link image] :as new-recipe}]
+  (let [recipe-id (uuid)
+        cooked-with (load-edn "cooked-with.edn")
+        recipes (load-edn "recipes.edn")]
+    (write-edn
+     "cooked-with.edn"
+     (->> new-recipe
+          :ingredients
+          (map
+           (fn [{:keys [amount-desc amount id]}]
+             {:id (uuid) :amount-desc amount-desc :amount amount :ingredient-id id :recipe-id recipe-id}))
+          (concat cooked-with)
+          vec))
+    (write-edn "recipes.edn"
+               (conj recipes {:id recipe-id :name name :link link :image image}))))
 
-  (defn normalize-ingredients [duplicated-ingredients ingredients]
-    (map (fn [{:keys [name] :as ingredient}]
-           (assoc ingredient :name
-                  (or
-                   (some (fn [[ingredient-group-name duplicated-name]]
-                           (when (or (= name ingredient-group-name)
-                                     (contains? duplicated-name name))
-                             ingredient-group-name))
-                         duplicated-ingredients)
-                   name)))
-         ingredients))
 
-  (defn ingredient-list [recipes]
-    (let [duplicated-ingredients
-          (load-edn "duplicated-ingredients.edn")]
-      (->> recipes
-           (map :ingredients)
-           flatten
-           (normalize-ingredients duplicated-ingredients)
-           (group-by :name)))))
+
+
