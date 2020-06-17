@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.ingredients.auth
+(ns tech.thomas-sojka.shopping-cards.auth
   (:require [clj-http.client :as client]
             [clojure.core.async :refer [<!! >! chan go]]
             [clojure.java.shell :refer [sh]]

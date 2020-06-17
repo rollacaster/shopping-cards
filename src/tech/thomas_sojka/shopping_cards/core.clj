@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.ingredients.core
+(ns tech.thomas-sojka.shopping-cards.core
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
             [clojure.string :as s]

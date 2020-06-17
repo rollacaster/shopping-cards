@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.ingredients.core
+(ns tech.thomas-sojka.shopping-cards.core
   (:require [cljs.reader :refer [read-string]]
             [clojure.string :as s]
             [reagent.core :as r]

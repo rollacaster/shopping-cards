@@ -12,7 +12,7 @@
         metosin/muuntaja {:mvn/version "0.6.6"}}
  :paths ["src" "classes" "resources"]
  :aliases {:uberdeps {:extra-deps {uberdeps {:mvn/version "0.1.10"}}
-                      :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.ingredients.main"]}
+                      :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.main"]}
            :dev {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.8"}
                               reagent {:mvn/version "0.10.0"}
                               org.clojure/clojurescript {:mvn/version "1.10.773"}

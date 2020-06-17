@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.ingredients.scrape
+(ns tech.thomas-sojka.shopping-cards.scrape
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
             clojure.pprint
@@ -7,8 +7,8 @@
             [clojure.walk :as w]
             [hickory.core :as html]
             [hickory.select :as select]
-            [tech.thomas-sojka.ingredients.auth :refer [access-token]]
-            [tech.thomas-sojka.ingredients.core :refer [load-edn load-recipes]]))
+            [tech.thomas-sojka.shopping-cards.auth :refer [access-token]]
+            [tech.thomas-sojka.shopping-cards.core :refer [load-edn load-recipes]]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def search-engine-cx "005510767845232759155:zdkkvfzersx")

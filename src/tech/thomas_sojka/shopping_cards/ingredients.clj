@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.ingredients.ingredients
+(ns tech.thomas-sojka.shopping-cards.ingredients
   (:require [clj-fuzzy.metrics :as fuzzy]
             [clojure.math.combinatorics :as combo]
             [clojure.set :as set]))

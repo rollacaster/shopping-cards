@@ -1,11 +1,11 @@
-(ns tech.thomas-sojka.ingredients.handler
+(ns tech.thomas-sojka.shopping-cards.handler
   (:require [compojure.core :refer [defroutes GET POST]]
             [compojure.route :as route]
             [muuntaja.middleware :refer [wrap-format]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :refer [resource-response]]
-            [tech.thomas-sojka.ingredients.core
+            [tech.thomas-sojka.shopping-cards.core
              :refer
              [create-klaka-shopping-card ingredients-for-recipes load-recipes]]))
 
