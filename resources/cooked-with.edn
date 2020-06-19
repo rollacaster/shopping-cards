@@ -251,7 +251,7 @@
   :recipe-id "af2f9e4c-3d6c-4679-a1e0-afb812962a3b"}
  {:id "be617986-b076-443d-b056-85b726eaba21",
   :amount-desc "½",
-  :amount nil,
+  :amount 1/2,
   :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
   :recipe-id "4054b9f0-07ec-4e48-bbca-fc7fa7c3454f"}
  {:id "1829c901-7a71-463e-ba31-5a6194512ba3",
@@ -614,8 +614,8 @@
   :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
   :recipe-id "db2d9ab0-1964-4052-a7c0-7c3292929504"}
  {:id "6d640e4b-8741-437d-94ab-e7905e1e4aa3",
-  :amount-desc "1 Pck.",
-  :amount 1,
+  :amount-desc "1/2",
+  :amount 1/2,
   :ingredient-id "864a7140-73c9-4360-801e-cf056886b7fb",
   :recipe-id "d33e56e8-64e1-4b32-9eaf-90c9405caf17"}
  {:id "6181d117-ae75-4ddb-a04b-c69585d57227",
@@ -900,7 +900,7 @@
   :recipe-id "309b346f-7863-4f3b-a121-9eb5939938d1"}
  {:id "ab43ce47-b331-45c1-ad97-592e61094cdb",
   :amount 1,
-  :amount-desc "(1",
+  :amount-desc "1",
   :ingredient-id "6d52b4da-fa8f-4b13-aa1d-26a4a4e661cd",
   :recipe-id "70295d13-7639-4ba2-8e48-a8c8157b3121"}
  {:id "e3946e73-a341-4dfd-b4e1-380e8b33e313",
@@ -909,8 +909,8 @@
   :ingredient-id "aea1b07a-be01-45fa-8a7b-b1ee7b2fca16",
   :recipe-id "8311263e-061f-482d-9b8b-e4229734976a"}
  {:id "a49a9a02-7aa2-4522-8a66-ba77ce209a09",
-  :amount-desc "5 g",
-  :amount 5,
+  :amount-desc "1/2",
+  :amount 1/2,
   :ingredient-id "864a7140-73c9-4360-801e-cf056886b7fb",
   :recipe-id "dd3fa340-a54a-4dc8-aea2-68cdc3656608"}
  {:id "fe0727ec-654a-442b-8a8f-eae05b080ddd",
@@ -1235,12 +1235,12 @@
   :recipe-id "91801559-4b7c-4a1a-8d60-8c4df6f6b435"}
  {:id "54c7db77-613e-4e42-8746-95b5148cb77e",
   :amount-desc "½",
-  :amount nil,
+  :amount 1/2,
   :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
   :recipe-id "91801559-4b7c-4a1a-8d60-8c4df6f6b435"}
  {:id "c0f280e8-a60a-4989-9f14-bd993b4ec1b4",
   :amount-desc "½",
-  :amount nil,
+  :amount 1/2,
   :ingredient-id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9",
   :recipe-id "91801559-4b7c-4a1a-8d60-8c4df6f6b435"}
  {:id "aeb1c2c3-54a5-4cfc-a379-f847456dd0c9",
