@@ -13,9 +13,13 @@
 (defn load-cooked-with [] (load-edn "cooked-with.edn"))
 
 (defn ingredient-text [ingredients]
-  (str (count ingredients)
-       " " (:name (first ingredients))
-       " (" (s/join ", " (map :amount-desc ingredients)) ")"))
+  (if (->> ingredients
+             (map :amount-desc)
+             (every? nil?))
+    (:name (first ingredients))
+    (str (count ingredients)
+         " " (:name (first ingredients))
+         " (" (s/join ", " (map :amount-desc ingredients)) ")")))
 
 (def penny-order
   ["Gemüse"
