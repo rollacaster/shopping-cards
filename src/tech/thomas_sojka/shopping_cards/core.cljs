@@ -64,9 +64,9 @@
 
 (defn deselect-ingredients []
   (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
-                       (.then #(.text %))
-                       (.then read-string)
-                       (.then #(reset! ingredients %)))
+      (.then #(.text %))
+      (.then read-string)
+      (.then #(reset! ingredients %)))
   [:ul.list.pl0.mv0.pb6
    (doall
     (map-indexed (fn [i [id content]]
@@ -167,12 +167,12 @@
                                                      (reset! loading false)
                                                      (rfe/push-state ::finish {:card-id %})))))}]
    ["/finish/:card-id" {:name ::finish
-               :view finish
-               :title "Einkaufszettel erstellt"
-               :parameters {:path {:card-id string?}}
-               :action (fn []
-                         (reset! selected-ingredients #{})
-                         (rfe/push-state ::main))}]])
+                        :view finish
+                        :title "Einkaufszettel erstellt"
+                        :parameters {:path {:card-id string?}}
+                        :action (fn []
+                                  (reset! selected-ingredients #{})
+                                  (rfe/push-state ::main))}]])
 
 (defn init! []
   (rfe/start!
