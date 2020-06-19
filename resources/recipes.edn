@@ -146,4 +146,34 @@
   :link
   "https://www.chefkoch.de/rezepte/740511176724575/Die-besten-Pizzabroetchen-aller-Zeiten.html",
   :image
-  "https://img.chefkoch-cdn.de/rezepte/194031082643453/bilder/879874/crop-360x240/pizzabroetchen.jpg"})
+  "https://img.chefkoch-cdn.de/rezepte/194031082643453/bilder/879874/crop-360x240/pizzabroetchen.jpg"}
+ {:id "74b16748-6d83-42c6-8831-8dc952eb5186",
+  :name "Sojka Sandwiches",
+  :link "",
+  :image
+  "https://www.stern.de/vergleich/wp-content/uploads/2018/09/tzs-first-austria-3-in-1-sandwichmaker-waffeleisen-tischgrillklick-system-thermostat-backampel-elektrischer-sandwichtoaster-700-watt-kontaktgrill-abnehmbare-platten.jpg"}
+ {:id "72dd98af-4248-4497-8279-9268f493ada7",
+  :name "Tortellini mit Pesto",
+  :link "",
+  :image
+  "https://ais.kochbar.de/kbrezept/24257_9592/620x465/tortellini-mit-gruenem-pesto-rezept.jpg"}
+ {:id "6b35488b-9a01-4b29-a969-8c0f52da7a66",
+  :name "Camenbert",
+  :link "",
+  :image
+  "https://cdn.gutekueche.de/upload/rezept/5726/gebackener-camembert.jpg"}
+ {:id "318e0c0f-7d59-433a-850a-5b218453bf5a",
+  :name "Ofenkäse",
+  :link "",
+  :image "https://i.ytimg.com/vi/_MMdtUxqPnY/maxresdefault.jpg"}
+ {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
+  :name "Spiegelei mit Spinat",
+  :link "",
+  :image
+  "https://www.springlane.de/magazin/wp-content/uploads/2016/01/Spiegelei-auf-Spinat-und-Kirschtomaten.jpg"}
+ {:id "fe10f893-a565-4ba6-890d-001031e71b17",
+  :name "Gebackender Feta",
+  :link
+  "https://www.chefkoch.de/rezepte/2490101391534933/Panierter-Schafskaese.html",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/3393871505204306/bilder/1076610/crop-360x240/gebackener-feta-auf-gemischtem-salat-mit-honigdressing.jpg"})

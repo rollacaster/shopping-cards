@@ -162,7 +162,10 @@
   :name "Thymian"}
  {:id "15e8d610-ce9f-405b-957c-5f4fb6249b20",
   :category "Brot & Co",
-  :name "Weißbrot"}
+  :name "Semmel"}
+ {:id "73233dd2-991a-40ea-8e3b-384bcf2ac408",
+  :category "Brot & Co",
+  :name "Toast"}
  {:id "175c3da0-a4c2-4bc4-ab37-2cfef0012ca2",
   :category "Gewürze",
   :name "Kokosmilch"}
@@ -237,4 +240,22 @@
   :name "Zimt"}
  {:id "60e4faa4-b39a-4539-b516-cdeceffd5541",
   :category "Käse & Co",
-  :name "Tofu"}]
+  :name "Tofu"}
+ {:id "b6d355fd-af3e-4b23-8949-f11cb93f0570",
+  :category "Käse & Co",
+  :name "Tortellini"}
+ {:id "fdde7243-3e9e-4044-98bb-b7ba8a6414b1",
+  :category "Beilage",
+  :name "Pesto"}
+ {:id "d8396502-884f-4314-9e47-42545fe4be84",
+  :category "Käse & Co",
+  :name "Camenbert"}
+ {:id "ea3e293f-a982-484b-bc0c-c5d27afae2f7",
+  :category "Käse & Co",
+  :name "Ofenkäse"}
+ {:id "36071b41-2b7b-4431-aad1-8a87b99327f6",
+  :category "Tiefkühl",
+  :name "Aufback-Semmeln"}
+ {:id "d33ad997-4d02-4437-8d35-db8e22fdb4b0",
+  :category "Tiefkühl",
+  :name "Aufback-Brezeln"}]

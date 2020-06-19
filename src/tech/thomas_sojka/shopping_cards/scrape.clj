@@ -228,6 +228,9 @@
     (write-edn "recipes.edn"
                (conj recipes {:id recipe-id :name name :link link :image image}))))
 
-
-
-
+(comment
+  (->
+   {:name "Gebackender Feta", :link "https://www.chefkoch.de/rezepte/2490101391534933/Panierter-Schafskaese.html", :image "https://img.chefkoch-cdn.de/rezepte/3393871505204306/bilder/1076610/crop-360x240/gebackener-feta-auf-gemischtem-salat-mit-honigdressing.jpg"}
+   add-ingredients
+   dedup-ingredients
+   add-new-recipe))
