@@ -2,6 +2,7 @@
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
             [clojure.string :as s]
+            [tech.thomas-sojka.shopping-cards.util :refer [write-edn]]
             [tick.core :refer [now]]))
 
 (def trello-api "https://api.trello.com/1")
@@ -114,6 +115,58 @@
     (doseq [ingredient ingredients]
       (create-trell-checklist-item checklist-id ingredient))
     card-id))
+
+(comment
+  (defn show-recipe [recipe-id]
+    (let [recipe (some (fn [{:keys [id] :as recipe}] (when (= id recipe-id) recipe))(load-recipes))
+          cooked-with (filter #(= (:recipe-id %) (:id recipe)) (load-cooked-with))
+          ingredients (map
+                       #(some (fn [ingredient] (when (= (:ingredient-id %) (:id ingredient)) (merge ingredient %))) (load-ingredients))
+                       cooked-with)]
+      (assoc recipe :ingredients
+             ingredients)))
+
+  (defn uuid [] (str (java.util.UUID/randomUUID)))
+
+  (defn add-ingredient [recipe-id {:keys [amount category name amount-desc unit]}]
+    (let [ingredient-id (uuid)]
+      {:recipe-id recipe-id :amount-desc amount-desc
+       :amount amount :unit unit :ingredient-id ingredient-id
+       :id (uuid)}
+      {:id ingredient-id :name name :category category}))
+
+  (defn find-ingredient [ingredient-name]
+    (some #(when (= (:name %) ingredient-name) (:id %)) (load-ingredients)))
+
+  (defn add-cooked-with [recipe-id ingredient-name {:keys [amount amount-desc unit] :or {amount nil amount-desc "" unit nil}}]
+    (write-edn
+     "cooked-with.edn"
+     (conj
+      (load-cooked-with)
+      {:recipe-id recipe-id :amount-desc amount-desc
+       :amount amount :unit unit :ingredient-id (find-ingredient ingredient-name)
+       :id (uuid)})))
+
+  (defn remove-cooked-with [recipe-id ingredient-name]
+    (write-edn
+     "cooked-with.edn"
+     (remove
+      #(and (= recipe-id (:recipe-id %)) (= (:ingredient-id %) (find-ingredient ingredient-name)))
+      (load-cooked-with))))
+
+  (def recipe-count (atom 0))
+  (do
+    (swap! recipe-count inc)
+    (def recipe-id (:id (first (drop @recipe-count (load-recipes))))))
+  (show-recipe recipe-id)
+  (map :name (:ingredients (show-recipe recipe-id)))
+  (find-ingredient "Mais")
+  (add-cooked-with recipe-id "Paprika" {:amount-desc "" :amount nil :unit nil})
+  (remove-cooked-with recipe-id "Salami")
+  ;; todo remove ingredients championgons
+  #_(add-ingredient "dd3fa340-a54a-4dc8-aea2-68cdc3656608" {}))
+
+
 
 
 
