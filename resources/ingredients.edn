@@ -118,6 +118,12 @@
  {:id "690fdb5c-711b-4b1b-918b-148d2a4eb355",
   :category "Tiefkühl",
   :name "Spinat"}
+ {:id "8c98a110-b7cd-477c-ab8f-9a08074ab779",
+  :category "Tiefkühl",
+  :name "Jalapenos"}
+ {:id "f5a0f2a7-efa8-4fa4-9ba1-d9dc402364df",
+  :category "Tiefkühl",
+  :name "Milde Peperoni"}
  {:id "282ef7bf-6d3a-4810-b331-5cf02d4e21b2",
   :category "Gewürze",
   :name "Peperoni"}

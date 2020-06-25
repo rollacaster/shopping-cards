@@ -138,31 +138,27 @@
   (defn find-ingredient [ingredient-name]
     (some #(when (= (:name %) ingredient-name) (:id %)) (load-ingredients)))
 
-  (defn add-cooked-with [recipe-id ingredient-name {:keys [amount amount-desc unit] :or {amount nil amount-desc "" unit nil}}]
+  (defn add-cooked-with [recipe-id ingredient-id {:keys [amount amount-desc unit] :or {amount nil amount-desc "" unit nil}}]
     (write-edn
      "cooked-with.edn"
      (conj
       (load-cooked-with)
       {:recipe-id recipe-id :amount-desc amount-desc
-       :amount amount :unit unit :ingredient-id (find-ingredient ingredient-name)
+       :amount amount :unit unit :ingredient-id ingredient-id
        :id (uuid)})))
 
-  (defn remove-cooked-with [recipe-id ingredient-name]
+  (defn remove-cooked-with [recipe-id ingredient-id]
     (write-edn
      "cooked-with.edn"
      (remove
-      #(and (= recipe-id (:recipe-id %)) (= (:ingredient-id %) (find-ingredient ingredient-name)))
+      #(and (= recipe-id (:recipe-id %)) (= (:ingredient-id %) ingredient-id))
       (load-cooked-with))))
-
-  (def recipe-count (atom 0))
-  (do
-    (swap! recipe-count inc)
-    (def recipe-id (:id (first (drop @recipe-count (load-recipes))))))
+  (load-recipes)
+  (def recipe-id "dd3fa340-a54a-4dc8-aea2-68cdc3656608")
   (show-recipe recipe-id)
-  (map :name (:ingredients (show-recipe recipe-id)))
-  (find-ingredient "Mais")
-  (add-cooked-with recipe-id "Paprika" {:amount-desc "" :amount nil :unit nil})
-  (remove-cooked-with recipe-id "Salami")
+  (map ingredient-text (map vector (:ingredients (show-recipe recipe-id))))
+  (add-cooked-with recipe-id (find-ingredient "Milde Peperoni") {:amount-desc "" :amount nil :unit nil})
+  (remove-cooked-with recipe-id (find-ingredient "Milde Peperoni"))
   ;; todo remove ingredients championgons
   #_(add-ingredient "dd3fa340-a54a-4dc8-aea2-68cdc3656608" {}))
 
