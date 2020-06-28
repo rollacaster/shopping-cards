@@ -56,11 +56,10 @@
                      (some #(when (= (:id %) ingredient-id) %) (load-ingredients)))))
        (remove #(= (:category %) "Gewürze"))
        (remove #(= (:category %) "Backen"))
-       (group-by :category)
-       (sort-by :category (fn [a b] (< (.indexOf penny-order a) (.indexOf penny-order b))))
-       (map second)
-       flatten
        (group-by :id)
+       (sort-by second (fn [[a] [b]]
+                         (prn (:category a))
+                        (< (.indexOf penny-order (:category a)) (.indexOf penny-order (:category b)))))
        (map (fn [[id ingredients]] (vector id (ingredient-text ingredients))))
        vec))
 
