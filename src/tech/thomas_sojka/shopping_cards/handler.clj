@@ -11,7 +11,7 @@
 
 (defroutes app-routes
   (GET "/" [] (resource-response "index-prd.html" {:root "public"}))
-  (GET "/recipes" [] {:status 200 :body (vec (load-recipes)) :headers {"Content-type" "application/edn"}})
+  (GET "/recipes" [] {:status 200 :body (vec (filter (comp not :inactive) (load-recipes))) :headers {"Content-type" "application/edn"}})
   (GET "/ingredients" [recipe-ids]
        (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids))))
   (POST "/shopping-card" request

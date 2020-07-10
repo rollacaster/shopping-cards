@@ -1,6 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.core
   (:require [clj-http.client :as client]
             [clojure.java.io :as io]
+            [clojure.set :refer [difference]]
             [clojure.string :as s]
             [tech.thomas-sojka.shopping-cards.util :refer [write-edn]]
             [tick.core :refer [now]]))
@@ -116,6 +117,47 @@
     card-id))
 
 (comment
+  (defn meal-line->clj [meal-line]
+  (let [meal (apply str (drop 2 meal-line))]
+    meal
+    (if (s/starts-with? meal "[")
+      (let [[_ meal-name link] (re-matches #"\[(.*)\]\((.*)\)" meal)]
+        {:name meal-name :link link})
+      {:name meal})))
+
+(defn load-trello-recipes []
+  (let [recipes-card-description
+        (:desc (:body (client/get (str trello-api "/cards/" "OT6HW1Ik")
+                                  {:query-params
+                                   {:key (:trello-key creds-file)
+                                    :token (:trello-token creds-file)}
+                                   :as :json})))]
+    (->> recipes-card-description
+         s/split-lines
+         (filter not-empty)
+         (take-while #(not= % "Selten"))
+         (filter #(s/includes? % "- "))
+         (map meal-line->clj))))
+
+(def trello-recipes (map :name (load-trello-recipes)))
+(def added-recipes
+  (difference
+   (set trello-recipes)
+   (set (map :name (load-recipes)))))
+
+(def removed-recipes
+  (difference
+   (set (->> (load-recipes)
+             (filter (comp not :inactive))
+             (map :name)))
+   (set trello-recipes)))
+
+(defn mark-inactive-recipes [recipes remove-recipes]
+  (write-edn "recipes.edn"
+             (map #(assoc % :inactive (if (remove-recipes (:name %)) true false)) recipes)))
+
+
+
   (defn show-recipe [recipe-id]
     (let [recipe (some (fn [{:keys [id] :as recipe}] (when (= id recipe-id) recipe))(load-recipes))
           cooked-with (filter #(= (:recipe-id %) (:id recipe)) (load-cooked-with))
