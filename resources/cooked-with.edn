@@ -1570,4 +1570,69 @@
   :amount-desc nil,
   :amount nil,
   :ingredient-id "60ab2373-1dbd-4884-8a9b-5ae626d245ce",
-  :recipe-id "6b69cebd-b4e6-424f-a908-dc325c8c2829"}]
+  :recipe-id "6b69cebd-b4e6-424f-a908-dc325c8c2829"}
+ {:id "c5f2a77e-dcf1-41ba-b60f-60ea1cb41a66",
+  :amount-desc "1 Prise(n)",
+  :amount 1,
+  :ingredient-id "94f58d5a-221b-48d4-9f9e-118d1fdce128",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "a4c32f85-9770-478d-98a5-66001c02bffb",
+  :amount-desc "1 Prise(n)",
+  :amount 1,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "e32683ae-c408-45c3-903d-519a93b492cc",
+  :amount-desc "1 Prise(n)",
+  :amount 1,
+  :ingredient-id "54c81443-15b7-48b9-883f-0d88cc131e5e",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "11ae56b4-3ae8-475a-ba6a-547d6dab6630",
+  :amount-desc "2 TL",
+  :amount 2,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "1d015614-0356-44b1-b418-cccc415535a7",
+  :amount-desc "400 g",
+  :amount 400,
+  :ingredient-id "2afef478-85f4-4e5c-baeb-b04f48e4a945",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "3bb28335-3b11-43d7-b7fc-917e5ca3813f",
+  :amount-desc "800 g",
+  :amount 800,
+  :ingredient-id "3599b722-c387-433f-a20a-5ef1bcc0fd34",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "f1ec32f6-d7d5-452d-b700-6240aa240086",
+  :amount-desc "50 ml",
+  :amount 50,
+  :ingredient-id nil,
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "f33b6078-a8d0-4b1a-a89d-05971af401f2",
+  :amount-desc "400 g",
+  :amount 400,
+  :ingredient-id "5eef57be-bc04-4f19-9d58-9c6eb2a5eddd",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "9fbf76ac-3299-48b9-bfcd-c3a827cf1d73",
+  :amount-desc "2 EL",
+  :amount 2,
+  :ingredient-id "c0cf3e5e-609f-474e-9fde-810285a0c31b",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "a9087661-5668-48c6-9414-f40a39d0e1de",
+  :amount-desc "1 EL",
+  :amount 1,
+  :ingredient-id "132de4f5-99cf-4078-9063-ff5b89d54aec",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "4692f29f-e221-4126-a13b-dd544f20c7c5",
+  :amount-desc "1 Prise(n)",
+  :amount 1,
+  :ingredient-id "83d5b8e1-945f-4917-9cd7-f9ddb6330b89",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "d7261b8b-c45e-4a31-bc07-0d56d0a1a471",
+  :amount-desc "1 TL",
+  :amount 1,
+  :ingredient-id "31bff67e-5285-475a-8d03-0228923d7215",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
+ {:id "9254d275-32ae-44f6-bdfa-89e3e93ea338",
+  :amount-desc "150 g",
+  :amount 150,
+  :ingredient-id "64e38f58-0fa1-4dee-8f41-fbac25a77f5f",
+  :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}]

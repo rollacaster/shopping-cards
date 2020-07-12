@@ -118,12 +118,14 @@
 (defn remove-ingredient [recipe ingredient-name]
   (update recipe :ingredients #(remove (fn [ingredient] (= ingredient-name (:name ingredient))) %)))
 
-(comment
 
+
+(comment
   (->
    (first (filter :link (added-recipes (load-trello-recipes))))
    scrape/add-ingredients
+   (remove-ingredient "Hähnchenbrustfilet, roh")
    dedup-ingredients
-   (remove-ingredient "Schinken")
-   scrape/find-image
+   #_scrape/find-image
+   (assoc :link "https://www.weightwatchers.de/images/1031/dynamic/foodandrecipes/2014/05/SpaetzeleHaehnchenauflauf2_800x800.jpg")
    add-new-recipe))

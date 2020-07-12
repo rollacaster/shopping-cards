@@ -1,22 +1,23 @@
 {"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver"}
  "Paprika" #{"Paprikaschote(n), rot"}
  "Frischkäse" #{"Frischkäse" "Frischkäse, leicht"}
- "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen"}
+ "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz"}
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
  "Wasser"#{"Wasser, lauwarm" "Wasser"}
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
-        "Olivenöl"}
+        "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln"}
  "Tomate" #{"Tomate(n), getrocknete" "getrocknete Tomaten" "Pizzatomaten" "Cherrytomate(n)"}
  "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
- "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"}
+ "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"
+                      "Tomaten, passiert"}
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener"
                     "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                     "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
-                    "Emmentaler, gerieben"}
+                    "Emmentaler, gerieben" "Käse, gerieben, 30 % Fett i. Tr."}
  "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen"}
  "Reis"#{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis"}
  "Schinken"#{"Kochschinken"}
@@ -30,20 +31,20 @@
             "Spinat, TK oder frisch dann blanchiert"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche"}
- "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche"}
+ "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett"}
  "Crème fraîche" #{"Creme fraiche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
  "Champignons" #{"Champignons, frisch, nicht zu groß"}
  "Mais" #{"Mais, TK oder 1 Dose"}
  "Hefe" #{"Trockenhefe oder 1/2 Pck. Frischhefe" "Frischhefe"}
- "Spätzle" #{"Spätzle, frische, aus dem Kühlregal"}
+ "Spätzle" #{"Spätzle, frische, aus dem Kühlregal" "Spätzle (Frischprodukt)"}
  "Kräuter" #{"Kräuter, gemischte, TK" "Kräuter, frische (Basilikum, Petersilie, Oregano)"}
  "Petersilie" #{"Petersilie, gehackt"}
  "Ingwer" #{"etwas Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
- "Chilli" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch"}
- "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK"}
+ "Chilli" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"}
+ "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK" "Romanesco"}
  "Zitrone"#{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon"}
  "Feta" #{"Schafskäse"}
  "Semmel" #{"Brötchen" "Weißbrot, altbackenes" "als Beilage Semmeln oder Brot"}
@@ -55,4 +56,5 @@
  "Milch" #{"etwas Milch zum verdünnen von Schmand"}
  "Zucker"#{"evtl. Zucker"}
  "Zucchini" #{" Zucchini"}
- "Cabanossi" #{"Cabanossi)"}}
+ "Cabanossi" #{"Cabanossi)"}
+ "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet"}}
