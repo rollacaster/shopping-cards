@@ -1,14 +1,11 @@
 (ns tech.thomas-sojka.shopping-cards.scrape
   (:require [clj-http.client :as client]
             clojure.pprint
-            [clojure.set :refer [difference]]
             [clojure.string :as s]
             [clojure.walk :as w]
             [hickory.core :as html]
             [hickory.select :as select]
-            [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
-            [tech.thomas-sojka.shopping-cards.db :as db]
-            [tech.thomas-sojka.shopping-cards.trello :refer [trello-api]]))
+            [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def search-engine-cx "005510767845232759155:zdkkvfzersx")
@@ -113,6 +110,27 @@
          (w/postwalk walk)
          (map scrape-eath-this-ingredient))))
 
+(defn scrape-weightwatchers [link]
+  (let [recipe-html (:body (client/get link))]
+    (let [ingredients (->> recipe-html
+                           html/parse
+                           html/as-hickory
+                           (select/select
+                            (select/child
+                             (select/class "VerticalList_listTwoColumn__a4AGp")))
+                           (map :content)
+                           first
+                           (map (comp  :content first :content first :content first :content)))
+          names (map (comp s/trim first :content first) ingredients)
+          amounts (map (comp parse-int first :content first :content second) ingredients)
+          amount-descs (map (comp first :content second :content second) ingredients)]
+      (map (fn [name amount amount-desc]
+             {:name name
+              :amount amount
+              :amount-desc (str amount amount-desc)
+              :unit (s/trim amount-desc)})
+           names amounts amount-descs))))
+
 (defn add-ingredients [recipe]
   (cond (and (:link recipe)
              (s/includes? (:link recipe) "chefkoch")
@@ -129,6 +147,11 @@
              (not (:ingredients recipe)))
         (assoc recipe
                :ingredients (scrape-eat-this-ingredients (:link recipe)))
+        (and (:link recipe)
+             (s/includes? (:link recipe) "weightwatchers")
+             (not (:ingredients recipe)))
+        (assoc recipe
+               :ingredients (scrape-weightwatchers (:link recipe)))
         :else recipe))
 
 (defn find-image [recipe]
