@@ -1,12 +1,14 @@
 (ns tech.thomas-sojka.shopping-cards.auth
   (:require [clj-http.client :as client]
             [clojure.core.async :refer [<!! >! chan go]]
+            [clojure.java.io :as io]
             [clojure.java.shell :refer [sh]]
             [clojure.string :as s]
             [ring.adapter.jetty :refer [run-jetty]]
             [ring.middleware.params :refer [wrap-params]]
             [tick.core :as t]))
 
+(def creds-file (read-string (slurp (io/resource ".creds.edn"))))
 (def oauth-creds-path (str (System/getProperty "user.home") "/.google-oauth-creds"))
 (def oauth-creds
   (try
@@ -71,7 +73,7 @@
   (cond
     (valid-creds?)
     (:access-token @creds)
-    
+
     (:refresh_token oauth-creds)
     (reset-access-token! (refresh-access-token {:client-id client-id
                                                 :client-secret client-secret
@@ -86,7 +88,7 @@
         (spit oauth-creds-path (prn-str drive-api-credentials))
         (reset-access-token! drive-api-credentials)))))
 (comment
-  (def creds-file (read-string (slurp ".creds.edn")))
+
   (access-token {:client-id (:drive-client-id creds-file)
                  :client-secret (:drive-client-secret creds-file)
                  :redirect-uri "http://localhost:8080"

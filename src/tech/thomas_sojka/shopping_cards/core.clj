@@ -1,18 +1,12 @@
 (ns tech.thomas-sojka.shopping-cards.core
   (:require [clj-http.client :as client]
-            [clojure.java.io :as io]
-            [clojure.set :refer [difference]]
             [clojure.string :as s]
-            [tech.thomas-sojka.shopping-cards.util :refer [write-edn]]
+            [tech.thomas-sojka.shopping-cards.auth :refer [creds-file]]
+            [tech.thomas-sojka.shopping-cards.db :as db]
+            [tech.thomas-sojka.shopping-cards.trello :refer [trello-api]]
             [tick.core :refer [now]]))
 
-(def trello-api "https://api.trello.com/1")
-(def creds-file (read-string (slurp (io/resource ".creds.edn"))))
-
-(defn load-edn [path] (read-string (slurp (io/resource path))))
-(defn load-recipes [] (load-edn "recipes.edn"))
-(defn load-ingredients [] (load-edn "ingredients.edn"))
-(defn load-cooked-with [] (load-edn "cooked-with.edn"))
+(defn load-recipes [] (db/load-recipes))
 
 (defn ingredient-text [ingredients]
   (let [no-unit? (->> ingredients
@@ -21,9 +15,6 @@
         no-amount? (->> ingredients
                         (map :amount-desc)
                         (every? nil?))
-        all-amount? (->> ingredients
-                        (map :amount)
-                        (every? some?))
         name (:name (first ingredients))]
     (cond no-amount? name
           (= (count ingredients) 1) (str (:amount-desc (first ingredients)) " " name)
@@ -49,18 +40,16 @@
    "Getränke"])
 
 (defn ingredients-for-recipes [selected-recipe-ids]
-  (->> (load-cooked-with)
+  (->> (db/load-cooked-with)
        (filter #(contains? selected-recipe-ids (:recipe-id %)))
        (map (fn [{:keys [ingredient-id amount-desc amount]}]
               (merge {:amount-desc amount-desc
                       :amount amount}
-                     (some #(when (= (:id %) ingredient-id) %) (load-ingredients)))))
+                     (some #(when (= (:id %) ingredient-id) %) (db/load-ingredients)))))
        (remove #(= (:category %) "Gewürze"))
        (remove #(= (:category %) "Backen"))
        (group-by :id)
-       (sort-by second (fn [[a] [b]]
-                         (prn (:category a))
-                        (< (.indexOf penny-order (:category a)) (.indexOf penny-order (:category b)))))
+       (sort-by second (fn [[a] [b]] (< (.indexOf penny-order (:category a)) (.indexOf penny-order (:category b)))))
        (map (fn [[id ingredients]] (vector id (ingredient-text ingredients))))
        vec))
 
@@ -116,92 +105,7 @@
       (create-trell-checklist-item checklist-id ingredient))
     card-id))
 
-(comment
-  (defn meal-line->clj [meal-line]
-  (let [meal (apply str (drop 2 meal-line))]
-    meal
-    (if (s/starts-with? meal "[")
-      (let [[_ meal-name link] (re-matches #"\[(.*)\]\((.*)\)" meal)]
-        {:name meal-name :link link})
-      {:name meal})))
 
-(defn load-trello-recipes []
-  (let [recipes-card-description
-        (:desc (:body (client/get (str trello-api "/cards/" "OT6HW1Ik")
-                                  {:query-params
-                                   {:key (:trello-key creds-file)
-                                    :token (:trello-token creds-file)}
-                                   :as :json})))]
-    (->> recipes-card-description
-         s/split-lines
-         (filter not-empty)
-         (take-while #(not= % "Selten"))
-         (filter #(s/includes? % "- "))
-         (map meal-line->clj))))
-
-(def trello-recipes (map :name (load-trello-recipes)))
-(def added-recipes
-  (difference
-   (set trello-recipes)
-   (set (map :name (load-recipes)))))
-
-(def removed-recipes
-  (difference
-   (set (->> (load-recipes)
-             (filter (comp not :inactive))
-             (map :name)))
-   (set trello-recipes)))
-
-(defn mark-inactive-recipes [recipes remove-recipes]
-  (write-edn "recipes.edn"
-             (map #(assoc % :inactive (if (remove-recipes (:name %)) true false)) recipes)))
-
-
-
-  (defn show-recipe [recipe-id]
-    (let [recipe (some (fn [{:keys [id] :as recipe}] (when (= id recipe-id) recipe))(load-recipes))
-          cooked-with (filter #(= (:recipe-id %) (:id recipe)) (load-cooked-with))
-          ingredients (map
-                       #(some (fn [ingredient] (when (= (:ingredient-id %) (:id ingredient)) (merge ingredient %))) (load-ingredients))
-                       cooked-with)]
-      (assoc recipe :ingredients
-             ingredients)))
-
-  (defn uuid [] (str (java.util.UUID/randomUUID)))
-
-  (defn add-ingredient [recipe-id {:keys [amount category name amount-desc unit]}]
-    (let [ingredient-id (uuid)]
-      {:recipe-id recipe-id :amount-desc amount-desc
-       :amount amount :unit unit :ingredient-id ingredient-id
-       :id (uuid)}
-      {:id ingredient-id :name name :category category}))
-
-  (defn find-ingredient [ingredient-name]
-    (some #(when (= (:name %) ingredient-name) (:id %)) (load-ingredients)))
-
-  (defn add-cooked-with [recipe-id ingredient-id {:keys [amount amount-desc unit] :or {amount nil amount-desc "" unit nil}}]
-    (write-edn
-     "cooked-with.edn"
-     (conj
-      (load-cooked-with)
-      {:recipe-id recipe-id :amount-desc amount-desc
-       :amount amount :unit unit :ingredient-id ingredient-id
-       :id (uuid)})))
-
-  (defn remove-cooked-with [recipe-id ingredient-id]
-    (write-edn
-     "cooked-with.edn"
-     (remove
-      #(and (= recipe-id (:recipe-id %)) (= (:ingredient-id %) ingredient-id))
-      (load-cooked-with))))
-  (load-recipes)
-  (def recipe-id "dd3fa340-a54a-4dc8-aea2-68cdc3656608")
-  (show-recipe recipe-id)
-  (map ingredient-text (map vector (:ingredients (show-recipe recipe-id))))
-  (add-cooked-with recipe-id (find-ingredient "Milde Peperoni") {:amount-desc "" :amount nil :unit nil})
-  (remove-cooked-with recipe-id (find-ingredient "Milde Peperoni"))
-  ;; todo remove ingredients championgons
-  #_(add-ingredient "dd3fa340-a54a-4dc8-aea2-68cdc3656608" {}))
 
 
 

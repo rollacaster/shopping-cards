@@ -1,25 +1,17 @@
 (ns tech.thomas-sojka.shopping-cards.scrape
   (:require [clj-http.client :as client]
-            [clojure.java.io :as io]
             clojure.pprint
             [clojure.set :refer [difference]]
             [clojure.string :as s]
             [clojure.walk :as w]
             [hickory.core :as html]
             [hickory.select :as select]
-            [tech.thomas-sojka.shopping-cards.auth :refer [access-token]]
-            [tech.thomas-sojka.shopping-cards.core :refer [load-edn load-recipes]]))
+            [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
+            [tech.thomas-sojka.shopping-cards.db :as db]
+            [tech.thomas-sojka.shopping-cards.trello :refer [trello-api]]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def search-engine-cx "005510767845232759155:zdkkvfzersx")
-(def trello-api "https://api.trello.com/1")
-
-(def creds-file (read-string (slurp (io/resource ".creds.edn"))))
-
-(defn write-edn [path data]
-  (binding [*print-level* nil
-            *print-length* nil]
-    (clojure.pprint/pprint data (clojure.java.io/writer (str "resources/" path)))))
 
 (defn oauth-token []
   (access-token {:client-id (:drive-client-id creds-file)
@@ -153,56 +145,6 @@
                :as :json :throw-entire-message? true})
              :body :items first :link)))
 
-(defn meal-line->clj [meal-line]
-  (let [meal (apply str (drop 2 meal-line))]
-    meal
-    (if (s/starts-with? meal "[")
-      (let [[_ meal-name link] (re-matches #"\[(.*)\]\((.*)\)" meal)]
-        {:name meal-name :link link})
-      {:name meal})))
-
-(defn load-trello-recipes []
-  (let [recipes-card-description
-        (:desc (:body (client/get (str trello-api "/cards/" "OT6HW1Ik")
-                                  {:query-params
-                                   {:key (:trello-key creds-file)
-                                    :token (:trello-token creds-file)}
-                                   :as :json})))]
-    (->> recipes-card-description
-         s/split-lines
-         (filter not-empty)
-         (take-while #(not= % "Schnell Gerichte"))
-         (map meal-line->clj))))
-
-(defn dedup-ingredients [recipe]
-  (update recipe :ingredients (fn [ingredients]
-                                (map (fn [{:keys [name] :as ingredient}]
-                                       (let [ingredient-name (or
-                                                              (some (fn [[ingredient-group-name duplicated-name]]
-                                                                      (when (or (= name ingredient-group-name)
-                                                                                (contains? duplicated-name name))
-                                                                        ingredient-group-name))
-                                                                    (load-edn "duplicated-ingredients.edn"))
-                                                              name)]
-                                         (assoc ingredient
-                                                :name ingredient-name
-                                                :id (some #(when (= (:name %) ingredient-name) (:id %)) (load-edn "ingredients.edn")))))
-                                     ingredients))))
-
-(defn load-new-recipes []
-  (let [new-recipes (difference
-                     (->> (load-trello-recipes)
-                          (map :name)
-                          set)
-                     (->> (load-recipes)
-                          (map :name)
-                          set))]
-    (->> new-recipes
-         (map (fn [new-recipe] (some #(when (= (:name %) new-recipe) %) (load-trello-recipes))))
-         (map add-ingredients)
-         (map find-image)
-         (map dedup-ingredients))))
-
 ;; TODO Handle new ingredients before adding recipe
 (defn new-ingredients [new-recipes]
   (->> new-recipes
@@ -212,25 +154,6 @@
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
-(defn add-new-recipe [{:keys [name link image] :as new-recipe}]
-  (let [recipe-id (uuid)
-        cooked-with (load-edn "cooked-with.edn")
-        recipes (load-edn "recipes.edn")]
-    (write-edn
-     "cooked-with.edn"
-     (->> new-recipe
-          :ingredients
-          (map
-           (fn [{:keys [amount-desc amount id]}]
-             {:id (uuid) :amount-desc amount-desc :amount amount :ingredient-id id :recipe-id recipe-id}))
-          (concat cooked-with)
-          vec))
-    (write-edn "recipes.edn"
-               (conj recipes {:id recipe-id :name name :link link :image image}))))
 
 (comment
-  (->
-   {:name "Gebackender Feta", :link "https://www.chefkoch.de/rezepte/2490101391534933/Panierter-Schafskaese.html", :image "https://img.chefkoch-cdn.de/rezepte/3393871505204306/bilder/1076610/crop-360x240/gebackener-feta-auf-gemischtem-salat-mit-honigdressing.jpg"}
-   add-ingredients
-   dedup-ingredients
-   add-new-recipe))
+  )
