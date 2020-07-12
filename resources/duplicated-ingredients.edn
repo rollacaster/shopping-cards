@@ -7,15 +7,16 @@
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl"}
- "Butter" #{"Butter zum Fetten der Form"}
- "Nudeln" #{"Pasta" "Rigatoni oder Penne"}
+ "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
+ "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln"}
  "Tomate" #{"Tomate(n), getrocknete" "getrocknete Tomaten" "Pizzatomaten" "Cherrytomate(n)"}
  "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
  "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"}
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener"
                     "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
-                    "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"}
+                    "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
+                    "Emmentaler, gerieben"}
  "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen"}
  "Reis"#{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis"}
  "Schinken"#{"Kochschinken"}
@@ -42,7 +43,7 @@
  "Ingwer" #{"etwas Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
  "Chilli" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch"}
- "Brokkoli" #{"Brokkoli, ca. 350 g"}
+ "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK"}
  "Zitrone"#{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon"}
  "Feta" #{"Schafskäse"}
  "Semmel" #{"Brötchen" "Weißbrot, altbackenes" "als Beilage Semmeln oder Brot"}
