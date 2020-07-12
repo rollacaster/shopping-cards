@@ -1,5 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.handler
-  (:require [compojure.core :refer [defroutes GET POST]]
+  (:require [compojure.api.sweet :refer [api GET POST]]
             [compojure.route :as route]
             [muuntaja.middleware :refer [wrap-format]]
             [ring.middleware.params :refer [wrap-params]]
@@ -9,16 +9,17 @@
              :refer
              [create-klaka-shopping-card ingredients-for-recipes load-recipes]]))
 
-(defroutes app-routes
-  (GET "/" [] (resource-response "index-prd.html" {:root "public"}))
-  (GET "/recipes" [] {:status 200 :body (vec (filter (comp not :inactive) (load-recipes))) :headers {"Content-type" "application/edn"}})
-  (GET "/ingredients" [recipe-ids]
-       (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids))))
-  (POST "/shopping-card" request
-        {:status 201
-         :body (create-klaka-shopping-card (:body-params request))
-         :headers {"Content-type" "application/edn"}})
-  (route/not-found "<h1>Page not found</h1>"))
+(def app-routes
+  (api
+   (GET "/" [] (resource-response "index-prd.html" {:root "public"}))
+   (GET "/recipes" [] {:status 200 :body (vec (filter (comp not :inactive) (load-recipes))) :headers {"Content-type" "application/edn"}})
+   (GET "/ingredients" [recipe-ids]
+        (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids))))
+   (POST "/shopping-card" request
+         {:status 201
+          :body (create-klaka-shopping-card (:body-params request))
+          :headers {"Content-type" "application/edn"}})
+   (route/not-found "<h1>Page not found</h1>")))
 
 (def app
   (-> app-routes
