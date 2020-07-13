@@ -118,9 +118,47 @@
 (defn remove-ingredient [recipe ingredient-name]
   (update recipe :ingredients #(remove (fn [ingredient] (= ingredient-name (:name ingredient))) %)))
 
+(defn find-recipe [recipe-name]
+  (some #(when (= (:name %) recipe-name) (:id %)) (db/load-recipes)))
+(let [types (->> (load-trello-recipes)
+                 (map #(assoc % :type (if (#{"Sojka Sandwiches"
+                                             "Käse-Brezeln"
+                                             "Camenbert"
+                                             "Ofenkäse"
+                                             "Spiegelei mit Spinat"
+                                             "Brezel + Tofu"
+                                             "Gebackender Feta"
+                                             "Spätzle mit Ei"
+                                             "Tortellini mit Pesto"} (:name %)) "FAST" "NORMAL")))
+                 (map #(assoc % :id (find-recipe (:name %))))
+                 (filter :id)
+                 (map #(select-keys % [:id :type])))]
+  (db/write-edn
+   "recipes.edn"
+   (map
+    (fn [[_ lists]]
+      (apply merge lists))
+    (merge-with
+     concat
+     (group-by :id (db/load-recipes))
+     (group-by :id types)))))
+
 
 
 (comment
+  (let [new-recipe (->> (load-trello-recipes)
+                        added-recipes
+                        #_(drop 1)
+                        #_(take 1)
+                        #_first
+                        (map :name))]
+    (-> new-recipe
+        (assoc :image "https://www.ditsch.de/mcinfo_assets/de/51d7fa67d7bf0a7db660b93b3530605eb3b222ff.jpeg")
+        (assoc :ingredients [{:name "Spätzle" :amount 500 :amount-desc "500 g" :unit "g"}
+                             {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
+        dedup-ingredients
+        #_scrape/find-image
+))
   (->
    (first (filter :link (added-recipes (load-trello-recipes))))
    scrape/add-ingredients

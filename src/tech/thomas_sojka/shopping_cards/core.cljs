@@ -45,22 +45,38 @@
 (def selected-ingredients (r/atom #{}))
 (def ingredients (r/atom []))
 (def loading (r/atom false))
+(def type-order ["NORMAL" "FAST"])
 
 (defn select-recipes []
   [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3
    (doall
-    (map (fn [{:keys [id name link image]}]
-           [recipe (let [selected? (contains? @selected-recipes id)]
-                     {:key id
-                      :name name
-                      :link link
-                      :image image
-                      :selected? selected?
-                      :on-click #(swap! selected-recipes
-                                        (fn [selected-recipes]
-                                          ((if selected? disj conj)
-                                           selected-recipes id)))})])
-         @recipes))])
+    (map
+     (fn [[recipe-type recipes]]
+       [:div {:key recipe-type}
+        [:h2.ph3 (case recipe-type
+                   "NORMAL" ""
+                   "FAST" "Schnell Gerichte")]
+        (doall
+         (map (fn [{:keys [id name link image]}]
+                [recipe (let [selected? (contains? @selected-recipes id)]
+                          {:key id
+                           :name name
+                           :link link
+                           :image image
+                           :selected? selected?
+                           :on-click #(swap! selected-recipes
+                                             (fn [selected-recipes]
+                                               ((if selected? disj conj)
+                                                selected-recipes id)))})])
+              recipes))])
+     (sort-by
+      (fn [[recipe-type]] (some
+                          (fn [[idx recipe-type-order]]
+                            (when (= recipe-type-order recipe-type) idx))
+                          (map-indexed #(vector %1 %2) type-order)))
+      (group-by
+       :type
+       @recipes))))])
 
 (defn deselect-ingredients []
   (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))

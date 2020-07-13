@@ -1,44 +1,33 @@
-({:id "397a5deb-7591-4851-9e95-74ebcc2def04",
-  :name "Käse-Brezeln",
-  :link nil,
+({:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
+  :name "Spiegelei mit Spinat",
+  :link "",
   :image
-  "https://img.chefkoch-cdn.de/rezepte/3340221496254924/bilder/1161131/crop-360x240/gefuellte-tomate-kaese-brezeln.jpg"}
- {:id "aa4c16e1-a97c-4bd1-8c97-e2438961fba1",
-  :name "Brezel + Tofu",
-  :link nil,
-  :image
-  "https://lh3.googleusercontent.com/proxy/peD0EhGd_wRZx1c1i0GFemKnlAnPwSK4Y4jp2o-OImQxOeJAvK2HsF1Y_ZesOD3kfC8dpw28yLK5MN2_RUUuhg3TRHuei2j69Vfp5uooqI-izefElXjcN5bcSVZTrUA"}
- {:id "383de5db-c031-4513-808c-ed9ad903aa84",
-  :name "Flammkuchen vegetarisch",
-  :link nil,
-  :image
-  "https://static.tegut.com/fileadmin/_processed_/f/1/csm_Flammkuchen-1920x1080_fe4a4a9ba2.png"}
- {:id "ab147915-2054-475f-bf62-7d69568759d4",
-  :name "Buntes Ofengemüse",
-  :link
-  "https://www.weightwatchers.com/de/recipe/sptzle-hhnchen-auflauf/562a9ae7873e1afb2a3c3c9d",
-  :image
-  "https://www.weightwatchers.de/images/1031/dynamic/foodandrecipes/2014/05/SpaetzeleHaehnchenauflauf2_800x800.jpg"}
- {:id "6b69cebd-b4e6-424f-a908-dc325c8c2829",
-  :name "Brokkoli-Nudelauflauf",
-  :link
-  "https://www.chefkoch.de/rezepte/1149701221232030/Brokkoli-Nudelauflauf.html",
-  :image
-  "https://img.chefkoch-cdn.de/rezepte/90081035040865/bilder/948554/crop-360x240/brokkoli-nudelauflauf.jpg"}
- {:id "91801559-4b7c-4a1a-8d60-8c4df6f6b435",
-  :name "Vegetarisches Pastizio",
-  :link
-  "https://www.chefkoch.de/rezepte/1414951246382895/Vegetarisches-Pastizio.html",
-  :image
-  "https://img.chefkoch-cdn.de/rezepte/1414951246382895/bilder/990583/crop-360x240/vegetarisches-pastizio.jpg",
-  :inactive false}
+  "https://www.springlane.de/magazin/wp-content/uploads/2016/01/Spiegelei-auf-Spinat-und-Kirschtomaten.jpg",
+  :inactive false,
+  :type "FAST"}
  {:id "dd3fa340-a54a-4dc8-aea2-68cdc3656608",
   :name "Pizza",
   :link
   "https://www.chefkoch.de/rezepte/1151011221381450/Der-beste-Pizzateig.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1855021300715711/bilder/340115/crop-360x240/pizza-dell-alpe.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
+ {:id "74b16748-6d83-42c6-8831-8dc952eb5186",
+  :name "Sojka Sandwiches",
+  :link "",
+  :image
+  "https://www.stern.de/vergleich/wp-content/uploads/2018/09/tzs-first-austria-3-in-1-sandwichmaker-waffeleisen-tischgrillklick-system-thermostat-backampel-elektrischer-sandwichtoaster-700-watt-kontaktgrill-abnehmbare-platten.jpg",
+  :inactive false,
+  :type "FAST"}
+ {:id "91801559-4b7c-4a1a-8d60-8c4df6f6b435",
+  :name "Vegetarisches Pastizio",
+  :link
+  "https://www.chefkoch.de/rezepte/1414951246382895/Vegetarisches-Pastizio.html",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1414951246382895/bilder/990583/crop-360x240/vegetarisches-pastizio.jpg",
+  :inactive false,
+  :type "NORMAL"}
  {:id "309b346f-7863-4f3b-a121-9eb5939938d1",
   :name "Krumplisteszta",
   :link
@@ -59,7 +48,14 @@
   "https://www.chefkoch.de/rezepte/1778601287739038/Rosmarinkartoffeln-aus-dem-Ofen.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/632851163951406/bilder/351816/crop-360x240/rosmarinkartoffeln.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
+ {:id "318e0c0f-7d59-433a-850a-5b218453bf5a",
+  :name "Ofenkäse",
+  :link "",
+  :image "https://i.ytimg.com/vi/_MMdtUxqPnY/maxresdefault.jpg",
+  :inactive false,
+  :type "FAST"}
  {:id "24b6cd98-a51f-45d8-9f3d-9eccb5e8365f",
   :name "Gnocchi in Spinat Frischkäse-Soße",
   :link
@@ -80,7 +76,8 @@
   "https://docs.google.com/document/d/1kx9Efvdy-WmMtT8n_N6oKdrM9uEtws6BjImaOjMTI0s/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3309061491475076/bilder/1006870/crop-360x240/falafel-wraps-a-la-milli.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "c8f2b8cd-a0a2-4a44-b11e-93f6339e85bb",
   :name "Spinatlasagne",
   :link
@@ -95,40 +92,85 @@
   :image
   "https://img.chefkoch-cdn.de/rezepte/2534541397069441/bilder/1036211/crop-360x240/vegetarische-gefuellte-zucchini-auf-griechische-art.jpg",
   :inactive true}
+ {:id "aa4c16e1-a97c-4bd1-8c97-e2438961fba1",
+  :name "Brezel + Tofu",
+  :link nil,
+  :image
+  "https://lh3.googleusercontent.com/proxy/peD0EhGd_wRZx1c1i0GFemKnlAnPwSK4Y4jp2o-OImQxOeJAvK2HsF1Y_ZesOD3kfC8dpw28yLK5MN2_RUUuhg3TRHuei2j69Vfp5uooqI-izefElXjcN5bcSVZTrUA",
+  :type "FAST"}
+ {:id "397a5deb-7591-4851-9e95-74ebcc2def04",
+  :name "Käse-Brezeln",
+  :link nil,
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/3340221496254924/bilder/1161131/crop-360x240/gefuellte-tomate-kaese-brezeln.jpg",
+  :type "FAST"}
  {:id "c96ecd6b-681f-4527-8ff4-0302f7f163d5",
   :name "Palatschinken",
   :link
   "https://docs.google.com/document/d/1XgYjXoomsM8Js3DQDMBApv13u3kZ2W81jLny2rDSnBU/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/886391194251662/bilder/129615/crop-360x240/ricotta-palatschinken.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
+ {:id "fe10f893-a565-4ba6-890d-001031e71b17",
+  :name "Gebackender Feta",
+  :link
+  "https://www.chefkoch.de/rezepte/2490101391534933/Panierter-Schafskaese.html",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/3393871505204306/bilder/1076610/crop-360x240/gebackener-feta-auf-gemischtem-salat-mit-honigdressing.jpg",
+  :inactive false,
+  :type "FAST"}
+ {:id "6b35488b-9a01-4b29-a969-8c0f52da7a66",
+  :name "Camenbert",
+  :link "",
+  :image
+  "https://cdn.gutekueche.de/upload/rezept/5726/gebackener-camembert.jpg",
+  :inactive false,
+  :type "FAST"}
  {:id "af2f9e4c-3d6c-4679-a1e0-afb812962a3b",
   :name "Curry",
   :link
   "https://www.chefkoch.de/rezepte/3418081509286217/Veganes-Curry-mit-Kokosmilch-Thai-Art.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3273691486403869/bilder/1130252/crop-360x240/indisches-chicken-mango-curry.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "8311263e-061f-482d-9b8b-e4229734976a",
   :name "One Pot Erdnuss-Nudel",
   :link
   "https://docs.google.com/document/d/1g1dD8fqHd-9d0SkyanjR9aiQJGTaRarV01bmHv4fOs4",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3190371474828227/bilder/1291461/crop-360x240/one-pot-pasta.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "ad958898-735e-438c-847a-f89504087a89",
   :name "Avocado-Pesto",
   :link "https://www.eat-this.org/pasta-mit-avocado-gruenkohl-pesto/",
   :image
   "https://img.chefkoch-cdn.de/rezepte/570881155737167/bilder/988885/crop-360x240/avocado-pesto.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
+ {:id "383de5db-c031-4513-808c-ed9ad903aa84",
+  :name "Flammkuchen vegetarisch",
+  :link nil,
+  :image
+  "https://static.tegut.com/fileadmin/_processed_/f/1/csm_Flammkuchen-1920x1080_fe4a4a9ba2.png",
+  :type "NORMAL"}
+ {:id "ab147915-2054-475f-bf62-7d69568759d4",
+  :name "Buntes Ofengemüse",
+  :link
+  "https://www.weightwatchers.com/de/recipe/sptzle-hhnchen-auflauf/562a9ae7873e1afb2a3c3c9d",
+  :image
+  "https://www.weightwatchers.de/images/1031/dynamic/foodandrecipes/2014/05/SpaetzeleHaehnchenauflauf2_800x800.jpg",
+  :type "NORMAL"}
  {:id "db2d9ab0-1964-4052-a7c0-7c3292929504",
   :name "Käse-Spätzle",
   :link
   "https://www.chefkoch.de/rezepte/1062121211526182/Schnelle-Kaesespaetzle.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1082671214034473/bilder/1020204/crop-360x240/cremige-kaesespaetzle.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "2a04b3e0-2602-49e9-b9a0-444ce06f70a3",
   :name "Raclette im Ofen",
   :link
@@ -136,95 +178,81 @@
   :image
   "https://img.chefkoch-cdn.de/rezepte/210861088430376/bilder/958948/crop-360x240/ananas-raclette-aus-dem-ofen.jpg",
   :inactive true}
+ {:id "6b69cebd-b4e6-424f-a908-dc325c8c2829",
+  :name "Brokkoli-Nudelauflauf",
+  :link
+  "https://www.chefkoch.de/rezepte/1149701221232030/Brokkoli-Nudelauflauf.html",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/90081035040865/bilder/948554/crop-360x240/brokkoli-nudelauflauf.jpg",
+  :type "NORMAL"}
  {:id "d33e56e8-64e1-4b32-9eaf-90c9405caf17",
   :name "Pide",
   :link
   "https://www.chefkoch.de/rezepte/3321291493196664/Tuerkische-Pide-mit-Kaese-und-Sucuk.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3305071490875490/bilder/1004795/crop-360x240/pide-mit-spinat-schafskaese-und-ei.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "76e12d5d-ab18-409b-8b6a-b7e4a5dd6235",
   :name "Cremiger Nudelauflauf",
   :link
   "https://www.chefkoch.de/rezepte/2352371374010722/Cremiger-Nudelauflauf-mit-Tomaten-und-Mozzarella.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/2352371374010722/bilder/988858/crop-360x240/cremiger-nudelauflauf-mit-tomaten-und-mozzarella.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "8b2dd671-20a8-4f55-b3d9-ce8010652f56",
   :name "Spinatknoedel",
   :link
   "https://www.chefkoch.de/rezepte/45491015343536/Spinatknoedel.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/45491015343536/bilder/663561/crop-360x240/spinatknoedel.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "501c77c8-498b-4bec-a2fa-6ea1837eae6b",
   :name "Gemüse-Lassange",
   :link
   "https://www.chefkoch.de/rezepte/1143511220703880/Julies-feine-Gemueselasagne.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/2114131340630587/bilder/1251192/crop-360x240/vegetarische-spinat-gemuese-lasagne-mit-tomatensosse.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "1f0e62ba-72e3-4871-b5ee-a3468a4457e2",
   :name "Kartoffelpuffer",
   :link
   "https://www.chefkoch.de/rezepte/755091178282333/Reibekuchen-Kartoffelpuffer.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/459831139066902/bilder/1218906/crop-360x240/kartoffelpuffer-sehr-einfach.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "f05e0d11-a18c-466f-a83a-cfab622f57c9",
   :name "Spinat-Reis mit Blumenkohl mit Käse überbacken",
   :link
   "https://docs.google.com/document/d/1EF81XXK9o6YBA0oq83maiUJ2RkmToh-FO0JUVtw5528/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/159921069926870/bilder/544569/crop-360x240/reis-mit-spinat-und-schafskaese.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
+ {:id "72dd98af-4248-4497-8279-9268f493ada7",
+  :name "Tortellini mit Pesto",
+  :link "",
+  :image
+  "https://ais.kochbar.de/kbrezept/24257_9592/620x465/tortellini-mit-gruenem-pesto-rezept.jpg",
+  :inactive false,
+  :type "FAST"}
  {:id "70295d13-7639-4ba2-8e48-a8c8157b3121",
   :name "Kartoffelauflauf mit Ei / Rakott Krumpli",
   :link
   "https://docs.google.com/document/d/155d_-rOQnXzYr0aA8uu80-h62x-wVa-ZqYt8q_ahO9Y/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3228081480257308/bilder/966187/crop-360x240/ungarischer-kartoffelauflauf-rakott-krumpli.jpg",
-  :inactive false}
+  :inactive false,
+  :type "NORMAL"}
  {:id "885e60b0-3f89-4f19-b0b4-ed8bc8d619fe",
   :name "Pizzabrötchen",
   :link
   "https://www.chefkoch.de/rezepte/740511176724575/Die-besten-Pizzabroetchen-aller-Zeiten.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/194031082643453/bilder/879874/crop-360x240/pizzabroetchen.jpg",
-  :inactive false}
- {:id "74b16748-6d83-42c6-8831-8dc952eb5186",
-  :name "Sojka Sandwiches",
-  :link "",
-  :image
-  "https://www.stern.de/vergleich/wp-content/uploads/2018/09/tzs-first-austria-3-in-1-sandwichmaker-waffeleisen-tischgrillklick-system-thermostat-backampel-elektrischer-sandwichtoaster-700-watt-kontaktgrill-abnehmbare-platten.jpg",
-  :inactive false}
- {:id "72dd98af-4248-4497-8279-9268f493ada7",
-  :name "Tortellini mit Pesto",
-  :link "",
-  :image
-  "https://ais.kochbar.de/kbrezept/24257_9592/620x465/tortellini-mit-gruenem-pesto-rezept.jpg",
-  :inactive false}
- {:id "6b35488b-9a01-4b29-a969-8c0f52da7a66",
-  :name "Camenbert",
-  :link "",
-  :image
-  "https://cdn.gutekueche.de/upload/rezept/5726/gebackener-camembert.jpg",
-  :inactive false}
- {:id "318e0c0f-7d59-433a-850a-5b218453bf5a",
-  :name "Ofenkäse",
-  :link "",
-  :image "https://i.ytimg.com/vi/_MMdtUxqPnY/maxresdefault.jpg",
-  :inactive false}
- {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
-  :name "Spiegelei mit Spinat",
-  :link "",
-  :image
-  "https://www.springlane.de/magazin/wp-content/uploads/2016/01/Spiegelei-auf-Spinat-und-Kirschtomaten.jpg",
-  :inactive false}
- {:id "fe10f893-a565-4ba6-890d-001031e71b17",
-  :name "Gebackender Feta",
-  :link
-  "https://www.chefkoch.de/rezepte/2490101391534933/Panierter-Schafskaese.html",
-  :image
-  "https://img.chefkoch-cdn.de/rezepte/3393871505204306/bilder/1076610/crop-360x240/gebackener-feta-auf-gemischtem-salat-mit-honigdressing.jpg",
-  :inactive false})
+  :inactive false,
+  :type "NORMAL"})
