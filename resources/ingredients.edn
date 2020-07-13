@@ -199,6 +199,9 @@
  {:id "4d3c25e5-198b-40a2-9aca-467e64185384",
   :category "Gewürze",
   :name "Basilikum"}
+ {:id "d06107aa-68b5-41f0-8256-f124e5d0f240",
+  :category "Gewürze",
+  :name "Kurkuma"}
  {:id "d71c24e8-85d4-4dc3-bb0d-1535a537fcf4",
   :category "Backen",
   :name "Backpulver"}

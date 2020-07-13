@@ -1,7 +1,24 @@
-({:id "ab147915-2054-475f-bf62-7d69568759d4",
+({:id "397a5deb-7591-4851-9e95-74ebcc2def04",
+  :name "Käse-Brezeln",
+  :link nil,
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/3340221496254924/bilder/1161131/crop-360x240/gefuellte-tomate-kaese-brezeln.jpg"}
+ {:id "aa4c16e1-a97c-4bd1-8c97-e2438961fba1",
+  :name "Brezel + Tofu",
+  :link nil,
+  :image
+  "https://lh3.googleusercontent.com/proxy/peD0EhGd_wRZx1c1i0GFemKnlAnPwSK4Y4jp2o-OImQxOeJAvK2HsF1Y_ZesOD3kfC8dpw28yLK5MN2_RUUuhg3TRHuei2j69Vfp5uooqI-izefElXjcN5bcSVZTrUA"}
+ {:id "383de5db-c031-4513-808c-ed9ad903aa84",
+  :name "Flammkuchen vegetarisch",
+  :link nil,
+  :image
+  "https://static.tegut.com/fileadmin/_processed_/f/1/csm_Flammkuchen-1920x1080_fe4a4a9ba2.png"}
+ {:id "ab147915-2054-475f-bf62-7d69568759d4",
   :name "Buntes Ofengemüse",
-  :link "https://www.weightwatchers.com/de/recipe/sptzle-hhnchen-auflauf/562a9ae7873e1afb2a3c3c9d",
-  :image "https://www.weightwatchers.de/images/1031/dynamic/foodandrecipes/2014/05/SpaetzeleHaehnchenauflauf2_800x800.jpg"}
+  :link
+  "https://www.weightwatchers.com/de/recipe/sptzle-hhnchen-auflauf/562a9ae7873e1afb2a3c3c9d",
+  :image
+  "https://www.weightwatchers.de/images/1031/dynamic/foodandrecipes/2014/05/SpaetzeleHaehnchenauflauf2_800x800.jpg"}
  {:id "6b69cebd-b4e6-424f-a908-dc325c8c2829",
   :name "Brokkoli-Nudelauflauf",
   :link
