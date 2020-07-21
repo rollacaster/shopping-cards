@@ -96,7 +96,7 @@
   :name "Brezel + Tofu",
   :link nil,
   :image
-  "https://lh3.googleusercontent.com/proxy/peD0EhGd_wRZx1c1i0GFemKnlAnPwSK4Y4jp2o-OImQxOeJAvK2HsF1Y_ZesOD3kfC8dpw28yLK5MN2_RUUuhg3TRHuei2j69Vfp5uooqI-izefElXjcN5bcSVZTrUA",
+  "https://lh3.googleusercontent.com/proxy/Ou3LT_K1XHYRkQata948QI9I-ViYT9yCoy4A6fhm44UvE_4SNRdi38EgEAANjHlNHaf8rUTWsuUR2V1NdJhegYHnvJJX5X48JSnAT52IjbkZeNGYvyic1xHrCgRpioQ",
   :type "FAST"}
  {:id "397a5deb-7591-4851-9e95-74ebcc2def04",
   :name "Käse-Brezeln",
@@ -143,6 +143,12 @@
   "https://img.chefkoch-cdn.de/rezepte/3190371474828227/bilder/1291461/crop-360x240/one-pot-pasta.jpg",
   :inactive false,
   :type "NORMAL"}
+ {:name "Couscous",
+  :link "",
+  :id "91a7d716-b6e8-45dc-9482-df511bea5b2b",
+  :type "NORMAL",
+  :image
+  "https://www.jessicagavin.com/wp-content/uploads/2019/03/mediterranean-couscous-salad-2-600x900.jpg"}
  {:id "ad958898-735e-438c-847a-f89504087a89",
   :name "Avocado-Pesto",
   :link "https://www.eat-this.org/pasta-mit-avocado-gruenkohl-pesto/",
@@ -201,6 +207,12 @@
   "https://img.chefkoch-cdn.de/rezepte/2352371374010722/bilder/988858/crop-360x240/cremiger-nudelauflauf-mit-tomaten-und-mozzarella.jpg",
   :inactive false,
   :type "NORMAL"}
+ {:name "Spätzle mit Ei",
+  :link "",
+  :id "9bbdb4ef-4934-4a96-be22-881ed37c0fd5",
+  :image
+  "https://www.gutekueche.at/img/rezept/45402/gerostete-spatzle-mit-ei.png",
+  :type "FAST"}
  {:id "8b2dd671-20a8-4f55-b3d9-ce8010652f56",
   :name "Spinatknoedel",
   :link

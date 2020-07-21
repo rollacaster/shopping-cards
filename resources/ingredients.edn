@@ -267,4 +267,10 @@
   :name "Aufback-Semmeln"}
  {:id "d33ad997-4d02-4437-8d35-db8e22fdb4b0",
   :category "Tiefkühl",
-  :name "Aufback-Brezeln"}]
+  :name "Aufback-Brezeln"}
+ {:id "3c4bfe45-4c2a-4245-aa8f-2b8eb931e52e",
+  :category "Gemüse",
+  :name "Zitronensaft"}
+ {:id "01cee208-21ad-4c6c-a9d7-900f3f8b0214",
+  :category "Beilage",
+  :name "Couscous"}]

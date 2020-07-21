@@ -24,7 +24,8 @@
                      " (" (s/join ", " (map :amount-desc ingredients)) ")"))))
 
 (def penny-order
-  ["Gemüse"
+  ["Obst"
+   "Gemüse"
    "Gewürze"
    "Tiefkühl"
    "Brot & Co"

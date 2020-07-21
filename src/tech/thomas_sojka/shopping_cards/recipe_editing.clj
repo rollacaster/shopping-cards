@@ -146,6 +146,19 @@
 
 
 (comment
+  (add-new-recipe
+   {:name "Couscous"
+    :link ""
+    :image "https://www.jessicagavin.com/wp-content/uploads/2019/03/mediterranean-couscous-salad-2-600x900.jpg"
+    :inactive false
+    :type "Normal"
+    :ingredients [{:id (find-ingredient "Paprika") :amount 2 :amount-desc "2" :unit nil}
+                  {:id (find-ingredient "Karotte") :amount 6 :amount-desc "6" :unit nil}
+                  {:id (find-ingredient "Mais") :amount 1 :amount-desc "1 Dose" :unit nil}
+                  {:id (find-ingredient "Feta") :amount 1 :amount-desc "1" :unit nil}
+                  {:id (find-ingredient "Couscous") :amount 250 :amount-desc "250 g" :unit "g"}
+                  {:id (find-ingredient "Zitronensaft") :amount nil :amount-desc "etwas" :unit nil}]})
+  (find-ingredient "Eier")
   (let [new-recipe (->> (load-trello-recipes)
                         added-recipes
                         #_(drop 1)
@@ -157,8 +170,7 @@
         (assoc :ingredients [{:name "Spätzle" :amount 500 :amount-desc "500 g" :unit "g"}
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
         dedup-ingredients
-        #_scrape/find-image
-))
+        #_scrape/find-image))
   (->
    (first (filter :link (added-recipes (load-trello-recipes))))
    scrape/add-ingredients
