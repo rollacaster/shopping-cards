@@ -58,12 +58,21 @@
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
-(defn add-ingredient [recipe-id {:keys [amount category name amount-desc unit]}]
+(defn add-ingredient-to-recipe [recipe-id {:keys [amount category name amount-desc unit]}]
   (let [ingredient-id (uuid)]
     {:recipe-id recipe-id :amount-desc amount-desc
      :amount amount :unit unit :ingredient-id ingredient-id
      :id (uuid)}
     {:id ingredient-id :name name :category category}))
+
+(defn add-ingredient [{:keys [category name]}]
+  (db/write-edn
+   "ingredients.edn"
+   (conj
+    (db/load-ingredients)
+    {:id (uuid)
+     :name name
+     :category category})))
 
 (defn find-ingredient [ingredient-name]
   (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-ingredients)))
@@ -84,7 +93,7 @@
     #(and (= recipe-id (:recipe-id %)) (= (:ingredient-id %) ingredient-id))
     (db/load-cooked-with))))
 
-(defn add-new-recipe [{:keys [name link image] :as new-recipe}]
+(defn add-new-recipe [{:keys [name link image type] :as new-recipe}]
   (let [recipe-id (uuid)
         cooked-with (db/load-cooked-with)
         recipes (db/load-recipes)]
@@ -98,7 +107,7 @@
           (concat cooked-with)
           vec))
     (db/write-edn "recipes.edn"
-               (conj recipes {:id recipe-id :name name :link link :image image}))))
+               (conj recipes {:id recipe-id :name name :link link :image image :type type}))))
 
 (defn remove-ingredient [recipe ingredient-name]
   (update recipe :ingredients #(remove (fn [ingredient] (= ingredient-name (:name ingredient))) %)))
@@ -157,6 +166,7 @@
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
         scrape/dedup-ingredients
         #_scrape/find-image))
+  (add-ingredient {:category "Backen" :name "Mandelsplitter"})
   (add-new-recipe
    (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/3232941480954040/Gefuellte-Paprika-mit-Feta-und-Mozzarella.html"
                                 :type "FAST"})))
