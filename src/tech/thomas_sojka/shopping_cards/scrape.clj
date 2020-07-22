@@ -83,7 +83,7 @@
                     #(when (= (get-in % [:attrs :class]) class) %)
                     spans))))
 
-(defn scrape-eath-this-ingredient [ingredient-li]
+(defn scrape-eat-this-ingredient [ingredient-li]
   (let [spans
         (->> ingredient-li
              :content
@@ -108,28 +108,28 @@
           (select/child
            (select/class "wprm-recipe-ingredient")))
          (w/postwalk walk)
-         (map scrape-eath-this-ingredient))))
+         (map scrape-eat-this-ingredient))))
 
 (defn scrape-weightwatchers [link]
-  (let [recipe-html (:body (client/get link))]
-    (let [ingredients (->> recipe-html
-                           html/parse
-                           html/as-hickory
-                           (select/select
-                            (select/child
-                             (select/class "VerticalList_listTwoColumn__a4AGp")))
-                           (map :content)
-                           first
-                           (map (comp  :content first :content first :content first :content)))
-          names (map (comp s/trim first :content first) ingredients)
-          amounts (map (comp parse-int first :content first :content second) ingredients)
-          amount-descs (map (comp first :content second :content second) ingredients)]
-      (map (fn [name amount amount-desc]
-             {:name name
-              :amount amount
-              :amount-desc (str amount amount-desc)
-              :unit (s/trim amount-desc)})
-           names amounts amount-descs))))
+  (let [recipe-html (:body (client/get link))
+        ingredients (->> recipe-html
+                         html/parse
+                         html/as-hickory
+                         (select/select
+                          (select/child
+                           (select/class "VerticalList_listTwoColumn__a4AGp")))
+                         (map :content)
+                         first
+                         (map (comp  :content first :content first :content first :content)))
+        names (map (comp s/trim first :content first) ingredients)
+        amounts (map (comp parse-int first :content first :content second) ingredients)
+        amount-descs (map (comp first :content second :content second) ingredients)]
+    (map (fn [name amount amount-desc]
+           {:name name
+            :amount amount
+            :amount-desc (str amount amount-desc)
+            :unit (s/trim amount-desc)})
+         names amounts amount-descs)))
 
 (defn add-ingredients [recipe]
   (cond (and (:link recipe)
@@ -143,7 +143,7 @@
         (assoc recipe
                :ingredients (scrape-gdrive-ingredients (:link recipe)))
         (and (:link recipe)
-             (s/includes? (:link recipe) "eat-this")
+             (or (s/includes? (:link recipe) "eat-this") (s/includes? (:link recipe) "thomassixt"))
              (not (:ingredients recipe)))
         (assoc recipe
                :ingredients (scrape-eat-this-ingredients (:link recipe)))

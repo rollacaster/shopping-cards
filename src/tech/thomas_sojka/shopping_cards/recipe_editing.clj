@@ -166,7 +166,7 @@
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
         scrape/dedup-ingredients
         #_scrape/find-image))
-  (add-ingredient {:category "Backen" :name "Mandelsplitter"})
+  (add-ingredient {:category "Käse & Co" :name "Räuchertofu"})
   (add-new-recipe
-   (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/3232941480954040/Gefuellte-Paprika-mit-Feta-und-Mozzarella.html"
+   (scrape/add-chefkoch-recipe {:link "https://thomassixt.de/rezept/schinkennudeln-vegetarisch/"
                                 :type "FAST"})))
