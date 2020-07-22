@@ -1,0 +1,4 @@
+* 🛒 shopping-cards 🛒
+This is a personal project and currently there are no efforts to create a version which is general enough to be useful for everyone.
+
+Here is a blog post I wrote which describes the details of this project: https://thomas-sojka.tech/shopping-cards.html
