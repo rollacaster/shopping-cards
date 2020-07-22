@@ -1,11 +1,11 @@
 (ns tech.thomas-sojka.shopping-cards.scrape
   (:require [clj-http.client :as client]
-            clojure.pprint
             [clojure.string :as s]
             [clojure.walk :as w]
             [hickory.core :as html]
             [hickory.select :as select]
-            [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]))
+            [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
+            [tech.thomas-sojka.shopping-cards.db :as db]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def search-engine-cx "005510767845232759155:zdkkvfzersx")
@@ -167,6 +167,37 @@
                               :key (:google-key creds-file)}
                :as :json :throw-entire-message? true})
              :body :items first :link)))
+
+(defn dedup-ingredients [recipe]
+  (update recipe :ingredients
+          (fn [ingredients]
+            (map (fn [{:keys [name] :as ingredient}]
+                   (let [ingredient-name (or
+                                          (some (fn [[ingredient-group-name duplicated-name]]
+                                                  (when (or (= name ingredient-group-name)
+                                                            (contains? duplicated-name name))
+                                                    ingredient-group-name))
+                                                (db/load-edn "duplicated-ingredients.edn"))
+                                          name)]
+                     (assoc ingredient
+                            :name ingredient-name
+                            :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-edn "ingredients.edn")))))
+                 ingredients))))
+
+
+(defn add-chefkoch-recipe [{:keys [link type]}]
+  (->>
+   (let [recipe-html (:body (client/get link))
+         recipe-hickory (->> recipe-html html/parse html/as-hickory)]
+     {:name (->> recipe-hickory
+                  (select/select (select/child (select/tag "h1")))
+                  first :content first)
+      :link link
+      :type type
+      :inactive false})
+   find-image
+   add-ingredients
+   dedup-ingredients))
 
 ;; TODO Handle new ingredients before adding recipe
 (defn new-ingredients [new-recipes]

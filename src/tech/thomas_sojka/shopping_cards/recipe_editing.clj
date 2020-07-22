@@ -100,21 +100,6 @@
     (db/write-edn "recipes.edn"
                (conj recipes {:id recipe-id :name name :link link :image image}))))
 
-(defn dedup-ingredients [recipe]
-  (update recipe :ingredients (fn [ingredients]
-                                (map (fn [{:keys [name] :as ingredient}]
-                                       (let [ingredient-name (or
-                                                              (some (fn [[ingredient-group-name duplicated-name]]
-                                                                      (when (or (= name ingredient-group-name)
-                                                                                (contains? duplicated-name name))
-                                                                        ingredient-group-name))
-                                                                    (db/load-edn "duplicated-ingredients.edn"))
-                                                              name)]
-                                         (assoc ingredient
-                                                :name ingredient-name
-                                                :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-edn "ingredients.edn")))))
-                                     ingredients))))
-
 (defn remove-ingredient [recipe ingredient-name]
   (update recipe :ingredients #(remove (fn [ingredient] (= ingredient-name (:name ingredient))) %)))
 
@@ -170,13 +155,8 @@
         (assoc :image "https://www.ditsch.de/mcinfo_assets/de/51d7fa67d7bf0a7db660b93b3530605eb3b222ff.jpeg")
         (assoc :ingredients [{:name "Spätzle" :amount 500 :amount-desc "500 g" :unit "g"}
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
-        dedup-ingredients
+        scrape/dedup-ingredients
         #_scrape/find-image))
-  (->
-   (first (filter :link (added-recipes (load-trello-recipes))))
-   scrape/add-ingredients
-   (remove-ingredient "Hähnchenbrustfilet, roh")
-   dedup-ingredients
-   #_scrape/find-image
-   (assoc :link "https://www.weightwatchers.de/images/1031/dynamic/foodandrecipes/2014/05/SpaetzeleHaehnchenauflauf2_800x800.jpg")
-   add-new-recipe))
+  (add-new-recipe
+   (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/3232941480954040/Gefuellte-Paprika-mit-Feta-und-Mozzarella.html"
+                                :type "FAST"})))
