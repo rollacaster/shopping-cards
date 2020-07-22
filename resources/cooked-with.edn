@@ -1755,4 +1755,10 @@
   :ingredient-id "3c4bfe45-4c2a-4245-aa8f-2b8eb931e52e",
   :amount-desc "etwas",
   :id "d9f94d5e-b2e3-4d00-b89c-64d7459d8335",
-  :recipe-id "91a7d716-b6e8-45dc-9482-df511bea5b2b"}]
+  :recipe-id "91a7d716-b6e8-45dc-9482-df511bea5b2b"}
+ {:amount nil,
+  :ingredient-id "c1604163-078b-4ef8-be0d-9740eb2636f1",
+  :unit nil,
+  :amount-desc "",
+  :id "ed8d8b64-3d5d-4789-8586-40e15db76a2c",
+  :recipe-id "ad958898-735e-438c-847a-f89504087a89"}]

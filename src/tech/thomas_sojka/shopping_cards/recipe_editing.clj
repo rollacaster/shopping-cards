@@ -146,6 +146,7 @@
 
 
 (comment
+  (add-cooked-with (find-recipe "Avocado-Pesto") (find-ingredient "Parmesan") {:amount nil :amount-desc "" :unit nil})
   (add-new-recipe
    {:name "Couscous"
     :link ""
