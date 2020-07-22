@@ -1836,4 +1836,49 @@
   :amount-desc nil,
   :amount nil,
   :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
-  :recipe-id "21d6249a-e28d-484a-ba4f-6f470ea22e69"}]
+  :recipe-id "21d6249a-e28d-484a-ba4f-6f470ea22e69"}
+ {:id "b80bbb6f-67e9-4a23-86da-f383dcf74ee0",
+  :amount-desc "250 g",
+  :amount 250,
+  :ingredient-id "14a0c9c7-3630-4ea3-957f-3807cd624636",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "04c56484-0c2e-496d-91fb-d5f5d5a04e44",
+  :amount-desc "80 g",
+  :amount 80,
+  :ingredient-id "ee34edf4-05af-481d-a3c1-46371349f942",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "871a827a-8942-43be-9a0e-c87fea8944ae",
+  :amount-desc "1 Stück",
+  :amount 1,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "dd0c6ea9-cb3c-4b48-9c01-6c49ac020a01",
+  :amount-desc "1 Stück",
+  :amount 1,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "1514dc60-d3ee-46dc-a714-9008749838ef",
+  :amount-desc "2 Stück",
+  :amount 2,
+  :ingredient-id "4373e821-8697-48ee-becf-9776f7a4e794",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "bb790ee3-41a2-4182-8f49-8debceeb9170",
+  :amount-desc "1 EL",
+  :amount 1,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "272b8dd5-c2e1-40a7-9e47-badf05eecbf0",
+  :amount-desc "40 g",
+  :amount 40,
+  :ingredient-id "c1604163-078b-4ef8-be0d-9740eb2636f1",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "ae9ebd58-5cca-4e76-88c6-8a946a878149",
+  :amount-desc "4 Prisen",
+  :amount 4,
+  :ingredient-id "94f58d5a-221b-48d4-9f9e-118d1fdce128",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "2d5188fd-c207-4654-a39b-97ea9e915a51",
+  :amount-desc "3 Prisen ",
+  :amount 3,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}]

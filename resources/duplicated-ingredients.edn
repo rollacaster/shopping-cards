@@ -23,14 +23,15 @@
  "Reis"#{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis"}
  "Schinken"#{"Kochschinken"}
  "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'"}
- "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben"}
+ "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan"}
  "Knoblauch" #{"Knoblauch" "Knoblauchzehen" "Knoblauchzehe(n), gepresster"
                "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt"
                "Knoblauch, getrocknet, aus der Gewürzmühle"}
  "Limettensaft" #{"Limettensaft" "Saft von halben Limette"}
  "Spinat" #{"Blattspinat, TK oder frisch"
             "Spinat, TK oder frisch dann blanchiert"}
- "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"}
+ "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
+             "weiße oder gelbe Zwiebel" "rote Zwiebel"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
  "Crème fraîche" #{"Creme fraiche"}

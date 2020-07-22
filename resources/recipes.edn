@@ -1,4 +1,10 @@
-({:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
+({:id "633e1ee6-4db1-4b21-a747-c37b1a0406b1",
+  :name "Schinkennudeln vegetarisch, ein einfaches Pastagericht",
+  :link "https://thomassixt.de/rezept/schinkennudeln-vegetarisch/",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1041081209130032/bilder/106010/crop-360x240/schmand-schinken-nudeln.jpg",
+  :type "FAST"}
+ {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
   :name "Spiegelei mit Spinat",
   :link "",
   :image

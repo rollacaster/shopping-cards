@@ -279,4 +279,7 @@
   :category "Beilage"}
  {:id "b98dbaa1-6112-4f57-a879-5d58ed24bf91",
   :name "Mandelsplitter",
-  :category "Backen"}]
+  :category "Backen"}
+ {:id "ee34edf4-05af-481d-a3c1-46371349f942",
+  :name "Räuchertofu",
+  :category "Käse & Co"}]
