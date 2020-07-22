@@ -4,7 +4,8 @@
  "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz"}
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
  "Wasser"#{"Wasser, lauwarm" "Wasser"}
- "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"}
+ "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
+             "Pfeffer, bunt, aus der Mühle"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
@@ -31,7 +32,7 @@
             "Spinat, TK oder frisch dann blanchiert"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche"}
- "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett"}
+ "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
  "Crème fraîche" #{"Creme fraiche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
@@ -46,7 +47,7 @@
  "Chilli" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"}
  "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK" "Romanesco"}
  "Zitrone"#{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon"}
- "Feta" #{"Schafskäse"}
+ "Feta" #{"Schafskäse" "Feta-Käse"}
  "Semmel" #{"Brötchen" "Weißbrot, altbackenes" "als Beilage Semmeln oder Brot"}
  "Salami" #{"Sucuk"}
  "Karotte" #{"Möhre(n)"}

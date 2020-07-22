@@ -273,4 +273,10 @@
   :name "Zitronensaft"}
  {:id "01cee208-21ad-4c6c-a9d7-900f3f8b0214",
   :category "Beilage",
-  :name "Couscous"}]
+  :name "Couscous"}
+ {:id "b47c89f9-f959-48f1-a955-b2642253350e",
+  :name "Pesto rosso",
+  :category "Beilage"}
+ {:id "b98dbaa1-6112-4f57-a879-5d58ed24bf91",
+  :name "Mandelsplitter",
+  :category "Backen"}]

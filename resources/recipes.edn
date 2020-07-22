@@ -96,7 +96,7 @@
   :name "Brezel + Tofu",
   :link nil,
   :image
-  "https://lh3.googleusercontent.com/proxy/Ou3LT_K1XHYRkQata948QI9I-ViYT9yCoy4A6fhm44UvE_4SNRdi38EgEAANjHlNHaf8rUTWsuUR2V1NdJhegYHnvJJX5X48JSnAT52IjbkZeNGYvyic1xHrCgRpioQ",
+  "http://annalee-eats.de/wp-content/uploads/2017/04/P1010782-768x1024.jpg",
   :type "FAST"}
  {:id "397a5deb-7591-4851-9e95-74ebcc2def04",
   :name "Käse-Brezeln",
@@ -156,6 +156,13 @@
   "https://img.chefkoch-cdn.de/rezepte/570881155737167/bilder/988885/crop-360x240/avocado-pesto.jpg",
   :inactive false,
   :type "NORMAL"}
+ {:id "ad6aa7f9-6f28-4b56-8578-8ced3f3a6d1b",
+  :name "Gnocchi mit Brokkoli und Pesto Rosso",
+  :type "FAST",
+  :link
+  "https://www.chefkoch.de/rezepte/2715361424443330/Gnocchi-mit-Brokkoli-und-Pesto-Rosso.html",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/2715361424443330/bilder/950203/crop-360x240/gnocchi-mit-brokkoli-und-pesto-rosso.jpg"}
  {:id "383de5db-c031-4513-808c-ed9ad903aa84",
   :name "Flammkuchen vegetarisch",
   :link nil,
@@ -229,6 +236,13 @@
   "https://img.chefkoch-cdn.de/rezepte/2114131340630587/bilder/1251192/crop-360x240/vegetarische-spinat-gemuese-lasagne-mit-tomatensosse.jpg",
   :inactive false,
   :type "NORMAL"}
+ {:id "21d6249a-e28d-484a-ba4f-6f470ea22e69",
+  :name "Gefüllte Paprika mit Feta und Mozzarella",
+  :type "FAST",
+  :link
+  "https://www.chefkoch.de/rezepte/3232941480954040/Gefuellte-Paprika-mit-Feta-und-Mozzarella.html",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/2627631412769071/bilder/1285741/crop-360x240/paprika-mit-feta-mozzarella-fuellung.jpg"}
  {:id "1f0e62ba-72e3-4871-b5ee-a3468a4457e2",
   :name "Kartoffelpuffer",
   :link
