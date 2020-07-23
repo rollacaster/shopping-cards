@@ -1,5 +1,5 @@
 {"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver"}
- "Paprika" #{"Paprikaschote(n), rot"}
+ "Paprika" #{"Paprikaschote(n), rot" "rote Paprika"}
  "Frischkäse" #{"Frischkäse" "Frischkäse, leicht"}
  "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz"}
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
@@ -14,7 +14,7 @@
  "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
  "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"
-                      "Tomaten, passiert"}
+                      "Tomaten, passiert" "gehackte Tomaten"}
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener"
                     "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                     "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
@@ -31,7 +31,7 @@
  "Spinat" #{"Blattspinat, TK oder frisch"
             "Spinat, TK oder frisch dann blanchiert"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
-             "weiße oder gelbe Zwiebel" "rote Zwiebel"}
+             "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
  "Crème fraîche" #{"Creme fraiche"}
@@ -45,7 +45,8 @@
  "Petersilie" #{"Petersilie, gehackt"}
  "Ingwer" #{"etwas Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
- "Chilli" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"}
+ "Chilli" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"
+             "Chili nach Geschmack"}
  "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK" "Romanesco"}
  "Zitrone"#{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon"}
  "Feta" #{"Schafskäse" "Feta-Käse"}
@@ -61,4 +62,5 @@
  "Cabanossi" #{"Cabanossi)"}
  "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet"}
  "Aufback-Brezeln" #{"Brezeln"}
- "Sojasoße" #{"Soja-Sauce"}}
+ "Sojasoße" #{"Soja-Sauce"}
+ "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt"}}

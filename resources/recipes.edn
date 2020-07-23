@@ -1,10 +1,4 @@
-({:id "633e1ee6-4db1-4b21-a747-c37b1a0406b1",
-  :name "Schinkennudeln vegetarisch, ein einfaches Pastagericht",
-  :link "https://thomassixt.de/rezept/schinkennudeln-vegetarisch/",
-  :image
-  "https://img.chefkoch-cdn.de/rezepte/1041081209130032/bilder/106010/crop-360x240/schmand-schinken-nudeln.jpg",
-  :type "FAST"}
- {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
+({:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
   :name "Spiegelei mit Spinat",
   :link "",
   :image
@@ -25,6 +19,12 @@
   :image
   "https://www.stern.de/vergleich/wp-content/uploads/2018/09/tzs-first-austria-3-in-1-sandwichmaker-waffeleisen-tischgrillklick-system-thermostat-backampel-elektrischer-sandwichtoaster-700-watt-kontaktgrill-abnehmbare-platten.jpg",
   :inactive false,
+  :type "FAST"}
+ {:id "633e1ee6-4db1-4b21-a747-c37b1a0406b1",
+  :name "Schinkennudeln vegetarisch, ein einfaches Pastagericht",
+  :link "https://thomassixt.de/rezept/schinkennudeln-vegetarisch/",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1041081209130032/bilder/106010/crop-360x240/schmand-schinken-nudeln.jpg",
   :type "FAST"}
  {:id "91801559-4b7c-4a1a-8d60-8c4df6f6b435",
   :name "Vegetarisches Pastizio",
@@ -249,6 +249,12 @@
   "https://www.chefkoch.de/rezepte/3232941480954040/Gefuellte-Paprika-mit-Feta-und-Mozzarella.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/2627631412769071/bilder/1285741/crop-360x240/paprika-mit-feta-mozzarella-fuellung.jpg"}
+ {:id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e",
+  :name "Indisches Kichererbsen-Curry",
+  :link "https://kochkarussell.com/indisches-kichererbsen-curry/",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/583151157447595/bilder/607051/crop-360x240/indisches-haehnchencurry-mit-kichererbsen.jpg",
+  :type "FAST"}
  {:id "1f0e62ba-72e3-4871-b5ee-a3468a4457e2",
   :name "Kartoffelpuffer",
   :link

@@ -282,4 +282,16 @@
   :category "Backen"}
  {:id "ee34edf4-05af-481d-a3c1-46371349f942",
   :name "Räuchertofu",
-  :category "Käse & Co"}]
+  :category "Käse & Co"}
+ {:category "Bohnen",
+  :name "Kichererbsen",
+  :id "3dc8331b-e1bf-4b59-9883-96bb855f9dfd"}
+ {:category "Gewürze",
+  :name "Kreuzkümmel",
+  :id "e67009b0-be0f-4c3e-b23b-75ff752fa643"}
+ {:category "Gewürze",
+  :name "Curry",
+  :id "64e066ef-1e5b-4c67-aa34-acc6fee52ed8"}
+ {:category "Gewürze",
+  :name "Chilli",
+  :id "5138699f-9d01-400e-97d8-3a02bf90c5b9"}]

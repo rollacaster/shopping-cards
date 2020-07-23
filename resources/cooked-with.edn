@@ -1881,4 +1881,54 @@
   :amount-desc "3 Prisen ",
   :amount 3,
   :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
-  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}]
+  :recipe-id "633e1ee6-4db1-4b21-a747-c37b1a0406b1"}
+ {:id "fbb30a83-3762-4608-9d6a-602b12b9ef30",
+  :amount-desc "1",
+  :amount 1,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "6dc1c3df-3b47-4730-8854-a1fe51b2cb5e",
+  :amount-desc "1",
+  :amount 1,
+  :ingredient-id "6c0740a2-24a0-4aa7-9548-60c79bac6fec",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "17aed224-b5b2-49a9-907d-67d0fa7d019e",
+  :amount-desc "1 EL",
+  :amount 1,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "f051fc10-8a2d-49bd-9320-75814a51d2f8",
+  :amount-desc "1 Dose",
+  :amount 1,
+  :ingredient-id "5eef57be-bc04-4f19-9d58-9c6eb2a5eddd",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "447bdbfc-4831-4071-8932-e505d5d875d2",
+  :amount-desc "1 Dose",
+  :amount 1,
+  :ingredient-id "3dc8331b-e1bf-4b59-9883-96bb855f9dfd",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "2387649e-94b1-4c72-bc8a-9dd6f612c5d0",
+  :amount-desc "2 EL",
+  :amount 2,
+  :ingredient-id "132de4f5-99cf-4078-9063-ff5b89d54aec",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "6bde51a2-76ec-405a-92f4-78033c9222d2",
+  :amount-desc "2 TL",
+  :amount 2,
+  :ingredient-id "e67009b0-be0f-4c3e-b23b-75ff752fa643",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "c3a2716d-3fb2-4549-8c84-762f818518be",
+  :amount-desc "1 TL",
+  :amount 1,
+  :ingredient-id "64e066ef-1e5b-4c67-aa34-acc6fee52ed8",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "352f454e-85c4-48f9-bdcf-d63469efc66c",
+  :amount-desc "",
+  :amount nil,
+  :ingredient-id "54c81443-15b7-48b9-883f-0d88cc131e5e",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:id "853d2927-9e1e-45f6-9b87-0875d1ca5a8c",
+  :amount-desc "2 EL",
+  :amount 2,
+  :ingredient-id "5316b1b4-73e3-4431-b12c-2740e13d18f3",
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}]
