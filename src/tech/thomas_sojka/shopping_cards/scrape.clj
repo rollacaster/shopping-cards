@@ -143,7 +143,9 @@
         (assoc recipe
                :ingredients (scrape-gdrive-ingredients (:link recipe)))
         (and (:link recipe)
-             (or (s/includes? (:link recipe) "eat-this") (s/includes? (:link recipe) "thomassixt"))
+             (or (s/includes? (:link recipe) "eat-this")
+                 (s/includes? (:link recipe) "thomassixt")
+                 (s/includes? (:link recipe) "kochkarussell"))
              (not (:ingredients recipe)))
         (assoc recipe
                :ingredients (scrape-eat-this-ingredients (:link recipe)))
