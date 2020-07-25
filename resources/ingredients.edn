@@ -294,4 +294,13 @@
   :id "64e066ef-1e5b-4c67-aa34-acc6fee52ed8"}
  {:category "Gewürze",
   :name "Chilli",
-  :id "5138699f-9d01-400e-97d8-3a02bf90c5b9"}]
+  :id "5138699f-9d01-400e-97d8-3a02bf90c5b9"}
+ {:category "Gewürze",
+  :name "Mandelmus",
+  :id "fcf62e6b-597a-4711-ad79-1caf84243061"}
+ {:category "Milch & Co",
+  :name "Mandelmilch",
+  :id "7308596e-b6c9-4f11-a59a-bf38364ebd48"}
+ {:category "Obst",
+  :name "Mandeln",
+  :id "cfc2741b-c361-4d05-b71e-a2a118881400"}]

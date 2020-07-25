@@ -5,11 +5,11 @@
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
  "Wasser"#{"Wasser, lauwarm" "Wasser"}
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
-             "Pfeffer, bunt, aus der Mühle"}
+             "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
- "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln"}
+ "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln"}
  "Tomate" #{"Tomate(n), getrocknete" "getrocknete Tomaten" "Pizzatomaten" "Cherrytomate(n)"}
  "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
@@ -26,12 +26,12 @@
  "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan"}
  "Knoblauch" #{"Knoblauch" "Knoblauchzehen" "Knoblauchzehe(n), gepresster"
                "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt"
-               "Knoblauch, getrocknet, aus der Gewürzmühle"}
+               "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe"}
  "Limettensaft" #{"Limettensaft" "Saft von halben Limette"}
- "Spinat" #{"Blattspinat, TK oder frisch"
+ "Spinat" #{"Blattspinat, TK oder frisch" "frischer Babyspinat"
             "Spinat, TK oder frisch dann blanchiert"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
-             "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel"}
+             "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
  "Crème fraîche" #{"Creme fraiche"}

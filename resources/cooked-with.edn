@@ -1931,4 +1931,59 @@
   :amount-desc "2 EL",
   :amount 2,
   :ingredient-id "5316b1b4-73e3-4431-b12c-2740e13d18f3",
-  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}]
+  :recipe-id "2ccb2aa8-1cbe-48cd-af0f-18fa2fba3f6e"}
+ {:amount 500,
+  :ingredient-id "14a0c9c7-3630-4ea3-957f-3807cd624636",
+  :amount-desc "500 g vegane Vollkornnudeln",
+  :id "fd61a722-97db-43e7-aa87-75ae25f47664",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 2,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :amount-desc "2   rote Zwiebeln",
+  :id "31435467-ded3-45f9-b14d-8a32e362d767",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 1,
+  :ingredient-id "4373e821-8697-48ee-becf-9776f7a4e794",
+  :amount-desc "1  Knoblauchzehe",
+  :id "3c2ea77b-7df7-4391-b580-72637e16fccb",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 400,
+  :ingredient-id "3e99ba7a-be59-4f98-98a1-2ad17b01d14e",
+  :amount-desc "400 g Champignons",
+  :id "37eedf77-7b68-4c88-ae87-7dab10a4d339",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 1,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :amount-desc "1 Esslöffel Olivenöl",
+  :id "ab1fb2ea-4189-450c-b039-50e64c0666ae",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 4,
+  :ingredient-id "fcf62e6b-597a-4711-ad79-1caf84243061",
+  :amount-desc "4 Esslöffel Mandelmus",
+  :id "5d3327c5-3c5b-4c5a-99eb-b9ba0227ffb0",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 400,
+  :ingredient-id "7308596e-b6c9-4f11-a59a-bf38364ebd48",
+  :amount-desc "400 ml Mandelmilch",
+  :id "3a5c12a5-6516-4f7e-8c28-e030ddbe0f62",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 1/2,
+  :ingredient-id "5afade6b-f382-452c-91cb-edc761380983",
+  :amount-desc "1/2 Teelöffel Muskat",
+  :id "281051a3-2d78-48bd-9cca-7c99bcb7c175",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 400,
+  :ingredient-id "690fdb5c-711b-4b1b-918b-148d2a4eb355",
+  :amount-desc "400  frischer Babyspinat",
+  :id "772f4c6e-c456-4201-9363-90172b0624b5",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount 1,
+  :ingredient-id "cfc2741b-c361-4d05-b71e-a2a118881400",
+  :amount-desc "1 Handvoll Mandeln",
+  :id "9cf863b4-1362-4fbf-bdc8-6584ee501c0e",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}
+ {:amount nil,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :amount-desc "Salz, Pfeffer",
+  :id "d50d6bec-3228-40a8-a81a-69078e7d6f56",
+  :recipe-id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec"}]

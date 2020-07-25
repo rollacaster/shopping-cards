@@ -1,4 +1,11 @@
-({:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
+({:name "Vegane Vollkornnudeln in cremiger Champignon-Rahmsauce",
+  :type "NORMAL",
+  :link
+  "https://www.springlane.de/magazin/rezeptideen/mandel-pasta-mit-champignons/",
+  :id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/988841204189309/bilder/1295035/crop-360x240/bandnudeln-in-champignonrahmsauce.jpg"}
+ {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
   :name "Spiegelei mit Spinat",
   :link "",
   :image
