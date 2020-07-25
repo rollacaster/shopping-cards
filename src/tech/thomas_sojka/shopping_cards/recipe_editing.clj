@@ -166,7 +166,7 @@
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
         scrape/dedup-ingredients
         #_scrape/find-image))
-  (add-ingredient {:category "Käse & Co" :name "Räuchertofu"})
+  (add-ingredient {:category "Obst" :name "Mandeln"})
   (add-new-recipe
-   (scrape/add-chefkoch-recipe {:link "https://thomassixt.de/rezept/schinkennudeln-vegetarisch/"
-                                :type "FAST"})))
+   (scrape/add-chefkoch-recipe {:link "https://www.springlane.de/magazin/rezeptideen/mandel-pasta-mit-champignons/"
+                                :type "NORMAL"})))
