@@ -145,10 +145,10 @@
       (.then #(js->clj % :keywordize-keys true))
       (.then #(reset! recipes %)))
   (fn []
-    [:div.sans-serif.h-100.bg-gray-200
+    [:div.sans-serif.h-100
      [header]
      [:main.h-100
-      [:div.mw9.center
+      [:div.mw9.center.bg-gray-200
        [(:view (:data @match)) @match]]]
      [footer]]))
 
