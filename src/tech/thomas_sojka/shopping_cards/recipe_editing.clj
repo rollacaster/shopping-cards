@@ -144,7 +144,7 @@
   (add-new-recipe
    {:name "Couscous"
     :link ""
-    :image "https://www.jessicagavin.com/wp-content/uploads/2019/03/mediterranean-couscous-salad-2-600x900.jpg"
+    :image "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html"
     :inactive false
     :type "Normal"
     :ingredients [{:id (find-ingredient "Paprika") :amount 2 :amount-desc "2" :unit nil}
@@ -168,5 +168,5 @@
         #_scrape/find-image))
   (add-ingredient {:category "Obst" :name "Mandeln"})
   (add-new-recipe
-   (scrape/add-chefkoch-recipe {:link "https://www.springlane.de/magazin/rezeptideen/mandel-pasta-mit-champignons/"
+   (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html"
                                 :type "NORMAL"})))

@@ -1,4 +1,11 @@
-({:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
+({:name "Vegetarische Frikadellen",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html",
+  :id "e9147690-a68c-40d5-84ef-5ac83c1db800",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1631611270752104/bilder/1122512/crop-360x240/vegetarische-frikadellen.jpg"}
+ {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
   :name "Spiegelei mit Spinat",
   :link "",
   :image
