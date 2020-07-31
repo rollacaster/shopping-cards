@@ -1,4 +1,47 @@
 * 🛒 shopping-cards 🛒
 This is a personal project and currently there are no efforts to create a version which is general enough to be useful for everyone.
 
-Here is a blog post I wrote which describes the details of this project: https://thomas-sojka.tech/shopping-cards.html
+** Overview
+I am a big fan of doing groceries everyday! The nearest shop is two minutes away from my house, and I like to decide spontaneously what I want to cook. The Corona pandemy changed that, currently I go shopping biweekly to reduce personal interactions. This change was annoying for me so I build =shopping-cards= for support.
+** Old process
+As you may have guessed, I am a bit obsessed with an efficient grocery process :-). My pre Coronoa process looked like this:
+
+- I have a small whiteboard in the kitchen were I write down all non-perishable food as soon as they ran out.
+- Each day I decide what to cook, and check which ingredients are missing.
+- I write down a new shopping list containing the whiteboard items and everything I need for the dinner of the day.
+- I sort my shopping list in the same way as the store layout, so I only need one pass when I am in the store.
+** New process
+I decided to shop less regularly, so I have fewer personal interactions. This means planning upfront what to eat and buying ingredients for multiple dishes. My new process looked like this.
+
+- Together my fiancée I create a table containing all dishes for lunch & dinner for the next 3-4 days. (We eat the same stuff for breakfast everyday)
+- Per dish I write down the ingredients and order them according to the store layout of your local store. Meanwhile my fiancée is checking if we need to buy the ingredient or if we already have it in stock.
+- Since we do not want to open the fridge too often while we check our stock, we make a second fridge ingredients list.
+- We check the fridge ingredients at last.
+
+This process took quite long, I decided to automate it and =shopping-cards=  was born.
+** Shopping Cards
+=shopping-cards= should automate my new shopping process with the following features:
+
+- I can select recipes from a curated list of our favorite meals.
+- I get a list of all necessary ingredients aggregated for the selected recipes and I can deselect everything already in stock. This list is ordered according to my local store layout
+- I can edit the shopping list after the first creation.
+
+In order to build =shopping-cards= I had to overcome three problems, knowing all the ingredients for each recipe I cook, implementing a tool to guide through the process and distribute this tool so I can easily update and use it. Let's take a look at each problem.
+*** Know all ingredients
+A [[https://trello.com][Trello]] card stores all the recipes that i cook regularly. Within this card most recipes link to external websites and some recipes are kept in a private Google Drive. I wrote scrapers for all external websites so that I could extract the ingredients. It's quite hard to understand the unit of the ingredient because people tend to use completely different units to measure things and the naming of ingredients is not consistent, e.g. sometimes it's "some crumbled cheese" and in the next recipe it's called "50g grated cheese".
+
+To match the names of the ingredients, I have created a curated list that has all the duplicated names for the same ingredients that I found when I scraped the recipes. I created it manually but I suspect that the recipes will not include an unlimited amount of different names for the same ingredient so after some time I will have created an exhaustive list.
+
+I have not figured out how to handle units yet. I just search for numbers display all the information I found with minimal formatting in my tool.
+
+Getting the recipes from the private Google Drive turned out to be the most time consuming task because I could not find fitting library for the Oauth implementation Clojure, so I had to write my own.
+*** Guiding through the process
+I created a webapp where you can select the recipes for the next few days and after the selection an aggregation of all needed ingredients is shown. With this aggregation I walk around in my kitchen and deselect everything which is in stock.
+
+In wanted to be able to collaborate on the shopping list to add additional shopping items which are not based from recipes. Instead of implementing this system by myself I integrated Trello in my the application. After the recipe & ingredient selection is done a Trello card is created which can be edited and shared easily.
+*** Distribution
+To reduce effort I did not want to add authentication but I also did not want that everyone with an internet connection could decide which groceries I buy :-) I usually decide what to cook when I am at home so I decided to run =shopping-cards= locally in my apartment. It runs on a Raspberry Pi and as long as you're in the WiFi you can access it.
+** Conclusion
+If you read that far you are either a grocery lunatic as well or shocked how much time is spent thinking about groceries :-) For me building =shopping-cards= was a lot of fun and I really like it if I am able to automate something of my everyday life. In addition, deciding to run =shopping-cards= locally worked out really great and I am slowly growing my own personal app store in my apartment.
+
+Building =shopping-cards= took me about 40 hours.
