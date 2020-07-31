@@ -1604,7 +1604,7 @@
  {:id "f1ec32f6-d7d5-452d-b700-6240aa240086",
   :amount-desc "50 ml",
   :amount 50,
-  :ingredient-id nil,
+  :ingredient-id "4e67d72f-44c4-464f-be33-05382c3c8080",
   :recipe-id "ab147915-2054-475f-bf62-7d69568759d4"}
  {:id "f33b6078-a8d0-4b1a-a89d-05971af401f2",
   :amount-desc "400 g",
