@@ -137,9 +137,14 @@
      (group-by :id (db/load-recipes))
      (group-by :id types)))))
 
-
+(defn missing-recipes []
+  (let [missin-recipe-names (difference
+                             (set (map :name (load-trello-recipes)))
+                             (set(map :name (db/load-recipes))))]
+    (filter #(missin-recipe-names (:name %)) (load-trello-recipes))))
 
 (comment
+  (missing-recipes)
   (add-cooked-with (find-recipe "Avocado-Pesto") (find-ingredient "Parmesan") {:amount nil :amount-desc "" :unit nil})
   (add-new-recipe
    {:name "Couscous"
