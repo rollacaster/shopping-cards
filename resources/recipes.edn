@@ -1,11 +1,4 @@
-({:name "Vegetarische Frikadellen",
-  :type "NORMAL",
-  :link
-  "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html",
-  :id "e9147690-a68c-40d5-84ef-5ac83c1db800",
-  :image
-  "https://img.chefkoch-cdn.de/rezepte/1631611270752104/bilder/1122512/crop-360x240/vegetarische-frikadellen.jpg"}
- {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
+({:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
   :name "Spiegelei mit Spinat",
   :link "",
   :image
@@ -61,7 +54,7 @@
   "https://www.chefkoch.de/rezepte/1778601287739038/Rosmarinkartoffeln-aus-dem-Ofen.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/632851163951406/bilder/351816/crop-360x240/rosmarinkartoffeln.jpg",
-  :inactive false,
+  :inactive true,
   :type "NORMAL"}
  {:id "318e0c0f-7d59-433a-850a-5b218453bf5a",
   :name "Ofenkäse",
@@ -89,7 +82,7 @@
   "https://docs.google.com/document/d/1kx9Efvdy-WmMtT8n_N6oKdrM9uEtws6BjImaOjMTI0s/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3309061491475076/bilder/1006870/crop-360x240/falafel-wraps-a-la-milli.jpg",
-  :inactive false,
+  :inactive true,
   :type "NORMAL"}
  {:id "c8f2b8cd-a0a2-4a44-b11e-93f6339e85bb",
   :name "Spinatlasagne",
@@ -117,7 +110,7 @@
   :image
   "https://img.chefkoch-cdn.de/rezepte/3340221496254924/bilder/1161131/crop-360x240/gefuellte-tomate-kaese-brezeln.jpg",
   :type "FAST"}
- {:name "Vegane Vollkornnudeln in cremiger Champignon-Rahmsauce",
+ {:name "Mandel Pasta mit Champigons",
   :type "NORMAL",
   :link
   "https://www.springlane.de/magazin/rezeptideen/mandel-pasta-mit-champignons/",
@@ -130,7 +123,7 @@
   "https://docs.google.com/document/d/1XgYjXoomsM8Js3DQDMBApv13u3kZ2W81jLny2rDSnBU/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/886391194251662/bilder/129615/crop-360x240/ricotta-palatschinken.jpg",
-  :inactive false,
+  :inactive true,
   :type "NORMAL"}
  {:id "fe10f893-a565-4ba6-890d-001031e71b17",
   :name "Gebackender Feta",
@@ -153,7 +146,7 @@
   "https://www.chefkoch.de/rezepte/3418081509286217/Veganes-Curry-mit-Kokosmilch-Thai-Art.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3273691486403869/bilder/1130252/crop-360x240/indisches-chicken-mango-curry.jpg",
-  :inactive false,
+  :inactive true,
   :type "NORMAL"}
  {:id "8311263e-061f-482d-9b8b-e4229734976a",
   :name "One Pot Erdnuss-Nudel",
@@ -161,7 +154,7 @@
   "https://docs.google.com/document/d/1g1dD8fqHd-9d0SkyanjR9aiQJGTaRarV01bmHv4fOs4",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3190371474828227/bilder/1291461/crop-360x240/one-pot-pasta.jpg",
-  :inactive false,
+  :inactive true,
   :type "NORMAL"}
  {:name "Couscous",
   :link "",
@@ -174,7 +167,7 @@
   :link "https://www.eat-this.org/pasta-mit-avocado-gruenkohl-pesto/",
   :image
   "https://img.chefkoch-cdn.de/rezepte/570881155737167/bilder/988885/crop-360x240/avocado-pesto.jpg",
-  :inactive false,
+  :inactive true,
   :type "NORMAL"}
  {:id "ad6aa7f9-6f28-4b56-8578-8ced3f3a6d1b",
   :name "Gnocchi mit Brokkoli und Pesto Rosso",
@@ -268,7 +261,7 @@
   :link "https://kochkarussell.com/indisches-kichererbsen-curry/",
   :image
   "https://img.chefkoch-cdn.de/rezepte/583151157447595/bilder/607051/crop-360x240/indisches-haehnchencurry-mit-kichererbsen.jpg",
-  :type "FAST"}
+  :type "NORMAL"}
  {:id "1f0e62ba-72e3-4871-b5ee-a3468a4457e2",
   :name "Kartoffelpuffer",
   :link
@@ -298,8 +291,16 @@
   "https://docs.google.com/document/d/155d_-rOQnXzYr0aA8uu80-h62x-wVa-ZqYt8q_ahO9Y/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3228081480257308/bilder/966187/crop-360x240/ungarischer-kartoffelauflauf-rakott-krumpli.jpg",
-  :inactive false,
+  :inactive true,
   :type "NORMAL"}
+ {:name "Vegetarische Frikadellen",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html",
+  :id "e9147690-a68c-40d5-84ef-5ac83c1db800",
+  :inactive true,
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1631611270752104/bilder/1122512/crop-360x240/vegetarische-frikadellen.jpg"}
  {:id "885e60b0-3f89-4f19-b0b4-ed8bc8d619fe",
   :name "Pizzabrötchen",
   :link
