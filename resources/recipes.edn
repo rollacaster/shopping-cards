@@ -62,6 +62,13 @@
   :image "https://i.ytimg.com/vi/_MMdtUxqPnY/maxresdefault.jpg",
   :inactive false,
   :type "FAST"}
+ {:name "Ofenkartoffeln mit Sour Cream light",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/2254741360838642/Ofenkartoffeln-mit-Sour-Cream-light.html",
+  :id "a186e4d7-e5e4-4871-be83-89f7b08c865c",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/2254741360838642/bilder/1051853/crop-360x240/ofenkartoffeln-mit-sour-cream-light.jpg"}
  {:id "24b6cd98-a51f-45d8-9f3d-9eccb5e8365f",
   :name "Gnocchi in Spinat Frischkäse-Soße",
   :link
@@ -171,7 +178,7 @@
   :type "NORMAL"}
  {:id "ad6aa7f9-6f28-4b56-8578-8ced3f3a6d1b",
   :name "Gnocchi mit Brokkoli und Pesto Rosso",
-  :type "FAST",
+  :type "NORMAL",
   :link
   "https://www.chefkoch.de/rezepte/2715361424443330/Gnocchi-mit-Brokkoli-und-Pesto-Rosso.html",
   :image
@@ -256,8 +263,8 @@
   :inactive false,
   :type "NORMAL"}
  {:id "21d6249a-e28d-484a-ba4f-6f470ea22e69",
-  :name "Gefüllte Paprika mit Feta und Mozzarella",
-  :type "FAST",
+  :name "Gefüllte Paprika mit Feta und Mozarella",
+  :type "NORMAL",
   :link
   "https://www.chefkoch.de/rezepte/3232941480954040/Gefuellte-Paprika-mit-Feta-und-Mozzarella.html",
   :image

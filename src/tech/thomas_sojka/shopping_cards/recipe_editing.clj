@@ -147,8 +147,10 @@
   (missing-recipes)
   (add-cooked-with (find-recipe "Avocado-Pesto") (find-ingredient "Parmesan") {:amount nil :amount-desc "" :unit nil})
   (find-ingredient "Tomatenmark")
-  (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/508081146067703/Vegetarische-Reispfanne.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS"
-                        :type "NORMAL"})
+  (add-new-recipe
+   (scrape/add-chefkoch-recipe
+    {:link "https://www.chefkoch.de/rezepte/2254741360838642/Ofenkartoffeln-mit-Sour-Cream-light.html"
+     :type "NORMAL"}))
   (add-new-recipe
    {:inactive false,
     :name "Vegetarische Reispfanne",
@@ -204,7 +206,7 @@
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
         scrape/dedup-ingredients
         #_scrape/find-image))
-  (add-ingredient {:category "Obst" :name "Mandeln"})
+  (add-ingredient {:category "Gewürze" :name "Tabasco"})
   (add-new-recipe
    (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html"
                                 :type "NORMAL"})))

@@ -306,4 +306,13 @@
   :id "cfc2741b-c361-4d05-b71e-a2a118881400"}
  {:category "Käse & Co",
   :name "Saure Sahne",
-  :id "e7691a24-6d24-401f-9516-1fc7cf33f880"}]
+  :id "e7691a24-6d24-401f-9516-1fc7cf33f880"}
+ {:category "Käse & Co",
+  :name "Quark",
+  :id "cdfe6ae3-fbad-4c98-9f2f-e91347856399"}
+ {:category "Gemüse",
+  :name "Frühlingszwiebel",
+  :id "cd3243c4-09a0-472d-970f-dc912ce74610"}
+ {:category "Gewürze",
+  :name "Tabasco",
+  :id "6c2eae84-f52a-42b7-9448-199dbde69bb9"}]

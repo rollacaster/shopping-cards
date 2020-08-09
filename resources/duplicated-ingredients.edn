@@ -1,13 +1,13 @@
 {"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver"}
  "Paprika" #{"Paprikaschote(n), rot" "rote Paprika"}
  "Frischkäse" #{"Frischkäse" "Frischkäse, leicht"}
- "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz"}
+ "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz" "Fleur de Sel"}
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
  "Wasser"#{"Wasser, lauwarm" "Wasser"}
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
              "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
-        "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz"}
+        "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln"}
  "Tomate" #{"Tomate(n), getrocknete" "getrocknete Tomaten" "Pizzatomaten" "Cherrytomate(n)" "Tomate(n)"}
@@ -25,9 +25,9 @@
  "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'"}
  "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan"}
  "Knoblauch" #{"Knoblauch" "Knoblauchzehen" "Knoblauchzehe(n), gepresster"
-               "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt"
+               "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt" "Knoblauchzehe(n), fein gewürfelt"
                "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe"}
- "Limettensaft" #{"Limettensaft" "Saft von halben Limette"}
+ "Limettensaft" #{"Limettensaft" "Saft von halben Limette" "Limette(n), Schale und Saft"}
  "Spinat" #{"Blattspinat, TK oder frisch" "frischer Babyspinat"
             "Spinat, TK oder frisch dann blanchiert"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
@@ -64,4 +64,6 @@
  "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet"}
  "Aufback-Brezeln" #{"Brezeln"}
  "Sojasoße" #{"Soja-Sauce"}
- "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt"}}
+ "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt"}
+ "Quark" #{"Quark 0,2%"}
+ "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten"}}
