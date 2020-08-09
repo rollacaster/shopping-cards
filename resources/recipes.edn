@@ -25,7 +25,7 @@
   :link "https://thomassixt.de/rezept/schinkennudeln-vegetarisch/",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1041081209130032/bilder/106010/crop-360x240/schmand-schinken-nudeln.jpg",
-  :type "NORMAL"}
+  :type "FAST"}
  {:id "91801559-4b7c-4a1a-8d60-8c4df6f6b435",
   :name "Vegetarisches Pastizio",
   :link
@@ -178,7 +178,7 @@
   :type "NORMAL"}
  {:id "ad6aa7f9-6f28-4b56-8578-8ced3f3a6d1b",
   :name "Gnocchi mit Brokkoli und Pesto Rosso",
-  :type "NORMAL",
+  :type "FAST",
   :link
   "https://www.chefkoch.de/rezepte/2715361424443330/Gnocchi-mit-Brokkoli-und-Pesto-Rosso.html",
   :image
@@ -271,7 +271,7 @@
   :type "NORMAL"}
  {:id "21d6249a-e28d-484a-ba4f-6f470ea22e69",
   :name "Gefüllte Paprika mit Feta und Mozarella",
-  :type "NORMAL",
+  :type "FAST",
   :link
   "https://www.chefkoch.de/rezepte/3232941480954040/Gefuellte-Paprika-mit-Feta-und-Mozzarella.html",
   :image
@@ -281,7 +281,7 @@
   :link "https://kochkarussell.com/indisches-kichererbsen-curry/",
   :image
   "https://img.chefkoch-cdn.de/rezepte/583151157447595/bilder/607051/crop-360x240/indisches-haehnchencurry-mit-kichererbsen.jpg",
-  :type "NORMAL"}
+  :type "FAST"}
  {:id "1f0e62ba-72e3-4871-b5ee-a3468a4457e2",
   :name "Kartoffelpuffer",
   :link
