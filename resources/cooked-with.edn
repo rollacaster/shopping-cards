@@ -2241,4 +2241,84 @@
   :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
   :amount-desc "Salz, Pfeffer",
   :id "80cc9963-5ebb-4703-8e06-944afcf17ee0",
-  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}]
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount nil,
+  :ingredient-id "0f552276-6d15-43db-95e6-0572a50602fe",
+  :amount-desc "¾ Tasse",
+  :id "446f1da0-efb6-4ebb-8e88-9402083866fc",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 2,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :amount-desc "2 EL",
+  :id "0d333d36-fa98-46b9-991c-6c4739df3860",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 1,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :amount-desc "1 große",
+  :id "6615b146-c593-46de-bb09-07b9d55c16dd",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 2,
+  :ingredient-id "4373e821-8697-48ee-becf-9776f7a4e794",
+  :amount-desc "2",
+  :id "f474dd9e-c233-4fae-9fa4-0f7343cc5435",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount nil,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :amount-desc nil,
+  :id "6bf69798-4536-4fab-ac4e-177fa3e23a16",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 2,
+  :ingredient-id "9597d110-d042-4203-990f-c339c2d61109",
+  :amount-desc "2 TL",
+  :id "c53e630e-07fa-40b7-b300-914333a6f0d4",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount nil,
+  :ingredient-id "54c81443-15b7-48b9-883f-0d88cc131e5e",
+  :amount-desc nil,
+  :id "113742b6-4e1a-47af-8a2e-d34438bad81b",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount nil,
+  :ingredient-id "1d89bbb9-3052-45f7-9be9-d7a0c54c9b45",
+  :amount-desc "½ TL",
+  :id "2f261f7a-d20f-4b03-8ec9-9ea45684836a",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 2,
+  :ingredient-id "5eef57be-bc04-4f19-9d58-9c6eb2a5eddd",
+  :amount-desc "2 Dose/n",
+  :id "a7084d09-bdb4-4e9d-9c6e-dab0e2cb7bb1",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 3,
+  :ingredient-id "4e67d72f-44c4-464f-be33-05382c3c8080",
+  :amount-desc "3 Tasse/n",
+  :id "ba7f88a4-7afd-4319-a051-d0f52758fbfb",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 1,
+  :ingredient-id "e3a78734-79bd-4304-bd7c-f43e203ec8b1",
+  :amount-desc "1 Dose",
+  :id "5f322310-c49a-4505-9147-caddf23cc753",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 1,
+  :ingredient-id "5ef93777-a340-4f21-b06f-1fce3dba2703",
+  :amount-desc "1 Dose",
+  :id "38750eaf-947b-4144-a3e0-4df7e1ea6781",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 1,
+  :ingredient-id "3dc8331b-e1bf-4b59-9883-96bb855f9dfd",
+  :amount-desc "1 Dose",
+  :id "e8b84d0c-1b23-40fa-9472-f928de6d04ab",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount 2,
+  :ingredient-id "132de4f5-99cf-4078-9063-ff5b89d54aec",
+  :amount-desc "2 EL",
+  :id "c73d3b7c-a7a6-4978-bd85-1f31651b8b8c",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount nil,
+  :ingredient-id "2dee32c2-1b68-4eea-a80d-5c5668a24d45",
+  :amount-desc "n. B.",
+  :id "814b9d79-d096-4f5d-a18f-dff63b5d4615",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}
+ {:amount nil,
+  :ingredient-id "c0cf3e5e-609f-474e-9fde-810285a0c31b",
+  :amount-desc "n. B.",
+  :id "c13178b2-7c7a-456f-a290-b59eb9092869",
+  :recipe-id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31"}]

@@ -37,6 +37,7 @@
    "Wursttheke"
    "Milch & Co"
    "Käse & Co"
+   "Süßigkeiten"
    "Eier"
    "Getränke"])
 

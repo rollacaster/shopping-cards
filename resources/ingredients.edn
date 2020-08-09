@@ -78,7 +78,7 @@
   :name "Ingwer"}
  {:id "54c81443-15b7-48b9-883f-0d88cc131e5e",
   :category "Gewürze",
-  :name "Chilli"}
+  :name "Chili"}
  {:id "f365f293-4adc-4cdc-bcca-389425f3e2e6",
   :category "Beilage",
   :name "Lasagneplatten"}
@@ -315,4 +315,13 @@
   :id "cd3243c4-09a0-472d-970f-dc912ce74610"}
  {:category "Gewürze",
   :name "Tabasco",
-  :id "6c2eae84-f52a-42b7-9448-199dbde69bb9"}]
+  :id "6c2eae84-f52a-42b7-9448-199dbde69bb9"}
+ {:category "Beilage",
+  :name "Bulgur",
+  :id "0f552276-6d15-43db-95e6-0572a50602fe"}
+ {:category "Gewürze",
+  :name "Kümmel",
+  :id "9597d110-d042-4203-990f-c339c2d61109"}
+ {:category "Süßigkeiten",
+  :name "Nachos",
+  :id "2dee32c2-1b68-4eea-a80d-5c5668a24d45"}]

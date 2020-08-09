@@ -21,11 +21,11 @@
   :inactive false,
   :type "FAST"}
  {:id "633e1ee6-4db1-4b21-a747-c37b1a0406b1",
-  :name "Schinkennudeln vegetarisch, ein einfaches Pastagericht",
+  :name "Schinkennudeln vegetarisch",
   :link "https://thomassixt.de/rezept/schinkennudeln-vegetarisch/",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1041081209130032/bilder/106010/crop-360x240/schmand-schinken-nudeln.jpg",
-  :type "FAST"}
+  :type "NORMAL"}
  {:id "91801559-4b7c-4a1a-8d60-8c4df6f6b435",
   :name "Vegetarisches Pastizio",
   :link
@@ -210,6 +210,13 @@
   "https://img.chefkoch-cdn.de/rezepte/1082671214034473/bilder/1020204/crop-360x240/cremige-kaesespaetzle.jpg",
   :inactive false,
   :type "NORMAL"}
+ {:name "Vegetarisches Chili mit Bulgur",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/1660421274170785/Vegetarisches-Chili-mit-Bulgur.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS",
+  :id "6ef0adb0-61d8-44d2-bcc9-93f2fbcc0a31",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1660421274170785/bilder/1136417/crop-360x240/vegetarisches-chili-mit-bulgur.jpg"}
  {:id "2a04b3e0-2602-49e9-b9a0-444ce06f70a3",
   :name "Raclette im Ofen",
   :link
@@ -305,7 +312,7 @@
   :id "1ed661b4-a96b-494a-8e31-5b46729a01da",
   :image
   "https://img.chefkoch-cdn.de/rezepte/508081146067703/bilder/297436/crop-360x240/vegetarische-reispfanne.jpg"}
- {:name "Penne con Verdura",
+ {:name "Penne con verdura",
   :type "NORMAL",
   :link "https://www.eat-this.org/penne-con-verdura/",
   :id "b43b5d14-45ee-4877-bf8c-fe539134e315",

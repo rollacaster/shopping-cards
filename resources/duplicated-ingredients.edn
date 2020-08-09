@@ -14,7 +14,7 @@
  "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
  "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"
-                      "Tomaten, passiert" "gehackte Tomaten"}
+                      "Tomaten, passiert" "gehackte Tomaten" "Pizzatomaten ( je 400 g)"}
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener" "Emmentaler"
                     "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                     "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
@@ -26,27 +26,27 @@
  "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan"}
  "Knoblauch" #{"Knoblauch" "Knoblauchzehen" "Knoblauchzehe(n), gepresster"
                "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt" "Knoblauchzehe(n), fein gewürfelt"
-               "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe"}
+               "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe" "Knoblauchzehe(n), klein gehackt"}
  "Limettensaft" #{"Limettensaft" "Saft von halben Limette" "Limette(n), Schale und Saft"}
  "Spinat" #{"Blattspinat, TK oder frisch" "frischer Babyspinat"
             "Spinat, TK oder frisch dann blanchiert"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
-             "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln"}
+             "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
  "Crème fraîche" #{"Creme fraiche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
  "Champignons" #{"Champignons, frisch, nicht zu groß" "Champignons, frische"}
- "Mais" #{"Mais, TK oder 1 Dose"}
+ "Mais" #{"Mais, TK oder 1 Dose" "Mais (310 g)"}
  "Hefe" #{"Trockenhefe oder 1/2 Pck. Frischhefe" "Frischhefe"}
  "Spätzle" #{"Spätzle, frische, aus dem Kühlregal" "Spätzle (Frischprodukt)"}
  "Kräuter" #{"Kräuter, gemischte, TK" "Kräuter, frische (Basilikum, Petersilie, Oregano)" "eine Prise Oregano"}
  "Petersilie" #{"Petersilie, gehackt"}
  "Ingwer" #{"etwas Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
- "Chilli" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"
-             "Chili nach Geschmack" "rote Chili"}
+ "Chili" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"
+             "Chili nach Geschmack" "rote Chili" "Chilipulver"}
  "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK" "Romanesco"}
  "Zitrone"#{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon" "Saft einer halben Zitrone"}
  "Feta" #{"Schafskäse" "Feta-Käse"}
@@ -67,4 +67,7 @@
  "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt"}
  "Quark" #{"Quark 0,2%"}
  "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten"}
- "Avocado" #{"reife Avocado"}}
+ "Avocado" #{"reife Avocado"}
+ "Kümmel" #{"Kreuzkümmelpulver"}
+ "Bohnen" #{"Kidneybohnen (440 g)"}
+ "Nachos" #{"Nacho(s)"}}

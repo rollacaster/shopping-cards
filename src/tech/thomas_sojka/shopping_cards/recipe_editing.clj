@@ -149,7 +149,7 @@
   (find-ingredient "Tomatenmark")
   (add-new-recipe
    (scrape/scrape-recipe
-    {:link "https://www.eat-this.org/penne-con-verdura/"
+    {:link "https://www.chefkoch.de/rezepte/1660421274170785/Vegetarisches-Chili-mit-Bulgur.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS"
      :type "NORMAL"}))
   (add-new-recipe
    {:inactive false,
@@ -206,7 +206,7 @@
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
         scrape/dedup-ingredients
         #_scrape/find-image))
-  (add-ingredient {:category "Gewürze" :name "Tabasco"})
+  (add-ingredient {:category "Süßigkeiten" :name "Nachos"})
   (add-new-recipe
    (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html"
                                 :type "NORMAL"})))
