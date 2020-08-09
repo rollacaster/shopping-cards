@@ -147,17 +147,20 @@
   (missing-recipes)
   (add-cooked-with (find-recipe "Avocado-Pesto") (find-ingredient "Parmesan") {:amount nil :amount-desc "" :unit nil})
   (add-new-recipe
-   {:name "Couscous"
-    :link ""
-    :image "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html"
+   {:name "Bunte Gemüse Quesadilla"
+    :link "https://www.rewe.de/rezepte/bunte-gemuese-quesadilla/"
+    :image "https://i.rewe-static.de/content/prod/cas/censhare/30412264-1575470163672_digital-image.png?crop=1600px:498px;0,96&resize=1480px:460px"
     :inactive false
     :type "Normal"
-    :ingredients [{:id (find-ingredient "Paprika") :amount 2 :amount-desc "2" :unit nil}
-                  {:id (find-ingredient "Karotte") :amount 6 :amount-desc "6" :unit nil}
+    :ingredients [{:id (find-ingredient "Zwiebel") :amount 1 :amount-desc "1" :unit nil}
+                  {:id (find-ingredient "Zucchini") :amount 1 :amount-desc "1" :unit nil}
                   {:id (find-ingredient "Mais") :amount 1 :amount-desc "1 Dose" :unit nil}
-                  {:id (find-ingredient "Feta") :amount 1 :amount-desc "1" :unit nil}
-                  {:id (find-ingredient "Couscous") :amount 250 :amount-desc "250 g" :unit "g"}
-                  {:id (find-ingredient "Zitronensaft") :amount nil :amount-desc "etwas" :unit nil}]})
+                  {:id (find-ingredient "Karotte") :amount 1 :amount-desc "1" :unit nil}
+                  {:id (find-ingredient "Bohnen") :amount 1 :amount-desc "1 Dose" :unit nil}
+                  {:id (find-ingredient "Wraps") :amount nil :amount-desc "" :unit nil}
+                  {:id (find-ingredient "Paprika") :amount 1 :amount-desc "1" :unit nil}
+                  {:id (find-ingredient "Geriebener Käse") :amount 1 :amount-desc "1 Packung" :unit nil}
+                  {:id (find-ingredient "Saure Sahne") :amount 1 :amount-desc "1" :unit nil}]})
   (find-ingredient "Eier")
   (let [new-recipe (->> (load-trello-recipes)
                         added-recipes

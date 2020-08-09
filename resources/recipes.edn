@@ -189,6 +189,12 @@
   :image
   "https://www.weightwatchers.de/images/1031/dynamic/foodandrecipes/2014/05/SpaetzeleHaehnchenauflauf2_800x800.jpg",
   :type "NORMAL"}
+ {:name "Bunte Gemüse Quesadilla",
+  :type "NORMAL",
+  :link "https://www.rewe.de/rezepte/bunte-gemuese-quesadilla/",
+  :id "369bb94c-94bc-4460-ae7f-582616a023f5",
+  :image
+  "https://i.rewe-static.de/content/prod/cas/censhare/30412264-1575470163672_digital-image.png?crop=1600px:498px;0,96&resize=1480px:460px"}
  {:id "db2d9ab0-1964-4052-a7c0-7c3292929504",
   :name "Käse-Spätzle",
   :link

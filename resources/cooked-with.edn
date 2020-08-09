@@ -2036,4 +2036,49 @@
   :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
   :amount-desc nil,
   :id "307b9b12-9723-41fc-bc86-91255542e888",
-  :recipe-id "e9147690-a68c-40d5-84ef-5ac83c1db800"}]
+  :recipe-id "e9147690-a68c-40d5-84ef-5ac83c1db800"}
+ {:amount 1,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :amount-desc "1",
+  :id "dfd17bb4-6157-488d-8de7-bb970a634a7b",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
+ {:amount 1,
+  :ingredient-id "e24ed0cd-c1a4-4e7c-92a1-84bcda090efa",
+  :amount-desc "1",
+  :id "e058bf2c-4a38-4f51-b79b-29e67c8a2593",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
+ {:amount 1,
+  :ingredient-id "5ef93777-a340-4f21-b06f-1fce3dba2703",
+  :amount-desc "1 Dose",
+  :id "00e868c3-3c58-48f7-9f9e-2edcb030b00c",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
+ {:amount 1,
+  :ingredient-id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9",
+  :amount-desc "1",
+  :id "bcba5196-b288-46fa-8e69-41cf2f1ac2e8",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
+ {:amount 1,
+  :ingredient-id "e3a78734-79bd-4304-bd7c-f43e203ec8b1",
+  :amount-desc "1 Dose",
+  :id "a944e4fb-dd97-447e-84d5-768685cc0e1b",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
+ {:amount nil,
+  :ingredient-id "f29557a1-d028-4efa-860d-562ad6fe8c56",
+  :amount-desc "",
+  :id "904460e3-64dd-470e-8546-a32f5258774f",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
+ {:amount 1,
+  :ingredient-id "6c0740a2-24a0-4aa7-9548-60c79bac6fec",
+  :amount-desc "1",
+  :id "4ed24666-6635-4f00-b152-b486df631ea6",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
+ {:amount 1,
+  :ingredient-id "64e38f58-0fa1-4dee-8f41-fbac25a77f5f",
+  :amount-desc "1 Packung",
+  :id "037cdf0e-d215-4e95-a6b5-ce19fd4d4a4f",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
+ {:amount 1,
+  :ingredient-id "e7691a24-6d24-401f-9516-1fc7cf33f880",
+  :amount-desc "1",
+  :id "c5050c52-8205-4e57-b37a-0d5992b1a48c",
+  :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}]
