@@ -146,21 +146,51 @@
 (comment
   (missing-recipes)
   (add-cooked-with (find-recipe "Avocado-Pesto") (find-ingredient "Parmesan") {:amount nil :amount-desc "" :unit nil})
+  (find-ingredient "Tomatenmark")
+  (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/508081146067703/Vegetarische-Reispfanne.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS"
+                        :type "NORMAL"})
   (add-new-recipe
-   {:name "Bunte Gemüse Quesadilla"
-    :link "https://www.rewe.de/rezepte/bunte-gemuese-quesadilla/"
-    :image "https://i.rewe-static.de/content/prod/cas/censhare/30412264-1575470163672_digital-image.png?crop=1600px:498px;0,96&resize=1480px:460px"
-    :inactive false
-    :type "Normal"
-    :ingredients [{:id (find-ingredient "Zwiebel") :amount 1 :amount-desc "1" :unit nil}
-                  {:id (find-ingredient "Zucchini") :amount 1 :amount-desc "1" :unit nil}
-                  {:id (find-ingredient "Mais") :amount 1 :amount-desc "1 Dose" :unit nil}
-                  {:id (find-ingredient "Karotte") :amount 1 :amount-desc "1" :unit nil}
-                  {:id (find-ingredient "Bohnen") :amount 1 :amount-desc "1 Dose" :unit nil}
-                  {:id (find-ingredient "Wraps") :amount nil :amount-desc "" :unit nil}
-                  {:id (find-ingredient "Paprika") :amount 1 :amount-desc "1" :unit nil}
-                  {:id (find-ingredient "Geriebener Käse") :amount 1 :amount-desc "1 Packung" :unit nil}
-                  {:id (find-ingredient "Saure Sahne") :amount 1 :amount-desc "1" :unit nil}]})
+   {:inactive false,
+    :name "Vegetarische Reispfanne",
+    :type "NORMAL",
+    :link "https://www.chefkoch.de/rezepte/508081146067703/Vegetarische-Reispfanne.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS",
+    :image "https://img.chefkoch-cdn.de/rezepte/508081146067703/bilder/297436/crop-360x240/vegetarische-reispfanne.jpg",
+    :ingredients '({:amount-desc "1 Tasse/n",
+                   :name "Reis",
+                   :amount 1,
+                   :id "9e0c19af-f27f-4b04-99fd-689357ee1be8"}
+                   {:amount-desc "",
+                    :name (find-ingredient "Tomatenmark"),
+                    :amount nil,
+                    :id "4e67d72f-44c4-464f-be33-05382c3c8080"}
+                  {:amount-desc "2 Tasse/n",
+                   :name "Gemüsebrühe",
+                   :amount 2,
+                   :id "4e67d72f-44c4-464f-be33-05382c3c8080"}
+                  {:amount-desc "2 kleine",
+                   :name "Zwiebel",
+                   :amount 2,
+                   :id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641"}
+                  {:amount-desc "1",
+                   :name "Paprika",
+                   :amount 1,
+                   :id "6c0740a2-24a0-4aa7-9548-60c79bac6fec"}
+                  {:amount-desc "100 g",
+                   :name "Feta",
+                   :amount 100,
+                   :id "d7d3faa8-f7c1-4cf2-ba0b-23df648b3c7c"}
+                  {:amount-desc nil,
+                   :name "Curry",
+                   :amount nil,
+                   :id "64e066ef-1e5b-4c67-aa34-acc6fee52ed8"}
+                  {:amount-desc nil,
+                   :name "Salz",
+                   :amount nil,
+                   :id "94f58d5a-221b-48d4-9f9e-118d1fdce128"}
+                  {:amount-desc "3 TL",
+                   :name "Öl",
+                   :amount 3,
+                   :id "3654b906-0dac-4db9-bf25-e4fbb9f4439f"})})
   (find-ingredient "Eier")
   (let [new-recipe (->> (load-trello-recipes)
                         added-recipes

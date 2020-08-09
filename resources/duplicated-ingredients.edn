@@ -10,7 +10,7 @@
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln"}
- "Tomate" #{"Tomate(n), getrocknete" "getrocknete Tomaten" "Pizzatomaten" "Cherrytomate(n)"}
+ "Tomate" #{"Tomate(n), getrocknete" "getrocknete Tomaten" "Pizzatomaten" "Cherrytomate(n)" "Tomate(n)"}
  "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
  "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"
@@ -20,7 +20,7 @@
                     "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
                     "Emmentaler, gerieben" "Käse, gerieben, 30 % Fett i. Tr."}
  "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen"}
- "Reis"#{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis"}
+ "Reis"#{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis" "Basmatireis"}
  "Schinken"#{"Kochschinken"}
  "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'"}
  "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan"}
@@ -37,7 +37,7 @@
  "Crème fraîche" #{"Creme fraiche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
- "Champignons" #{"Champignons, frisch, nicht zu groß"}
+ "Champignons" #{"Champignons, frisch, nicht zu groß" "Champignons, frische"}
  "Mais" #{"Mais, TK oder 1 Dose"}
  "Hefe" #{"Trockenhefe oder 1/2 Pck. Frischhefe" "Frischhefe"}
  "Spätzle" #{"Spätzle, frische, aus dem Kühlregal" "Spätzle (Frischprodukt)"}
@@ -56,6 +56,7 @@
  "Sellerie" #{"Staudensellerie, mit Blättern"}
  "Aubergine" #{"Aubergine(n)"}
  "Currypaste" #{"Thai-Currypaste, grün"}
+ "Curry" #{"Currypulver"}
  "Milch" #{"etwas Milch zum verdünnen von Schmand"}
  "Zucker"#{"evtl. Zucker"}
  "Zucchini" #{" Zucchini"}

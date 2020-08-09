@@ -291,6 +291,13 @@
   "https://ais.kochbar.de/kbrezept/24257_9592/620x465/tortellini-mit-gruenem-pesto-rezept.jpg",
   :inactive false,
   :type "FAST"}
+ {:name "Vegetarische Reispfanne",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/508081146067703/Vegetarische-Reispfanne.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS",
+  :id "1ed661b4-a96b-494a-8e31-5b46729a01da",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/508081146067703/bilder/297436/crop-360x240/vegetarische-reispfanne.jpg"}
  {:id "70295d13-7639-4ba2-8e48-a8c8157b3121",
   :name "Kartoffelauflauf mit Ei / Rakott Krumpli",
   :link
