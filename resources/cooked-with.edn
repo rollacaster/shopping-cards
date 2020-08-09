@@ -2181,4 +2181,64 @@
   :ingredient-id "83d5b8e1-945f-4917-9cd7-f9ddb6330b89",
   :amount-desc "wenig",
   :id "455b0c99-f509-4360-86fb-b6462208a881",
-  :recipe-id "a186e4d7-e5e4-4871-be83-89f7b08c865c"}]
+  :recipe-id "a186e4d7-e5e4-4871-be83-89f7b08c865c"}
+ {:amount 150,
+  :ingredient-id "14a0c9c7-3630-4ea3-957f-3807cd624636",
+  :amount-desc "150 g Vollkorn-Penne",
+  :id "afda0874-598f-4aa4-b492-82299e890d1b",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount 1,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :amount-desc "1 rote Zwiebel",
+  :id "c5eac65a-a847-44a4-9614-d48e00e0445d",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount 1,
+  :ingredient-id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9",
+  :amount-desc "1 Karotte",
+  :id "b6cd98d4-962e-40aa-9e93-e7b6060fbd7b",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount 1/2,
+  :ingredient-id "e24ed0cd-c1a4-4e7c-92a1-84bcda090efa",
+  :amount-desc "1/2 Zucchini",
+  :id "71262c42-f8d8-485e-a785-16a62fa8d2ff",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount 2,
+  :ingredient-id "9f8d0bd9-4274-4f35-83fb-7916c43c77c3",
+  :amount-desc "2 Tomaten",
+  :id "540353c0-bad1-4c66-b712-29763469a709",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount 1,
+  :ingredient-id "4373e821-8697-48ee-becf-9776f7a4e794",
+  :amount-desc "1 Knoblauchzehe",
+  :id "b15c4c2f-28bc-453d-ba21-0e0316586105",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount 1/2,
+  :ingredient-id "54c81443-15b7-48b9-883f-0d88cc131e5e",
+  :amount-desc "1/2 rote Chili",
+  :id "7d4ac910-9ec9-4906-87ff-a19229a4a727",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount 2,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :amount-desc "2 EL Olivenöl + 1TL",
+  :id "92cc4407-7ead-4e4c-93a9-8fc0b1c590a1",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount nil,
+  :ingredient-id "1880eb8a-dafd-4ea2-a985-7789bc99e0a2",
+  :amount-desc "eine Prise Oregano",
+  :id "aac129ab-0e5d-43b3-847e-11cff805c866",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount 1,
+  :ingredient-id "ffed7113-6388-4473-ad82-60aaf0ac00f9",
+  :amount-desc "1 reife Avocado",
+  :id "bea3ede2-3260-403f-aebf-22298984c94f",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount nil,
+  :ingredient-id "2402edca-bcdc-4ba0-a2a4-187568e9f7a1",
+  :amount-desc "Saft einer halben Zitrone",
+  :id "e5d21518-847a-4674-af9c-96736c94e0e4",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
+ {:amount nil,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :amount-desc "Salz, Pfeffer",
+  :id "80cc9963-5ebb-4703-8e06-944afcf17ee0",
+  :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}]

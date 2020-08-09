@@ -80,6 +80,33 @@
               (drop 1)
               (take-while #(s/starts-with? % "*"))))))
 
+(def units ["g" "Esslöffel" "ml" "Handvoll" "Teelöffel" "EL"])
+
+(defn scrape-springlane-ingredient [ingredient-line]
+  (let [unit (some (fn [unit] (when (s/includes? ingredient-line (str " " unit " ")) unit)) units)
+        amount (parse-int ingredient-line)]
+    {:amount-desc ingredient-line
+     :amount amount
+     :name (-> ingredient-line
+               (s/replace (re-pattern (str amount)) "")
+               (s/replace (re-pattern (str " " unit " ")) "")
+               s/trim)
+     :unit unit}))
+
+(defn scrape-springlane [link]
+  (let [recipe-html (:body (client/get link))
+        ingredients (->> recipe-html
+                         html/parse
+                         html/as-hickory
+                         (select/select
+                          (select/child
+                           (select/class "recipe-ingredients-list")))
+                         first :content
+                         (remove string?)
+                         (map (comp s/trim first :content))
+                         (map scrape-springlane-ingredient))]
+    ingredients))
+
 (defn scrape-eat-this-span [class spans]
   (first (:content (some
                     #(when (= (get-in % [:attrs :class]) class) %)
@@ -102,15 +129,26 @@
      :unit unit}))
 
 (defn scrape-eat-this-ingredients [link]
-  (let [recipe-html (:body (client/get link))]
-    (->> recipe-html
-         html/parse
-         html/as-hickory
-         (select/select
-          (select/child
-           (select/class "wprm-recipe-ingredient")))
-         (w/postwalk walk)
-         (map scrape-eat-this-ingredient))))
+  (let [recipe-html (->> (:body (client/get link))
+                          html/parse
+                          html/as-hickory)
+        wprm-ingredients (->> recipe-html
+                          (select/select
+                           (select/child
+                            (select/class "wprm-recipe-ingredient")))
+                          (w/postwalk walk)
+                          (map scrape-eat-this-ingredient))]
+    (if (> (count wprm-ingredients) 0)
+      wprm-ingredients
+      (->> recipe-html
+           (select/select
+            (select/child
+             (select/class "Zutaten")
+             (select/tag "ul")))
+           first
+           :content
+           (map (comp first :content))
+           (map scrape-springlane-ingredient)))))
 
 (defn scrape-weightwatchers [link]
   (let [recipe-html (:body (client/get link))
@@ -132,31 +170,6 @@
             :amount-desc (str amount amount-desc)
             :unit (s/trim amount-desc)})
          names amounts amount-descs)))
-
-(def units ["g" "Esslöffel" "ml" "Handvoll" "Teelöffel"])
-
-(defn scrape-springlane [link]
-  (let [recipe-html (:body (client/get link))
-        ingredients (->> recipe-html
-                         html/parse
-                         html/as-hickory
-                         (select/select
-                          (select/child
-                           (select/class "recipe-ingredients-list")))
-                         first :content
-                         (remove string?)
-                         (map (comp s/trim first :content))
-                         (map (fn [ingredient-line]
-                                (let [unit (some (fn [unit] (when (s/includes? ingredient-line (str " " unit " ")) unit)) units)
-                                      amount (parse-int ingredient-line)]
-                                  {:amount-desc ingredient-line
-                                   :amount amount
-                                   :name (-> ingredient-line
-                                             (s/replace (re-pattern (str amount)) "")
-                                             (s/replace (re-pattern (str " " unit " ")) "")
-                                             s/trim)
-                                   :unit unit}))))]
-    ingredients))
 
 (defn add-ingredients [recipe]
   (cond (and (:link recipe)
@@ -219,7 +232,7 @@
                  ingredients))))
 
 
-(defn add-chefkoch-recipe [{:keys [link type]}]
+(defn scrape-recipe [{:keys [link type]}]
   (->>
    (let [recipe-html (:body (client/get link))
          recipe-hickory (->> recipe-html html/parse html/as-hickory)]

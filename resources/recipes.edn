@@ -305,6 +305,12 @@
   :id "1ed661b4-a96b-494a-8e31-5b46729a01da",
   :image
   "https://img.chefkoch-cdn.de/rezepte/508081146067703/bilder/297436/crop-360x240/vegetarische-reispfanne.jpg"}
+ {:name "Penne con Verdura",
+  :type "NORMAL",
+  :link "https://www.eat-this.org/penne-con-verdura/",
+  :id "b43b5d14-45ee-4877-bf8c-fe539134e315",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/3346661497357496/bilder/1199324/crop-360x240/penne-verdura-dalla-padella.jpg"}
  {:id "70295d13-7639-4ba2-8e48-a8c8157b3121",
   :name "Kartoffelauflauf mit Ei / Rakott Krumpli",
   :link
