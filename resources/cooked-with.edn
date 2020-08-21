@@ -2052,9 +2052,9 @@
   :amount-desc "1 Dose",
   :id "00e868c3-3c58-48f7-9f9e-2edcb030b00c",
   :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
- {:amount 1,
+ {:amount 3,
   :ingredient-id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9",
-  :amount-desc "1",
+  :amount-desc "3",
   :id "bcba5196-b288-46fa-8e69-41cf2f1ac2e8",
   :recipe-id "369bb94c-94bc-4460-ae7f-582616a023f5"}
  {:amount 1,
@@ -2202,9 +2202,10 @@
   :amount-desc "1/2 Zucchini",
   :id "71262c42-f8d8-485e-a785-16a62fa8d2ff",
   :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
- {:amount 2,
-  :ingredient-id "9f8d0bd9-4274-4f35-83fb-7916c43c77c3",
-  :amount-desc "2 Tomaten",
+ {:amount 250,
+  :ingredient-id "5eef57be-bc04-4f19-9d58-9c6eb2a5eddd",
+  :amount-desc "250 ml",
+  :unit "ml"
   :id "540353c0-bad1-4c66-b712-29763469a709",
   :recipe-id "b43b5d14-45ee-4877-bf8c-fe539134e315"}
  {:amount 1,
