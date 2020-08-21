@@ -1,4 +1,9 @@
-({:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
+({:name "Obst",
+  :type "FAST",
+  :link nil,
+  :id "ab605e71-72b1-4bfd-8f98-b56f9b99080a",
+  :image "https://readersdigest.de/media/zoo/images/Obst_7377b6b5a0d3dd04b3ec4dcf663ba1e4.jpg"}
+ {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
   :name "Spiegelei mit Spinat",
   :link "",
   :image

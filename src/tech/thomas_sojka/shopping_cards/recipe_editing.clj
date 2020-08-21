@@ -151,6 +151,39 @@
    (scrape/scrape-recipe
     {:link "https://www.chefkoch.de/rezepte/1660421274170785/Vegetarisches-Chili-mit-Bulgur.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS"
      :type "NORMAL"}))
+  (add-ingredient {:category "Obst" :name "Kirsche"})
+  (add-new-recipe
+   {:inactive false,
+    :name "Obst",
+    :type "FAST",
+    :ingredients '({:amount-desc "3",
+                    :name "Äpfel",
+                    :amount 1,
+                    :id "2f989e52-c965-4f3c-af5b-e41ccd8b185f"}
+                   {:amount-desc "1",
+                    :name "Ananas",
+                    :amount 1,
+                    :id "fa465e7b-c158-40b5-8d16-d2a156c476c6"}
+                   {:amount-desc "1",
+                    :name "Wassermelone",
+                    :amount 1,
+                    :id "b287887d-346c-4644-ab84-4abc3eec81da"}
+                   {:amount-desc "1 Packung",
+                    :name "Trauben",
+                    :amount 1,
+                    :id "1ae57296-0493-4ac6-826e-549e4f4439a9"}
+                   {:amount-desc "1 Packung",
+                    :name "Blaubeeren",
+                    :amount 1,
+                    :id "8ce0dca4-db23-4ec8-a577-54e2caeeb802"}
+                   {:amount-desc "1 Packung",
+                    :name "Erdbeeren",
+                    :amount 1,
+                    :id "05da97fa-3bc1-40b5-a5bb-d1d341d96b44"}
+                   {:amount-desc "1 Packung",
+                    :name "Kirschen",
+                    :amount 1,
+                    :id "4caae747-2b97-4d1a-b477-629781beae3f"})})
   (add-new-recipe
    {:inactive false,
     :name "Vegetarische Reispfanne",
@@ -200,6 +233,7 @@
                         #_(take 1)
                         #_first
                         (map :name))]
+    (scrape/find-image {:name "Obst"})
     (-> new-recipe
         (assoc :image "https://www.ditsch.de/mcinfo_assets/de/51d7fa67d7bf0a7db660b93b3530605eb3b222ff.jpeg")
         (assoc :ingredients [{:name "Spätzle" :amount 500 :amount-desc "500 g" :unit "g"}

@@ -324,4 +324,25 @@
   :id "9597d110-d042-4203-990f-c339c2d61109"}
  {:category "Süßigkeiten",
   :name "Nachos",
-  :id "2dee32c2-1b68-4eea-a80d-5c5668a24d45"}]
+  :id "2dee32c2-1b68-4eea-a80d-5c5668a24d45"}
+ {:category "Obst",
+  :name "Äpfel",
+  :id "2f989e52-c965-4f3c-af5b-e41ccd8b185f"}
+ {:category "Obst",
+  :name "Ananas",
+  :id "fa465e7b-c158-40b5-8d16-d2a156c476c6"}
+ {:category "Obst",
+  :name "Wassermelone",
+  :id "b287887d-346c-4644-ab84-4abc3eec81da"}
+ {:category "Obst",
+  :name "Trauben",
+  :id "1ae57296-0493-4ac6-826e-549e4f4439a9"}
+ {:category "Obst",
+  :name "Blaubeeren",
+  :id "8ce0dca4-db23-4ec8-a577-54e2caeeb802"}
+ {:category "Obst",
+  :name "Erdbeeren",
+  :id "05da97fa-3bc1-40b5-a5bb-d1d341d96b44"}
+ {:category "Obst",
+  :name "Kirschen",
+  :id "4caae747-2b97-4d1a-b477-629781beae3f"}]
