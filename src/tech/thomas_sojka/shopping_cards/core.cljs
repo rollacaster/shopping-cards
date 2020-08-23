@@ -89,7 +89,7 @@
                    "FAST" "Schnell Gerichte")]
         (doall
          (->> recipes
-              (filter #(:link %))
+              (remove #(or (= (:link %) "") (= (:link %) nil)))
               (map (fn [{:keys [id name link image]}]
                      [:a.pointer.link
                       {:href link}
