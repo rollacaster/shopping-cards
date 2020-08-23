@@ -114,28 +114,6 @@
 
 (defn find-recipe [recipe-name]
   (some #(when (= (:name %) recipe-name) (:id %)) (db/load-recipes)))
-(let [types (->> (load-trello-recipes)
-                 (map #(assoc % :type (if (#{"Sojka Sandwiches"
-                                             "Käse-Brezeln"
-                                             "Camenbert"
-                                             "Ofenkäse"
-                                             "Spiegelei mit Spinat"
-                                             "Brezel + Tofu"
-                                             "Gebackender Feta"
-                                             "Spätzle mit Ei"
-                                             "Tortellini mit Pesto"} (:name %)) "FAST" "NORMAL")))
-                 (map #(assoc % :id (find-recipe (:name %))))
-                 (filter :id)
-                 (map #(select-keys % [:id :type])))]
-  (db/write-edn
-   "recipes.edn"
-   (map
-    (fn [[_ lists]]
-      (apply merge lists))
-    (merge-with
-     concat
-     (group-by :id (db/load-recipes))
-     (group-by :id types)))))
 
 (defn missing-recipes []
   (let [missin-recipe-names (difference
