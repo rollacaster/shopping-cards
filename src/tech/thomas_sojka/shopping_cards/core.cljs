@@ -78,6 +78,31 @@
        :type
        @recipes))))])
 
+(defn show-recipes []
+  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3
+   (doall
+    (map
+     (fn [[recipe-type recipes]]
+       [:div {:key recipe-type}
+        [:h2.ph3 (case recipe-type
+                   "NORMAL" ""
+                   "FAST" "Schnell Gerichte")]
+        (doall
+         (->> recipes
+              (filter #(:link %))
+              (map (fn [{:keys [id name link image]}]
+                     [:a.pointer.link
+                      {:href link}
+                      [recipe {:key id
+                               :name name
+                               :link link
+                               :image image}]]))))])
+     (->> @recipes
+          (group-by :type)
+          (sort-by
+           (fn [[recipe-type]] (some (fn [[idx recipe-type-order]] (when (= recipe-type-order recipe-type) idx))
+                                    (map-indexed #(vector %1 %2) type-order)))))))])
+
 (defn deselect-ingredients []
   (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
       (.then #(.text %))
@@ -167,6 +192,10 @@
                                  (reset! ingredients %)
                                  (reset! selected-ingredients (set (map first %)))
                                  (.scrollTo js/window 0 0)))))}]
+   ["/show-recipes"
+    {:name ::recipes
+     :view show-recipes
+     :title "Rezepte"}]
    ["/deselect-ingredients" {:name ::deselect-ingredients
                              :view deselect-ingredients
                              :title "Zutaten auswählen"
