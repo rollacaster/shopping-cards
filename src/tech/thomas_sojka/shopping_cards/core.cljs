@@ -79,7 +79,7 @@
        @recipes))))])
 
 (defn show-recipes []
-  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3
+  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3.bg-gray-200
    (doall
     (map
      (fn [[recipe-type recipes]]
@@ -91,17 +91,42 @@
          (->> recipes
               (remove #(or (= (:link %) "") (= (:link %) nil)))
               (map (fn [{:keys [id name link image]}]
-                     [:a.pointer.link
-                      {:href link}
-                      [recipe {:key id
-                               :name name
-                               :link link
-                               :image image}]]))))])
+                     [recipe {:key id
+                              :name name
+                              :link link
+                              :image image
+                              :on-click #(rfe/push-state ::recipe {:recipe-id id})}]))))])
      (->> @recipes
           (group-by :type)
           (sort-by
            (fn [[recipe-type]] (some (fn [[idx recipe-type-order]] (when (= recipe-type-order recipe-type) idx))
                                     (map-indexed #(vector %1 %2) type-order)))))))])
+
+
+(defn show-recipe [{{{:keys [recipe-id]} :path}:parameters}]
+  (let [ingredients (r/atom [])]
+    (-> (.fetch js/window (str "/recipes/" recipe-id "/ingredients"))
+        (.then #(.text %))
+        (.then read-string)
+        (.then #(reset! ingredients %)))
+    (fn [match]
+      (let [{:keys [path]} (:parameters match)
+            {:keys [recipe-id]} path
+            {:keys [name link image]}
+            (->> @recipes
+                 (some #(when (= (:id %) recipe-id) %)))]
+        [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
+         [:a.link.near-black.underline {:href link :target "_blank" :referer "norel noopener"}
+          [:h1.mv0 name]]
+         [:div.flex.justify-between
+          [:ul.pl0.list.mb4
+           (map
+            (fn [[id ingredient]]
+              [:li.mb3.f4 {:key id} ingredient])
+            @ingredients)]
+          [:div.h-100.ba.b--orange-300.br3.bw1
+           [:img.w5.br3.h-100 {:src image}]]]
+         [:iframe.w-100 {:src link :style {:height "50rem"}}]]))))
 
 (defn deselect-ingredients []
   (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
@@ -173,7 +198,7 @@
     [:div.sans-serif.h-100
      [header]
      [:main.h-100
-      [:div.mw9.center.bg-gray-200
+      [:div.mw9.center.bg-gray-200.h-100
        [(:view (:data @match)) @match]]]
      [footer]]))
 
@@ -196,6 +221,11 @@
     {:name ::recipes
      :view show-recipes
      :title "Rezepte"}]
+   ["/show-recipes/:recipe-id"
+    {:name ::recipe
+     :view show-recipe
+     :title "Rezept"
+     :parameters {:path {:recipe-id string?}}}]
    ["/deselect-ingredients" {:name ::deselect-ingredients
                              :view deselect-ingredients
                              :title "Zutaten auswählen"

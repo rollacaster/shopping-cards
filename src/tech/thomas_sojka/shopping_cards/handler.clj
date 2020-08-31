@@ -7,12 +7,14 @@
             [ring.util.response :refer [resource-response]]
             [tech.thomas-sojka.shopping-cards.core
              :refer
-             [create-klaka-shopping-card ingredients-for-recipes load-recipes]]))
+             [create-klaka-shopping-card ingredients-for-recipes load-recipes ingredients-for-recipe]]))
 
 (def app-routes
   (api
    (GET "/" [] (resource-response "index-prd.html" {:root "public"}))
    (GET "/recipes" [] {:status 200 :body (vec (filter (comp not :inactive) (load-recipes))) :headers {"Content-type" "application/edn"}})
+   (GET "/recipes/:recipe-id/ingredients" [recipe-id]
+     (pr-str (ingredients-for-recipe recipe-id)))
    (GET "/ingredients" [recipe-ids]
         (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids))))
    (POST "/shopping-card" request
