@@ -116,16 +116,16 @@
             (->> @recipes
                  (some #(when (= (:id %) recipe-id) %)))]
         [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
-         [:a.link.near-black.underline {:href link :target "_blank" :referer "norel noopener"}
+         [:a.link.near-black.underline.mb3.mb0-ns.db {:href link :target "_blank" :referer "norel noopener"}
           [:h1.mv0 name]]
-         [:div.flex.justify-between
-          [:ul.pl0.list.mb4
+         [:div.flex.justify-between.flex-wrap
+          [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
+           [:img.w5.br3.ba.b--orange-300 {:src image}]]
+          [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
            (map
             (fn [[id ingredient]]
               [:li.mb3.f4 {:key id} ingredient])
-            @ingredients)]
-          [:div.h-100.ba.b--orange-300.br3.bw1
-           [:img.w5.br3.h-100 {:src image}]]]
+            @ingredients)]]
          [:iframe.w-100 {:src link :style {:height "50rem"}}]]))))
 
 (defn deselect-ingredients []
