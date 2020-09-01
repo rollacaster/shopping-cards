@@ -345,4 +345,7 @@
   :id "05da97fa-3bc1-40b5-a5bb-d1d341d96b44"}
  {:category "Obst",
   :name "Kirschen",
-  :id "4caae747-2b97-4d1a-b477-629781beae3f"}]
+  :id "4caae747-2b97-4d1a-b477-629781beae3f"}
+ {:category "Käse & Co",
+  :name "Griechischer Joghurt",
+  :id "8f485322-2016-4642-a8b8-47f5c10ff599"}]

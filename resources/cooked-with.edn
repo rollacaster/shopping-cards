@@ -2357,4 +2357,16 @@
   :ingredient-id "4caae747-2b97-4d1a-b477-629781beae3f",
   :amount-desc "1 Packung",
   :id "e03dd7a0-751c-4c4f-91d1-2acbea233c85",
+  :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}
+ {:amount 400,
+  :ingredient-id "cdfe6ae3-fbad-4c98-9f2f-e91347856399",
+  :unit "g",
+  :amount-desc "400 g",
+  :id "425f6217-6b01-48d7-8f4f-c877a5bbd5db",
+  :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}
+ {:amount 1,
+  :ingredient-id "8f485322-2016-4642-a8b8-47f5c10ff599",
+  :unit nil,
+  :amount-desc "1",
+  :id "39fe8cce-0959-4f79-92ba-3420d1f66627",
   :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}]
