@@ -235,10 +235,11 @@
 (defn scrape-recipe [{:keys [link type]}]
   (->>
    (let [recipe-html (:body (client/get link))
-         recipe-hickory (->> recipe-html html/parse html/as-hickory)]
-     {:name (->> recipe-hickory
-                  (select/select (select/child (select/tag "h1")))
-                  first :content first)
+         recipe-hickory (->> recipe-html html/parse html/as-hickory)
+         recipe-name (->> recipe-hickory
+                           (select/select (select/child (select/tag "h1")))
+                           first :content first)]
+     {:name (if (string? recipe-name) recipe-name (-> recipe-name :content first))
       :link link
       :type type
       :inactive false})

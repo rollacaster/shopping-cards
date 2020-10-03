@@ -1,8 +1,58 @@
-({:name "Obst",
+({:name "Broccolicurry mit roten Linsen",
+  :type "NORMAL",
+  :link
+  "https://www.weightwatchers.com/de/recipe/broccolicurry-mit-roten-linsen/591aeb9416581df91e8726f4",
+  :id "a1dae95b-96cf-4278-8015-9ea0fed30750",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/3456341515054121/bilder/1156624/crop-360x240/brokkolicurry-mit-roten-linsen.jpg"}
+ {:name "Nudelsalat mit Schinken und Erbsen",
+  :type "FAST",
+  :link
+  "https://www.weightwatchers.com/de/recipe/nudelsalat-schinken-und-erbsen/562a9b23c82276e52f53145f",
+  :id "19d9e712-edc5-4f15-81c1-3acaa31d8cbc",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/124671053506142/bilder/1212199/crop-360x240/nudelsalat-mit-schinken-und-kaese.jpg"}
+ {:name "Pasta mit Brokkoli",
+  :type "FAST",
+  :link
+  "https://www.chefkoch.de/rezepte/2520541395236214/Pasta-mit-Brokkoli.html",
+  :id "be4aacb3-fb09-4187-b62d-a571489368e7",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/179011077807954/bilder/1081112/crop-360x240/nudeln-mit-brokkoli-sahne-kaese-sosse.jpg"}
+ {:name "Kartoffelcurry mit Erbsen und Tomaten",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/3046781457290954/Kartoffelcurry-mit-Erbsen-und-Tomaten.html",
+  :id "f7fd4e1d-3381-4b1b-86fc-dea0d64f76c7",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/3046781457290954/bilder/1311497/crop-360x240/kartoffelcurry-mit-erbsen-und-tomaten.jpg"}
+ {:name "Blumenkohl-Schnitzel",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/525821148991246/Blumenkohl-Schnitzel.html",
+  :id "eea1f964-ccad-4dd7-8dd4-2c93bd777829",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/525821148991246/bilder/1199231/crop-360x240/blumenkohl-schnitzel.jpg"}
+ {:name "Buntes Ofengemüse",
+  :type "NORMAL",
+  :link
+  "https://www.weightwatchers.com/de/recipe/buntes-ofengemuse-mit-hahnchen/5847792efc2e0341162a4da8",
+  :id "51e93034-d11f-4bfb-bbf1-9dffd96af275",
+  :image
+  "https://cmx.weightwatchers.de/assets-proxy/weight-watchers/image/upload/t_WINE_EXTRALARGE/vamhkkzjmmp8k1bzzmvz.jpg"}
+ {:name "Kohlrabi in Parmesan-Kräuter-Panade",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/2202081353071159/Kohlrabi-in-Parmesan-Kraeuter-Panade.html",
+  :id "e662d355-1086-4463-b6ae-b6b2e94251fb",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/2202081353071159/bilder/1318687/crop-360x240/kohlrabi-in-parmesan-kraeuter-panade.jpg"}
+ {:name "Obst",
   :type "FAST",
   :link nil,
   :id "ab605e71-72b1-4bfd-8f98-b56f9b99080a",
-  :image "https://readersdigest.de/media/zoo/images/Obst_7377b6b5a0d3dd04b3ec4dcf663ba1e4.jpg"}
+  :image
+  "https://readersdigest.de/media/zoo/images/Obst_7377b6b5a0d3dd04b3ec4dcf663ba1e4.jpg"}
  {:id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2",
   :name "Spiegelei mit Spinat",
   :link "",
@@ -336,7 +386,7 @@
   :link
   "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html",
   :id "e9147690-a68c-40d5-84ef-5ac83c1db800",
-  :inactive true,
+  :inactive false,
   :image
   "https://img.chefkoch-cdn.de/rezepte/1631611270752104/bilder/1122512/crop-360x240/vegetarische-frikadellen.jpg"}
  {:id "885e60b0-3f89-4f19-b0b4-ed8bc8d619fe",

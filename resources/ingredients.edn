@@ -173,7 +173,7 @@
   :category "Brot & Co",
   :name "Toast"}
  {:id "175c3da0-a4c2-4bc4-ab37-2cfef0012ca2",
-  :category "Gewürze",
+  :category "Gemüse",
   :name "Kokosmilch"}
  {:id "9f8d0bd9-4274-4f35-83fb-7916c43c77c3",
   :category "Gemüse",
@@ -348,4 +348,25 @@
   :id "4caae747-2b97-4d1a-b477-629781beae3f"}
  {:category "Käse & Co",
   :name "Griechischer Joghurt",
-  :id "8f485322-2016-4642-a8b8-47f5c10ff599"}]
+  :id "8f485322-2016-4642-a8b8-47f5c10ff599"}
+ {:category "Gemüse",
+  :name "Kohlrabi",
+  :id "8b77e903-6c87-4e48-b902-7035ca008374"}
+ {:category "Gewürze",
+  :name "Koriander",
+  :id "589c086e-b06b-4451-aba2-90c46b8c1702"}
+ {:category "Konserven",
+  :name "Erbsen",
+  :id "5381790d-3485-47ff-92bd-90d03f1f62a8"}
+ {:category "Gemüse",
+  :name "Pinienkerne",
+  :id "49e653d8-08da-42c9-b19b-34320d400007"}
+ {:category "Konserven",
+  :name "Linsen",
+  :id "c649995f-c56f-40d9-bb65-b6e57d9c1d73"}
+ {:category "Gewürze",
+  :name "Nüsse",
+  :id "3bc4e5ec-8cff-4ff4-b080-50a2a3aed6ec"}
+ {:category "Gewürze",
+  :name "Brühe",
+  :id "afb01109-0750-4a59-9e63-7ad4fbb891b5"}]
