@@ -1,4 +1,18 @@
-({:name "Broccolicurry mit roten Linsen",
+({:name "Langos",
+  :type "RARE",
+  :link
+  "https://www.chefkoch.de/rezepte/1726761281857676/Ungarische-Langos-mit-Knoblauchcreme-und-Kaese.html",
+  :id "4d85e9a3-5e24-4895-abe9-d94a73d12a5c",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1726761281857676/bilder/1169202/crop-360x240/ungarische-langos-mit-knoblauchcreme-und-kaese.jpg"}
+ {:name "Kartoffeln Lorraine",
+  :type "RARE",
+  :link
+  "https://www.chefkoch.de/rezepte/1522681257453590/Kartoffeln-Lorraine.html",
+  :id "801a5f13-fbc8-40d6-8437-df77becd9475",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1522681257453590/bilder/945086/crop-360x240/kartoffeln-lorraine.jpg"}
+ {:name "Broccolicurry mit roten Linsen",
   :type "NORMAL",
   :link
   "https://www.weightwatchers.com/de/recipe/broccolicurry-mit-roten-linsen/591aeb9416581df91e8726f4",

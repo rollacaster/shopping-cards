@@ -45,7 +45,7 @@
 (def selected-ingredients (r/atom #{}))
 (def ingredients (r/atom []))
 (def loading (r/atom false))
-(def type-order ["NORMAL" "FAST"])
+(def type-order ["NORMAL" "FAST" "RARE"])
 
 (defn select-recipes []
   [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3
@@ -55,7 +55,8 @@
        [:div {:key recipe-type}
         [:h2.ph3 (case recipe-type
                    "NORMAL" ""
-                   "FAST" "Schnell Gerichte")]
+                   "FAST" "Schnell Gerichte"
+                   "RARE" "Selten")]
         (doall
          (map (fn [{:keys [id name link image]}]
                 [recipe (let [selected? (contains? @selected-recipes id)]
@@ -69,14 +70,13 @@
                                                ((if selected? disj conj)
                                                 selected-recipes id)))})])
               recipes))])
-     (sort-by
-      (fn [[recipe-type]] (some
-                          (fn [[idx recipe-type-order]]
-                            (when (= recipe-type-order recipe-type) idx))
-                          (map-indexed #(vector %1 %2) type-order)))
-      (group-by
-       :type
-       @recipes))))])
+     (->> @recipes
+          (group-by :type)
+          (sort-by
+           (fn [[recipe-type]] (some
+                               (fn [[idx recipe-type-order]]
+                                 (when (= recipe-type-order recipe-type) idx))
+                               (map-indexed #(vector %1 %2) type-order)))))))])
 
 (defn show-recipes []
   [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3.bg-gray-200

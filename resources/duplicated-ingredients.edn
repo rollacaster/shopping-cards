@@ -8,7 +8,7 @@
              "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer" "Pfeffer aus der Mühle"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
-        "Öl zum Braten" "Öl, Erdnussöl"}
+        "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln" "Vollkorn-Penne"
             "Muschelnudeln" "Nudeln, trocken, jede Sorte"}
@@ -20,11 +20,11 @@
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener" "Emmentaler"
                     "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                     "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
-                    "Emmentaler, gerieben" "Käse, gerieben, 30 % Fett i. Tr."}
- "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen"}
+                    "Emmentaler, gerieben" "Käse, gerieben, 30 % Fett i. Tr." "Gouda, gerieben"}
+ "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen" }
  "Reis"#{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis" "Basmatireis"}
  "Schinken"#{"Kochschinken"}
- "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'" "Kartoffel(n), festkochend"}
+ "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'" "Kartoffel(n), festkochend" "Kartoffeln, festkochend"}
  "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan" "Parmesan, gerieben"}
  "Knoblauch" #{"Knoblauch" "Knoblauchzehen" "Knoblauchzehe(n), gepresster"
                "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt" "Knoblauchzehe(n), fein gewürfelt"
@@ -35,9 +35,9 @@
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
              "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt" "Zwiebel/n"
              "Schalotten"}
- "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche"}
+ "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche" "Weizenmehl, bei Bedarf auch mehr"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
- "Crème fraîche" #{"Creme fraiche"}
+ "Crème fraîche" #{"Creme fraiche" "Crème fraîche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
  "Champignons" #{"Champignons, frisch, nicht zu groß" "Champignons, frische"}
@@ -63,7 +63,7 @@
  "Aubergine" #{"Aubergine(n)"}
  "Currypaste" #{"Thai-Currypaste, grün"}
  "Curry" #{"Currypulver"}
- "Milch" #{"etwas Milch zum verdünnen von Schmand"}
+ "Milch" #{"etwas Milch zum verdünnen von Schmand" "Milch, lauwarm"}
  "Zucker"#{"evtl. Zucker"}
  "Zucchini" #{" Zucchini"}
  "Cabanossi" #{"Cabanossi)"}
@@ -72,7 +72,7 @@
  "Sojasoße" #{"Soja-Sauce"}
  "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt" "Joghurt, Magermilchjoghurt, Natur, bis 0,5 % Fett"}
  "Quark" #{"Quark 0,2%"}
- "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten"}
+ "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten" "Frühlingszwiebel(n)"}
  "Avocado" #{"reife Avocado"}
  "Kümmel" #{"Kreuzkümmelpulver" "Kreuzkümmel, gemahlen"}
  "Bohnen" #{"Kidneybohnen (440 g)"}
@@ -83,4 +83,6 @@
  "Erbsen" #{"Erbsen, tiefgekühlt" "Erbsen (Konserve)"}
  "Linsen" #{"Linsen, trocken"}
  "Kokosmilch" #{"Kokosmilch, fettreduziert"}
- "Nüsse" #{"Nüsse, Cashewnüsse, Natur"}}
+ "Nüsse" #{"Nüsse, Cashewnüsse, Natur"}
+ "Schnittlauch" #{"Schnittlauch, getrocknet oder frisch"}
+ "Saure Sahne" #{"saure Sahne"}}

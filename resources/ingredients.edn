@@ -369,4 +369,10 @@
   :id "3bc4e5ec-8cff-4ff4-b080-50a2a3aed6ec"}
  {:category "Gewürze",
   :name "Brühe",
-  :id "afb01109-0750-4a59-9e63-7ad4fbb891b5"}]
+  :id "afb01109-0750-4a59-9e63-7ad4fbb891b5"}
+ {:category "Gewürze",
+  :name "Kräuter der Provence",
+  :id "43a6f610-b503-4116-9c0b-b540dd5a2778"}
+ {:category "Gemüse",
+  :name "Schnittlauch",
+  :id "f8e191a6-a0cc-4b75-82ec-b8a67e978f95"}]

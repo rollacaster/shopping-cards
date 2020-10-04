@@ -26,7 +26,7 @@
     (->> recipes-card-description
          s/split-lines
          (filter not-empty)
-         (take-while #(not= % "Selten"))
+         (take-while #(not= % "Ideen"))
          (filter #(s/includes? % "- "))
          (map meal-line->clj))))
 
