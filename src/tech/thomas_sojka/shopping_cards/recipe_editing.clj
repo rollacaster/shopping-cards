@@ -123,87 +123,26 @@
 
 (comment
   (missing-recipes)
-  (add-cooked-with (find-recipe "Avocado-Pesto") (find-ingredient "Parmesan") {:amount nil :amount-desc "" :unit nil})
+  (add-cooked-with (find-recipe "Kohlrabi in Parmesan-Kräuter-Panade") (find-ingredient "Kartoffeln") {:amount 6 :amount-desc "6 m.-große" :unit nil})
   (find-ingredient "Tomatenmark")
   (add-new-recipe
    (scrape/scrape-recipe
     {:link "https://www.chefkoch.de/rezepte/1660421274170785/Vegetarisches-Chili-mit-Bulgur.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS"
      :type "NORMAL"}))
-  (add-ingredient {:category "Obst" :name "Kirsche"})
+  (add-ingredient {:category "Beilage" :name "Spinatspätzle"})
   (add-new-recipe
    {:inactive false,
-    :name "Obst",
+    :name "Spinatspätzle",
     :type "FAST",
-    :ingredients '({:amount-desc "3",
-                    :name "Äpfel",
+    :image (scrape/find-image {:name "Spinatspätzle"})
+    :ingredients '({:amount-desc "2 Packungen",
+                    :name "Spinatspätzle",
                     :amount 1,
-                    :id "2f989e52-c965-4f3c-af5b-e41ccd8b185f"}
-                   {:amount-desc "1",
-                    :name "Ananas",
-                    :amount 1,
-                    :id "fa465e7b-c158-40b5-8d16-d2a156c476c6"}
-                   {:amount-desc "1",
-                    :name "Wassermelone",
-                    :amount 1,
-                    :id "b287887d-346c-4644-ab84-4abc3eec81da"}
+                    :id "6964c9bf-bdae-45fc-8978-c5eb8d22a810"}
                    {:amount-desc "1 Packung",
-                    :name "Trauben",
+                    :name "Geriebener Käse",
                     :amount 1,
-                    :id "1ae57296-0493-4ac6-826e-549e4f4439a9"}
-                   {:amount-desc "1 Packung",
-                    :name "Blaubeeren",
-                    :amount 1,
-                    :id "8ce0dca4-db23-4ec8-a577-54e2caeeb802"}
-                   {:amount-desc "1 Packung",
-                    :name "Erdbeeren",
-                    :amount 1,
-                    :id "05da97fa-3bc1-40b5-a5bb-d1d341d96b44"}
-                   {:amount-desc "1 Packung",
-                    :name "Kirschen",
-                    :amount 1,
-                    :id "4caae747-2b97-4d1a-b477-629781beae3f"})})
-  (add-new-recipe
-   {:inactive false,
-    :name "Vegetarische Reispfanne",
-    :type "NORMAL",
-    :link "https://www.chefkoch.de/rezepte/508081146067703/Vegetarische-Reispfanne.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS",
-    :image "https://img.chefkoch-cdn.de/rezepte/508081146067703/bilder/297436/crop-360x240/vegetarische-reispfanne.jpg",
-    :ingredients '({:amount-desc "1 Tasse/n",
-                   :name "Reis",
-                   :amount 1,
-                   :id "9e0c19af-f27f-4b04-99fd-689357ee1be8"}
-                   {:amount-desc "",
-                    :name (find-ingredient "Tomatenmark"),
-                    :amount nil,
-                    :id "4e67d72f-44c4-464f-be33-05382c3c8080"}
-                  {:amount-desc "2 Tasse/n",
-                   :name "Gemüsebrühe",
-                   :amount 2,
-                   :id "4e67d72f-44c4-464f-be33-05382c3c8080"}
-                  {:amount-desc "2 kleine",
-                   :name "Zwiebel",
-                   :amount 2,
-                   :id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641"}
-                  {:amount-desc "1",
-                   :name "Paprika",
-                   :amount 1,
-                   :id "6c0740a2-24a0-4aa7-9548-60c79bac6fec"}
-                  {:amount-desc "100 g",
-                   :name "Feta",
-                   :amount 100,
-                   :id "d7d3faa8-f7c1-4cf2-ba0b-23df648b3c7c"}
-                  {:amount-desc nil,
-                   :name "Curry",
-                   :amount nil,
-                   :id "64e066ef-1e5b-4c67-aa34-acc6fee52ed8"}
-                  {:amount-desc nil,
-                   :name "Salz",
-                   :amount nil,
-                   :id "94f58d5a-221b-48d4-9f9e-118d1fdce128"}
-                  {:amount-desc "3 TL",
-                   :name "Öl",
-                   :amount 3,
-                   :id "3654b906-0dac-4db9-bf25-e4fbb9f4439f"})})
+                    :id "64e38f58-0fa1-4dee-8f41-fbac25a77f5f"})})
   (find-ingredient "Eier")
   (let [new-recipe (->> (load-trello-recipes)
                         added-recipes
@@ -218,7 +157,9 @@
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
         scrape/dedup-ingredients
         #_scrape/find-image))
-  (add-ingredient {:category "Süßigkeiten" :name "Nachos"})
+  (add-ingredient {:category "Gemüse" :name "Schnittlauch"})
   (add-new-recipe
-   (scrape/add-chefkoch-recipe {:link "https://www.chefkoch.de/rezepte/1631611270752104/Vegetarische-Frikadellen.html"
-                                :type "NORMAL"})))
+   (->(scrape/scrape-recipe {:link
+                             "https://www.chefkoch.de/rezepte/1726761281857676/Ungarische-Langos-mit-Knoblauchcreme-und-Kaese.html"
+                             :type "RARE"})
+      (update :ingredients #(filter :id %)))))

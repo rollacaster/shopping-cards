@@ -1,4 +1,10 @@
-({:name "Langos",
+({:name "Spinatspätzle",
+  :type "FAST",
+  :link nil,
+  :id "3f83a10b-8de0-4f27-bce4-64532f37c0b8",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/91361035557222/bilder/673427/crop-360x240/spinatspaetzle-mit-gorgonzolarahmsosse.jpg"}
+ {:name "Langos",
   :type "RARE",
   :link
   "https://www.chefkoch.de/rezepte/1726761281857676/Ungarische-Langos-mit-Knoblauchcreme-und-Kaese.html",

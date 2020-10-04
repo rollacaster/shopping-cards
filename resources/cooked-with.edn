@@ -2825,4 +2825,32 @@
   :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
   :amount-desc nil,
   :id "b3c29784-5719-4e72-99c5-3443be4d3d59",
-  :recipe-id "4d85e9a3-5e24-4895-abe9-d94a73d12a5c"}]
+  :recipe-id "4d85e9a3-5e24-4895-abe9-d94a73d12a5c"}
+ {:amount 6,
+  :ingredient-id "cec199c0-318a-475f-825c-4bbb7262778e",
+  :unit nil,
+  :amount-desc "6 m.-große",
+  :id "0e0697b9-f117-430a-b8d8-62ee541e5dff",
+  :recipe-id "eea1f964-ccad-4dd7-8dd4-2c93bd777829"}
+ {:amount 6,
+  :ingredient-id "cec199c0-318a-475f-825c-4bbb7262778e",
+  :unit nil,
+  :amount-desc "6 m.-große",
+  :id "9e7f0100-0f1d-45d3-beb3-2183a1e1a8c8",
+  :recipe-id "51e93034-d11f-4bfb-bbf1-9dffd96af275"}
+ {:amount 6,
+  :ingredient-id "cec199c0-318a-475f-825c-4bbb7262778e",
+  :unit nil,
+  :amount-desc "6 m.-große",
+  :id "80c6e8d7-3971-4cca-a07e-c2a5839c5078",
+  :recipe-id "e662d355-1086-4463-b6ae-b6b2e94251fb"}
+ {:amount 1,
+  :ingredient-id "6964c9bf-bdae-45fc-8978-c5eb8d22a810",
+  :amount-desc "2 Packungen",
+  :id "b192c510-7285-4ab9-9666-03ccfd23c809",
+  :recipe-id "3f83a10b-8de0-4f27-bce4-64532f37c0b8"}
+ {:amount 1,
+  :ingredient-id "64e38f58-0fa1-4dee-8f41-fbac25a77f5f",
+  :amount-desc "1 Packung",
+  :id "402769d3-10f9-4f74-a407-f6d34608154e",
+  :recipe-id "3f83a10b-8de0-4f27-bce4-64532f37c0b8"}]

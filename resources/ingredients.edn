@@ -375,4 +375,7 @@
   :id "43a6f610-b503-4116-9c0b-b540dd5a2778"}
  {:category "Gemüse",
   :name "Schnittlauch",
-  :id "f8e191a6-a0cc-4b75-82ec-b8a67e978f95"}]
+  :id "f8e191a6-a0cc-4b75-82ec-b8a67e978f95"}
+ {:category "Beilage",
+  :name "Spinatspätzle",
+  :id "6964c9bf-bdae-45fc-8978-c5eb8d22a810"}]
