@@ -108,14 +108,15 @@
   :image
   "https://img.chefkoch-cdn.de/rezepte/1414951246382895/bilder/990583/crop-360x240/vegetarisches-pastizio.jpg",
   :inactive false,
-  :type "NORMAL"}
+  :type "RARE"}
  {:id "309b346f-7863-4f3b-a121-9eb5939938d1",
   :name "Krumplisteszta",
   :link
   "https://docs.google.com/document/d/1muuRIAhG1Yhtt43HBtyvcTA1Bfvz8YbTnoK_Qb2kELc/edit",
+  :type "RARE"
   :image
   "https://www.nosalty.hu/files/imagecache/recept/recept_kepek/273486_295059_krumplisteszta01x.jpg_.crop_display_0.jpg",
-  :inactive true}
+  :inactive false}
  {:id "f0d25872-8874-4aff-819d-08861577401c",
   :name "Nudelpesto",
   :link
@@ -129,8 +130,8 @@
   "https://www.chefkoch.de/rezepte/1778601287739038/Rosmarinkartoffeln-aus-dem-Ofen.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/632851163951406/bilder/351816/crop-360x240/rosmarinkartoffeln.jpg",
-  :inactive true,
-  :type "NORMAL"}
+  :inactive false,
+  :type "RARE"}
  {:id "318e0c0f-7d59-433a-850a-5b218453bf5a",
   :name "Ofenkäse",
   :link "",
@@ -150,36 +151,40 @@
   "https://www.chefkoch.de/rezepte/1958291318524674/Gnocchi-in-Spinat-Frischkaese-Sosse.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1958291318524674/bilder/710737/crop-360x240/gnocchi-in-spinat-frischkaese-sosse.jpg",
-  :inactive true}
+  :inactive false
+  :type "RARE"}
  {:id "5391806f-d56f-430a-b6c7-ce04c2fbc4d8",
   :name "Spinat-Feta Nudelauflauf",
   :link
   "https://docs.google.com/document/d/1E4vr4f5N130H6sDB7g4WsjNBn44oTvZrq8pi6B6xOMI/edit#heading=h.82t1kb2cspi",
   :image
   "https://img.chefkoch-cdn.de/rezepte/2477591389983960/bilder/667375/crop-360x240/spinat-nudelauflauf-mit-feta.jpg",
-  :inactive true}
+  :type "RARE"
+  :inactive false}
  {:id "787ebbb2-1dc5-43c4-991f-6c90136040f7",
   :name "Falafel-Wraps",
   :link
   "https://docs.google.com/document/d/1kx9Efvdy-WmMtT8n_N6oKdrM9uEtws6BjImaOjMTI0s/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3309061491475076/bilder/1006870/crop-360x240/falafel-wraps-a-la-milli.jpg",
-  :inactive true,
-  :type "NORMAL"}
+  :inactive false,
+  :type "RARE"}
  {:id "c8f2b8cd-a0a2-4a44-b11e-93f6339e85bb",
   :name "Spinatlasagne",
   :link
   "https://www.chefkoch.de/rezepte/1231981228220302/Spinatlasagne.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1231981228220302/bilder/1223467/crop-360x240/spinatlasagne.jpg",
-  :inactive true}
+  :inactive false
+  :type "RARE"}
  {:id "4054b9f0-07ec-4e48-bbca-fc7fa7c3454f",
   :name "Vegetarische gefüllte Zucchini auf griechische Art",
   :link
   "https://www.chefkoch.de/rezepte/2534541397069441/Vegetarische-gefuellte-Zucchini-auf-griechische-Art.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/2534541397069441/bilder/1036211/crop-360x240/vegetarische-gefuellte-zucchini-auf-griechische-art.jpg",
-  :inactive true}
+  :inactive false
+  :type "RARE"}
  {:id "aa4c16e1-a97c-4bd1-8c97-e2438961fba1",
   :name "Brezel + Tofu",
   :link nil,
@@ -193,7 +198,7 @@
   "https://img.chefkoch-cdn.de/rezepte/3340221496254924/bilder/1161131/crop-360x240/gefuellte-tomate-kaese-brezeln.jpg",
   :type "FAST"}
  {:name "Mandel Pasta mit Champigons",
-  :type "NORMAL",
+  :type "RARE",
   :link
   "https://www.springlane.de/magazin/rezeptideen/mandel-pasta-mit-champignons/",
   :id "f040c24a-c80e-4c96-b930-6cd3ed2c1fec",
@@ -205,8 +210,8 @@
   "https://docs.google.com/document/d/1XgYjXoomsM8Js3DQDMBApv13u3kZ2W81jLny2rDSnBU/edit",
   :image
   "https://img.chefkoch-cdn.de/rezepte/886391194251662/bilder/129615/crop-360x240/ricotta-palatschinken.jpg",
-  :inactive true,
-  :type "NORMAL"}
+  :inactive false,
+  :type "RARE"}
  {:id "fe10f893-a565-4ba6-890d-001031e71b17",
   :name "Gebackender Feta",
   :link
@@ -228,16 +233,16 @@
   "https://www.chefkoch.de/rezepte/3418081509286217/Veganes-Curry-mit-Kokosmilch-Thai-Art.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3273691486403869/bilder/1130252/crop-360x240/indisches-chicken-mango-curry.jpg",
-  :inactive true,
-  :type "NORMAL"}
+  :inactive false,
+  :type "RARE"}
  {:id "8311263e-061f-482d-9b8b-e4229734976a",
   :name "One Pot Erdnuss-Nudel",
   :link
   "https://docs.google.com/document/d/1g1dD8fqHd-9d0SkyanjR9aiQJGTaRarV01bmHv4fOs4",
   :image
   "https://img.chefkoch-cdn.de/rezepte/3190371474828227/bilder/1291461/crop-360x240/one-pot-pasta.jpg",
-  :inactive true,
-  :type "NORMAL"}
+  :inactive false,
+  :type "RARE"}
  {:name "Couscous",
   :link "",
   :id "91a7d716-b6e8-45dc-9482-df511bea5b2b",
@@ -249,8 +254,8 @@
   :link "https://www.eat-this.org/pasta-mit-avocado-gruenkohl-pesto/",
   :image
   "https://img.chefkoch-cdn.de/rezepte/570881155737167/bilder/988885/crop-360x240/avocado-pesto.jpg",
-  :inactive true,
-  :type "NORMAL"}
+  :inactive false,
+  :type "RARE"}
  {:id "ad6aa7f9-6f28-4b56-8578-8ced3f3a6d1b",
   :name "Gnocchi mit Brokkoli und Pesto Rosso",
   :type "FAST",
@@ -284,7 +289,7 @@
   :image
   "https://img.chefkoch-cdn.de/rezepte/1082671214034473/bilder/1020204/crop-360x240/cremige-kaesespaetzle.jpg",
   :inactive false,
-  :type "NORMAL"}
+  :type "RARE"}
  {:name "Vegetarisches Chili mit Bulgur",
   :type "NORMAL",
   :link
@@ -298,7 +303,8 @@
   "https://www.chefkoch.de/rezepte/129531055744529/Kartoffelauflauf-mit-Mais-und-Paprika.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/210861088430376/bilder/958948/crop-360x240/ananas-raclette-aus-dem-ofen.jpg",
-  :inactive true}
+  :inactive false
+  :type "RARE"}
  {:id "6b69cebd-b4e6-424f-a908-dc325c8c2829",
   :name "Brokkoli-Nudelauflauf",
   :link
