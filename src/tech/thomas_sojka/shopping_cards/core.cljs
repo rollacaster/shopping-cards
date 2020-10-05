@@ -86,7 +86,8 @@
        [:div {:key recipe-type}
         [:h2.ph3 (case recipe-type
                    "NORMAL" ""
-                   "FAST" "Schnell Gerichte")]
+                   "FAST" "Schnell Gerichte"
+                   "RARE" "Selten")]
         (doall
          (->> recipes
               (remove #(or (= (:link %) "") (= (:link %) nil)))
