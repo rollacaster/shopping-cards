@@ -1,4 +1,11 @@
-({:name "Spinatspätzle",
+({:name "Milchreis",
+  :type "RARE",
+  :link
+  "https://www.chefkoch.de/rezepte/1153081221555008/Der-perfekte-Milchreis-Grundrezept.html",
+  :id "9b938e1a-8310-409f-92c3-a13399258107",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1153081221555008/bilder/927065/crop-360x240/der-perfekte-milchreis-grundrezept.jpg"}
+ {:name "Spinatspätzle",
   :type "FAST",
   :link nil,
   :id "3f83a10b-8de0-4f27-bce4-64532f37c0b8",
@@ -113,7 +120,7 @@
   :name "Krumplisteszta",
   :link
   "https://docs.google.com/document/d/1muuRIAhG1Yhtt43HBtyvcTA1Bfvz8YbTnoK_Qb2kELc/edit",
-  :type "RARE"
+  :type "RARE",
   :image
   "https://www.nosalty.hu/files/imagecache/recept/recept_kepek/273486_295059_krumplisteszta01x.jpg_.crop_display_0.jpg",
   :inactive false}
@@ -151,7 +158,7 @@
   "https://www.chefkoch.de/rezepte/1958291318524674/Gnocchi-in-Spinat-Frischkaese-Sosse.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1958291318524674/bilder/710737/crop-360x240/gnocchi-in-spinat-frischkaese-sosse.jpg",
-  :inactive false
+  :inactive false,
   :type "RARE"}
  {:id "5391806f-d56f-430a-b6c7-ce04c2fbc4d8",
   :name "Spinat-Feta Nudelauflauf",
@@ -159,7 +166,7 @@
   "https://docs.google.com/document/d/1E4vr4f5N130H6sDB7g4WsjNBn44oTvZrq8pi6B6xOMI/edit#heading=h.82t1kb2cspi",
   :image
   "https://img.chefkoch-cdn.de/rezepte/2477591389983960/bilder/667375/crop-360x240/spinat-nudelauflauf-mit-feta.jpg",
-  :type "RARE"
+  :type "RARE",
   :inactive false}
  {:id "787ebbb2-1dc5-43c4-991f-6c90136040f7",
   :name "Falafel-Wraps",
@@ -175,7 +182,7 @@
   "https://www.chefkoch.de/rezepte/1231981228220302/Spinatlasagne.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1231981228220302/bilder/1223467/crop-360x240/spinatlasagne.jpg",
-  :inactive false
+  :inactive false,
   :type "RARE"}
  {:id "4054b9f0-07ec-4e48-bbca-fc7fa7c3454f",
   :name "Vegetarische gefüllte Zucchini auf griechische Art",
@@ -183,7 +190,7 @@
   "https://www.chefkoch.de/rezepte/2534541397069441/Vegetarische-gefuellte-Zucchini-auf-griechische-Art.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/2534541397069441/bilder/1036211/crop-360x240/vegetarische-gefuellte-zucchini-auf-griechische-art.jpg",
-  :inactive false
+  :inactive false,
   :type "RARE"}
  {:id "aa4c16e1-a97c-4bd1-8c97-e2438961fba1",
   :name "Brezel + Tofu",
@@ -303,7 +310,7 @@
   "https://www.chefkoch.de/rezepte/129531055744529/Kartoffelauflauf-mit-Mais-und-Paprika.html",
   :image
   "https://img.chefkoch-cdn.de/rezepte/210861088430376/bilder/958948/crop-360x240/ananas-raclette-aus-dem-ofen.jpg",
-  :inactive false
+  :inactive false,
   :type "RARE"}
  {:id "6b69cebd-b4e6-424f-a908-dc325c8c2829",
   :name "Brokkoli-Nudelauflauf",

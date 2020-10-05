@@ -63,7 +63,7 @@
  "Aubergine" #{"Aubergine(n)"}
  "Currypaste" #{"Thai-Currypaste, grün"}
  "Curry" #{"Currypulver"}
- "Milch" #{"etwas Milch zum verdünnen von Schmand" "Milch, lauwarm"}
+ "Milch" #{"etwas Milch zum verdünnen von Schmand" "Milch, lauwarm" "Vollmilch, zimmerwarm"}
  "Zucker"#{"evtl. Zucker"}
  "Zucchini" #{" Zucchini"}
  "Cabanossi" #{"Cabanossi)"}
@@ -85,4 +85,5 @@
  "Kokosmilch" #{"Kokosmilch, fettreduziert"}
  "Nüsse" #{"Nüsse, Cashewnüsse, Natur"}
  "Schnittlauch" #{"Schnittlauch, getrocknet oder frisch"}
- "Saure Sahne" #{"saure Sahne"}}
+ "Saure Sahne" #{"saure Sahne"}
+ "Vanillezucker" #{"Vanilleschote(n) oder 1 Pck.Vanillezucker"}}

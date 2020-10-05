@@ -2853,4 +2853,29 @@
   :ingredient-id "64e38f58-0fa1-4dee-8f41-fbac25a77f5f",
   :amount-desc "1 Packung",
   :id "402769d3-10f9-4f74-a407-f6d34608154e",
-  :recipe-id "3f83a10b-8de0-4f27-bce4-64532f37c0b8"}]
+  :recipe-id "3f83a10b-8de0-4f27-bce4-64532f37c0b8"}
+ {:amount 1,
+  :ingredient-id "a34e4012-c32d-4186-ae83-4c791938f1f1",
+  :amount-desc "1 Liter",
+  :id "58334762-c9e2-425b-b2a4-d444d7539d01",
+  :recipe-id "9b938e1a-8310-409f-92c3-a13399258107"}
+ {:amount 250,
+  :ingredient-id "3382e500-33fc-4803-9bea-56ab17e3d044",
+  :amount-desc "250 g",
+  :id "abcbf5c1-340c-4e7f-b322-8c985709f071",
+  :recipe-id "9b938e1a-8310-409f-92c3-a13399258107"}
+ {:amount 4,
+  :ingredient-id "83d5b8e1-945f-4917-9cd7-f9ddb6330b89",
+  :amount-desc "4 EL",
+  :id "b67bfa5e-0ef9-432e-bb91-fc885ea9e004",
+  :recipe-id "9b938e1a-8310-409f-92c3-a13399258107"}
+ {:amount 1,
+  :ingredient-id "60ab2373-1dbd-4884-8a9b-5ae626d245ce",
+  :amount-desc "1 EL",
+  :id "f3f263bf-e6db-4b24-a8ec-bab66583448c",
+  :recipe-id "9b938e1a-8310-409f-92c3-a13399258107"}
+ {:amount 1,
+  :ingredient-id "5281f0e4-cc6f-4a2b-91c2-a9c212919134",
+  :amount-desc "1",
+  :id "3b7584de-94f7-461c-8138-7ecb2b3fb6bd",
+  :recipe-id "9b938e1a-8310-409f-92c3-a13399258107"}]
