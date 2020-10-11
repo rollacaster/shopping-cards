@@ -2884,4 +2884,24 @@
   :unit nil,
   :amount-desc "5",
   :id "3de46d44-9ff4-4250-b696-b92d0f413cb9",
-  :recipe-id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2"}]
+  :recipe-id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2"}
+ {:amount 6,
+  :ingredient-id "cec199c0-318a-475f-825c-4bbb7262778e",
+  :amount-desc "6 große",
+  :id "601e4a19-29ee-450e-b44d-872c5685beeb",
+  :recipe-id "4c722d63-70cf-4e1f-b137-afc591c1b8fd"}
+ {:amount 2,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :amount-desc "2",
+  :id "19afc871-57f8-4919-bf0c-81e668ab05e4",
+  :recipe-id "4c722d63-70cf-4e1f-b137-afc591c1b8fd"}
+ {:amount 400,
+  :ingredient-id "60e4faa4-b39a-4539-b516-cdeceffd5541",
+  :amount-desc "400g",
+  :id "a1a136a7-4ee1-4d7e-90e8-d1ff998c4f50",
+  :recipe-id "4c722d63-70cf-4e1f-b137-afc591c1b8fd"}
+ {:amount 5,
+  :ingredient-id "a1ab22e1-8f4b-411e-a9e9-a1c5efa6c51d",
+  :amount-desc "5 Scheiben",
+  :id "51fdae43-2299-4bd0-8f7f-d9582a13fa5f",
+  :recipe-id "4c722d63-70cf-4e1f-b137-afc591c1b8fd"}]

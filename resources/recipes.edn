@@ -1,4 +1,10 @@
-({:name "Milchreis",
+({:name "Paprikás krumpli",
+  :type "RARE",
+  :link nil,
+  :id "4c722d63-70cf-4e1f-b137-afc591c1b8fd",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/472901140871981/bilder/590321/crop-360x240/ungarische-kartoffelsuppe.jpg"}
+ {:name "Milchreis",
   :type "RARE",
   :link
   "https://www.chefkoch.de/rezepte/1153081221555008/Der-perfekte-Milchreis-Grundrezept.html",

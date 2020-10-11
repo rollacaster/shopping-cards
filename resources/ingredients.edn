@@ -384,4 +384,7 @@
   :id "3382e500-33fc-4803-9bea-56ab17e3d044"}
  {:category "Backen",
   :name "Vanillezucker",
-  :id "5281f0e4-cc6f-4a2b-91c2-a9c212919134"}]
+  :id "5281f0e4-cc6f-4a2b-91c2-a9c212919134"}
+ {:category "Brot & Co",
+  :name "Brot",
+  :id "a1ab22e1-8f4b-411e-a9e9-a1c5efa6c51d"}]
