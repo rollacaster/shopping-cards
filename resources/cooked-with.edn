@@ -2358,10 +2358,10 @@
   :amount-desc "1 Packung",
   :id "e03dd7a0-751c-4c4f-91d1-2acbea233c85",
   :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}
- {:amount 400,
+ {:amount 250,
   :ingredient-id "cdfe6ae3-fbad-4c98-9f2f-e91347856399",
   :unit "g",
-  :amount-desc "400 g",
+  :amount-desc "250 g",
   :id "425f6217-6b01-48d7-8f4f-c877a5bbd5db",
   :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}
  {:amount 1,
@@ -2878,4 +2878,10 @@
   :ingredient-id "5281f0e4-cc6f-4a2b-91c2-a9c212919134",
   :amount-desc "1",
   :id "3b7584de-94f7-461c-8138-7ecb2b3fb6bd",
-  :recipe-id "9b938e1a-8310-409f-92c3-a13399258107"}]
+  :recipe-id "9b938e1a-8310-409f-92c3-a13399258107"}
+ {:amount 5,
+  :ingredient-id "73233dd2-991a-40ea-8e3b-384bcf2ac408",
+  :unit nil,
+  :amount-desc "5",
+  :id "3de46d44-9ff4-4250-b696-b92d0f413cb9",
+  :recipe-id "b7c72cf6-e071-4b8d-965e-bb673b85f0b2"}]
