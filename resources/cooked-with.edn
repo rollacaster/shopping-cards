@@ -2904,4 +2904,49 @@
   :ingredient-id "a1ab22e1-8f4b-411e-a9e9-a1c5efa6c51d",
   :amount-desc "5 Scheiben",
   :id "51fdae43-2299-4bd0-8f7f-d9582a13fa5f",
-  :recipe-id "4c722d63-70cf-4e1f-b137-afc591c1b8fd"}]
+  :recipe-id "4c722d63-70cf-4e1f-b137-afc591c1b8fd"}
+ {:id "ae2da1cd-9db9-4e26-94a3-5dd68eebc6a7",
+  :amount-desc "1 große",
+  :amount 1,
+  :ingredient-id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}
+ {:id "d7d10021-fb0b-4f75-9813-f5026d21ff58",
+  :amount-desc "1 Stange/n",
+  :amount 1,
+  :ingredient-id "cd3243c4-09a0-472d-970f-dc912ce74610",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}
+ {:id "092994d6-7e3a-49e3-95c7-1ba31b64f8fa",
+  :amount-desc "200 g",
+  :amount 200,
+  :ingredient-id "3e99ba7a-be59-4f98-98a1-2ad17b01d14e",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}
+ {:id "e39016c4-7fe8-4e68-a48e-e7f0653094f3",
+  :amount-desc "250 g",
+  :amount 250,
+  :ingredient-id "60e4faa4-b39a-4539-b516-cdeceffd5541",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}
+ {:id "3f0ea366-a7c6-42c3-9772-39afd4115634",
+  :amount-desc "1 EL",
+  :amount 1,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}
+ {:id "cbee92d3-a580-4f33-ae2e-cacd0170310b",
+  :amount-desc "900 ml",
+  :amount 900,
+  :ingredient-id "4e67d72f-44c4-464f-be33-05382c3c8080",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}
+ {:id "014d0b8a-8000-4345-a804-6193cf29b2d3",
+  :amount-desc "2 EL",
+  :amount 2,
+  :ingredient-id "7485cc2e-6a74-430a-9273-659334fbec21",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}
+ {:id "77110180-8338-4755-b615-0429851eecb0",
+  :amount-desc "1 Bund",
+  :amount 1,
+  :ingredient-id "f8e191a6-a0cc-4b75-82ec-b8a67e978f95",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}
+ {:id "30c07a07-2336-4d9d-8d80-27db0e85adbe",
+  :amount-desc nil,
+  :amount nil,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :recipe-id "ee5adeed-4f8c-456b-be85-14225d36c18a"}]

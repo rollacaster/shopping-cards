@@ -1,4 +1,11 @@
-({:name "Paprikás krumpli",
+({:id "ee5adeed-4f8c-456b-be85-14225d36c18a",
+  :name "Misosuppe mit Gemüse und Tofu",
+  :link
+  "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
+  :type "FAST"}
+ {:name "Paprikás krumpli",
   :type "RARE",
   :link nil,
   :id "4c722d63-70cf-4e1f-b137-afc591c1b8fd",

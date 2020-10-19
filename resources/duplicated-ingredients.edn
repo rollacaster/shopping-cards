@@ -40,7 +40,8 @@
  "Crème fraîche" #{"Creme fraiche" "Crème fraîche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
- "Champignons" #{"Champignons, frisch, nicht zu groß" "Champignons, frische"}
+ "Champignons" #{"Champignons, frisch, nicht zu groß" "Champignons, frische"
+                 "Pilze (Shiitake, alterntaiv Austernpilze)"}
  "Mais" #{"Mais, TK oder 1 Dose" "Mais (310 g)"}
  "Hefe" #{"Trockenhefe oder 1/2 Pck. Frischhefe" "Frischhefe"}
  "Spätzle" #{"Spätzle, frische, aus dem Kühlregal" "Spätzle (Frischprodukt)"}
@@ -72,7 +73,7 @@
  "Sojasoße" #{"Soja-Sauce"}
  "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt" "Joghurt, Magermilchjoghurt, Natur, bis 0,5 % Fett"}
  "Quark" #{"Quark 0,2%"}
- "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten" "Frühlingszwiebel(n)"}
+ "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten" "Frühlingszwiebel(n)" "Lauch (dünne Stange)"}
  "Avocado" #{"reife Avocado"}
  "Kümmel" #{"Kreuzkümmelpulver" "Kreuzkümmel, gemahlen"}
  "Bohnen" #{"Kidneybohnen (440 g)"}
@@ -86,4 +87,5 @@
  "Nüsse" #{"Nüsse, Cashewnüsse, Natur"}
  "Schnittlauch" #{"Schnittlauch, getrocknet oder frisch"}
  "Saure Sahne" #{"saure Sahne"}
- "Vanillezucker" #{"Vanilleschote(n) oder 1 Pck.Vanillezucker"}}
+ "Vanillezucker" #{"Vanilleschote(n) oder 1 Pck.Vanillezucker"}
+ "Miso-Brühe" #{"Gewürzpaste (Miso-Paste, Asia-Shop)"}}
