@@ -382,11 +382,6 @@
   :amount nil,
   :ingredient-id "5afade6b-f382-452c-91cb-edc761380983",
   :recipe-id "8b2dd671-20a8-4f55-b3d9-ce8010652f56"}
- {:id "6b85ccee-b7c8-4560-b9b7-f7c4b3d7eb96",
-  :amount-desc "6",
-  :amount 6,
-  :ingredient-id "9f8d0bd9-4274-4f35-83fb-7916c43c77c3",
-  :recipe-id "24b6cd98-a51f-45d8-9f3d-9eccb5e8365f"}
  {:id "9902c47d-22fb-46b5-9bc0-1b255c8a2a85",
   :amount-desc "300",
   :amount 300,
