@@ -1,4 +1,18 @@
-({:id "ee5adeed-4f8c-456b-be85-14225d36c18a",
+({:name "Nudeln in Zucchini-Erdnuss-Sauce",
+  :type "NORMAL",
+  :link
+  "https://mobile.kptncook.com/recipe/pinterest/Pasta-with-Zucchini-&-Peanut-Sauce/498799af?_branch_match_id=749146132440347375",
+  :id "0e01853e-4b1b-4b74-b269-a438006eb82e",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/3290541488626665/bilder/1071656/crop-360x240/zucchini-nudeln-mit-wuerziger-erdnusssosse.jpg"}
+ {:name "Zucchinipuffer mit Fetakäse",
+  :type "NORMAL",
+  :link
+  "https://mobile.kptncook.com/recipe/pinterest/Zucchini-Fritters-with-Feta-Cheese/755ad55d?_branch_match_id=749146132440347375&utm_source=WhatsApp&utm_medium=sharing",
+  :id "6087eaf2-71cb-4fff-b9b2-e32aa10d89f8",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/2626811412665915/bilder/823440/crop-360x240/zucchinipuffer-mit-fetakaese.jpg"}
+ {:id "ee5adeed-4f8c-456b-be85-14225d36c18a",
   :name "Misosuppe mit Gemüse und Tofu",
   :link
   "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",

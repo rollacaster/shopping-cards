@@ -390,4 +390,10 @@
   :id "a1ab22e1-8f4b-411e-a9e9-a1c5efa6c51d"}
  {:id "7485cc2e-6a74-430a-9273-659334fbec21",
   :name "Miso-Brühe",
-  :category "Gewürze"}]
+  :category "Gewürze"}
+ {:category "Gewürze",
+  :name "Rohrzucker",
+  :id "2b5e354e-6408-4b51-81a7-4cb7dfb6f39f"}
+ {:category "Beilage",
+  :name "Spaghetti",
+  :id "81c4abf6-9c3c-421e-8f11-bb78f3cfeb54"}]
