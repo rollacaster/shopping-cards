@@ -41,44 +41,42 @@
     (edn/read-string (re-find #"[\d/]+" s))))
 
 
-(defn scrape-chefkoch-ingredients [link]
-  (let [recipe-html (:body (client/get link))]
-    (->> recipe-html
-         html/parse
-         html/as-hickory
-         (select/select
-          (select/child
-           (select/class "ingredients")
-           (select/tag :tbody)
-           (select/tag :tr)
-           (select/tag :td)))
-         (map (comp :content first #(filter (complement string?) %) :content))
-         (w/postwalk walk)
-         (map first)
-         (map #(if (string? %) (trim-all %) %))
-         (partition 2)
-         (map #(zipmap [:amount-desc :name] %))
-         (map #(assoc % :amount (parse-int (:amount-desc %)))))))
+(defn scrape-chefkoch-ingredients [recipe-hickory]
+  (->> recipe-hickory
+       (select/select
+        (select/child
+         (select/class "ingredients")
+         (select/tag :tbody)
+         (select/tag :tr)
+         (select/tag :td)))
+       (map (comp :content first #(filter (complement string?) %) :content))
+       (w/postwalk walk)
+       (map first)
+       (map #(if (string? %) (trim-all %) %))
+       (partition 2)
+       (map #(zipmap [:amount-desc :name] %))
+       (map #(assoc % :amount (parse-int (:amount-desc %))))))
 
-(defn scrape-gdrive-ingredient [ingredient-line]
-  (let [ingredient (s/split (apply str (drop 2 ingredient-line)) #" ")]
-    (if (and (> (count ingredient) 1) (parse-int (first ingredient)))
-      {:amount-desc (first ingredient)
-       :name (last ingredient)
-       :amount (parse-int (first ingredient))}
-      {:amount-desc nil :name (s/join " "ingredient) :amount nil})))
+;; (defn scrape-gdrive-ingredient [ingredient-line]
+;;   (let [ingredient (s/split (apply str (drop 2 ingredient-line)) #" ")]
+;;     (if (and (> (count ingredient) 1) (parse-int (first ingredient)))
+;;       {:amount-desc (first ingredient)
+;;        :name (last ingredient)
+;;        :amount (parse-int (first ingredient))}
+;;       {:amount-desc nil :name (s/join " "ingredient) :amount nil})))
 
-(defn scrape-gdrive-ingredients [link]
-  (let [recipe-id ((s/split link #"/") 5)
-        recipe-text
-        (:body (client/get (str drive-api-url "/files/" recipe-id "/export")
-                           {:oauth-token (oauth-token)
-                            :query-params {:mimeType "text/plain"}}))]
-    (map scrape-gdrive-ingredient
-         (->> recipe-text
-              s/split-lines
-              (drop 1)
-              (take-while #(s/starts-with? % "*"))))))
+
+;; (defn scrape-gdrive-ingredients [link]
+;;   (let [recipe-id ((s/split link #"/") 5)
+;;         recipe-text
+;;         (:body (client/get (str drive-api-url "/files/" recipe-id "/export")
+;;                            {:oauth-token (oauth-token)
+;;                             :query-params {:mimeType "text/plain"}}))]
+;;     (map scrape-gdrive-ingredient
+;;          (->> recipe-text
+;;               s/split-lines
+;;               (drop 1)
+;;               (take-while #(s/starts-with? % "*"))))))
 
 (def units ["g" "Esslöffel" "ml" "Handvoll" "Teelöffel" "EL"])
 
@@ -93,19 +91,39 @@
                s/trim)
      :unit unit}))
 
-(defn scrape-springlane [link]
-  (let [recipe-html (:body (client/get link))
-        ingredients (->> recipe-html
-                         html/parse
-                         html/as-hickory
-                         (select/select
-                          (select/child
-                           (select/class "recipe-ingredients-list")))
-                         first :content
-                         (remove string?)
+(defn scrape-springlane [recipe-hickory]
+  (->> recipe-hickory
+       (select/select
+        (select/child
+         (select/class "recipe-ingredients-list")))
+       first :content
+       (remove string?)
+       (map (comp s/trim first :content))
+       (map scrape-springlane-ingredient)))
+
+(defn scrape-kptcook [recipe-hickory]
+  (let [scrape-class (fn [class]
+                       (->> recipe-hickory
+                            (select/select
+                             (select/child
+                              (select/class class)))))
+        measures (->> (scrape-class "kptn-ingredient-measure")
+                      (map (comp s/trim first :content))
+                      (map (fn [amount-desc] {:amount-desc amount-desc
+                                             :amount (parse-int amount-desc)
+                                             :unit (let [last-part (last (s/split amount-desc #" "))]
+                                                     (when-not (parse-int last-part) last-part))})))
+        ingredients (->> (scrape-class "kptn-ingredient")
                          (map (comp s/trim first :content))
-                         (map scrape-springlane-ingredient))]
-    ingredients))
+                         (map (fn [name] {:name name})))]
+    (concat
+     (map
+      merge
+      ingredients
+      measures)
+     (drop
+      (count measures)
+      ingredients))))
 
 (defn scrape-eat-this-span [class spans]
   (first (:content (some
@@ -128,11 +146,8 @@
      :name (scrape-eat-this-span "wprm-recipe-ingredient-name" spans)
      :unit unit}))
 
-(defn scrape-eat-this-ingredients [link]
-  (let [recipe-html (->> (:body (client/get link))
-                          html/parse
-                          html/as-hickory)
-        wprm-ingredients (->> recipe-html
+(defn scrape-eat-this-ingredients [recipe-hickory]
+  (let [wprm-ingredients (->> recipe-hickory
                           (select/select
                            (select/child
                             (select/class "wprm-recipe-ingredient")))
@@ -140,7 +155,7 @@
                           (map scrape-eat-this-ingredient))]
     (if (> (count wprm-ingredients) 0)
       wprm-ingredients
-      (->> recipe-html
+      (->> recipe-hickory
            (select/select
             (select/child
              (select/class "Zutaten")
@@ -150,11 +165,8 @@
            (map (comp first :content))
            (map scrape-springlane-ingredient)))))
 
-(defn scrape-weightwatchers [link]
-  (let [recipe-html (:body (client/get link))
-        ingredients (->> recipe-html
-                         html/parse
-                         html/as-hickory
+(defn scrape-weightwatchers [recipe-hickory]
+  (let [ingredients (->> recipe-hickory
                          (select/select
                           (select/child
                            (select/class "VerticalList_listTwoColumn__a4AGp")))
@@ -171,81 +183,76 @@
             :unit (s/trim amount-desc)})
          names amounts amount-descs)))
 
-(defn add-ingredients [recipe]
-  (cond (and (:link recipe)
-             (s/includes? (:link recipe) "chefkoch")
-             (not (:ingredients recipe)))
-        (assoc recipe
-               :ingredients (scrape-chefkoch-ingredients (:link recipe)))
-        (and (:link recipe)
-             (s/includes? (:link recipe) "docs.google")
-             (not (:ingredients recipe)))
-        (assoc recipe
-               :ingredients (scrape-gdrive-ingredients (:link recipe)))
-        (and (:link recipe)
-             (or (s/includes? (:link recipe) "eat-this")
-                 (s/includes? (:link recipe) "thomassixt")
-                 (s/includes? (:link recipe) "kochkarussell"))
-             (not (:ingredients recipe)))
-        (assoc recipe
-               :ingredients (scrape-eat-this-ingredients (:link recipe)))
-        (and (:link recipe)
-             (s/includes? (:link recipe) "weightwatchers")
-             (not (:ingredients recipe)))
-        (assoc recipe
-               :ingredients (scrape-weightwatchers (:link recipe)))
-        (and (:link recipe)
-             (s/includes? (:link recipe) "springlane")
-             (not (:ingredients recipe)))
-        (assoc recipe
-               :ingredients (scrape-springlane (:link recipe)))
-        :else recipe))
+(defn add-ingredients [link recipe-hickory]
+  (cond (s/includes? link "chefkoch")
+        (scrape-chefkoch-ingredients recipe-hickory)
+        ;; (s/includes? link "docs.google")
+        ;; (scrape-gdrive-ingredients recipe-hickory)
+        (or (s/includes? link "eat-this")
+            (s/includes? link "thomassixt")
+            (s/includes? link "kochkarussell"))
+        (scrape-eat-this-ingredients recipe-hickory)
+        (s/includes? link "weightwatchers")
+        (scrape-weightwatchers recipe-hickory)
+        (s/includes? link "springlane")
+        (scrape-springlane recipe-hickory)
+        (s/includes? link "kptncook")
+        (scrape-kptcook recipe-hickory)))
 
-(defn find-image [recipe]
-  (assoc recipe :image
-         (-> "https://customsearch.googleapis.com/customsearch/v1"
-             (client/get
-              {:query-params {:q (s/replace (:name recipe) " " "+")
-                              :num 1
-                              :start 1
-                              :imgSize "medium"
-                              :searchType "image"
-                              :cx search-engine-cx
-                              :key (:google-key creds-file)}
-               :as :json :throw-entire-message? true})
-             :body :items first :link)))
+(defn find-image [recipe-name]
+  (-> (client/get "https://customsearch.googleapis.com/customsearch/v1"
+                  {:query-params {:q (s/replace recipe-name " " "+")
+                                  :num 1
+                                  :start 1
+                                  :imgSize "medium"
+                                  :searchType "image"
+                                  :cx search-engine-cx
+                                  :key (:google-key creds-file)}
+                   :as :json :throw-entire-message? true})
+      :body :items first :link))
 
-(defn dedup-ingredients [recipe]
-  (update recipe :ingredients
-          (fn [ingredients]
-            (map (fn [{:keys [name] :as ingredient}]
-                   (let [ingredient-name (or
-                                          (some (fn [[ingredient-group-name duplicated-name]]
-                                                  (when (or (= name ingredient-group-name)
-                                                            (contains? duplicated-name name))
-                                                    ingredient-group-name))
-                                                (db/load-edn "duplicated-ingredients.edn"))
-                                          name)]
-                     (assoc ingredient
-                            :name ingredient-name
-                            :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-edn "ingredients.edn")))))
-                 ingredients))))
+(defn dedup-ingredients [ingredients]
+  (map (fn [{:keys [name] :as ingredient}]
+         (let [ingredient-name (or
+                                (some (fn [[ingredient-group-name duplicated-name]]
+                                        (when (or (= name ingredient-group-name)
+                                                  (contains? duplicated-name name))
+                                          ingredient-group-name))
+                                      (db/load-edn "duplicated-ingredients.edn"))
+                                name)]
+           (assoc ingredient
+                  :name ingredient-name
+                  :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-edn "ingredients.edn")))))
+       ingredients))
 
 
-(defn scrape-recipe [{:keys [link type]}]
-  (->>
-   (let [recipe-html (:body (client/get link))
-         recipe-hickory (->> recipe-html html/parse html/as-hickory)
-         recipe-name (->> recipe-hickory
-                           (select/select (select/child (select/tag "h1")))
-                           first :content first)]
-     {:name (if (string? recipe-name) recipe-name (-> recipe-name :content first))
+(defmulti recipe-name (fn [link _] (cond
+                                  (s/includes? link "kptncook") :kptncook
+                                  :else :chefkoch)))
+(defmethod recipe-name :kptncook [_ recipe-hickory]
+  (->> recipe-hickory
+       (select/select (select/child (select/class "kptn-recipetitle")))
+       first
+       :content
+       first
+       s/trim))
+(defmethod recipe-name :chefkoch [_ recipe-hickory]
+  (let [recipe-name (->> recipe-hickory
+                         (select/select (select/child (select/tag "h1")))
+                         first :content first)]
+    (if (string? recipe-name) recipe-name (-> recipe-name :content first))))
+
+(defn scrape-recipe [{:keys [link type] :or {type "NORMAL"}}]
+  (let [recipe-hickory (->> (:body (client/get link {:headers {"Accept-Language" "de-DE,de;q=0.9,en-DE;q=0.8,en;q=0.7,en-US;q=0.6"}})) html/parse html/as-hickory)
+        name (recipe-name link recipe-hickory)]
+    (->
+     {:name name
       :link link
       :type type
-      :inactive false})
-   find-image
-   add-ingredients
-   dedup-ingredients))
+      :inactive false}
+     (assoc :image (find-image name))
+     (assoc :ingredients (add-ingredients link recipe-hickory))
+     (update :ingredients dedup-ingredients))))
 
 ;; TODO Handle new ingredients before adding recipe
 (defn new-ingredients [new-recipes]
@@ -258,4 +265,6 @@
 
 
 (comment
+  (scrape-recipe {:link "https://mobile.kptncook.com/recipe/pinterest/Zucchini-Fritters-with-Feta-Cheese/755ad55d?_branch_match_id=749146132440347375&utm_source=WhatsApp&utm_medium=sharing"}
+                 )
   )
