@@ -1,14 +1,16 @@
-{"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver"}
+{"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver" "½TL Paprikapulver"}
  "Paprika" #{"Paprikaschote(n), rot" "rote Paprika"}
- "Frischkäse" #{"Frischkäse" "Frischkäse, leicht"}
+ "Frischkäse" #{"Frischkäse" "Frischkäse, leicht" "Kräuterfrischkäse"}
  "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz" "Fleur de Sel"}
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
  "Wasser"#{"Wasser, lauwarm" "Wasser"}
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
-             "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer" "Pfeffer aus der Mühle"}
+             "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer" "Pfeffer aus der Mühle"
+             "¼ gemahlener Schwarzer Pfeffer"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
-        "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"}
+        "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"
+        "gutes Olivenöl*" "Olivenöl oder Butterschmalz zum braten"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln" "Vollkorn-Penne"
             "Muschelnudeln" "Nudeln, trocken, jede Sorte" }
@@ -16,7 +18,7 @@
  "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
  "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"
-                      "Tomaten, passiert" "gehackte Tomaten" "Pizzatomaten ( je 400 g)"}
+                      "Tomaten, passiert" "gehackte Tomaten" "Pizzatomaten ( je 400 g)" "passierte Tomaten"}
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener" "Emmentaler"
                     "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                     "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
@@ -53,8 +55,8 @@
  "Ingwer" #{"etwas Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
  "Chili" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"
-             "Chili nach Geschmack" "rote Chili" "Chilipulver" "Chilischote(n)"
-           "Chiliflocken, getrocknete" "Chiliflocken"}
+           "Chili nach Geschmack" "rote Chili" "Chilipulver" "Chilischote(n)"
+           "Chiliflocken, getrocknete" "Chiliflocken" "Chillipulver"}
  "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK" "Romanesco" "Broccoli"}
  "Zitrone"#{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon" "Saft einer halben Zitrone"
             "Bio-Zitronenschale, fein geriebene"}
@@ -69,7 +71,7 @@
  "Milch" #{"etwas Milch zum verdünnen von Schmand" "Milch, lauwarm" "Vollmilch, zimmerwarm"
            "whole milk" "Vollmilch"}
  "Zucker"#{"evtl. Zucker"}
- "Zucchini" #{"Zucchini"}
+ "Zucchini" #{"Zucchini" "Zucchini (ca. 200g)"}
  "Cabanossi" #{"Cabanossi)"}
  "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet"}
  "Aufback-Brezeln" #{"Brezeln"}
@@ -80,13 +82,13 @@
                       "onion(s), yellow"}
  "Avocado" #{"reife Avocado"}
  "Kümmel" #{"Kreuzkümmelpulver" "Kreuzkümmel, gemahlen"}
- "Bohnen" #{"Kidneybohnen (440 g)"}
+ "Bohnen" #{"Kidneybohnen (440 g)" "Kidney-Bohnen" "schwarze Bohnen"}
  "Nachos" #{"Nacho(s)"}
- "Kurkuma" #{"Kurkumapulver"}
+ "Kurkuma" #{"Kurkumapulver" "frische Kurkumawurzel"}
  "Koriander" #{"Koriander, gemahlen"}
  "Zimt" #{"Zimt, gemahlen"}
  "Erbsen" #{"Erbsen, tiefgekühlt" "Erbsen (Konserve)"}
- "Linsen" #{"Linsen, trocken"}
+ "Linsen" #{"Linsen, trocken" "rote Linsen"}
  "Kokosmilch" #{"Kokosmilch, fettreduziert"}
  "Nüsse" #{"Nüsse, Cashewnüsse, Natur" "Erdnüsse geröstet & ungesalzen"}
  "Schnittlauch" #{"Schnittlauch, getrocknet oder frisch"}
@@ -95,4 +97,6 @@
  "Miso-Brühe" #{"Gewürzpaste (Miso-Paste, Asia-Shop)"}
  "Muskat" #{"Muskatnuss"}
  "Rohrzucker" #{"Brauner Rohrzucker"}
- "Spaghetti" #{}}
+ "Spaghetti" #{}
+ "Umami Soße" #{}
+ "Toast" #{"große Toast"}}

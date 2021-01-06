@@ -1,4 +1,17 @@
-({:name "Nudeln in Zucchini-Erdnuss-Sauce",
+({:name "Zucchini-Frischkäse-Taschen, paniert und knusprig gebraten",
+  :type "NORMAL",
+  :link "https://www.meinestube.de/zucchini-frischkaese/",
+  :id "d2913581-8b66-42b6-ba8a-4c9b35969887",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/145111062848394/bilder/1271079/crop-360x240/haehnchenschnitzel-mit-kaesekruste.jpg"}
+ {:name "Vegetarisches Gulasch á la Margarete",
+  :type "NORMAL",
+  :link
+  "https://docs.google.com/document/d/1SDgNCPGMwaKdHEmF1yTOHndItLqkIdiLN879BhMlaZE/edit",
+  :id "327e80b4-4b47-4ac9-8fc8-b5e6371b87c6",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/453231137934972/bilder/549998/crop-360x240/serbisches-reisfleisch-a-la-margret.jpg"}
+ {:name "Nudeln in Zucchini-Erdnuss-Sauce",
   :type "NORMAL",
   :link
   "https://mobile.kptncook.com/recipe/pinterest/Pasta-with-Zucchini-&-Peanut-Sauce/498799af?_branch_match_id=749146132440347375",

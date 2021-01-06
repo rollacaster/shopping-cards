@@ -396,4 +396,7 @@
   :id "2b5e354e-6408-4b51-81a7-4cb7dfb6f39f"}
  {:category "Beilage",
   :name "Spaghetti",
-  :id "81c4abf6-9c3c-421e-8f11-bb78f3cfeb54"}]
+  :id "81c4abf6-9c3c-421e-8f11-bb78f3cfeb54"}
+ {:category "Gewürze",
+  :name "Umami Soße",
+  :id "308d3d71-cbaf-437b-9f14-2d059515843e"}]
