@@ -57,27 +57,6 @@
        (map #(zipmap [:amount-desc :name] %))
        (map #(assoc % :amount (parse-int (:amount-desc %))))))
 
-;; (defn scrape-gdrive-ingredient [ingredient-line]
-;;   (let [ingredient (s/split (apply str (drop 2 ingredient-line)) #" ")]
-;;     (if (and (> (count ingredient) 1) (parse-int (first ingredient)))
-;;       {:amount-desc (first ingredient)
-;;        :name (last ingredient)
-;;        :amount (parse-int (first ingredient))}
-;;       {:amount-desc nil :name (s/join " "ingredient) :amount nil})))
-
-
-;; (defn scrape-gdrive-ingredients [link]
-;;   (let [recipe-id ((s/split link #"/") 5)
-;;         recipe-text
-;;         (:body (client/get (str drive-api-url "/files/" recipe-id "/export")
-;;                            {:oauth-token (oauth-token)
-;;                             :query-params {:mimeType "text/plain"}}))]
-;;     (map scrape-gdrive-ingredient
-;;          (->> recipe-text
-;;               s/split-lines
-;;               (drop 1)
-;;               (take-while #(s/starts-with? % "*"))))))
-
 (def units ["g" "Esslöffel" "ml" "Handvoll" "Teelöffel" "EL"])
 
 (defn scrape-springlane-ingredient [ingredient-line]
@@ -186,11 +165,10 @@
 (defn add-ingredients [link recipe-hickory]
   (cond (s/includes? link "chefkoch")
         (scrape-chefkoch-ingredients recipe-hickory)
-        ;; (s/includes? link "docs.google")
-        ;; (scrape-gdrive-ingredients recipe-hickory)
         (or (s/includes? link "eat-this")
             (s/includes? link "thomassixt")
-            (s/includes? link "kochkarussell"))
+            (s/includes? link "kochkarussell")
+            (s/includes? link "meinestube"))
         (scrape-eat-this-ingredients recipe-hickory)
         (s/includes? link "weightwatchers")
         (scrape-weightwatchers recipe-hickory)
@@ -228,6 +206,7 @@
 
 (defmulti recipe-name (fn [link _] (cond
                                   (s/includes? link "kptncook") :kptncook
+                                  (s/includes? link "meinestube") :meinestube
                                   :else :chefkoch)))
 (defmethod recipe-name :kptncook [_ recipe-hickory]
   (->> recipe-hickory
@@ -236,22 +215,47 @@
        :content
        first
        s/trim))
+
 (defmethod recipe-name :chefkoch [_ recipe-hickory]
   (let [recipe-name (->> recipe-hickory
                          (select/select (select/child (select/tag "h1")))
                          first :content first)]
     (if (string? recipe-name) recipe-name (-> recipe-name :content first))))
 
-(defn scrape-recipe [{:keys [link type] :or {type "NORMAL"}}]
+(defn gdrive-ingredient [ingredient-line]
+  (let [ingredient (s/split (apply str (drop 2 ingredient-line)) #" ")]
+    (if (and (> (count ingredient) 1) (parse-int (first ingredient)))
+      {:amount-desc (first ingredient)
+       :name (s/join " " (rest ingredient))
+       :amount (parse-int (first ingredient))}
+      {:amount-desc nil :name (s/join " "ingredient) :amount nil})))
+
+
+(defn fetch-gdrive-ingredients [link]
+  (let [recipe-id ((s/split link #"/") 5)
+        recipe-text
+        (:body (client/get (str drive-api-url "/files/" recipe-id "/export")
+                           {:oauth-token (oauth-token)
+                            :query-params {:mimeType "text/plain"}}))]
+    (map gdrive-ingredient
+         (->> recipe-text
+              s/split-lines
+              (drop 1)
+              (take-while #(s/starts-with? % "*"))))))
+
+(defn scrape-recipe [{:keys [link type name] :or {type "NORMAL"}}]
   (let [recipe-hickory (->> (:body (client/get link {:headers {"Accept-Language" "de-DE,de;q=0.9,en-DE;q=0.8,en;q=0.7,en-US;q=0.6"}})) html/parse html/as-hickory)
-        name (recipe-name link recipe-hickory)]
+        name (or name (recipe-name link recipe-hickory))]
     (->
      {:name name
       :link link
       :type type
       :inactive false}
      (assoc :image (find-image name))
-     (assoc :ingredients (add-ingredients link recipe-hickory))
+     (assoc :ingredients
+            (if (s/includes? link "docs.google")
+              (fetch-gdrive-ingredients link)
+              (add-ingredients link recipe-hickory)))
      (update :ingredients dedup-ingredients))))
 
 ;; TODO Handle new ingredients before adding recipe
@@ -265,6 +269,10 @@
 
 
 (comment
-  (scrape-recipe {:link "https://mobile.kptncook.com/recipe/pinterest/Zucchini-Fritters-with-Feta-Cheese/755ad55d?_branch_match_id=749146132440347375&utm_source=WhatsApp&utm_medium=sharing"}
+  (scrape-recipe {:name "Vegetarisches Gulasch á la Margarete"
+                  :link "https://docs.google.com/document/d/1SDgNCPGMwaKdHEmF1yTOHndItLqkIdiLN879BhMlaZE/edit"})
+
+
+  (scrape-recipe {:link "https://www.meinestube.de/zucchini-frischkaese/"}
                  )
   )
