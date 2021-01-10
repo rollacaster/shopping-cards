@@ -1,4 +1,18 @@
-({:name "Zucchini-Frischkäse-Taschen, paniert und knusprig gebraten",
+({:name "Rakott krumpli",
+  :type "RARE",
+  :link
+  "https://docs.google.com/document/d/155d_-rOQnXzYr0aA8uu80-h62x-wVa-ZqYt8q_ahO9Y/edit",
+  :id "61f06ebd-2271-403c-93c3-43511ba44fcd",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/368171122361602/bilder/389483/crop-360x240/rakott-krumpli.jpg"}
+ {:name "Broccoli-Hähnchen-Penne",
+  :type "NORMAL",
+  :link
+  "https://www.weightwatchers.com/de/rezept/broccoli-hahnchen-penne/562a9b1f873e1afb2a3c5e2f",
+  :id "d0bb942b-0165-417d-9153-6c770c036fe8",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1994851323160989/bilder/1287477/crop-360x240/penne-an-sauce-hollandaise-mit-brokkoli.jpg"}
+ {:name "Zucchini-Frischkäse-Taschen, paniert und knusprig gebraten",
   :type "NORMAL",
   :link "https://www.meinestube.de/zucchini-frischkaese/",
   :id "d2913581-8b66-42b6-ba8a-4c9b35969887",
