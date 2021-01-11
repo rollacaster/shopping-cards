@@ -3176,11 +3176,6 @@
   :id "16d4a124-b0bd-4fcc-9b56-c0b1635dec10",
   :recipe-id "d2913581-8b66-42b6-ba8a-4c9b35969887"}
  {:amount 1/2,
-  :ingredient-id "9f8d0bd9-4274-4f35-83fb-7916c43c77c3",
-  :amount-desc "1/2 Stk",
-  :id "3297c41e-ecd0-40b3-9f45-43eb1ac70ada",
-  :recipe-id "d2913581-8b66-42b6-ba8a-4c9b35969887"}
- {:amount 1/2,
   :ingredient-id "4373e821-8697-48ee-becf-9776f7a4e794",
   :amount-desc "1/2 Stk",
   :id "444487ce-5630-4c0d-be39-a49f910bd5dc",
@@ -3309,4 +3304,10 @@
   :ingredient-id "15e8d610-ce9f-405b-957c-5f4fb6249b20",
   :amount-desc nil,
   :id "04d89a64-7d8c-431a-95af-f2101f0d1e48",
-  :recipe-id "61f06ebd-2271-403c-93c3-43511ba44fcd"}]
+  :recipe-id "61f06ebd-2271-403c-93c3-43511ba44fcd"}
+ {:amount 1,
+  :ingredient-id "c6f1817a-9536-4747-9160-fd263e53564f",
+  :unit nil,
+  :amount-desc "1 Packung",
+  :id "c504c1be-bb70-49f8-8eb3-28929987e9f0",
+  :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}]

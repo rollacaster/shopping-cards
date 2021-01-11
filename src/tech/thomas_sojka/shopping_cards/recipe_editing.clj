@@ -89,9 +89,10 @@
 (defn remove-cooked-with [recipe-id ingredient-id]
   (db/write-edn
    "cooked-with.edn"
-   (remove
-    #(and (= recipe-id (:recipe-id %)) (= (:ingredient-id %) ingredient-id))
-    (db/load-cooked-with))))
+   (vec
+    (remove
+     #(and (= recipe-id (:recipe-id %)) (= (:ingredient-id %) ingredient-id))
+     (db/load-cooked-with)))))
 
 (defn add-new-recipe [{:keys [name link image type] :as new-recipe}]
   (let [recipe-id (uuid)
