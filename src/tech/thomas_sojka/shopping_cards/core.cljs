@@ -9,21 +9,31 @@
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
 
-(defn icon [{:keys [color]} name]
-  [:svg {:viewBox "0 0 24 24"}
-   [:path {:d (icons name) :fill color}]])
+(defn icon
+  ([name]
+   [icon {} name])
+  ([_ name]
+   [:svg {:viewBox "0 0 24 24"}
+    [:path {:d (icons name) :fill "currentColor"}]]))
 
-(defn recipe [{:keys [name image selected? on-click]}]
-  [:button.bn.bg-transparent.outline-transparent {:on-click on-click}
-   [:div.w5.h5.relative.ma2.shadow-3 {:class (when selected? "o-50")}
+(defn recipe [{:keys [even name image selected? on-click]}]
+  [:button.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-trbg-gray-600-ns.white-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns
+   {:on-click on-click :class (if even "bg-gray-600 white" "bg-gray-300")}
+   [:div.w5-ns.h5-ns.h-100.shadow-3-ns.w-20.z-1
     (when selected?
-      [:div.w4.h4.absolute {:style {:top "50%" :left "50%" :transform "translate(-50%,-50%)"}}
-       [icon {:color "white"} :check-mark]])
-    [:img.br2.w-100.h-100 {:style {:object-fit "cover"} :src image}]
-    [:div.bg-gray-700.absolute.pa2.mh2.mb2.bottom-0.o-50.br2
-     [:span.white.f4 name]]
-    [:div.absolute.pa2.mh2.mb2.bottom-0
-     [:span.white.f4 name]]]])
+      [:<>
+       [:div.w3.h3.absolute.orange-400.db.dn-ns
+        {:style {:top "50%" :left "2%" :transform "translate(0,-50%)"}}
+        [icon :check-mark]]
+       [:div.w4.h4.absolute.white.dn.db-ns
+       {:style {:top "50%" :left "50%" :transform "translate(-50%,-50%)"}}
+       [icon :check-mark]]])
+    [:img.br2-ns.w-100.h-100 {:style {:object-fit "cover"} :src image :class (when selected? "o-40")}]]
+   [:div.bg-gray-700.absolute.pa2.mh2.mb2.bottom-0.o-50.br2.dn.db-ns
+    [:span.f4 name]]
+   [:div.absolute-ns.pa2.mb2-ns.mh2.bottom-0.w-80.w-auto-ns
+    {:class (when selected? "o-40")}
+    [:span.f4 name]]])
 
 (defn ingredient [{:keys [i id selected? on-change]} children]
   [:li.mh2.mh5-ns.ph4.pv3.mv3.br2 {:class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")}
@@ -41,42 +51,47 @@
       "In Trello anzeigen"]]))
 
 (def recipes (r/atom []))
-(def selected-recipes (r/atom #{}))
+(defonce selected-recipes (r/atom #{}))
 (def selected-ingredients (r/atom #{}))
 (def ingredients (r/atom []))
 (def loading (r/atom false))
 (def type-order ["NORMAL" "FAST" "RARE"])
 
 (defn select-recipes []
-  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3
+  [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
    (doall
     (map
      (fn [[recipe-type recipes]]
        [:div {:key recipe-type}
-        [:h2.ph3 (case recipe-type
-                   "NORMAL" ""
-                   "FAST" "Schnell Gerichte"
-                   "RARE" "Selten")]
-        (doall
-         (map (fn [{:keys [id name link image]}]
-                [recipe (let [selected? (contains? @selected-recipes id)]
-                          {:key id
-                           :name name
-                           :link link
-                           :image image
-                           :selected? selected?
-                           :on-click #(swap! selected-recipes
-                                             (fn [selected-recipes]
-                                               ((if selected? disj conj)
-                                                selected-recipes id)))})])
-              recipes))])
+        (case recipe-type
+          "NORMAL" ""
+          "FAST" [:h2.mv3.tc "Schnell Gerichte"]
+          "RARE" [:h2.mv3.tc "Selten"])
+        [:div.flex.flex-wrap
+         (doall
+          (map-indexed
+           (fn [idx {:keys [id name link image]}]
+             [recipe (let [selected? (contains? @selected-recipes id)]
+                       {:key id
+                        :even (even? idx)
+                        :name name
+                        :link link
+                        :image image
+                        :selected? selected?
+                        :on-click #(swap! selected-recipes
+                                          (fn [selected-recipes]
+                                            ((if selected? disj conj)
+                                             selected-recipes id)))})])
+           recipes))]])
      (->> @recipes
           (group-by :type)
           (sort-by
-           (fn [[recipe-type]] (some
-                               (fn [[idx recipe-type-order]]
-                                 (when (= recipe-type-order recipe-type) idx))
-                               (map-indexed #(vector %1 %2) type-order)))))))])
+           (fn [[recipe-type]] (->> type-order
+                                   (map-indexed #(vector %1 %2))
+                                   (some
+                                    (fn [[idx recipe-type-order]]
+                                      (when (= recipe-type-order recipe-type) idx))))))
+          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])
 
 (defn show-recipes []
   [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3.bg-gray-200
@@ -179,7 +194,7 @@
 
 (defn footer []
   (when (and (> (count @selected-recipes) 0))
-    [:footer.fixed.bottom-0.w-100.bg-orange-400.flex.justify-center.pa3
+    [:footer.fixed.bottom-0.w-100.bg-orange-400.flex.justify-center.pa3.z-2
      [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
       {:on-click (:action (:data @match))}
       [:div.flex.items-center

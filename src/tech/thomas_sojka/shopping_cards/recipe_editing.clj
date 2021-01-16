@@ -124,26 +124,37 @@
 
 (comment
   (missing-recipes)
-  (add-cooked-with (find-recipe "Kohlrabi in Parmesan-Kräuter-Panade") (find-ingredient "Kartoffeln") {:amount 6 :amount-desc "6 m.-große" :unit nil})
+  (map :name (db/load-recipes))
+  (show-recipe (find-recipe "Obst"))
+  (add-cooked-with (find-recipe "Brokkoli-Nudelauflauf") (find-ingredient "Bohnen")
+                      {:amount 1 :amount-desc "1 Dose" :unit nil})
+  (remove-cooked-with (find-recipe "Zucchini-Frischkäse-Taschen, paniert und knusprig gebraten") (find-ingredient "Tomate"))
+  (map :name (db/load-recipes))
+  (remove-cooked-with (find-recipe "Pizzabrötchen") (find-ingredient "Sahne"))
+  (add-cooked-with (find-recipe "Obst") (find-ingredient "Mandarine") {:amount 1 :amount-desc "1 Packung" :unit nil})
   (find-ingredient "Tomatenmark")
   (add-new-recipe
    (scrape/scrape-recipe
-    {:link "https://www.chefkoch.de/rezepte/1660421274170785/Vegetarisches-Chili-mit-Bulgur.html?utm_source=net.whatsapp.WhatsApp.ShareExtension&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS"
-     :type "NORMAL"}))
-  (add-ingredient {:category "Beilage" :name "Spinatspätzle"})
+    {:link "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html"
+     :type "FAST"}))
+  (add-ingredient {:category "Obst" :name "Mandarine"})
   (add-new-recipe
    {:inactive false,
-    :name "Spinatspätzle",
-    :type "FAST",
-    :image (scrape/find-image {:name "Spinatspätzle"})
-    :ingredients '({:amount-desc "2 Packungen",
-                    :name "Spinatspätzle",
-                    :amount 1,
-                    :id "6964c9bf-bdae-45fc-8978-c5eb8d22a810"}
-                   {:amount-desc "1 Packung",
-                    :name "Geriebener Käse",
-                    :amount 1,
-                    :id "64e38f58-0fa1-4dee-8f41-fbac25a77f5f"})})
+    :name "Paprikás krumpli",
+    :type "RARE",
+    :image (:image (scrape/find-image {:name "Paprikás krumpli"}))
+    :ingredients [{:amount-desc "6 große Kartoffeln",
+                   :amount 6,
+                   :id (find-ingredient "Kartoffeln")}
+                  {:amount-desc "2",
+                   :amount 2,
+                   :id (find-ingredient "Zwiebel")}
+                  {:amount-desc "400g",
+                   :amount 400,
+                   :id (find-ingredient "Tofu")}
+                  {:amount-desc "5 Scheiben",
+                   :amount 5,
+                   :id "a1ab22e1-8f4b-411e-a9e9-a1c5efa6c51d"}]})
   (find-ingredient "Eier")
   (let [new-recipe (->> (load-trello-recipes)
                         added-recipes
@@ -158,9 +169,17 @@
                              {:name "Eier" :amount 2 :amount-desc nil :unit nil}])
         scrape/dedup-ingredients
         #_scrape/find-image))
-  (add-ingredient {:category "Gemüse" :name "Schnittlauch"})
-  (add-new-recipe
-   (->(scrape/scrape-recipe {:link
-                             "https://www.chefkoch.de/rezepte/1726761281857676/Ungarische-Langos-mit-Knoblauchcreme-und-Kaese.html"
-                             :type "RARE"})
-      (update :ingredients #(filter :id %)))))
+  (add-ingredient {:category "Beilage" :name "schwarze Bohnen"})
+  (add-ingredient {:category "Gewürze" :name "Umami Soße"})
+  (->(scrape/scrape-recipe {:link "https://www.weightwatchers.com/de/rezept/broccoli-hahnchen-penne/562a9b1f873e1afb2a3c5e2f"}
+                    )
+     (update :ingredients #(filter :id %))
+     add-new-recipe)
+  (-> {:name "Rakott krumpli"
+       :link "https://docs.google.com/document/d/155d_-rOQnXzYr0aA8uu80-h62x-wVa-ZqYt8q_ahO9Y/edit"
+       :type "RARE"}
+      scrape/scrape-recipe
+      add-new-recipe)
+  (-> {:link "https://www.meinestube.de/zucchini-frischkaese/"}
+      scrape/scrape-recipe
+      add-new-recipe))
