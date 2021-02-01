@@ -94,15 +94,15 @@
           (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])
 
 (defn show-recipes []
-  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5.pb6.pt3.bg-gray-200
+  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns.bg-gray-200
    (doall
     (map
      (fn [[recipe-type recipes]]
        [:div {:key recipe-type}
-        [:h2.ph3 (case recipe-type
-                   "NORMAL" ""
-                   "FAST" "Schnell Gerichte"
-                   "RARE" "Selten")]
+        (case recipe-type
+          "NORMAL" ""
+          "FAST" [:h2.ph3 "Schnell Gerichte"]
+          "RARE" [:h2.ph3 "Selten"])
         (doall
          (->> recipes
               (remove #(or (= (:link %) "") (= (:link %) nil)))
@@ -116,7 +116,8 @@
           (group-by :type)
           (sort-by
            (fn [[recipe-type]] (some (fn [[idx recipe-type-order]] (when (= recipe-type-order recipe-type) idx))
-                                    (map-indexed #(vector %1 %2) type-order)))))))])
+                                    (map-indexed #(vector %1 %2) type-order))))
+          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])
 
 
 (defn show-recipe [{{{:keys [recipe-id]} :path}:parameters}]
