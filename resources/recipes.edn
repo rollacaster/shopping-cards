@@ -1,4 +1,11 @@
-({:name "Rakott krumpli",
+({:name "Pasta mit Kichererbsen & Spinat",
+  :type "NORMAL",
+  :link
+  "https://mobile.kptncook.com/recipe/pinterest/Pasta-mit-Kichererbsen-&-Spinat/2eb63704?_branch_match_id=749146132440347375&utm_source=WhatsApp&utm_medium=sharing",
+  :id "d47bc268-5e9d-45da-af96-143b12d334c5",
+  :image
+  "https://d2am1qai33sroc.cloudfront.net/image/60116dc9410000a409a0a4b5?kptnkey=6q7QNKy-oIgk-IMuWisJ-jfN7s6"}
+ {:name "Rakott krumpli",
   :type "RARE",
   :link
   "https://docs.google.com/document/d/155d_-rOQnXzYr0aA8uu80-h62x-wVa-ZqYt8q_ahO9Y/edit",

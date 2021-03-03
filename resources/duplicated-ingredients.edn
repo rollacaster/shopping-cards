@@ -34,7 +34,7 @@
                "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe" "Knoblauchzehe(n), klein gehackt"}
  "Limettensaft" #{"Limettensaft" "Saft von halben Limette" "Limette(n), Schale und Saft" "Limette(n)"}
  "Spinat" #{"Blattspinat, TK oder frisch" "frischer Babyspinat"
-            "Spinat, TK oder frisch dann blanchiert"}
+            "Spinat, TK oder frisch dann blanchiert" "Blattspinat, frisch"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
              "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt" "Zwiebel/n"
              "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)"}
@@ -87,12 +87,15 @@
  "Kurkuma" #{"Kurkumapulver" "frische Kurkumawurzel"}
  "Koriander" #{"Koriander, gemahlen"}
  "Zimt" #{"Zimt, gemahlen"}
+ "Kichererbsen" #{"Kichererbsen, Dose od. Glas"}
  "Erbsen" #{"Erbsen, tiefgekühlt" "Erbsen (Konserve)"}
  "Linsen" #{"Linsen, trocken" "rote Linsen"}
  "Kokosmilch" #{"Kokosmilch, fettreduziert"}
+ "Rosmarin" #{"Rosmarin, frisch"}
  "Nüsse" #{"Nüsse, Cashewnüsse, Natur" "Erdnüsse geröstet & ungesalzen"}
  "Schnittlauch" #{"Schnittlauch, getrocknet oder frisch"}
  "Saure Sahne" #{"saure Sahne"}
+ "Sahne" #{"Schlagsahne"}
  "Vanillezucker" #{"Vanilleschote(n) oder 1 Pck.Vanillezucker"}
  "Miso-Brühe" #{"Gewürzpaste (Miso-Paste, Asia-Shop)"}
  "Muskat" #{"Muskatnuss"}
