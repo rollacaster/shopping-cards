@@ -144,29 +144,32 @@
               [:li.mb3.f4 {:key id} ingredient])
             @ingredients)]]
          [:iframe.w-100 {:src link :style {:height "50rem"}}]]))))
-
+(defn select-water [ingredients]
+  (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
+                                              "Wasser"]))
 (defn deselect-ingredients []
   (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
       (.then #(.text %))
       (.then read-string)
-      (.then #(reset! ingredients %)))
-  [:ul.list.pl0.mv0.pb6
-   (doall
-    (map-indexed (fn [i [id content]]
-                   [ingredient
-                    (let [selected?
-                          (contains? @selected-ingredients id)]
-                      {:key id
-                       :i i
-                       :id id
-                       :selected? selected?
-                       :on-change
-                       #(swap! selected-ingredients
-                               (fn [selected-ingredients]
-                                 ((if selected? disj conj)
-                                  selected-ingredients id)))})
-                    content])
-                 @ingredients))])
+      (.then #(reset! ingredients (select-water %))))
+  (fn []
+    [:ul.list.pl0.mv0.pb6
+     (doall
+      (map-indexed (fn [i [id content]]
+                     [ingredient
+                      (let [selected?
+                            (contains? @selected-ingredients id)]
+                        {:key id
+                         :i i
+                         :id id
+                         :selected? selected?
+                         :on-change
+                         #(swap! selected-ingredients
+                                 (fn [selected-ingredients]
+                                   ((if selected? disj conj)
+                                    selected-ingredients id)))})
+                      content])
+                   @ingredients))]))
 
 (defonce match (r/atom nil))
 
@@ -218,7 +221,8 @@
       [:div.mw9.center.bg-gray-200.h-100
        [(:view (:data @match)) @match]]]
      [footer]]))
-
+(defn add-water [ingredients]
+  (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
 (def routes
   [["/" {:name ::main
          :view select-recipes
@@ -232,7 +236,7 @@
                                  (reset! loading false)
                                  (rfe/push-state ::deselect-ingredients)
                                  (reset! ingredients %)
-                                 (reset! selected-ingredients (set (map first %)))
+                                 (reset! selected-ingredients (add-water (set (map first %))))
                                  (.scrollTo js/window 0 0)))))}]
    ["/show-recipes"
     {:name ::recipes
