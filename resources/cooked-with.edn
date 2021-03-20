@@ -3413,4 +3413,10 @@
   :ingredient-id "94f58d5a-221b-48d4-9f9e-118d1fdce128",
   :amount-desc nil,
   :id "055be821-c198-4f48-a46b-73f78433661d",
-  :recipe-id "d47bc268-5e9d-45da-af96-143b12d334c5"}]
+  :recipe-id "d47bc268-5e9d-45da-af96-143b12d334c5"}
+ {:amount 1,
+  :ingredient-id "b9bf8d43-15d0-4460-869e-d44b06cd815a",
+  :unit nil,
+  :amount-desc "1",
+  :id "d497ed5b-8236-447d-a0f5-5f7e431468f4",
+  :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}]
