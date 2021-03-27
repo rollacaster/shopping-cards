@@ -45,3 +45,8 @@ To reduce effort I did not want to add authentication but I also did not want th
 If you read that far you are either a grocery lunatic as well or shocked how much time is spent thinking about groceries :-) For me, building =shopping-cards= was a lot of fun and I really like it if I can automate something of my everyday life. Besides, deciding to run =shopping-cards= locally worked out really great and I am slowly growing my own personal app store in my apartment.
 
 Building =shopping-cards= took me about 40 hours.
+** Screenshots
+
+[[./images/recipes.png]]
+[[./images/ingredients.png]]
+
