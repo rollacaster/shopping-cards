@@ -3419,4 +3419,10 @@
   :unit nil,
   :amount-desc "1",
   :id "d497ed5b-8236-447d-a0f5-5f7e431468f4",
-  :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}]
+  :recipe-id "ab605e71-72b1-4bfd-8f98-b56f9b99080a"}
+ {:amount 1,
+  :ingredient-id "24de8be6-1300-41be-9814-f698aacf1638",
+  :unit nil,
+  :amount-desc "1",
+  :id "bd2d8ace-9d46-41fc-9141-e270dbba2fa6",
+  :recipe-id "c96ecd6b-681f-4527-8ff4-0302f7f163d5"}]
