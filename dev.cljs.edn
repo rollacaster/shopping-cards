@@ -1,4 +1,5 @@
-^{:ring-server-options {:port 9504}
+^{:npm {:bundles {"dist/index.bundle.js" "src/js/index.js"}}
+  :ring-server-options {:port 9504}
   :ring-handler tech.thomas-sojka.shopping-cards.handler/app}
 {:main tech.thomas-sojka.shopping-cards.core
  :target :bundle

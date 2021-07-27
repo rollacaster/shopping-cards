@@ -7,3 +7,4 @@
 /resources/public/cljs-out/
 /resources/public/dev/
 /resources/.creds.edn
+/dist/

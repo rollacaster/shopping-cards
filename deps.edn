@@ -1,10 +1,10 @@
-{:deps {clj-http {:mvn/version "3.10.1"}
+{:deps {clj-http/clj-http {:mvn/version "3.10.1"}
         org.clojure/clojure {:mvn/version "1.10.1"}
-        cheshire {:mvn/version "5.10.0"}
-        hickory {:mvn/version "0.7.1"}
+        cheshire/cheshire {:mvn/version "5.10.0"}
+        hickory/hickory {:mvn/version "0.7.1"}
         org.clojure/core.async {:mvn/version "1.2.603"}
-        tick {:mvn/version "0.4.23-alpha"}
-        clj-fuzzy {:mvn/version "0.4.1"}
+        tick/tick {:mvn/version "0.4.23-alpha"}
+        clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
         org.clojure/math.combinatorics {:mvn/version "0.1.6"}
         metosin/compojure-api {:mvn/version "1.1.13"}
         metosin/muuntaja {:mvn/version "0.6.6"}
@@ -12,17 +12,19 @@
         ring/ring {:mvn/version "1.8.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}}
  :paths ["src" "classes" "resources"]
- :aliases {:uberdeps {:extra-deps {uberdeps {:mvn/version "0.1.10"}}
+ :aliases {:uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
                       :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.main"]}
            :dev {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.9"}
-                              reagent {:mvn/version "0.10.0"}
+                              reagent/reagent {:mvn/version "1.1.0"}
+                              re-frame/re-frame {:mvn/version "1.2.0"}
                               org.clojure/clojurescript {:mvn/version "1.10.773"}
-                              hashp {:mvn/version "0.1.1"}
+                              hashp/hashp {:mvn/version "0.1.1"}
                               metosin/reitit-frontend {:mvn/version "0.4.2"}
                               metosin/reitit-spec {:mvn/version "0.4.2"}}
                  :extra-paths ["target"]}
            :fe-build {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.8"}
-                                   reagent {:mvn/version "0.10.0"}
+                                   reagent/reagent {:mvn/version "1.1.0"}
+                                   re-frame/re-frame {:mvn/version "1.2.0"}
                                    org.clojure/clojurescript {:mvn/version "1.10.773"}
                                    metosin/reitit-frontend {:mvn/version "0.4.2"}
                                    metosin/reitit-spec {:mvn/version "0.4.2"}}
