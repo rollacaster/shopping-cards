@@ -10,7 +10,8 @@
         metosin/muuntaja {:mvn/version "0.6.6"}
         ring/ring-jetty-adapter {:mvn/version "1.8.0"}
         ring/ring {:mvn/version "1.8.0"}
-        org.clojure/test.check {:mvn/version "1.1.0"}}
+        org.clojure/test.check {:mvn/version "1.1.0"}
+        day8.re-frame/http-fx {:mvn/version "0.2.3"}}
  :paths ["src" "classes" "resources"]
  :aliases {:uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
                       :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.main"]}

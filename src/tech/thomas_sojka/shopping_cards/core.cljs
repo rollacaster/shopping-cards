@@ -3,9 +3,11 @@
             [clojure.string :as s]
             [reagent.core :as r]
             [reagent.dom :as dom]
-            [reitit.frontend :as rf]
             [reitit.coercion.spec :as rss]
-            [reitit.frontend.easy :as rfe]))
+            [reitit.frontend :as rf]
+            [reitit.frontend.easy :as rfe]
+            [re-frame.core :refer [dispatch]]
+            [day8.re-frame.http-fx]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
 
@@ -273,7 +275,9 @@
 (defn init! []
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})
-   (fn [m] (reset! match m))
+   (fn [m]
+     (dispatch [:navigate m])
+     (reset! match m))
    {:use-fragment true})
   (dom/render [app] (.getElementById js/document "app")))
 
