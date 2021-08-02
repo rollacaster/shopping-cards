@@ -1,13 +1,13 @@
 (ns tech.thomas-sojka.shopping-cards.core
   (:require [cljs.reader :refer [read-string]]
             [clojure.string :as s]
+            [re-frame.core :refer [clear-subscription-cache! dispatch]]
             [reagent.core :as r]
             [reagent.dom :as dom]
             [reitit.coercion.spec :as rss]
             [reitit.frontend :as rf]
-            [reitit.frontend.easy :as rfe]
-            [re-frame.core :refer [dispatch]]
-            [day8.re-frame.http-fx]))
+            [day8.re-frame.http-fx]
+            [reitit.frontend.easy :as rfe]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
 
@@ -280,5 +280,11 @@
      (reset! match m))
    {:use-fragment true})
   (dom/render [app] (.getElementById js/document "app")))
+
+(defn ^:dev/after-load clear-cache-and-render!
+  []
+  (prn "clear")
+  (clear-subscription-cache!)
+  (init!))
 
 (init!)
