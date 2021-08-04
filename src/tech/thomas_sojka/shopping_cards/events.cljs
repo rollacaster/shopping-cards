@@ -100,7 +100,7 @@
 (reg-event-fx
  :success-load-ingredients-for-selected-recipes
  (fn [{:keys [db]} [_ res]]
-   {:push-state [:tech.thomas-sojka.shopping-cards.core/deselect-ingredients]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/deselect-ingredients]
     :scroll-to [0 0]
     :db
     (let [data (read-string res)]
@@ -137,22 +137,22 @@
 (reg-event-fx
  :show-recipes
  (fn [_ _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.core/recipes]}))
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/recipes]}))
 
 (reg-event-fx
  :show-main
  (fn [_ _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.core/main]}))
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/main]}))
 
 (reg-event-fx
  :show-recipe
  (fn [_ [_ id]]
-   {:push-state [:tech.thomas-sojka.shopping-cards.core/recipe {:recipe-id id}]}))
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/recipe {:recipe-id id}]}))
 
 (reg-event-fx
  :restart
  (fn [{:keys [db]} _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.core/main]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/main]
     :db (-> db
             (assoc :selected-ingredients #{})
             (assoc :selected-recipes #{}))}))
@@ -180,13 +180,13 @@
 (reg-event-fx
  :success-shopping-card
  (fn [{:keys [db]} [_ card-id]]
-   {:push-state [:tech.thomas-sojka.shopping-cards.core/finish {:card-id card-id}]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/finish {:card-id card-id}]
     :db (assoc db :loading false)}))
 
 (reg-event-fx
  :failure-shopping-card
  (fn [{:keys [db]} _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.core/error]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/error]
     :db (assoc db :loading false)}))
 
 (comment
