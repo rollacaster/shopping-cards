@@ -1,13 +1,12 @@
 (ns tech.thomas-sojka.shopping-cards.core
-  (:require [cljs.reader :refer [read-string]]
-            [clojure.string :as s]
-            [re-frame.core :refer [clear-subscription-cache! dispatch]]
-            [reagent.core :as r]
+  (:require [re-frame.core :refer [clear-subscription-cache! dispatch subscribe dispatch-sync]]
             [reagent.dom :as dom]
             [reitit.coercion.spec :as rss]
             [reitit.frontend :as rf]
             [day8.re-frame.http-fx]
-            [reitit.frontend.easy :as rfe]))
+            [reitit.frontend.easy :as rfe]
+            [tech.thomas-sojka.shopping-cards.events]
+            [tech.thomas-sojka.shopping-cards.subs]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
 
@@ -52,135 +51,108 @@
       {:href (str "https://trello.com/c/" card-id)}
       "In Trello anzeigen"]]))
 
-(def recipes (r/atom []))
-(defonce selected-recipes (r/atom #{}))
-(def selected-ingredients (r/atom #{}))
-(def ingredients (r/atom []))
-(def loading (r/atom false))
-(def type-order ["NORMAL" "FAST" "RARE"])
 
 (defn select-recipes []
-  [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
-   (doall
-    (map
-     (fn [[recipe-type recipes]]
-       [:div {:key recipe-type}
-        (case recipe-type
-          "NORMAL" ""
-          "FAST" [:h2.mv3.tc "Schnell Gerichte"]
-          "RARE" [:h2.mv3.tc "Selten"])
-        [:div.flex.flex-wrap
-         (doall
-          (map-indexed
-           (fn [idx {:keys [id name link image]}]
-             [recipe (let [selected? (contains? @selected-recipes id)]
-                       {:key id
-                        :even (even? idx)
-                        :name name
-                        :link link
-                        :image image
-                        :selected? selected?
-                        :on-click #(swap! selected-recipes
-                                          (fn [selected-recipes]
-                                            ((if selected? disj conj)
-                                             selected-recipes id)))})])
-           recipes))]])
-     (->> @recipes
-          (group-by :type)
-          (sort-by
-           (fn [[recipe-type]] (->> type-order
-                                   (map-indexed #(vector %1 %2))
-                                   (some
-                                    (fn [[idx recipe-type-order]]
-                                      (when (= recipe-type-order recipe-type) idx))))))
-          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])
+  (let [selected-recipes @(subscribe [:selected-recipes])
+        sorted-recipes @(subscribe [:sorted-recipes])]
+    [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
+     (doall
+      (map
+       (fn [[recipe-type recipes]]
+         [:div {:key recipe-type}
+          (case recipe-type
+            "NORMAL" ""
+            "FAST" [:h2.mv3.tc "Schnell Gerichte"]
+            "RARE" [:h2.mv3.tc "Selten"])
+          [:div.flex.flex-wrap
+           (doall
+            (map-indexed
+             (fn [idx {:keys [id name link image]}]
+               [recipe (let [selected? (contains? selected-recipes id)]
+                         {:key id
+                          :even (even? idx)
+                          :name name
+                          :link link
+                          :image image
+                          :selected? selected?
+                          :on-click #(dispatch [:toggle-selected-recipes id])})])
+             recipes))]])
+       (->> sorted-recipes
+            (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))]))
 
 (defn show-recipes []
-  [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns.bg-gray-200
-   (doall
-    (map
-     (fn [[recipe-type recipes]]
-       [:div {:key recipe-type}
-        (case recipe-type
-          "NORMAL" ""
-          "FAST" [:h2.ph3 "Schnell Gerichte"]
-          "RARE" [:h2.ph3 "Selten"])
-        (doall
-         (->> recipes
-              (remove #(or (= (:link %) "") (= (:link %) nil)))
-              (map (fn [{:keys [id name link image]}]
-                     [recipe {:key id
-                              :name name
-                              :link link
-                              :image image
-                              :on-click #(rfe/push-state ::recipe {:recipe-id id})}]))))])
-     (->> @recipes
-          (group-by :type)
-          (sort-by
-           (fn [[recipe-type]] (some (fn [[idx recipe-type-order]] (when (= recipe-type-order recipe-type) idx))
-                                    (map-indexed #(vector %1 %2) type-order))))
-          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])
+  (let [sorted-recipes @(subscribe [:sorted-recipes])]
+    [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns.bg-gray-200
+     (doall
+      (map
+       (fn [[recipe-type recipes]]
+         [:div {:key recipe-type}
+          (case recipe-type
+            "NORMAL" ""
+            "FAST" [:h2.ph3 "Schnell Gerichte"]
+            "RARE" [:h2.ph3 "Selten"])
+          (doall
+           (->> recipes
+                (remove #(or (= (:link %) "") (= (:link %) nil)))
+                (map (fn [{:keys [id name link image]}]
+                       [recipe {:key id
+                                :name name
+                                :link link
+                                :image image
+                                :on-click #(dispatch [:show-recipe id])}]))))])
+       (->> sorted-recipes
+            (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))]))
 
 
 (defn show-recipe [{{{:keys [recipe-id]} :path}:parameters}]
-  (let [ingredients (r/atom [])]
-    (-> (.fetch js/window (str "/recipes/" recipe-id "/ingredients"))
-        (.then #(.text %))
-        (.then read-string)
-        (.then #(reset! ingredients %)))
-    (fn [match]
-      (let [{:keys [path]} (:parameters match)
-            {:keys [recipe-id]} path
-            {:keys [name link image]}
-            (->> @recipes
-                 (some #(when (= (:id %) recipe-id) %)))]
-        [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
-         [:a.link.near-black.underline.mb3.mb0-ns.db {:href link :target "_blank" :referer "norel noopener"}
-          [:h1.mv0 name]]
-         [:div.flex.justify-between.flex-wrap
-          [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
-           [:img.w5.br3.ba.b--orange-300 {:src image}]]
-          [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-           (map
-            (fn [[id ingredient]]
-              [:li.mb3.f4 {:key id} ingredient])
-            @ingredients)]]
-         [:iframe.w-100 {:src link :style {:height "50rem"}}]]))))
+  (dispatch [:load-ingredients-for-recipe recipe-id])
+  (fn [match]
+    (let [{:keys [path]} (:parameters match)
+          {:keys [recipe-id]} path
+          {:keys [name link image]} @(subscribe [:shown-recipe recipe-id])
+          ingredients @(subscribe [:recipe-details])]
+      [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
+       [:a.link.near-black.underline.mb3.mb0-ns.db {:href link :target "_blank" :referer "norel noopener"}
+        [:h1.mv0 name]]
+       [:div.flex.justify-between.flex-wrap
+        [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
+         [:img.w5.br3.ba.b--orange-300 {:src image}]]
+        [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
+         (map
+          (fn [[id ingredient]]
+            [:li.mb3.f4 {:key id} ingredient])
+          ingredients)]]
+       [:iframe.w-100 {:src link :style {:height "50rem"}}]])))
 (defn select-water [ingredients]
   (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
                                               "Wasser"]))
 (defn deselect-ingredients []
-  (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
-      (.then #(.text %))
-      (.then read-string)
-      (.then #(reset! ingredients (select-water %))))
+  (dispatch [:load-ingredients-for-selected-recipes])
   (fn []
-    [:ul.list.pl0.mv0.pb6
-     (doall
-      (map-indexed (fn [i [id content]]
-                     [ingredient
-                      (let [selected?
-                            (contains? @selected-ingredients id)]
-                        {:key id
-                         :i i
-                         :id id
-                         :selected? selected?
-                         :on-change
-                         #(swap! selected-ingredients
-                                 (fn [selected-ingredients]
-                                   ((if selected? disj conj)
-                                    selected-ingredients id)))})
-                      content])
-                   @ingredients))]))
-
-(defonce match (r/atom nil))
+    (let [selected-ingredients @(subscribe [:selected-ingredients])
+          ingredients @(subscribe [:ingredients])]
+      [:ul.list.pl0.mv0.pb6
+       (doall
+        (map-indexed (fn [i [id content]]
+                       [ingredient
+                        (let [selected?
+                              (contains? selected-ingredients id)]
+                          {:key id
+                           :i i
+                           :id id
+                           :selected? selected?
+                           :on-change
+                           #(dispatch [:toggle-selected-ingredients id])})
+                        content])
+                     ingredients))])))
 
 (defn header []
-  [:header.bg-orange-400
-   [:div.mw9.center
-    [:div.pv3.ph5-ns.ph3
-     [:h1.ma0.gray-800.ml2-ns
-      (:title (:data @match))]]]])
+  (let [route @(subscribe [:route])]
+    [:header.bg-orange-400
+     [:div.mw9.center
+      [:div.pv3.ph5-ns.ph3
+       [:h1.ma0.gray-800.ml2-ns
+        (:title (:data route))]]]]))
 
 (defn spinner []
   [:svg {:width 38 :height 38
@@ -199,47 +171,39 @@
      [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;-45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]]])
 
 (defn footer []
-  (when (and (> (count @selected-recipes) 0))
-    [:footer.fixed.bottom-0.w-100.bg-orange-400.flex.justify-center.pa3.z-2
-     [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
-      {:on-click (:action (:data @match))}
-      [:div.flex.items-center
-       (if @loading
-         [:div {:style {:width 128}}
-          [spinner]]
-         [:<>
-          [:span.f2.mr2 "Fertig"]
-          [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])]]]))
+  (let [selected-recipes @(subscribe [:selected-recipes])
+        route @(subscribe [:route])
+        loading @(subscribe [:loading])]
+    (when (and (> (count selected-recipes) 0))
+      [:footer.fixed.bottom-0.w-100.bg-orange-400.flex.justify-center.pa3.z-2
+       [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
+        {:on-click (:action (:data route))}
+        [:div.flex.items-center
+         (if loading
+           [:div {:style {:width 128}}
+            [spinner]]
+           [:<>
+            [:span.f2.mr2 "Fertig"]
+            [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])]]])))
 
 (defn app []
-  (-> (.fetch js/window "/recipes")
-      (.then #(.json %))
-      (.then #(js->clj % :keywordize-keys true))
-      (.then #(reset! recipes %)))
+  (dispatch [:load-recipes])
   (fn []
-    [:div.sans-serif.h-100
-     [header]
-     [:main.h-100
-      [:div.mw9.center.bg-gray-200.h-100
-       [(:view (:data @match)) @match]]]
-     [footer]]))
+    (let [route @(subscribe [:route])]
+      [:div.sans-serif.h-100
+       [header]
+       (when (:view (:data route))
+         [:main.h-100
+          [:div.mw9.center.bg-gray-200.h-100
+           [(:view (:data route)) route]]])
+       [footer]])))
 (defn add-water [ingredients]
   (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
 (def routes
   [["/" {:name ::main
          :view select-recipes
          :title "Rezepte"
-         :action (fn []
-                   (reset! loading true)
-                   (-> (.fetch js/window (str "/ingredients?" (s/join "&" (map #(str "recipe-ids=" %) @selected-recipes))))
-                       (.then #(.text %))
-                       (.then read-string)
-                       (.then #(do
-                                 (reset! loading false)
-                                 (rfe/push-state ::deselect-ingredients)
-                                 (reset! ingredients %)
-                                 (reset! selected-ingredients (add-water (set (map first %))))
-                                 (.scrollTo js/window 0 0)))))}]
+         :action #(dispatch [:load-ingredients-for-selected-recipes])}]
    ["/show-recipes"
     {:name ::recipes
      :view show-recipes
@@ -252,32 +216,17 @@
    ["/deselect-ingredients" {:name ::deselect-ingredients
                              :view deselect-ingredients
                              :title "Zutaten auswählen"
-                             :action (fn []
-                                       (reset! loading true)
-                                       (-> (.fetch js/window "/shopping-card"
-                                                   (clj->js {:method "POST"
-                                                             :headers {"Content-type" "application/edn"}
-                                                             :body (pr-str (->> @ingredients
-                                                                                (filter #(contains? @selected-ingredients (first %)))
-                                                                                (map second)))}))
-                                           (.then #(.text %))
-                                           (.then #(do
-                                                     (reset! loading false)
-                                                     (rfe/push-state ::finish {:card-id %})))))}]
+                             :action #(dispatch [:create-shopping-card])}]
    ["/finish/:card-id" {:name ::finish
                         :view finish
                         :title "Einkaufszettel erstellt"
                         :parameters {:path {:card-id string?}}
-                        :action (fn []
-                                  (reset! selected-ingredients #{})
-                                  (rfe/push-state ::main))}]])
+                        :action #(dispatch [:restart])}]])
 
 (defn init! []
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})
-   (fn [m]
-     (dispatch [:navigate m])
-     (reset! match m))
+   (fn [m] (dispatch [:navigate m]))
    {:use-fragment true})
   (dom/render [app] (.getElementById js/document "app")))
 
@@ -287,4 +236,5 @@
   (clear-subscription-cache!)
   (init!))
 
+(dispatch-sync [:initialise-db])
 (init!)

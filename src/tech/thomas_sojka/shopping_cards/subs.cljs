@@ -7,6 +7,11 @@
    (:selected-recipes db)))
 
 (reg-sub
+ :selected-ingredients
+ (fn [db _]
+   (:selected-ingredients db)))
+
+(reg-sub
  :recipes
  (fn [db _]
    (:recipes db)))
@@ -28,7 +33,6 @@
 (reg-sub
  :recipe-details
  (fn [db _]
-   (prn "hi")
    (:recipe-details db)))
 
 (reg-sub
@@ -55,6 +59,7 @@
 
 (comment
   @(subscribe [:selected-recipes])
+  @(subscribe [:selected-ingredients])
   @(subscribe [:shown-recipe "9bbdb4ef-4934-4a96-be22-881ed37c0fd5"])
 
   @(subscribe [:recipes])

@@ -36,7 +36,7 @@
  (fn [db [_ id]]
    (update
     db
-    :selected-recipes
+    :selected-ingredients
     (partial toggle-map id))))
 
 (reg-event-db
@@ -64,12 +64,16 @@
 (reg-event-db
  :success-recipes
  (fn [db [_ data]]
-   (assoc db :recipes data)))
+   (-> db
+       (assoc :loading false)
+       (assoc :recipes data))))
 
 (reg-event-db
  :failure-recipes
  (fn [db _]
-   (assoc db :recipes :ERROR)))
+   (-> db
+       (assoc :loading false)
+       (assoc :recipes :ERROR))))
 
 (reg-event-db
  :toggle-selected-recipes
@@ -175,8 +179,7 @@
 
 (reg-event-fx
  :success-shopping-card
- (fn [{:keys [db]} card-id]
-   (prn card-id)
+ (fn [{:keys [db]} [_ card-id]]
    {:push-state [:tech.thomas-sojka.shopping-cards.core/finish {:card-id card-id}]
     :db (assoc db :loading false)}))
 
@@ -194,7 +197,7 @@
   (dispatch [:toggle-selected-recipes "d47bc268-5e9d-45da-af96-143b12d334c5"])
   (:selected-recipes @re-frame.db/app-db)
   (dispatch [:load-ingredients-for-selected-recipes])
-  (:selected-recipes @re-frame.db/app-db)
+  (:selected-ingredients @re-frame.db/app-db)
   (dispatch [:toggle-selected-ingredients "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641"])
   (:selected-ingredients @re-frame.db/app-db)
   (dispatch [:load-ingredients-for-recipe "d47bc268-5e9d-45da-af96-143b12d334c5"])
