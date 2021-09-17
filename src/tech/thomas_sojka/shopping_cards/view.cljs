@@ -120,24 +120,22 @@
   (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
                                               "Wasser"]))
 (defn deselect-ingredients []
-  (dispatch [:load-ingredients-for-selected-recipes])
-  (fn []
-    (let [selected-ingredients @(subscribe [:selected-ingredients])
-          ingredients @(subscribe [:ingredients])]
-      [:ul.list.pl0.mv0.pb6
-       (doall
-        (map-indexed (fn [i [id content]]
-                       [ingredient
-                        (let [selected?
-                              (contains? selected-ingredients id)]
-                          {:key id
-                           :i i
-                           :id id
-                           :selected? selected?
-                           :on-change
-                           #(dispatch [:toggle-selected-ingredients id])})
-                        content])
-                     ingredients))])))
+  (let [selected-ingredients @(subscribe [:selected-ingredients])
+        ingredients @(subscribe [:ingredients])]
+    [:ul.list.pl0.mv0.pb6
+     (doall
+      (map-indexed (fn [i [id content]]
+                     [ingredient
+                      (let [selected?
+                            (contains? selected-ingredients id)]
+                        {:key id
+                         :i i
+                         :id id
+                         :selected? selected?
+                         :on-change
+                         #(dispatch [:toggle-selected-ingredients id])})
+                      content])
+                   ingredients))]))
 
 (defn header []
   (let [route @(subscribe [:route])]
