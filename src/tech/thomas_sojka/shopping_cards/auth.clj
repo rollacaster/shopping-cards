@@ -84,7 +84,7 @@
       (sh "open" "-a" "firefox" "-g"
           (create-authorization-request {:client_id client-id :redirect_uri redirect-uri :scope scope}))
       (let [code (<!! token-chan)
-            drive-api-credentials (get-access-token {:client-id client-id :client-secred client-secret :code code})]
+            drive-api-credentials (get-access-token {:client-id client-id :client-secret client-secret :code code})]
         (spit oauth-creds-path (prn-str drive-api-credentials))
         (reset-access-token! drive-api-credentials)))))
 (comment
