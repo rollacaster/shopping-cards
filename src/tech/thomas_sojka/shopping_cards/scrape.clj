@@ -57,7 +57,7 @@
        (map #(zipmap [:amount-desc :name] %))
        (map #(assoc % :amount (parse-int (:amount-desc %))))))
 
-(def units ["g" "Esslöffel" "ml" "Handvoll" "Teelöffel" "EL"])
+(def units ["g" "Esslöffel" "ml" "Handvoll" "Teelöffel" "EL" "TL" "Dose" "Zehen" "Tasse" "ein paar"])
 
 (defn scrape-springlane-ingredient [ingredient-line]
   (let [unit (some (fn [unit] (when (s/includes? ingredient-line (str " " unit " ")) unit)) units)
@@ -223,12 +223,19 @@
     (if (string? recipe-name) recipe-name (-> recipe-name :content first))))
 
 (defn gdrive-ingredient [ingredient-line]
-  (let [ingredient (s/split (apply str (drop 2 ingredient-line)) #" ")]
+  (let [ingredient (s/split (apply str (drop 2 ingredient-line)) #" ")
+        unit (some (fn [unit] (when (s/includes? ingredient-line (str " " unit " ")) unit)) units)]
     (if (and (> (count ingredient) 1) (parse-int (first ingredient)))
       {:amount-desc (first ingredient)
-       :name (s/join " " (rest ingredient))
-       :amount (parse-int (first ingredient))}
-      {:amount-desc nil :name (s/join " "ingredient) :amount nil})))
+       :name (s/replace (s/join " " (rest ingredient))
+                        (re-pattern (str unit " ")) "")
+       :amount (parse-int (first ingredient))
+       :unit unit}
+      {:amount-desc nil
+       :name (s/replace (s/join " "ingredient)
+                        (re-pattern (str " " unit " ")) "")
+       :amount nil})))
+
 
 
 (defn fetch-gdrive-ingredients [link]
@@ -241,7 +248,8 @@
          (->> recipe-text
               s/split-lines
               (drop 1)
-              (take-while #(s/starts-with? % "*"))))))
+              (take-while #(or (s/starts-with? % "*")
+                               (s/starts-with? % "•")))))))
 
 (defn scrape-recipe [{:keys [link type name] :or {type "NORMAL"}}]
   (let [recipe-hickory (->> (:body (client/get link {:headers {"Accept-Language" "de-DE,de;q=0.9,en-DE;q=0.8,en;q=0.7,en-US;q=0.6"}})) html/parse html/as-hickory)

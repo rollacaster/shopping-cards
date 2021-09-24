@@ -52,7 +52,7 @@
  "Kräuter" #{"Kräuter, gemischte, TK" "Kräuter, frische (Basilikum, Petersilie, Oregano)" "eine Prise Oregano"
              "8 Kräuter, TK" "Kräuter der Provence, getrocknet"}
  "Petersilie" #{"Petersilie, gehackt" "Petersilie, glatte" "Petersilie, frisch"}
- "Ingwer" #{"etwas Ingwer"}
+ "Ingwer" #{"etwas Ingwer" "gehackter Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
  "Chili" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"
            "Chili nach Geschmack" "rote Chili" "Chilipulver" "Chilischote(n)"
@@ -66,7 +66,7 @@
  "Karotte" #{"Möhre(n)" "Karotten/Möhren"}
  "Sellerie" #{"Staudensellerie, mit Blättern"}
  "Aubergine" #{"Aubergine(n)"}
- "Currypaste" #{"Thai-Currypaste, grün"}
+ "Currypaste" #{"Thai-Currypaste, grün" "rote Currypaste"}
  "Curry" #{"Currypulver"}
  "Milch" #{"etwas Milch zum verdünnen von Schmand" "Milch, lauwarm" "Vollmilch, zimmerwarm"
            "whole milk" "Vollmilch"}
@@ -75,7 +75,7 @@
  "Cabanossi" #{"Cabanossi)"}
  "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet"}
  "Aufback-Brezeln" #{"Brezeln"}
- "Sojasoße" #{"Soja-Sauce"}
+ "Sojasoße" #{"Soja-Sauce" "Sojasauce"}
  "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt" "Joghurt, Magermilchjoghurt, Natur, bis 0,5 % Fett"}
  "Quark" #{"Quark 0,2%"}
  "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten" "Frühlingszwiebel(n)" "Lauch (dünne Stange)"
@@ -92,7 +92,7 @@
  "Linsen" #{"Linsen, trocken" "rote Linsen"}
  "Kokosmilch" #{"Kokosmilch, fettreduziert"}
  "Rosmarin" #{"Rosmarin, frisch"}
- "Nüsse" #{"Nüsse, Cashewnüsse, Natur" "Erdnüsse geröstet & ungesalzen"}
+ "Nüsse" #{"Nüsse, Cashewnüsse, Natur" "Erdnüsse geröstet & ungesalzen" "Erdnüsse"}
  "Schnittlauch" #{"Schnittlauch, getrocknet oder frisch"}
  "Saure Sahne" #{"saure Sahne"}
  "Sahne" #{"Schlagsahne"}
