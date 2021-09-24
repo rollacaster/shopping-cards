@@ -1,4 +1,11 @@
-({:name "Pasta mit Kichererbsen & Spinat",
+({:id "0c39f9c8-8875-45bf-9151-605838888c9b",
+  :name "Erdnuss-Curry",
+  :link
+  "https://docs.google.com/document/d/1HODzQbmjDpdTtDFlu58SywHuJTVUFJ_yVBMqo1633lg/edit",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1804951291896974/bilder/693883/crop-360x240/thai-curry-erdnuss-kokos-huehnchen.jpg",
+  :type "NORMAL"}
+ {:name "Pasta mit Kichererbsen & Spinat",
   :type "NORMAL",
   :link
   "https://mobile.kptncook.com/recipe/pinterest/Pasta-mit-Kichererbsen-&-Spinat/2eb63704?_branch_match_id=749146132440347375&utm_source=WhatsApp&utm_medium=sharing",
