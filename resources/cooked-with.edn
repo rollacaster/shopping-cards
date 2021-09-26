@@ -3525,4 +3525,59 @@
   :ingredient-id "c1604163-078b-4ef8-be0d-9740eb2636f1",
   :amount-desc "evtl.",
   :id "b15679f7-620a-451b-9e6d-6f461205946e",
-  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}]
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount "500",
+  :ingredient-id "3e99ba7a-be59-4f98-98a1-2ad17b01d14e",
+  :amount-desc "500g Pilze",
+  :id "3afe4f5a-79e2-4d56-9496-c0035a3c35f4",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount "1",
+  :ingredient-id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9",
+  :amount-desc "1 Möhre",
+  :id "b62073b0-22bd-4f9d-8d98-66dccc2be5d3",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount "1",
+  :ingredient-id "4373e821-8697-48ee-becf-9776f7a4e794",
+  :amount-desc "1 Knoblauchzehe",
+  :id "fd255b9f-27e2-4c0d-bae7-062d9fde2e55",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount "2",
+  :ingredient-id "539ae848-13bd-410d-9830-32822b02443c",
+  :amount-desc "2Zweige Majoran",
+  :id "94f1141d-2dc3-4b35-ace4-c59653ea6483",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount "2",
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :amount-desc "2EL Olivenöl",
+  :id "ca408ac6-5d15-4060-9e27-043661b7bb0d",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount nil,
+  :ingredient-id "94f58d5a-221b-48d4-9f9e-118d1fdce128",
+  :amount-desc " Salz",
+  :id "c0a5794c-b892-4812-badd-e891fef068e5",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount nil,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :amount-desc " Pfeffer",
+  :id "c294c8ad-e7d3-4b86-bebd-f741a6c8fa95",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount "1",
+  :ingredient-id "9597d110-d042-4203-990f-c339c2d61109",
+  :amount-desc "1Prise Kümmel",
+  :id "6245c3e8-3725-4228-9191-fac39fea5e08",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount "200",
+  :ingredient-id "f907e5df-dbe9-48a2-bc13-70884b1e56f0",
+  :amount-desc "200ml Hafersahne",
+  :id "fbfc1f05-86d3-4bf8-b8c4-34f061b67356",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount "¼",
+  :ingredient-id "2402edca-bcdc-4ba0-a2a4-187568e9f7a1",
+  :amount-desc "¼ Bio-Zitrone",
+  :id "b7037dc9-7036-4ed1-bb1f-bf867459d623",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}
+ {:amount "300",
+  :ingredient-id "3599b722-c387-433f-a20a-5ef1bcc0fd34",
+  :amount-desc "300g Brokkoli",
+  :id "5111b7a7-50c1-4fea-877a-04a4365d426c",
+  :recipe-id "1d795381-d094-4cd4-b285-0eae223f49c9"}]

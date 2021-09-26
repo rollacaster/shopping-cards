@@ -414,4 +414,7 @@
   :id "4b7d675c-a303-4bda-9ead-6f216b86a814"}
  {:category "Konserven",
   :name "Pesto (rot)",
-  :id "577755d6-91c8-4815-bfca-dea5e362300c"}]
+  :id "577755d6-91c8-4815-bfca-dea5e362300c"}
+ {:category "Gewürze",
+  :name "Majoran",
+  :id "539ae848-13bd-410d-9830-32822b02443c"}]

@@ -162,6 +162,20 @@
             :unit (s/trim amount-desc)})
          names amounts amount-descs)))
 
+(defn scrape-eatsmarter [recipe-hickory]
+  (->> recipe-hickory
+       (select/select (select/tag "dd"))
+       (map (fn [node]
+              (let [contents ((comp :content first :content first :content) node)
+                    [unit-node ingredient-node] contents
+                    amount (some-> (first (:content unit-node)) s/trim)
+                    unit ((comp first :content) (second (:content unit-node)))
+                    name ((comp first :content first) (select/select (select/tag :a) ingredient-node))]
+                {:amount amount
+                 :unit unit
+                 :amount-desc (str amount unit " " name)
+                 :name name})))))
+
 (defn add-ingredients [link recipe-hickory]
   (cond (s/includes? link "chefkoch")
         (scrape-chefkoch-ingredients recipe-hickory)
@@ -175,7 +189,9 @@
         (s/includes? link "springlane")
         (scrape-springlane recipe-hickory)
         (s/includes? link "kptncook")
-        (scrape-kptcook recipe-hickory)))
+        (scrape-kptcook recipe-hickory)
+        (s/includes? link "eatsmarter")
+        (scrape-eatsmarter recipe-hickory)))
 
 (defn find-image [recipe-name]
   (-> (client/get "https://customsearch.googleapis.com/customsearch/v1"
@@ -216,6 +232,14 @@
        first
        s/trim))
 
+(defmethod recipe-name :eatsmarter [_ recipe-hickory]
+  (->> recipe-hickory
+       (select/select (select/tag "h1"))
+       first
+       :content
+       first
+       s/trim))
+
 (defmethod recipe-name :chefkoch [_ recipe-hickory]
   (let [recipe-name (->> recipe-hickory
                          (select/select (select/child (select/tag "h1")))
@@ -251,8 +275,12 @@
               (take-while #(or (s/starts-with? % "*")
                                (s/starts-with? % "•")))))))
 
+(defn as-hickory [link]
+  (->> (:body (client/get link {:headers {"Accept-Language" "de-DE,de;q=0.9,en-DE;q=0.8,en;q=0.7,en-US;q=0.6"}}))
+       html/parse
+       html/as-hickory))
 (defn scrape-recipe [{:keys [link type name] :or {type "NORMAL"}}]
-  (let [recipe-hickory (->> (:body (client/get link {:headers {"Accept-Language" "de-DE,de;q=0.9,en-DE;q=0.8,en;q=0.7,en-US;q=0.6"}})) html/parse html/as-hickory)
+  (let [recipe-hickory (as-hickory link)
         name (or name (recipe-name link recipe-hickory))]
     (->
      {:name name
@@ -279,8 +307,13 @@
 (comment
   (scrape-recipe {:name "Vegetarisches Gulasch á la Margarete"
                   :link "https://docs.google.com/document/d/1SDgNCPGMwaKdHEmF1yTOHndItLqkIdiLN879BhMlaZE/edit"})
-
-
+  (->> "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"
+       as-hickory
+          scrape-eatsmarter
+       )
+  (assoc (scrape-recipe {:link "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"})
+         :image
+         "https://images.eatsmarter.de/sites/default/files/styles/576x432/public/veganes-pilzragout-mit-brokkoli-661993.jpg")
   (scrape-recipe {:link "https://www.meinestube.de/zucchini-frischkaese/"}
                  )
   )

@@ -1,4 +1,11 @@
-({:name "Spaghetti mit rotem Pesto und Schafskäse",
+({:name "Veganes Pilzragout mit Brokkoli",
+  :type "FAST",
+  :link
+  "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli",
+  :id "1d795381-d094-4cd4-b285-0eae223f49c9",
+  :image
+  "https://images.eatsmarter.de/sites/default/files/styles/576x432/public/veganes-pilzragout-mit-brokkoli-661993.jpg"}
+ {:name "Spaghetti mit rotem Pesto und Schafskäse",
   :type "NORMAL",
   :link
   "https://www.chefkoch.de/rezepte/615661161608797/Spaghetti-mit-rotem-Pesto-und-Schafskaese.html",
