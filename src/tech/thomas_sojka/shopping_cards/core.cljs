@@ -1,4 +1,4 @@
-(ns ^:figwheel-hooks tech.thomas-sojka.shopping-cards.core
+(ns tech.thomas-sojka.shopping-cards.core
   (:require [re-frame.core
              :refer
              [clear-subscription-cache! dispatch dispatch-sync]]
@@ -19,7 +19,7 @@
    {:use-fragment true})
   (dom/render [app] (.getElementById js/document "app")))
 
-(defn ^:after-load clear-cache-and-render!
+(defn ^:dev/after-load clear-cache-and-render!
   []
   (clear-subscription-cache!)
   (init!))

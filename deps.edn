@@ -10,24 +10,7 @@
         metosin/muuntaja {:mvn/version "0.6.6"}
         ring/ring-jetty-adapter {:mvn/version "1.8.0"}
         ring/ring {:mvn/version "1.8.0"}
-        org.clojure/test.check {:mvn/version "1.1.0"}
-        day8.re-frame/http-fx {:mvn/version "0.2.3"}}
+        org.clojure/test.check {:mvn/version "1.1.0"}}
  :paths ["src" "classes" "resources"]
  :aliases {:uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
-                      :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.main"]}
-           :dev {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.9"}
-                              reagent/reagent {:mvn/version "1.1.0"}
-                              re-frame/re-frame {:mvn/version "1.2.0"}
-                              org.clojure/clojurescript {:mvn/version "1.10.773"}
-                              hashp/hashp {:mvn/version "0.1.1"}
-                              metosin/reitit-frontend {:mvn/version "0.4.2"}
-                              metosin/reitit-spec {:mvn/version "0.4.2"}}
-                 :extra-paths ["target"]}
-           :fe-build {:extra-deps {com.bhauman/figwheel-main {:mvn/version "0.2.8"}
-                                   reagent/reagent {:mvn/version "1.1.0"}
-                                   re-frame/re-frame {:mvn/version "1.2.0"}
-                                   org.clojure/clojurescript {:mvn/version "1.10.773"}
-                                   metosin/reitit-frontend {:mvn/version "0.4.2"}
-                                   metosin/reitit-spec {:mvn/version "0.4.2"}}
-                      :extra-paths ["target"]
-                      :main-opts ["-m" "figwheel.main" "-O" "advanced" "--clean""-bo" "dev"]}}}
+                      :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.main"]}}}

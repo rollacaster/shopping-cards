@@ -1,0 +1,19 @@
+;; shadow-cljs configuration
+{:source-paths
+ ["src"]
+
+ :dev-http {9504 {:root "resources/public/"}}
+
+ :dependencies
+ [[reagent "1.1.0"]
+  [re-frame/re-frame "1.2.0"]
+  [metosin/reitit-frontend "0.4.2"]
+  [metosin/reitit-spec "0.4.2"]
+  [day8.re-frame/http-fx "0.2.3"]]
+
+ :builds
+ {:app {:target :browser
+        :output-dir "resources/public/js"
+        :asset-path "/js"
+        :compiler-options {:output-feature-set :es6}
+        :modules {:main {:entries [tech.thomas-sojka.shopping-cards.core]}}}}}
