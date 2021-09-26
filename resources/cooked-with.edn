@@ -3480,4 +3480,49 @@
   :amount-desc nil,
   :amount nil,
   :ingredient-id "3bc4e5ec-8cff-4ff4-b080-50a2a3aed6ec",
-  :recipe-id "0c39f9c8-8875-45bf-9151-605838888c9b"}]
+  :recipe-id "0c39f9c8-8875-45bf-9151-605838888c9b"}
+ {:amount 500,
+  :ingredient-id "81c4abf6-9c3c-421e-8f11-bb78f3cfeb54",
+  :amount-desc "500 g",
+  :id "2f02820f-ac51-453a-9897-8906d7c81333",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount 2,
+  :ingredient-id "577755d6-91c8-4815-bfca-dea5e362300c",
+  :amount-desc "2 Gläser",
+  :id "1c71b21f-475a-4143-ac8f-c73276b52cd8",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount 250,
+  :ingredient-id "d7d3faa8-f7c1-4cf2-ba0b-23df648b3c7c",
+  :amount-desc "250 g",
+  :id "958049cc-0d3e-4cc7-ad48-5b0b5ebf0f4d",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount 5,
+  :ingredient-id "5eef57be-bc04-4f19-9d58-9c6eb2a5eddd",
+  :amount-desc "5 große",
+  :id "25f75d9e-7e59-433e-af16-82542bee86dc",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount nil,
+  :ingredient-id "afb01109-0750-4a59-9e63-7ad4fbb891b5",
+  :amount-desc nil,
+  :id "4e3ada6f-04de-496d-95b1-5afdf474e2dc",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount nil,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :amount-desc nil,
+  :id "178cb539-9baa-4470-a0fd-fd56b4b49ab2",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount nil,
+  :ingredient-id "1880eb8a-dafd-4ea2-a985-7789bc99e0a2",
+  :amount-desc nil,
+  :id "89e041ee-14c4-49ae-a525-1ce067c13cef",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount 4,
+  :ingredient-id "4b7d675c-a303-4bda-9ead-6f216b86a814",
+  :amount-desc "4 EL",
+  :id "c67176e0-d0d0-49ed-a708-ba70cd98a1d2",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}
+ {:amount nil,
+  :ingredient-id "c1604163-078b-4ef8-be0d-9740eb2636f1",
+  :amount-desc "evtl.",
+  :id "b15679f7-620a-451b-9e6d-6f461205946e",
+  :recipe-id "ddd22da3-c334-4516-831a-e3b5e3541573"}]

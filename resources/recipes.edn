@@ -1,4 +1,11 @@
-({:id "0c39f9c8-8875-45bf-9151-605838888c9b",
+({:name "Spaghetti mit rotem Pesto und Schafskäse",
+  :type "NORMAL",
+  :link
+  "https://www.chefkoch.de/rezepte/615661161608797/Spaghetti-mit-rotem-Pesto-und-Schafskaese.html",
+  :id "ddd22da3-c334-4516-831a-e3b5e3541573",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/615661161608797/bilder/60488/crop-360x240/spaghetti-mit-rotem-pesto-und-schafskaese.jpg"}
+ {:id "0c39f9c8-8875-45bf-9151-605838888c9b",
   :name "Erdnuss-Curry",
   :link
   "https://docs.google.com/document/d/1HODzQbmjDpdTtDFlu58SywHuJTVUFJ_yVBMqo1633lg/edit",

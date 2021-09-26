@@ -408,4 +408,10 @@
   :id "b9bf8d43-15d0-4460-869e-d44b06cd815a"}
  {:category "Käse & Co",
   :name "Kräuter-Frischkäse",
-  :id "24de8be6-1300-41be-9814-f698aacf1638"}]
+  :id "24de8be6-1300-41be-9814-f698aacf1638"}
+ {:category "Gewürze",
+  :name "Balsamico",
+  :id "4b7d675c-a303-4bda-9ead-6f216b86a814"}
+ {:category "Konserven",
+  :name "Pesto (rot)",
+  :id "577755d6-91c8-4815-bfca-dea5e362300c"}]

@@ -18,7 +18,8 @@
  "Tomatenmark" #{"evtl. Tomatenmark"}
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
  "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"
-                      "Tomaten, passiert" "gehackte Tomaten" "Pizzatomaten ( je 400 g)" "passierte Tomaten"}
+                      "Tomaten, passiert" "gehackte Tomaten" "Pizzatomaten ( je 400 g)" "passierte Tomaten"
+                      "Tomate(n), feste"}
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener" "Emmentaler"
                     "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                     "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
@@ -28,7 +29,8 @@
  "Schinken"#{"Kochschinken"}
  "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'" "Kartoffel(n), festkochend" "Kartoffeln, festkochend"
                 "potato(es)"}
- "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan" "Parmesan, gerieben"}
+ "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan" "Parmesan, gerieben"
+              "Parmesan, frisch geriebener"}
  "Knoblauch" #{"Knoblauch" "Knoblauchzehen" "Knoblauchzehe(n), gepresster"
                "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt" "Knoblauchzehe(n), fein gewürfelt"
                "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe" "Knoblauchzehe(n), klein gehackt"}
@@ -50,7 +52,7 @@
  "Hefe" #{"Trockenhefe oder 1/2 Pck. Frischhefe" "Frischhefe"}
  "Spätzle" #{"Spätzle, frische, aus dem Kühlregal" "Spätzle (Frischprodukt)"}
  "Kräuter" #{"Kräuter, gemischte, TK" "Kräuter, frische (Basilikum, Petersilie, Oregano)" "eine Prise Oregano"
-             "8 Kräuter, TK" "Kräuter der Provence, getrocknet"}
+             "8 Kräuter, TK" "Kräuter der Provence, getrocknet" "Kräuter, gemischte"}
  "Petersilie" #{"Petersilie, gehackt" "Petersilie, glatte" "Petersilie, frisch"}
  "Ingwer" #{"etwas Ingwer" "gehackter Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
@@ -60,7 +62,7 @@
  "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK" "Romanesco" "Broccoli"}
  "Zitrone"#{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon" "Saft einer halben Zitrone"
             "Bio-Zitronenschale, fein geriebene"}
- "Feta" #{"Schafskäse" "Feta-Käse" "feta cheese" "Feta Käse"}
+ "Feta" #{"Schafskäse" "Feta-Käse" "feta cheese" "Feta Käse" "Schafskäse, alternativ Feta-Käse"}
  "Semmel" #{"Brötchen" "Weißbrot, altbackenes" "als Beilage Semmeln oder Brot"}
  "Salami" #{"Sucuk"}
  "Karotte" #{"Möhre(n)" "Karotten/Möhren"}
@@ -73,7 +75,7 @@
  "Zucker"#{"evtl. Zucker"}
  "Zucchini" #{"Zucchini" "Zucchini (ca. 200g)"}
  "Cabanossi" #{"Cabanossi)"}
- "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet"}
+ "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet" "Gewürzmischung (Tomatengewürzsalz)"}
  "Aufback-Brezeln" #{"Brezeln"}
  "Sojasoße" #{"Soja-Sauce" "Sojasauce"}
  "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt" "Joghurt, Magermilchjoghurt, Natur, bis 0,5 % Fett"}
@@ -102,4 +104,5 @@
  "Rohrzucker" #{"Brauner Rohrzucker"}
  "Spaghetti" #{}
  "Umami Soße" #{}
- "Toast" #{"große Toast"}}
+ "Toast" #{"große Toast"}
+ "Pesto (rot)" #{"Pesto, rotes"}}
