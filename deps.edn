@@ -11,7 +11,7 @@
         ring/ring-jetty-adapter {:mvn/version "1.8.0"}
         ring/ring {:mvn/version "1.8.0"}
         org.clojure/test.check {:mvn/version "1.1.0"}
-        com.datomic/dev-local {:mvn/version "0.9.232"}
+        com.datomic/dev-local {:mvn/version "1.0.238"}
         hodur/engine {:mvn/version "0.1.8"}
         hodur/datomic-schema {:mvn/version "0.1.0"}
         hodur/graphviz-schema {:mvn/version "0.1.1"}}
