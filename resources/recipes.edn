@@ -208,6 +208,7 @@
   :inactive false}
  {:id "f0d25872-8874-4aff-819d-08861577401c",
   :name "Nudelpesto",
+  :type "RARE"
   :link
   "https://docs.google.com/document/d/1uWg90k32jHVV1dDyRGBr3mHmuEKpE9siLyLbYIkZEzw/edit",
   :image
