@@ -8,7 +8,7 @@
 
 (defn load-recipes [] (db/load-recipes))
 
-(defn ingredient-text [ingredients]
+(defn- ingredient-text [ingredients]
   (let [no-unit? (->> ingredients
                       (map :unit)
                       (every? nil?))
@@ -67,11 +67,6 @@
        (sort-by second (fn [[a] [b]] (< (.indexOf penny-order (:category a)) (.indexOf penny-order (:category b)))))
        (map (fn [[id ingredients]] (vector id (ingredient-text ingredients))))
        vec))
-
-(defn category-ingredients->str [{:keys [ingredients]}]
-  (->> ingredients
-       (map #(str "- " %))
-       (s/join "\n")))
 
 (def klaka-board-id "48aas65T")
 
