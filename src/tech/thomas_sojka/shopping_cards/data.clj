@@ -57,7 +57,8 @@
          (map (fn [res]
                 (d/pull
                  db
-                 '[[:recipe/name :as :name]
+                 '[[:recipe/id :as :id]
+                   [:recipe/name :as :name]
                    [:recipe/image :as :image]
                    [:recipe/link :as :link]
                    {:recipe/type [[:db/ident]]}]

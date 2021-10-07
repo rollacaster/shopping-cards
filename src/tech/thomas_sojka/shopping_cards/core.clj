@@ -6,8 +6,6 @@
             [tech.thomas-sojka.shopping-cards.trello :refer [trello-api]]
             [tick.core :refer [now]]))
 
-(defn load-recipes [] (db/load-recipes))
-
 (defn- ingredient-text [ingredients]
   (let [no-unit? (->> ingredients
                       (map :unit)

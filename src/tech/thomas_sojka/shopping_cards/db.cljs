@@ -2,16 +2,15 @@
   (:require [clojure.spec.alpha :as s]))
 
 (s/def ::route map?)
-(s/def :recipe/id string?)
 (s/def :recipe/name string?)
 (s/def :recipe/type #{"NORMAL" "FAST" "RARE"})
 (s/def :recipe/image string?)
 (s/def :recipe/link (s/nilable string?))
 (s/def :recipe/inactive boolean?)
-(s/def :recipe/recipe (s/keys :req-un [:recipe/id :recipe/name :recipe/type :recipe/image]
+(s/def :recipe/recipe (s/keys :req-un [:recipe/name :recipe/type :recipe/image]
                               :opt-un [:recipe/link :recipe/inactive]))
 (s/def ::recipes (s/coll-of :recipe/recipe))
-(s/def ::selected-recipes (s/coll-of :recipe/id :kind set?))
+(s/def ::selected-recipes (s/coll-of :recipe/name :kind set?))
 
 
 (s/def :ingredient/id string?)
@@ -28,7 +27,7 @@
 (s/def :cooked-with/unit string?)
 (s/def :cooked-with/amount-desc string?)
 (s/def :cooked-with/amount number?)
-(s/def :cooked-with/cooked-with (s/keys :req [:cooked-with/recipe-id :cooked-with/ingredient-id
+(s/def :cooked-with/cooked-with (s/keys :req [:cooked-with/ingredient-id
                                               :cooked-with/unit :cooked-with/amount-desc]
                                         :opt [:cooked-with/amount]))
 

@@ -7,7 +7,10 @@
             [ring.util.response :refer [resource-response]]
             [tech.thomas-sojka.shopping-cards.core
              :refer
-             [create-klaka-shopping-card ingredients-for-recipes load-recipes ingredients-for-recipe]]))
+             [create-klaka-shopping-card
+              ingredients-for-recipe
+              ingredients-for-recipes]]
+            [tech.thomas-sojka.shopping-cards.data :refer [load-recipes]]))
 
 (def app-routes
   (api
