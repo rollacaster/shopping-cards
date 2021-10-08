@@ -40,18 +40,6 @@
    "Eier"
    "Getränke"])
 
-(defn ingredients-for-recipe [recipe-id]
-  (->> (db/load-cooked-with)
-       (filter #(= recipe-id (:recipe-id %)))
-       (map (fn [{:keys [ingredient-id amount-desc amount]}]
-              (merge {:amount-desc amount-desc
-                      :amount amount}
-                     (some #(when (= (:id %) ingredient-id) %) (db/load-ingredients)))))
-       (group-by :id)
-       (sort-by second (fn [[a] [b]] (< (.indexOf penny-order (:category a)) (.indexOf penny-order (:category b)))))
-       (map (fn [[id ingredients]] (vector id (ingredient-text ingredients))))
-       vec))
-
 (defn ingredients-for-recipes [selected-recipe-ids]
   (->> (db/load-cooked-with)
        (filter #(contains? selected-recipe-ids (:recipe-id %)))

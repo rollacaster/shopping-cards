@@ -8,9 +8,8 @@
             [tech.thomas-sojka.shopping-cards.core
              :refer
              [create-klaka-shopping-card
-              ingredients-for-recipe
               ingredients-for-recipes]]
-            [tech.thomas-sojka.shopping-cards.data :refer [load-recipes]]))
+            [tech.thomas-sojka.shopping-cards.data :refer [load-recipes ingredients-for-recipe]]))
 
 (def app-routes
   (api

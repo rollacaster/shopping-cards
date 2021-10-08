@@ -3178,6 +3178,7 @@
  {:amount 250,
   :ingredient-id "3599b722-c387-433f-a20a-5ef1bcc0fd34",
   :amount-desc "250 g",
+  :unit "g"
   :id "9abfd861-4a66-4708-9094-6466656ed517",
   :recipe-id "d0bb942b-0165-417d-9153-6c770c036fe8"}
  {:amount 2,
