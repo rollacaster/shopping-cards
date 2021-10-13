@@ -417,4 +417,10 @@
   :id "577755d6-91c8-4815-bfca-dea5e362300c"}
  {:category "Gewürze",
   :name "Majoran",
-  :id "539ae848-13bd-410d-9830-32822b02443c"}]
+  :id "539ae848-13bd-410d-9830-32822b02443c"}
+ {:category "Käse & Co",
+  :name "Ricotta",
+  :id "a0a33606-3241-44bc-b91e-c09f10dd6054"}
+ {:category "Gewürze",
+  :name "Minze",
+  :id "2c78778a-2331-4d42-b7bb-02cc759f17da"}]

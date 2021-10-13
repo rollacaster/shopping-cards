@@ -1,4 +1,10 @@
-({:name "Veganes Pilzragout mit Brokkoli",
+({:name "Zucchini-Nudeln in cremiger Ricotta-Sauce",
+  :type "NORMAL",
+  :link "http://mobile.kptncook.com/recipe/pinterest/Zucchini-Nudeln-in-cremiger-Ricotta-Sauce/360183b7?_branch_match_id=732898497676962929&utm_source=Clipboard&utm_medium=sharing",
+  :id "e01b523a-8472-4e33-b5d1-90377f4da0dd",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1470861251890512/bilder/1319161/crop-360x240/spaghetti-mit-zucchini-ricotta-tomatensauce.jpg"}
+ {:name "Veganes Pilzragout mit Brokkoli",
   :type "FAST",
   :link
   "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli",
@@ -208,7 +214,7 @@
   :inactive false}
  {:id "f0d25872-8874-4aff-819d-08861577401c",
   :name "Nudelpesto",
-  :type "RARE"
+  :type "RARE",
   :link
   "https://docs.google.com/document/d/1uWg90k32jHVV1dDyRGBr3mHmuEKpE9siLyLbYIkZEzw/edit",
   :image

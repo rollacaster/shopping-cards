@@ -10,7 +10,7 @@
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
         "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"
-        "gutes Olivenöl*" "Olivenöl oder Butterschmalz zum braten"}
+        "gutes Olivenöl*" "Olivenöl oder Butterschmalz zum braten" "Sesamöl"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln" "Vollkorn-Penne"
             "Muschelnudeln" "Nudeln, trocken, jede Sorte" }
@@ -105,4 +105,5 @@
  "Spaghetti" #{}
  "Umami Soße" #{}
  "Toast" #{"große Toast"}
- "Pesto (rot)" #{"Pesto, rotes"}}
+ "Pesto (rot)" #{"Pesto, rotes"}
+ "Minze" #{"Minze, frisch"}}
