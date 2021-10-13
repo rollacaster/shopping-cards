@@ -1,6 +1,8 @@
 (ns tech.thomas-sojka.shopping-cards.scrape
-  (:require [clj-http.client :as client]
+  (:require [cheshire.core :refer [parse-string]]
+            [clj-http.client :as client]
             [clojure.edn :as edn]
+            [clojure.java.shell :refer [sh]]
             [clojure.string :as s]
             [clojure.walk :as w]
             [hickory.core :as html]
@@ -79,30 +81,6 @@
        (remove string?)
        (map (comp s/trim first :content))
        (map scrape-springlane-ingredient)))
-
-(defn scrape-kptcook [recipe-hickory]
-  (let [scrape-class (fn [class]
-                       (->> recipe-hickory
-                            (select/select
-                             (select/child
-                              (select/class class)))))
-        measures (->> (scrape-class "kptn-ingredient-measure")
-                      (map (comp s/trim first :content))
-                      (map (fn [amount-desc] {:amount-desc amount-desc
-                                             :amount (parse-int amount-desc)
-                                             :unit (let [last-part (last (s/split amount-desc #" "))]
-                                                     (when-not (parse-int last-part) last-part))})))
-        ingredients (->> (scrape-class "kptn-ingredient")
-                         (map (comp s/trim first :content))
-                         (map (fn [name] {:name name})))]
-    (concat
-     (map
-      merge
-      ingredients
-      measures)
-     (drop
-      (count measures)
-      ingredients))))
 
 (defn scrape-eat-this-span [class spans]
   (first (:content (some
@@ -188,8 +166,6 @@
         (scrape-weightwatchers recipe-hickory)
         (s/includes? link "springlane")
         (scrape-springlane recipe-hickory)
-        (s/includes? link "kptncook")
-        (scrape-kptcook recipe-hickory)
         (s/includes? link "eatsmarter")
         (scrape-eatsmarter recipe-hickory)))
 
@@ -226,7 +202,7 @@
                                   :else :chefkoch)))
 (defmethod recipe-name :kptncook [_ recipe-hickory]
   (->> recipe-hickory
-       (select/select (select/child (select/class "kptn-recipetitle")))
+       (select/select (select/tag "title"))
        first
        :content
        first
@@ -279,20 +255,31 @@
   (->> (:body (client/get link {:headers {"Accept-Language" "de-DE,de;q=0.9,en-DE;q=0.8,en;q=0.7,en-US;q=0.6"}}))
        html/parse
        html/as-hickory))
+
+
 (defn scrape-recipe [{:keys [link type name] :or {type "NORMAL"}}]
-  (let [recipe-hickory (as-hickory link)
-        name (or name (recipe-name link recipe-hickory))]
-    (->
-     {:name name
-      :link link
-      :type type
-      :inactive false}
-     (assoc :image (find-image name))
-     (assoc :ingredients
-            (if (s/includes? link "docs.google")
-              (fetch-gdrive-ingredients link)
-              (add-ingredients link recipe-hickory)))
-     (update :ingredients dedup-ingredients))))
+  (if (s/includes? link "kptncook")
+    (let [{:keys [name ingredients]}(parse-string (:out (sh "node" "src/js/scrape.js" link)) true)]
+      (-> {:name name
+           :ingredients ingredients
+           :inactive false
+           :type type
+           :image (find-image name)
+           :link link}
+          (update :ingredients dedup-ingredients)))
+    (let [recipe-hickory (as-hickory link)
+          name (or name (recipe-name link recipe-hickory))]
+      (->
+       {:name name
+        :link link
+        :type type
+        :inactive false}
+       (assoc :image (find-image name))
+       (assoc :ingredients
+              (if (s/includes? link "docs.google")
+                (fetch-gdrive-ingredients link)
+                (add-ingredients link recipe-hickory)))
+       (update :ingredients dedup-ingredients)))))
 
 ;; TODO Handle new ingredients before adding recipe
 (defn new-ingredients [new-recipes]
@@ -314,6 +301,6 @@
   (assoc (scrape-recipe {:link "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"})
          :image
          "https://images.eatsmarter.de/sites/default/files/styles/576x432/public/veganes-pilzragout-mit-brokkoli-661993.jpg")
-  (scrape-recipe {:link "https://www.meinestube.de/zucchini-frischkaese/"}
+  (scrape-recipe {:link "http://mobile.kptncook.com/recipe/pinterest/Zucchini-Nudeln-in-cremiger-Ricotta-Sauce/360183b7?_branch_match_id=732898497676962929&utm_source=Clipboard&utm_medium=sharing"}
                  )
   )
