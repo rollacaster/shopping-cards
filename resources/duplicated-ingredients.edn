@@ -39,7 +39,7 @@
             "Spinat, TK oder frisch dann blanchiert" "Blattspinat, frisch"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
              "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt" "Zwiebel/n"
-             "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)"}
+             "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)" "Speisezwiebel"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche" "Weizenmehl, bei Bedarf auch mehr"
           "Weizenmehl Typ 405"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
@@ -52,7 +52,7 @@
  "Hefe" #{"Trockenhefe oder 1/2 Pck. Frischhefe" "Frischhefe"}
  "Spätzle" #{"Spätzle, frische, aus dem Kühlregal" "Spätzle (Frischprodukt)"}
  "Kräuter" #{"Kräuter, gemischte, TK" "Kräuter, frische (Basilikum, Petersilie, Oregano)" "eine Prise Oregano"
-             "8 Kräuter, TK" "Kräuter der Provence, getrocknet" "Kräuter, gemischte"}
+             "8 Kräuter, TK" "Kräuter der Provence, getrocknet" "Kräuter, gemischte" "Oregano, frisch"}
  "Petersilie" #{"Petersilie, gehackt" "Petersilie, glatte" "Petersilie, frisch"}
  "Ingwer" #{"etwas Ingwer" "gehackter Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
@@ -85,6 +85,7 @@
  "Avocado" #{"reife Avocado"}
  "Kümmel" #{"Kreuzkümmelpulver" "Kreuzkümmel, gemahlen"}
  "Bohnen" #{"Kidneybohnen (440 g)" "Kidney-Bohnen" "schwarze Bohnen"}
+ "Weiße Bohnen" #{"weiße Bohnen, Dose od. Glas"}
  "Nachos" #{"Nacho(s)"}
  "Kurkuma" #{"Kurkumapulver" "frische Kurkumawurzel"}
  "Koriander" #{"Koriander, gemahlen"}

@@ -3543,4 +3543,109 @@
   :ingredient-id "4373e821-8697-48ee-becf-9776f7a4e794",
   :amount-desc nil,
   :id "ee5bffcc-fc12-447a-8c3c-ed3a645bb4c9",
-  :recipe-id "e01b523a-8472-4e33-b5d1-90377f4da0dd"}]
+  :recipe-id "e01b523a-8472-4e33-b5d1-90377f4da0dd"}
+ {:amount 5,
+  :ingredient-id "1880eb8a-dafd-4ea2-a985-7789bc99e0a2",
+  :amount-desc "5 g",
+  :id "bfc7abf3-5a2c-48bc-966d-ccc01d1a85d7",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount 100,
+  :ingredient-id "ee34edf4-05af-481d-a3c1-46371349f942",
+  :amount-desc "100 g",
+  :id "c9236fc7-aec6-415d-bfa3-c06c01e5fb28",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount 1,
+  :ingredient-id "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641",
+  :amount-desc "1",
+  :id "1bf6edb3-d33f-416a-8abd-7e2e2c74bf4b",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount 300,
+  :ingredient-id "3c541633-5f65-452f-aca5-313fcec1be31",
+  :amount-desc "300 g",
+  :id "fc26ade6-7b19-4f82-a51f-409f2b6aaf53",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount nil,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :amount-desc nil,
+  :id "7ff951a4-cad7-47e9-85e7-a35673a88db0",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount nil,
+  :ingredient-id "bf5870c3-64f9-42c9-a584-8371dbb5358e",
+  :amount-desc nil,
+  :id "7e37e6ba-4a96-4556-a0a4-cbf2fda702bb",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount nil,
+  :ingredient-id "94f58d5a-221b-48d4-9f9e-118d1fdce128",
+  :amount-desc nil,
+  :id "113d65da-54f9-45b7-98fa-71d074689b20",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount nil,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :amount-desc nil,
+  :id "82669fc7-cee5-466d-8f7f-b354fde43a25",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount nil,
+  :ingredient-id "4373e821-8697-48ee-becf-9776f7a4e794",
+  :amount-desc nil,
+  :id "9674bc87-2501-4b69-bfd6-f55da197bc0c",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount nil,
+  :ingredient-id "e6ce2fbe-8f6b-442e-a9e3-cdb67a1c90a1",
+  :amount-desc nil,
+  :id "6db8ccee-1f61-4934-9a67-f303778da266",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount nil,
+  :ingredient-id "4e67d72f-44c4-464f-be33-05382c3c8080",
+  :amount-desc nil,
+  :id "135ea060-ed85-4bfe-83f0-d85b64c83e81",
+  :recipe-id "e4becf95-ca7e-4555-9166-994bafc3bce9"}
+ {:amount 4.2,
+  :ingredient-id "864a7140-73c9-4360-801e-cf056886b7fb",
+  :amount-desc "4.2 g",
+  :id "b1894884-502a-40b9-a7a3-6633feaf58c2",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount 20,
+  :ingredient-id "690fdb5c-711b-4b1b-918b-148d2a4eb355",
+  :amount-desc "20 g",
+  :id "ec10f053-c6af-4b5a-9a4d-e15a820f8f1a",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount 40,
+  :ingredient-id "d7d3faa8-f7c1-4cf2-ba0b-23df648b3c7c",
+  :amount-desc "40 g",
+  :id "04225d3c-75a3-4a93-a64b-d4f6ca034cf3",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount 3,
+  :ingredient-id "2c78778a-2331-4d42-b7bb-02cc759f17da",
+  :amount-desc "3 g",
+  :id "fb53fd8d-86da-49f1-a2a4-7116ebf9c602",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount nil,
+  :ingredient-id "3654b906-0dac-4db9-bf25-e4fbb9f4439f",
+  :amount-desc nil,
+  :id "e1fca9a7-31ab-4196-80a0-cb5100afc56a",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount nil,
+  :ingredient-id "83d5b8e1-945f-4917-9cd7-f9ddb6330b89",
+  :amount-desc nil,
+  :id "ebe0a32f-1dfa-4b27-9b50-fde54e5785ee",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount nil,
+  :ingredient-id "94f58d5a-221b-48d4-9f9e-118d1fdce128",
+  :amount-desc nil,
+  :id "7d701697-28a5-4720-a10f-267301534722",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount nil,
+  :ingredient-id "9580eac9-5902-4420-917d-7d6539c64c9b",
+  :amount-desc nil,
+  :id "6374effa-d715-4450-91a5-1656a0b2a7f3",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount nil,
+  :ingredient-id "e6ce2fbe-8f6b-442e-a9e3-cdb67a1c90a1",
+  :amount-desc nil,
+  :id "a4cf709b-2822-459d-8618-1949d29a7958",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}
+ {:amount nil,
+  :ingredient-id "6175d1a2-0af7-43fb-8a53-212af7b72c9c",
+  :amount-desc nil,
+  :id "38d45ed2-5fec-47b5-9be5-a072ec6074a3",
+  :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}]

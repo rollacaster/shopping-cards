@@ -1,6 +1,19 @@
-({:name "Zucchini-Nudeln in cremiger Ricotta-Sauce",
+({:name "Teigtaschen mit Spinat-Feta-Füllung",
   :type "NORMAL",
-  :link "http://mobile.kptncook.com/recipe/pinterest/Zucchini-Nudeln-in-cremiger-Ricotta-Sauce/360183b7?_branch_match_id=732898497676962929&utm_source=Clipboard&utm_medium=sharing",
+  :link "https://sharing.kptncook.com/zMqbew3hkkb",
+  :id "05e32dc9-0531-42c2-878c-b2c7503624cf",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1061411211443715/bilder/964448/crop-360x240/blaetterteigtaschen-mit-spinat-und-feta.jpg"}
+ {:name "Bohnengulasch mit Räuchertofu",
+  :type "NORMAL",
+  :link "https://sharing.kptncook.com/oKIKqk6hkkb",
+  :id "e4becf95-ca7e-4555-9166-994bafc3bce9",
+  :image
+  "https://img.chefkoch-cdn.de/rezepte/1199001225798839/bilder/1286429/crop-240x180/portugiesisches-bohnengulasch.jpg"}
+ {:name "Zucchini-Nudeln in cremiger Ricotta-Sauce",
+  :type "NORMAL",
+  :link
+  "http://mobile.kptncook.com/recipe/pinterest/Zucchini-Nudeln-in-cremiger-Ricotta-Sauce/360183b7?_branch_match_id=732898497676962929&utm_source=Clipboard&utm_medium=sharing",
   :id "e01b523a-8472-4e33-b5d1-90377f4da0dd",
   :image
   "https://img.chefkoch-cdn.de/rezepte/1470861251890512/bilder/1319161/crop-360x240/spaghetti-mit-zucchini-ricotta-tomatensauce.jpg"}
