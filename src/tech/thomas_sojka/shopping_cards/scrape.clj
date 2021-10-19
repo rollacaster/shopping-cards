@@ -1,5 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.scrape
-  (:require [cheshire.core :refer [parse-string]]
+  (:require [clojure.java.io :as io]
+            [cheshire.core :refer [parse-string]]
             [clj-http.client :as client]
             [clojure.edn :as edn]
             [clojure.java.shell :refer [sh]]
@@ -8,7 +9,7 @@
             [hickory.core :as html]
             [hickory.select :as select]
             [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
-            [tech.thomas-sojka.shopping-cards.db :as db]))
+            [tech.thomas-sojka.shopping-cards.data :as data]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def search-engine-cx "005510767845232759155:zdkkvfzersx")
@@ -181,6 +182,8 @@
                    :as :json :throw-entire-message? true})
       :body :items first :link))
 
+(defn load-edn [path] (read-string (slurp (io/resource path))))
+
 (defn dedup-ingredients [ingredients]
   (map (fn [{:keys [name] :as ingredient}]
          (let [ingredient-name (or
@@ -188,13 +191,12 @@
                                         (when (or (= name ingredient-group-name)
                                                   (contains? duplicated-name name))
                                           ingredient-group-name))
-                                      (db/load-edn "duplicated-ingredients.edn"))
+                                      (load-edn "duplicated-ingredients.edn"))
                                 name)]
            (assoc ingredient
                   :name ingredient-name
-                  :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-edn "ingredients.edn")))))
+                  :id (some #(when (= (:name %) ingredient-name) (:id %)) (data/load-ingredients)))))
        ingredients))
-
 
 (defmulti recipe-name (fn [link _] (cond
                                   (s/includes? link "kptncook") :kptncook

@@ -87,6 +87,17 @@
               [?r :recipe/id ]])
        (map (comp transform-recipe-type first))))
 
+(defn load-ingredients []
+  (->> db
+       (d/q '[:find
+              (pull ?i [[:ingredient/id :as :id]
+                        [:ingredient/name :as :name]
+                        {[:ingredient/category :as :category] [[:db/ident]]}])
+              :where
+              [?i :ingredient/id ]
+              [?c :cooked-with/ingredient ?i]])
+       (map (fn [[ingredient]] (update ingredient :category :db/ident)))))
+
 (defn ingredients-for-recipe [id]
   (map
    (fn [[{:keys [ingredient/id ingredient/name]}
