@@ -12,15 +12,15 @@
    :ingredient-category/gemüse
    :ingredient-category/gewürze
    :ingredient-category/tiefkühl
-   :ingredient-category/brot-&-Co
-   :ingredient-category/müsli-&-Co
+   :ingredient-category/brot&co
+   :ingredient-category/müsli&co
    :ingredient-category/konserven
    :ingredient-category/beilage
    :ingredient-category/backen
    :ingredient-category/fleisch
    :ingredient-category/wursttheke
-   :ingredient-category/milch-&-Co
-   :ingredient-category/käse-&-Co
+   :ingredient-category/milch&co
+   :ingredient-category/käse&co
    :ingredient-category/süßigkeiten
    :ingredient-category/eier
    :ingredient-category/getränke])

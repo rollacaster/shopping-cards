@@ -4,24 +4,6 @@
             [tech.thomas-sojka.shopping-cards.trello :refer [trello-api]]
             [tick.core :refer [now]]))
 
-(def penny-order
-  ["Obst"
-   "Gemüse"
-   "Gewürze"
-   "Tiefkühl"
-   "Brot & Co"
-   "Müsli & Co"
-   "Konserven"
-   "Beilage"
-   "Backen"
-   "Fleisch"
-   "Wursttheke"
-   "Milch & Co"
-   "Käse & Co"
-   "Süßigkeiten"
-   "Eier"
-   "Getränke"])
-
 (def klaka-board-id "48aas65T")
 
 (defn load-trello-lists [board-id]

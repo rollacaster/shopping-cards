@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.core-test
+(ns tech.thomas-sojka.db-test
   (:require
    [clojure.test :refer [deftest is testing]]
    [tech.thomas-sojka.shopping-cards.db :as db]))
