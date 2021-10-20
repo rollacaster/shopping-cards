@@ -77,7 +77,7 @@
       (dissoc :recipe/type)))
 
 (defn load-recipes []
-  (->> db
+  (->> (d/db conn)
        (d/q '[:find (pull ?r [[:recipe/id :as :id]
                               [:recipe/name :as :name]
                               [:recipe/image :as :image]
@@ -86,6 +86,45 @@
               :where
               [?r :recipe/id ]])
        (map (comp transform-recipe-type first))))
+
+(defn load-recipe [recipe-ref]
+  (d/pull
+   (d/db conn)
+   [[:recipe/id :as :id]
+    [:recipe/name :as :name]
+    [:recipe/image :as :image]
+    [:recipe/link :as :link]
+    {[:recipe/type :as :type] [[:db/ident :as :type]]}
+    {[:cooked-with/_recipe :as :ingredients]
+     [[:cooked-with/id :as :id]
+      [:cooked-with/amount :as :amount]
+      [:cooked-with/unit :as :unit]
+      [:cooked-with/amount-desc :as :amount-desc]
+      {[:cooked-with/ingredient :as :ingredient]
+       [[:ingredient/name :as :name]
+        [:ingredient/id :as :id]]}]}]
+   recipe-ref))
+
+(defn load-cooked-with []
+  (->> db
+       (d/q '[:find
+              (pull ?c
+                    [[:cooked-with/amount :as :amount]
+                     [:cooked-with/ingredient :as :ingredient-id]
+                     [:cooked-with/unit :as :unit]
+                     [:cooked-with/amount-desc :as :amount-desc]
+                     [:cooked-with/id :as :id]])
+              ?recipe-id
+              ?ingredient-id
+              :where
+              [?c :cooked-with/id]
+              [?c :cooked-with/recipe ?r]
+              [?c :cooked-with/ingredient ?i]
+              [?r :recipe/id ?recipe-id]
+              [?i :ingredient/id ?ingredient-id]])
+       (map (fn [[cooked-with recipe-id ingredient-id]]
+              (merge cooked-with {:recipe-id recipe-id
+                                  :ingredient-id ingredient-id})))))
 
 (defn load-ingredients []
   (->> db
@@ -97,6 +136,9 @@
               [?i :ingredient/id ]
               [?c :cooked-with/ingredient ?i]])
        (map (fn [[ingredient]] (update ingredient :category :db/ident)))))
+
+(defn load-entity [lookup-ref]
+  (d/pull (d/db conn) '[*] lookup-ref))
 
 (defn ingredients-for-recipe [id]
   (map
@@ -173,6 +215,13 @@
      (map (fn [[_ ingredients]]
             (let [{:keys [ingredient/id]} (second (first ingredients))]
               [id (ingredient-text ingredients)])))))
+
+(defn transact [tx-data]
+  (d/transact conn {:tx-data tx-data}))
+
+(defn retract [lookup-ref]
+  (transact [[:db/retractEntity lookup-ref]]))
+
 
 (comment
   (defn keywordify [name]
