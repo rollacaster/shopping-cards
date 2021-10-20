@@ -9,7 +9,7 @@
             [hickory.core :as html]
             [hickory.select :as select]
             [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
-            [tech.thomas-sojka.shopping-cards.data :as data]))
+            [tech.thomas-sojka.shopping-cards.db :as db]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def search-engine-cx "005510767845232759155:zdkkvfzersx")
@@ -195,7 +195,7 @@
                                 name)]
            (assoc ingredient
                   :name ingredient-name
-                  :id (some #(when (= (:name %) ingredient-name) (:id %)) (data/load-ingredients)))))
+                  :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-ingredients)))))
        ingredients))
 
 (defmulti recipe-name (fn [link _] (cond

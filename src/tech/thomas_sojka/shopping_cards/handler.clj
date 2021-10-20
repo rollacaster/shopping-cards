@@ -6,10 +6,10 @@
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :refer [resource-response]]
             [tech.thomas-sojka.shopping-cards.core
+             :refer [create-klaka-shopping-card]]
+            [tech.thomas-sojka.shopping-cards.db
              :refer
-             [create-klaka-shopping-card
-              ingredients-for-recipes]]
-            [tech.thomas-sojka.shopping-cards.data :refer [load-recipes ingredients-for-recipe]]))
+             [ingredients-for-recipe load-recipes ingredients-for-recipes]]))
 
 (def app-routes
   (api
@@ -18,11 +18,11 @@
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
      (pr-str (ingredients-for-recipe recipe-id)))
    (GET "/ingredients" [recipe-ids]
-        (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids))))
+     (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids))))
    (POST "/shopping-card" request
-         {:status 201
-          :body (create-klaka-shopping-card (:body-params request))
-          :headers {"Content-type" "application/edn"}})
+     {:status 201
+      :body (create-klaka-shopping-card (:body-params request))
+      :headers {"Content-type" "application/edn"}})
    (route/not-found "<h1>Page not found</h1>")))
 
 (def app

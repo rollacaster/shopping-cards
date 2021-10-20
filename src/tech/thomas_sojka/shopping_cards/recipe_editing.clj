@@ -1,7 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.recipe-editing
   (:require
    [clojure.string :as str]
-   [tech.thomas-sojka.shopping-cards.data :as data]
+   [tech.thomas-sojka.shopping-cards.db :as db]
    [tech.thomas-sojka.shopping-cards.scrape :as scrape]))
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
@@ -45,7 +45,7 @@
   (cons
    [:db/retractEntity recipe-ref]
    (map (fn [{:keys [id]}] [:db/retractEntity [:cooked-with/id id]])
-        (:ingredients (data/load-recipe recipe-ref)))))
+        (:ingredients (db/load-recipe recipe-ref)))))
 
 (comment
   (add-new-recipe
@@ -56,7 +56,7 @@
     :image "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
     :ingredients [{:amount-desc "1 große", :name "Karotte", :amount 1, :id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9"}]})
   (add-ingredient {:category "Obst" :name "Mandarine"})
-  (data/load-entity [:ingredient/name "Eier"])
+  (db/load-entity [:ingredient/name "Eier"])
   (-> {:name "temp" :link "https://www.meinestube.de/zucchini-frischkaese/"}
       scrape/scrape-recipe
       add-new-recipe))

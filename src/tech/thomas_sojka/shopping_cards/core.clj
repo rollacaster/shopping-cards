@@ -1,26 +1,8 @@
 (ns tech.thomas-sojka.shopping-cards.core
   (:require [clj-http.client :as client]
-            [clojure.string :as s]
             [tech.thomas-sojka.shopping-cards.auth :refer [creds-file]]
-            [tech.thomas-sojka.shopping-cards.db :as db]
             [tech.thomas-sojka.shopping-cards.trello :refer [trello-api]]
             [tick.core :refer [now]]))
-
-(defn- ingredient-text [ingredients]
-  (let [no-unit? (->> ingredients
-                      (map :unit)
-                      (every? nil?))
-        no-amount? (->> ingredients
-                        (map :amount-desc)
-                        (every? nil?))
-        name (:name (first ingredients))]
-    (s/trim
-     (cond no-amount? name
-           (= (count ingredients) 1) (str (:amount-desc (first ingredients)) " " name)
-           (and no-unit? no-amount?) (str (float (reduce + (map :amount ingredients))) " " name)
-           :else (str (count ingredients)
-                      " " (:name (first ingredients))
-                      " (" (s/join ", " (map :amount-desc ingredients)) ")")))))
 
 (def penny-order
   ["Obst"
@@ -39,20 +21,6 @@
    "Süßigkeiten"
    "Eier"
    "Getränke"])
-
-(defn ingredients-for-recipes [selected-recipe-ids]
-  (->> (db/load-cooked-with)
-       (filter #(contains? selected-recipe-ids (:recipe-id %)))
-       (map (fn [{:keys [ingredient-id amount-desc amount]}]
-              (merge {:amount-desc amount-desc
-                      :amount amount}
-                     (some #(when (= (:id %) ingredient-id) %) (db/load-ingredients)))))
-       (remove #(= (:category %) "Gewürze"))
-       (remove #(= (:category %) "Backen"))
-       (group-by :id)
-       (sort-by second (fn [[a] [b]] (< (.indexOf penny-order (:category a)) (.indexOf penny-order (:category b)))))
-       (map (fn [[id ingredients]] (vector id (ingredient-text ingredients))))
-       vec))
 
 (def klaka-board-id "48aas65T")
 

@@ -1,10 +1,11 @@
 (ns tech.thomas-sojka.core-test
-  (:require [clojure.test :refer [deftest is testing]]
-            [tech.thomas-sojka.shopping-cards.data :as data]))
+  (:require
+   [clojure.test :refer [deftest is testing]]
+   [tech.thomas-sojka.shopping-cards.db :as db]))
 
 (deftest ingredients-for-recipes
   (testing "works"
-    (is (= (data/ingredients-for-recipes #{"d0bb942b-0165-417d-9153-6c770c036fe8"
+    (is (= (db/ingredients-for-recipes #{"d0bb942b-0165-417d-9153-6c770c036fe8"
                                           "a1dae95b-96cf-4278-8015-9ea0fed30750"})
            [["7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641" "2 Zwiebel (1 Stück, klein, 1 Stück, klein)"]
             ["960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9" "1 Stück, klein Karotte"]
@@ -17,7 +18,7 @@
 
 (deftest ingredients-for-recipe
   (testing "works"
-    (is (= (set (data/ingredients-for-recipe "d33e56e8-64e1-4b32-9eaf-90c9405caf17"))
+    (is (= (set (db/ingredients-for-recipe "d33e56e8-64e1-4b32-9eaf-90c9405caf17"))
            (set
             [["6c0740a2-24a0-4aa7-9548-60c79bac6fec" "Paprika"]
              ["94f58d5a-221b-48d4-9f9e-118d1fdce128" "1 ½ TL Salz"]
