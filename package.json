@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "css": "cp node_modules/react-big-calendar/lib/css/react-big-calendar.css resources/public/css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,8 +16,10 @@
     "ssri": ">=8.0.1"
   },
   "dependencies": {
+    "globalize": "^0.1.1",
     "puppeteer": "^10.4.0",
     "react": "^17.0.2",
+    "react-big-calendar": "^0.38.0",
     "react-dom": "^17.0.2",
     "shadow-cljs": "^2.15.10"
   }

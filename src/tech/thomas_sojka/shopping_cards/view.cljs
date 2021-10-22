@@ -1,5 +1,8 @@
 (ns tech.thomas-sojka.shopping-cards.view
-  (:require [re-frame.core :refer [dispatch subscribe]]))
+  (:require [re-frame.core :refer [dispatch subscribe]]
+            ["react-big-calendar" :as calendar]
+            ["globalize" :as globalize]
+            ["globalize/lib/cultures/globalize.culture.de-DE.js"]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
 
@@ -46,55 +49,59 @@
 
 
 (defn select-recipes []
-  (let [selected-recipes @(subscribe [:selected-recipes])
-        sorted-recipes @(subscribe [:sorted-recipes])]
-    [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
-     (doall
-      (map
-       (fn [[recipe-type recipes]]
-         [:div {:key recipe-type}
-          (case recipe-type
-            "NORMAL" ""
-            "FAST" [:h2.mv3.tc "Schnell Gerichte"]
-            "RARE" [:h2.mv3.tc "Selten"])
-          [:div.flex.flex-wrap
-           (doall
-            (map-indexed
-             (fn [idx {:keys [id name link image]}]
-               [recipe (let [selected? (contains? selected-recipes id)]
-                         {:key id
-                          :even (even? idx)
-                          :name name
-                          :link link
-                          :image image
-                          :selected? selected?
-                          :on-click #(dispatch [:toggle-selected-recipes id])})])
-             recipes))]])
-       (->> sorted-recipes
-            (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))]))
+  (dispatch [:load-recipes])
+  (fn []
+    (let [selected-recipes @(subscribe [:selected-recipes])
+          sorted-recipes @(subscribe [:sorted-recipes])]
+      [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
+       (doall
+        (map
+         (fn [[recipe-type recipes]]
+           [:div {:key recipe-type}
+            (case recipe-type
+              "NORMAL" ""
+              "FAST" [:h2.mv3.tc "Schnell Gerichte"]
+              "RARE" [:h2.mv3.tc "Selten"])
+            [:div.flex.flex-wrap
+             (doall
+              (map-indexed
+               (fn [idx {:keys [id name link image]}]
+                 [recipe (let [selected? (contains? selected-recipes id)]
+                           {:key id
+                            :even (even? idx)
+                            :name name
+                            :link link
+                            :image image
+                            :selected? selected?
+                            :on-click #(dispatch [:toggle-selected-recipes id])})])
+               recipes))]])
+         (->> sorted-recipes
+              (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])))
 
 (defn show-recipes []
-  (let [sorted-recipes @(subscribe [:sorted-recipes])]
-    [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns.bg-gray-200
-     (doall
-      (map
-       (fn [[recipe-type recipes]]
-         [:div {:key recipe-type}
-          (case recipe-type
-            "NORMAL" ""
-            "FAST" [:h2.ph3 "Schnell Gerichte"]
-            "RARE" [:h2.ph3 "Selten"])
-          (doall
-           (->> recipes
-                (remove #(or (= (:link %) "") (= (:link %) nil)))
-                (map (fn [{:keys [id name link image]}]
-                       [recipe {:key id
-                                :name name
-                                :link link
-                                :image image
-                                :on-click #(dispatch [:show-recipe id])}]))))])
-       (->> sorted-recipes
-            (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))]))
+  (dispatch [:load-recipes])
+  (fn []
+    (let [sorted-recipes @(subscribe [:sorted-recipes])]
+      [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns.bg-gray-200
+       (doall
+        (map
+         (fn [[recipe-type recipes]]
+           [:div {:key recipe-type}
+            (case recipe-type
+              "NORMAL" ""
+              "FAST" [:h2.ph3 "Schnell Gerichte"]
+              "RARE" [:h2.ph3 "Selten"])
+            (doall
+             (->> recipes
+                  (remove #(or (= (:link %) "") (= (:link %) nil)))
+                  (map (fn [{:keys [id name link image]}]
+                         [recipe {:key id
+                                  :name name
+                                  :link link
+                                  :image image
+                                  :on-click #(dispatch [:show-recipe id])}]))))])
+         (->> sorted-recipes
+              (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])))
 
 
 (defn show-recipe [{{{:keys [recipe-id]} :path}:parameters}]
@@ -178,7 +185,6 @@
             [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])]]])))
 
 (defn app []
-  (dispatch [:load-recipes])
   (fn []
     (let [route @(subscribe [:route])]
       [:div.sans-serif.h-100
@@ -190,6 +196,23 @@
        [footer]])))
 (defn add-water [ingredients]
   (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
+
+(comment
+  (dispatch [:show-meal-plan])
+  (js/console.clear))
+(defn meal-plan []
+  [:div.ph5-ns.pt2
+   {:style {:height "89%"}}
+   [:> (.-Calendar calendar)
+    {:localizer (.globalizeLocalizer calendar globalize)
+     :events (clj->js [{:title "test"
+                        :start (js/Date.)
+                        :end (js/Date.)}])
+     :selectable true
+     :views #js["month"]
+     :culture "de-DE"
+     :onSelectSlot (fn [params]
+                     (prn (js->clj params)))}]])
 (def routes
   [["/" {:name ::main
          :view select-recipes
@@ -212,4 +235,7 @@
                         :view finish
                         :title "Einkaufszettel erstellt"
                         :parameters {:path {:card-id string?}}
-                        :action #(dispatch [:restart])}]])
+                        :action #(dispatch [:restart])}]
+   ["/meal-plan" {:name ::meal-plan
+                  :view meal-plan
+                  :title "Essensplan"}]])

@@ -140,6 +140,11 @@
    {:push-state [:tech.thomas-sojka.shopping-cards.view/recipes]}))
 
 (reg-event-fx
+ :show-meal-plan
+ (fn [_ _]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
+
+(reg-event-fx
  :show-main
  (fn [_ _]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/main]}))
