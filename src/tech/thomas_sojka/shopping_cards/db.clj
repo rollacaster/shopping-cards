@@ -152,8 +152,6 @@
             [?r :recipe/id ?recipe-id]
             [?c :cooked-with/recipe ?r]
             [?c :cooked-with/ingredient ?i]
-            [?c :cooked-with/amount-desc ?amount-desc]
-            [?c :cooked-with/amount ?amount]
             [?i :ingredient/name ?name]
             [?i :ingredient/category ?ca]
             [?ca :db/ident ?category]

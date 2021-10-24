@@ -6,7 +6,7 @@
 (deftest ingredients-for-recipes
   (testing "works"
     (is (= (db/ingredients-for-recipes #{"d0bb942b-0165-417d-9153-6c770c036fe8"
-                                          "a1dae95b-96cf-4278-8015-9ea0fed30750"})
+                                         "a1dae95b-96cf-4278-8015-9ea0fed30750"})
            [["7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641" "2 Zwiebel (1 Stück, klein, 1 Stück, klein)"]
             ["960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9" "1 Stück, klein Karotte"]
             ["3599b722-c387-433f-a20a-5ef1bcc0fd34" "2 Brokkoli (200 g, 250 g)"]
@@ -14,7 +14,16 @@
             ["6c0740a2-24a0-4aa7-9548-60c79bac6fec" "1 Stück, rot Paprika"]
             ["4373e821-8697-48ee-becf-9776f7a4e794" "1 Zehe(n) Knoblauch"]
             ["c649995f-c56f-40d9-bb65-b6e57d9c1d73" "2 EL Linsen"]
-            ["14a0c9c7-3630-4ea3-957f-3807cd624636" "50 g Nudeln"]]))))
+            ["14a0c9c7-3630-4ea3-957f-3807cd624636" "50 g Nudeln"]])))
+
+  (testing "Bug Case: Tortellini + Kaesebretzel"
+    (is (= (db/ingredients-for-recipes
+            #{"72dd98af-4248-4497-8279-9268f493ada7"
+              "397a5deb-7591-4851-9e95-74ebcc2def04"})
+           [["d33ad997-4d02-4437-8d35-db8e22fdb4b0" "5 Aufback-Brezeln"]
+            ["fdde7243-3e9e-4044-98bb-b7ba8a6414b1" "Pesto"]
+            ["b6d355fd-af3e-4b23-8949-f11cb93f0570" "Tortellini"]
+            ["5b34388f-4b84-4242-8acc-0514a75e57b5" "Käseaufschnitt"]]))))
 
 (deftest ingredients-for-recipe
   (testing "works"
