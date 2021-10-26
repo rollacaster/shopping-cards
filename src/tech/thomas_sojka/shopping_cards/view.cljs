@@ -2,7 +2,9 @@
   (:require [re-frame.core :refer [dispatch subscribe]]
             ["react-big-calendar" :as calendar]
             ["globalize" :as globalize]
-            ["globalize/lib/cultures/globalize.culture.de-DE.js"]))
+            ["globalize/lib/cultures/globalize.culture.de-DE.js"]
+            [reagent.core :as r]
+            [tech.thomas-sojka.shopping-cards.util :refer [days-in-current-month]]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
 
@@ -172,7 +174,7 @@
   (let [selected-recipes @(subscribe [:selected-recipes])
         route @(subscribe [:route])
         loading @(subscribe [:loading])]
-    (when (and (> (count selected-recipes) 0))
+    (when (> (count selected-recipes) 0)
       [:footer.fixed.bottom-0.w-100.bg-orange-400.flex.justify-center.pa3.z-2
        [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
         {:on-click (:action (:data route))}
@@ -187,10 +189,10 @@
 (defn app []
   (fn []
     (let [route @(subscribe [:route])]
-      [:div.sans-serif.h-100
+      [:div.sans-serif.flex.flex-column.h-100
        [header]
        (when (:view (:data route))
-         [:main.h-100
+         [:main.flex-auto
           [:div.mw9.center.bg-gray-200.h-100
            [(:view (:data route)) route]]])
        [footer]])))
@@ -200,19 +202,37 @@
 (comment
   (dispatch [:show-meal-plan])
   (js/console.clear))
+
+(defn meal [{:keys [title]}]
+  [:div {:style {:min-height "2rem"}} title])
+
 (defn meal-plan []
-  [:div.ph5-ns.pt2
-   {:style {:height "89%"}}
+  [:div.ph5-ns.pt2.h-100
    [:> (.-Calendar calendar)
     {:localizer (.globalizeLocalizer calendar globalize)
-     :events (clj->js [{:title "test"
-                        :start (js/Date.)
-                        :end (js/Date.)}])
+     :events (clj->js
+              (mapcat
+               (fn [day]
+                 [{:title "Mittagessen"
+                   :start (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))
+                   :end (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))
+                   :resource (str (.getFullYear (js/Date.)) " " (.getMonth (js/Date.)) " " (inc day))}
+                  {:title "Abendessen"
+                   :start (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))
+                   :end (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))
+                   :resource "234-234-234"}])
+               (range (days-in-current-month))))
+     :eventPropGetter (fn [props]
+                        (clj->js {:className
+                                  (r/class-names
+                                   "bg-transparent bw1 b--gray b--dashed gray f6"
+                                   (when (< (.-end props) (.setDate (js/Date.) (- (.getDate (js/Date.)) 1)))
+                                     "o-20"))}))
+     :components #js {:event (r/reactify-component meal)}
      :selectable true
      :views #js["month"]
-     :culture "de-DE"
-     :onSelectSlot (fn [params]
-                     (prn (js->clj params)))}]])
+     :culture "de-DE"}]])
+
 (def routes
   [["/" {:name ::main
          :view select-recipes
