@@ -10,7 +10,7 @@
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
         "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"
-        "gutes Olivenöl*" "Olivenöl oder Butterschmalz zum braten" "Sesamöl"}
+        "gutes Olivenöl*" "Olivenöl oder Butterschmalz zum braten" "Sesamöl" "Rapsöl"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln" "Vollkorn-Penne"
             "Muschelnudeln" "Nudeln, trocken, jede Sorte" }
@@ -19,13 +19,14 @@
  "Basilikum" #{"Basilikum" "Basilikum, frisch" "ein Basikilumtopf"}
  "Passierte Tomaten"#{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"
                       "Tomaten, passiert" "gehackte Tomaten" "Pizzatomaten ( je 400 g)" "passierte Tomaten"
-                      "Tomate(n), feste"}
+                      "Tomate(n), feste" "Fleischtomaten"}
  "Geriebener Käse"#{"Geriebener Käse" "Emmentaler, geriebener" "Emmentaler"
                     "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                     "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
                     "Emmentaler, gerieben" "Käse, gerieben, 30 % Fett i. Tr." "Gouda, gerieben"}
  "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen" "egg(s)" ""}
- "Reis"#{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis" "Basmatireis"}
+ "Reis"#{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis" "Basmatireis"
+         "Basmati Reis"}
  "Schinken"#{"Kochschinken"}
  "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'" "Kartoffel(n), festkochend" "Kartoffeln, festkochend"
                 "potato(es)"}
@@ -36,14 +37,15 @@
                "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe" "Knoblauchzehe(n), klein gehackt"}
  "Limettensaft" #{"Limettensaft" "Saft von halben Limette" "Limette(n), Schale und Saft" "Limette(n)"}
  "Spinat" #{"Blattspinat, TK oder frisch" "frischer Babyspinat"
-            "Spinat, TK oder frisch dann blanchiert" "Blattspinat, frisch"}
+            "Spinat, TK oder frisch dann blanchiert" "Blattspinat, frisch" "Blattspinat, tiefgefroren"}
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
              "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt" "Zwiebel/n"
-             "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)" "Speisezwiebel"}
+             "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)" "Speisezwiebel"
+             "Speisezwiebeln"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche" "Weizenmehl, bei Bedarf auch mehr"
           "Weizenmehl Typ 405"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
- "Crème fraîche" #{"Creme fraiche" "Crème fraîche"}
+ "Crème fraîche" #{"Creme fraiche" "Crème fraîche" "vegane Crème fraîche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
  "Champignons" #{"Champignons, frisch, nicht zu groß" "Champignons, frische"
@@ -83,7 +85,7 @@
  "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten" "Frühlingszwiebel(n)" "Lauch (dünne Stange)"
                       "onion(s), yellow"}
  "Avocado" #{"reife Avocado"}
- "Kümmel" #{"Kreuzkümmelpulver" "Kreuzkümmel, gemahlen"}
+ "Kümmel" #{"Kreuzkümmelpulver" "Kreuzkümmel, gemahlen" "Kreuzkümmel (Cumin), gemahlen"}
  "Bohnen" #{"Kidneybohnen (440 g)" "Kidney-Bohnen" "schwarze Bohnen"}
  "Weiße Bohnen" #{"weiße Bohnen, Dose od. Glas"}
  "Nachos" #{"Nacho(s)"}
@@ -107,4 +109,7 @@
  "Umami Soße" #{}
  "Toast" #{"große Toast"}
  "Pesto (rot)" #{"Pesto, rotes"}
- "Minze" #{"Minze, frisch"}}
+ "Minze" #{"Minze, frisch"}
+ "Tofu" #{"Tofu, natur"}
+ "Garam Masala" #{}
+ "Thymian" #{"Thymian, frisch"}}

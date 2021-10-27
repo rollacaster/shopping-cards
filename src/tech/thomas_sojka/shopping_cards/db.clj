@@ -91,8 +91,7 @@
                         [:ingredient/name :as :name]
                         {[:ingredient/category :as :category] [[:db/ident]]}])
               :where
-              [?i :ingredient/id ]
-              [?c :cooked-with/ingredient ?i]])
+              [?i :ingredient/id ]])
        (map (fn [[ingredient]] (update ingredient :category :db/ident)))))
 
 (defn load-entity [lookup-ref]
