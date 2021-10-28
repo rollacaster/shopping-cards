@@ -194,8 +194,27 @@
    {:push-state [:tech.thomas-sojka.shopping-cards.view/error]
     :db (assoc db :loading false)}))
 
+(reg-event-db
+ :add-meal-plan
+ (fn [db [_ meal-plan]]
+   (update db :meal-plans conj meal-plan)))
+
+(reg-event-db
+ :remove-meal-plan
+ (fn [db [_ {:keys [date type]}]]
+   (update db :meal-plans #(remove (fn [m] (and (= date (:date m))
+                                               (= type (:type m))))
+                                   %))))
+
 (comment
-  @re-frame.db/app-db
+  (dispatch [:add-meal-plan
+             {:date (js/Date.)
+              :type :LUNCH
+              :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}])
+  (dispatch [:remove-meal-plan
+             {:date #inst "2021-10-28T06:11:18.005-00:00"
+              :type :LUNCH}])
+  (:meal-plans @re-frame.db/app-db)
   (dispatch [:initialise-db])
   (dispatch [:load-recipes])
   (:recipes @re-frame.db/app-db)

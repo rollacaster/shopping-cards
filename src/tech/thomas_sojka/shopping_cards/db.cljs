@@ -1,7 +1,10 @@
 (ns tech.thomas-sojka.shopping-cards.db
-  (:require [clojure.spec.alpha :as s]))
+  (:require
+   [cljs.spec.gen.alpha :as gen]
+   [clojure.spec.alpha :as s]))
 
 (s/def ::route map?)
+(s/def :recipe/id string?)
 (s/def :recipe/name string?)
 (s/def :recipe/type #{"NORMAL" "FAST" "RARE"})
 (s/def :recipe/image string?)
@@ -22,7 +25,7 @@
 (s/def ::selected-ingredients (s/coll-of :ingredient/id :kind set?))
 (s/def ::recipe-details (s/coll-of ::read-ingredient))
 
-(s/def :cooked-with/recipe-id string?)
+(s/def :cooked-with/recipe-id :recipe/id)
 (s/def :cooked-with/ingredient-id string?)
 (s/def :cooked-with/unit string?)
 (s/def :cooked-with/amount-desc string?)
@@ -33,7 +36,15 @@
 
 (s/def ::loading boolean?)
 
-(s/def ::db (s/keys :req-un [::loading ::route ::recipes ::selected-recipes ::ingredients ::selected-ingredients ::recipe-details]))
+(s/def :meal-plan/date inst?)
+(s/def :meal-plan/type #{:LUNCH :DINNER})
+(s/def :meal-plan/recipe-id :recipe/id)
+(s/def :meal-plan/meal-plan
+  (s/keys :req-un [:meal-plan/date :meal-plan/type :meal-plan/recipe-id]))
+(s/def ::meal-plans (s/coll-of :meal-plan/meal-plan))
+
+(s/def ::db (s/keys :req-un [::loading ::route ::recipes ::selected-recipes ::ingredients ::selected-ingredients ::recipe-details
+                             ::meal-plans]))
 
 
 (def default-db
@@ -43,4 +54,5 @@
    :selected-recipes #{}
    :selected-ingredients #{}
    :ingredients []
+   :meal-plans []
    :recipe-details []})
