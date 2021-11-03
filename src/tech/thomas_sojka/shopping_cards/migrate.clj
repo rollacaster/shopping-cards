@@ -23,19 +23,31 @@
               (filter #(= (:id %) id))
               (map :name))))
 
+(defn migrate-schema [conn]
+  (let [datomic-schema (hodur-datomic/schema meta-db)]
+    (d/transact conn {:tx-data datomic-schema})
+    (d/transact conn {:tx-data [{:db/ident :cooked-with/recipe+ingredient
+                                 :db/valueType :db.type/tuple
+                                 :db/tupleAttrs [:cooked-with/ingredient :cooked-with/recipe]
+                                 :db/cardinality :db.cardinality/one
+                                 :db/unique :db.unique/identity}]})
+    (d/transact conn {:tx-data [{:db/ident :meal-plan/inst+type
+                                 :db/valueType :db.type/tuple
+                                 :db/tupleAttrs [:meal-plan/inst :meal-plan/type]
+                                 :db/cardinality :db.cardinality/one
+                                 :db/unique :db.unique/identity}]})))
+(comment
+  (migrate-schema (d/connect (d/client {:server-type :dev-local
+                          :system "dev"}) {:db-name "shopping-cards"})))
+
 (defn migrate-to-datomic []
   (let [client (d/client {:server-type :dev-local
                           :system "dev"})]
     (d/delete-database client {:db-name "shopping-cards"})
     (d/create-database client {:db-name "shopping-cards"})
-    (let [conn (d/connect client {:db-name "shopping-cards"})
-          datomic-schema (hodur-datomic/schema meta-db)]
-      (d/transact conn {:tx-data datomic-schema})
-      (d/transact conn {:tx-data [{:db/ident :cooked-with/recipe+ingredient
-                                   :db/valueType :db.type/tuple
-                                   :db/tupleAttrs [:cooked-with/ingredient :cooked-with/recipe]
-                                   :db/cardinality :db.cardinality/one
-                                   :db/unique :db.unique/identity}]})
+    (let [conn (d/connect client {:db-name "shopping-cards"})]
+      (migrate-schema conn)
+
 
       (d/transact conn {:tx-data
                         (map (fn [{:keys [id name type link image]}]

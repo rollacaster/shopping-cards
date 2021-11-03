@@ -9,7 +9,7 @@
              :refer [create-klaka-shopping-card]]
             [tech.thomas-sojka.shopping-cards.db
              :refer
-             [ingredients-for-recipe load-recipes ingredients-for-recipes]]))
+             [ingredients-for-recipe load-recipes ingredients-for-recipes load-meal-plans]]))
 
 (def app-routes
   (api
@@ -23,6 +23,10 @@
          {:status 201
           :body (create-klaka-shopping-card (:body-params request))
           :headers {"Content-type" "application/edn"}})
+   (GET "/meal-plans/:month" [month]
+        {:status 200
+         :body (load-meal-plans month)
+         :headers {"Content-type" "application/edn"}})
    (route/not-found "<h1>Page not found</h1>")))
 
 (def app

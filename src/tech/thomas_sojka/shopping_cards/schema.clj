@@ -38,4 +38,13 @@
       ^Ingredient ingredient
       ^String unit
       ^String amount-desc
+      ^Recipe recipe]
+
+     ^{:enum true :graphviz/tag-recursive true}
+     MealType
+     [DINNER LUNCH]
+
+     MealPlan
+     [^DateTime inst
+      ^MealType type
       ^Recipe recipe]]))
