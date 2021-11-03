@@ -181,21 +181,27 @@
   (.format (java.text.SimpleDateFormat. "MM") date))
 
 (defn load-meal-plans [month]
-  (d/q '[:find (pull ?m [[:meal-plan/inst :as :date]
-                         {[:meal-plan/type :as :type]
-                          [[:db/ident :as :ref]]}
-                         {[:meal-plan/recipe :as :recipe]
-                          [[:recipe/name :as :name]]}])
-         :in $ ?month
-         :where
-         [?m :meal-plan/inst ?d]
-         [(tech.thomas-sojka.shopping-cards.db/month ?d) ?month]]
-       (d/db conn)
-       (str month)))
+  (->> (d/q '[:find (pull ?m [[:meal-plan/inst :as :date]
+                              {[:meal-plan/type :as :type]
+                               [[:db/ident :as :ref]]}
+                              {[:meal-plan/recipe :as :recipe]
+                               [[:recipe/name :as :name]
+                                {:recipe/type [[:db/ident]]}
+                                [:recipe/image :as :image]]}])
+              :in $ ?month
+              :where
+              [?m :meal-plan/inst ?d]
+              [(tech.thomas-sojka.shopping-cards.db/month ?d) ?month]]
+            (d/db conn)
+            (str month))
+       (map (fn [meal-plan]
+              (-> (first meal-plan)
+                  (update :recipe transform-recipe-type)
+                  (update :type :ref))))))
 
 (comment
-  (load-meal-plans 12)
-  (transact [#:meal-plan{:inst (java.util.Date. 121 10 03)
+  (load-meal-plans 10)
+  (transact [#:meal-plan{:inst (java.util.Date. 121 9 5)
                          :type :meal-type/dinner
                          :recipe [:recipe/name "Teigtaschen mit Spinat-Feta-Füllung"]}])
   (defn find-recipes-by-ingredient [ingredient]

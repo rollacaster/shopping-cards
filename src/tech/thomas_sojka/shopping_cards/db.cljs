@@ -37,10 +37,10 @@
 (s/def ::loading boolean?)
 
 (s/def :meal-plan/date inst?)
-(s/def :meal-plan/type #{:LUNCH :DINNER})
-(s/def :meal-plan/recipe-id :recipe/id)
+(s/def :meal-plan/type #{:meal-type/dinner :meal-type/lunch})
+(s/def :meal-plan/recipe :recipe/recipe)
 (s/def :meal-plan/meal-plan
-  (s/keys :req-un [:meal-plan/date :meal-plan/type :meal-plan/recipe-id]))
+  (s/keys :req-un [:meal-plan/date :meal-plan/type :meal-plan/recipe]))
 (s/def ::meal-plans (s/coll-of :meal-plan/meal-plan))
 
 (s/def ::db (s/keys :req-un [::loading ::route ::recipes ::selected-recipes ::ingredients ::selected-ingredients ::recipe-details

@@ -75,6 +75,43 @@
        (assoc :loading false)
        (assoc :recipes :ERROR))))
 
+(reg-event-fx
+ :load-meal-plans
+ (fn [{:keys [db]} [_ month]]
+   {:db (assoc db :loading true)
+    :http-xhrio {:method :get
+                 :uri (str "/meal-plans/" month)
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [:success-meal-plans]
+                 :on-failure [:failure-meal-plans]}}))
+
+(reg-event-db
+ :success-meal-plans
+ (fn [db [_ data]]
+   (def meal-plans
+    (:meal-plans
+     (-> db
+       (assoc :loading false)
+       (assoc :meal-plans (map (fn [meal-plan]
+                                 (-> meal-plan
+                                     (update :type keyword)
+                                     (update :date #(js/Date. %))))
+                               data)))))
+   (-> db
+       (assoc :loading false)
+       (assoc :meal-plans (map (fn [meal-plan]
+                                 (-> meal-plan
+                                     (update :type keyword)
+                                     (update :date #(js/Date. %))))
+                               data)))))
+
+(reg-event-db
+ :failure-meal-plans
+ (fn [db _]
+   (-> db
+       (assoc :loading false)
+       (assoc :meal-plans :ERROR))))
+
 (reg-event-db
  :toggle-selected-recipes
  (fn [db [_ id]]
@@ -217,6 +254,7 @@
   (:meal-plans @re-frame.db/app-db)
   (dispatch [:initialise-db])
   (dispatch [:load-recipes])
+  (dispatch [:load-meal-plans 11])
   (:recipes @re-frame.db/app-db)
   (dispatch [:toggle-selected-recipes "d47bc268-5e9d-45da-af96-143b12d334c5"])
   (:selected-recipes @re-frame.db/app-db)
@@ -232,4 +270,5 @@
   (dispatch [:show-main])
   (dispatch [:restart])
   )
+
 

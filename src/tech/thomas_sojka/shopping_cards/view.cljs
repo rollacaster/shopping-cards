@@ -3,8 +3,7 @@
             ["react-big-calendar" :as calendar]
             ["globalize" :as globalize]
             ["globalize/lib/cultures/globalize.culture.de-DE.js"]
-            [reagent.core :as r]
-            [tech.thomas-sojka.shopping-cards.util :refer [days-in-current-month]]))
+            [reagent.core :as r]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
 
@@ -207,31 +206,26 @@
   [:div {:style {:min-height "2rem"}} title])
 
 (defn meal-plan []
-  [:div.ph5-ns.pt2.h-100
-   [:> (.-Calendar calendar)
-    {:localizer (.globalizeLocalizer calendar globalize)
-     :events (clj->js
-              (mapcat
-               (fn [day]
-                 [{:title "Mittagessen"
-                   :start (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))
-                   :end (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))
-                   :resource (str (.getFullYear (js/Date.)) " " (.getMonth (js/Date.)) " " (inc day))}
-                  {:title "Abendessen"
-                   :start (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))
-                   :end (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))
-                   :resource "234-234-234"}])
-               (range (days-in-current-month))))
-     :eventPropGetter (fn [props]
-                        (clj->js {:className
-                                  (r/class-names
-                                   "bg-transparent bw1 b--gray b--dashed gray f6"
-                                   (when (< (.-end props) (.setDate (js/Date.) (- (.getDate (js/Date.)) 1)))
-                                     "o-20"))}))
-     :components #js {:event (r/reactify-component meal)}
-     :selectable true
-     :views #js["month"]
-     :culture "de-DE"}]])
+  (dispatch [:load-meal-plans (inc (.getMonth (js/Date.)))])
+  (fn []
+    (let [meal-plan-events @(subscribe [:meal-plan-events])]
+      [:div.ph5-ns.pt2.h-100
+       [:> (.-Calendar calendar)
+        {:localizer (.globalizeLocalizer calendar globalize)
+         :events (clj->js meal-plan-events)
+         :eventPropGetter (fn [props]
+                            (clj->js {:className
+                                      (r/class-names
+                                       "f6 ba bw1"
+                                       (if (.-resource.type ^js props)
+                                         "bg-orange-400 white b--gray"
+                                         "bg-transparent gray b--gray b--dashed")
+                                       (when (< (.-end props) (.setDate (js/Date.) (- (.getDate (js/Date.)) 1)))
+                                         "o-20"))}))
+         :components #js {:event (r/reactify-component meal)}
+         :selectable true
+         :views #js["month"]
+         :culture "de-DE"}]])))
 
 (def routes
   [["/" {:name ::main

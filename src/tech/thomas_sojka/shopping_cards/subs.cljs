@@ -1,5 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.subs
-  (:require [re-frame.core :refer [reg-sub subscribe]]))
+  (:require [re-frame.core :refer [reg-sub subscribe]]
+            [tech.thomas-sojka.shopping-cards.util :refer [days-in-current-month]]))
 
 (reg-sub
  :selected-recipes
@@ -79,21 +80,48 @@
  (fn [db _]
    (:meal-plans db)))
 
+(defn meal-plan->event [meal-plan]
+  {:title (-> meal-plan :recipe :name)
+   :start (:date meal-plan)
+   :end (:date meal-plan)
+   :resource (:recipe meal-plan)})
+
+(defn group-meal-plans [meal-plans]
+  (->> meal-plans
+       (group-by :date)
+       (map #(hash-map (first %) (->> (second %)
+                                      (group-by :type)
+                                      (map (fn [[type [recipe]]] (hash-map type recipe)))
+                                      (apply merge))))
+       (apply merge)))
+
 (reg-sub
- :meal-plans-with-recipes
+ :meal-plan-events
  :<- [:meal-plans]
- :<- [:recipes]
- (fn [[meal-plans recipes]]
-   (map
-    (fn [meal-plan]
-      (assoc
-       meal-plan
-       :recipe
-       (some #(when (= (:id %) (:recipe-id meal-plan)) %) recipes)))
-    meal-plans)))
+ (fn [meal-plans]
+   (mapcat
+    (fn [day]
+      (let [date (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))]
+        [(meal-plan->event
+          (get-in (group-meal-plans meal-plans)
+                  [date :meal-type/lunch]
+                  {:recipe {:name "Mittagessen"}
+                   :date date}))
+         (meal-plan->event
+          (get-in (group-meal-plans meal-plans)
+                  [date :meal-type/dinner]
+                  {:recipe {:name "Abendessen"}
+                   :date date }))]))
+    (range (days-in-current-month)))))
 
 (comment
-  @(subscribe [:meal-plans])
+  @(subscribe [:meal-plan-events])
+  (get-in
+   (->> @(subscribe [:meal-plans])
+        (group-by :date)
+        (map #(hash-map (first %) (group-by :type (second %))))
+        first)
+   [#inst "2021-11-02T23:00:00.000-00:00" :meal-type/dinner])
   @(subscribe [:recipes])
   @(subscribe [:meal-plans-with-recipes])
 
