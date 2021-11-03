@@ -76,14 +76,16 @@
        (assoc :recipes :ERROR))))
 
 (reg-event-fx
- :load-meal-plans
+ :init-meal-plans
  (fn [{:keys [db]} [_ month]]
-   {:db (assoc db :loading true)
-    :http-xhrio {:method :get
-                 :uri (str "/meal-plans/" month)
-                 :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success [:success-meal-plans]
-                 :on-failure [:failure-meal-plans]}}))
+   (if (empty? (:meal-plans db))
+     {:db (assoc db :loading true)
+      :http-xhrio {:method :get
+                   :uri (str "/meal-plans/" month)
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success [:success-meal-plans]
+                   :on-failure [:failure-meal-plans]}}
+     {:db db})))
 
 (reg-event-db
  :success-meal-plans
@@ -119,6 +121,16 @@
     db
     :selected-recipes
     (partial toggle-map id))))
+
+(reg-event-fx
+ :select-recipe
+ (fn [{:keys [db]} [_ type recipe]]
+   {:db (-> db
+            (update :meal-plans conj {:date (:select-recipe db)
+                                      :type type
+                                      :recipe recipe})
+            (assoc :select-recipe nil))
+    :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
 
 (reg-event-fx
  :load-ingredients-for-selected-recipes
@@ -187,6 +199,18 @@
    {:push-state [:tech.thomas-sojka.shopping-cards.view/main]}))
 
 (reg-event-fx
+ :select-lunch
+ (fn [{:keys [db]} [_ date]]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/select-lunch]
+    :db (assoc db :select-recipe date)}))
+
+(reg-event-fx
+ :select-dinner
+ (fn [{:keys [db]} [_ date]]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/select-dinner]
+    :db (assoc db :select-recipe date)}))
+
+(reg-event-fx
  :show-recipe
  (fn [_ [_ id]]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/recipe {:recipe-id id}]}))
@@ -251,10 +275,9 @@
   (dispatch [:remove-meal-plan
              {:date #inst "2021-10-28T06:11:18.005-00:00"
               :type :LUNCH}])
-  (:meal-plans @re-frame.db/app-db)
+  (:select-recipe @re-frame.db/app-db)
   (dispatch [:initialise-db])
   (dispatch [:load-recipes])
-  (dispatch [:load-meal-plans 11])
   (:recipes @re-frame.db/app-db)
   (dispatch [:toggle-selected-recipes "d47bc268-5e9d-45da-af96-143b12d334c5"])
   (:selected-recipes @re-frame.db/app-db)

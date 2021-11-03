@@ -79,6 +79,47 @@
          (->> sorted-recipes
               (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])))
 
+(defn select-recipe [{:keys [type recipes get-title]}]
+  [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
+   (map
+    (fn [[recipe-type recipes]]
+      [:div {:key recipe-type}
+       (get-title recipe-type)
+       [:div.flex.flex-wrap
+        (map-indexed
+         (fn [idx {:keys [id name link image] :as r}]
+           [recipe {:key id
+                    :even (even? idx)
+                    :name name
+                    :link link
+                    :image image
+                    :on-click #(dispatch [:select-recipe type r])}])
+         recipes)]])
+    (->> recipes
+         (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))))])
+
+
+
+(defn select-lunch []
+  (let [recipes @(subscribe [:lunch-recipes])]
+    [select-recipe {:type :meal-type/lunch
+                    :recipes recipes
+                    :get-title (fn [recipe-type]
+                                 (case recipe-type
+                                   "NORMAL" [:h2.mv3.tc "Normale Gerichte"]
+                                   "FAST" ""
+                                   "RARE" [:h2.mv3.tc "Selten"]))}]))
+
+(defn select-dinner []
+  (let [recipes @(subscribe [:sorted-recipes])]
+    [select-recipe {:type :meal-type/dinner
+                    :recipes recipes
+                    :get-title (fn [recipe-type]
+                                 (case recipe-type
+                                   "NORMAL" ""
+                                   "FAST" [:h2.mv3.tc "Schnell Gerichte"]
+                                   "RARE" [:h2.mv3.tc "Selten"]))}]))
+
 (defn show-recipes []
   (dispatch [:load-recipes])
   (fn []
@@ -206,13 +247,21 @@
   [:div {:style {:min-height "2rem"}} title])
 
 (defn meal-plan []
-  (dispatch [:load-meal-plans (inc (.getMonth (js/Date.)))])
+  (dispatch [:load-recipes])
+  (dispatch [:init-meal-plans (inc (.getMonth (js/Date.)))])
   (fn []
     (let [meal-plan-events @(subscribe [:meal-plan-events])]
       [:div.ph5-ns.pt2.h-100
        [:> (.-Calendar calendar)
         {:localizer (.globalizeLocalizer calendar globalize)
          :events (clj->js meal-plan-events)
+         :onSelectEvent (fn [event]
+                          (dispatch
+                           (if (.-resource.id ^js event)
+                             [:show-recipe (.-resource.id ^js event)]
+                             (if (= (.-title ^js event) "Mittagessen")
+                               [:select-lunch (.-start ^js event)]
+                               [:select-dinner (.-start ^js event)]))))
          :eventPropGetter (fn [props]
                             (clj->js {:className
                                       (r/class-names
@@ -252,4 +301,12 @@
                         :action #(dispatch [:restart])}]
    ["/meal-plan" {:name ::meal-plan
                   :view meal-plan
-                  :title "Essensplan"}]])
+                  :title "Essensplan"}]
+   ["/select-lunch"
+    {:name ::select-lunch
+     :view select-lunch
+     :title "Mittag auswählen"}]
+   ["/select-dinner"
+    {:name ::select-dinner
+     :view select-dinner
+     :title "Abendessen auswählen"}]])

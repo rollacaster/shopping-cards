@@ -1,7 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.db
-  (:require
-   [cljs.spec.gen.alpha :as gen]
-   [clojure.spec.alpha :as s]))
+  (:require [clojure.spec.alpha :as s]))
 
 (s/def ::route map?)
 (s/def :recipe/id string?)
@@ -15,7 +13,7 @@
 (s/def ::recipes (s/coll-of :recipe/recipe))
 (s/def ::selected-recipes (s/coll-of :recipe/name :kind set?))
 
-
+(s/def ::select-recipe (s/nilable inst?))
 (s/def :ingredient/id string?)
 (s/def :ingredient/category string?)
 (s/def :ingredient/name string?)
@@ -43,7 +41,14 @@
   (s/keys :req-un [:meal-plan/date :meal-plan/type :meal-plan/recipe]))
 (s/def ::meal-plans (s/coll-of :meal-plan/meal-plan))
 
-(s/def ::db (s/keys :req-un [::loading ::route ::recipes ::selected-recipes ::ingredients ::selected-ingredients ::recipe-details
+(s/def ::db (s/keys :req-un [::loading
+                             ::route
+                             ::recipes
+                             ::selected-recipes
+                             ::select-recipe
+                             ::ingredients
+                             ::selected-ingredients
+                             ::recipe-details
                              ::meal-plans]))
 
 
@@ -55,4 +60,5 @@
    :selected-ingredients #{}
    :ingredients []
    :meal-plans []
-   :recipe-details []})
+   :recipe-details []
+   :select-recipe nil})

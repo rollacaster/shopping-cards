@@ -185,7 +185,8 @@
                               {[:meal-plan/type :as :type]
                                [[:db/ident :as :ref]]}
                               {[:meal-plan/recipe :as :recipe]
-                               [[:recipe/name :as :name]
+                               [[:recipe/id :as :id]
+                                [:recipe/name :as :name]
                                 {:recipe/type [[:db/ident]]}
                                 [:recipe/image :as :image]]}])
               :in $ ?month
