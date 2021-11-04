@@ -13,7 +13,7 @@
 (s/def ::recipes (s/coll-of :recipe/recipe))
 (s/def ::selected-recipes (s/coll-of :recipe/name :kind set?))
 
-(s/def ::select-recipe (s/nilable inst?))
+
 (s/def :ingredient/id string?)
 (s/def :ingredient/category string?)
 (s/def :ingredient/name string?)
@@ -37,15 +37,17 @@
 (s/def :meal-plan/date inst?)
 (s/def :meal-plan/type #{:meal-type/dinner :meal-type/lunch})
 (s/def :meal-plan/recipe :recipe/recipe)
-(s/def :meal-plan/meal-plan
-  (s/keys :req-un [:meal-plan/date :meal-plan/type :meal-plan/recipe]))
-(s/def ::meal-plans (s/coll-of :meal-plan/meal-plan))
+(s/def :meal-plan/meal
+  (s/keys :req-un [:meal-plan/date :meal-plan/type]
+          :opt-un [:meal-plan/recipe]))
+(s/def ::selected-meal (s/nilable :meal-plan/meal))
+(s/def ::meal-plans (s/coll-of :meal-plan/meal))
 
 (s/def ::db (s/keys :req-un [::loading
                              ::route
                              ::recipes
                              ::selected-recipes
-                             ::select-recipe
+                             ::selected-meal
                              ::ingredients
                              ::selected-ingredients
                              ::recipe-details
@@ -61,4 +63,4 @@
    :ingredients []
    :meal-plans []
    :recipe-details []
-   :select-recipe nil})
+   :selected-meal nil})

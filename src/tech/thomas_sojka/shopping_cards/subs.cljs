@@ -84,7 +84,8 @@
   {:title (-> meal-plan :recipe :name)
    :start (:date meal-plan)
    :end (:date meal-plan)
-   :resource (:recipe meal-plan)})
+   :resource {:recipe (:recipe meal-plan)
+              :type (:type meal-plan)}})
 
 (defn group-meal-plans [meal-plans]
   (->> meal-plans
@@ -105,13 +106,13 @@
         [(meal-plan->event
           (get-in (group-meal-plans meal-plans)
                   [date :meal-type/lunch]
-                  {:recipe {:name "Mittagessen"}
-                   :date date}))
+                  {:date date
+                   :type :meal-type/lunch}))
          (meal-plan->event
           (get-in (group-meal-plans meal-plans)
                   [date :meal-type/dinner]
-                  {:recipe {:name "Abendessen"}
-                   :date date }))]))
+                  {:date date
+                   :type :meal-type/dinner}))]))
     (range (days-in-current-month)))))
 
 (comment

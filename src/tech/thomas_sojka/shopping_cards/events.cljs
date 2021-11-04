@@ -123,13 +123,11 @@
     (partial toggle-map id))))
 
 (reg-event-fx
- :select-recipe
- (fn [{:keys [db]} [_ type recipe]]
+ :add-meal
+ (fn [{:keys [db]} [_ recipe]]
    {:db (-> db
-            (update :meal-plans conj {:date (:select-recipe db)
-                                      :type type
-                                      :recipe recipe})
-            (assoc :select-recipe nil))
+            (update :meal-plans conj (assoc (:selected-meal db) :recipe recipe))
+            (assoc :selected-meal nil))
     :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
 
 (reg-event-fx
@@ -199,21 +197,30 @@
    {:push-state [:tech.thomas-sojka.shopping-cards.view/main]}))
 
 (reg-event-fx
- :select-lunch
- (fn [{:keys [db]} [_ date]]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/select-lunch]
-    :db (assoc db :select-recipe date)}))
+ :select-meal
+ (fn [{:keys [db]} [_ meal]]
+   {:push-state
+    (if (= (:type meal) :meal-type/lunch)
+      [:tech.thomas-sojka.shopping-cards.view/select-lunch]
+      [:tech.thomas-sojka.shopping-cards.view/select-dinner])
+    :db (assoc db :selected-meal meal)}))
 
 (reg-event-fx
  :select-dinner
- (fn [{:keys [db]} [_ date]]
+ (fn [{:keys [db]} [_ meal]]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/select-dinner]
-    :db (assoc db :select-recipe date)}))
+    :db (assoc db :selected-meal meal)}))
 
 (reg-event-fx
  :show-recipe
  (fn [_ [_ id]]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/recipe {:recipe-id id}]}))
+
+(reg-event-fx
+ :show-meal-details
+ (fn [{:keys [db]} [_ meal]]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/recipe-details {:recipe-id (:id (:recipe meal))}]
+    :db (assoc db :selected-meal meal)}))
 
 (reg-event-fx
  :restart
@@ -255,30 +262,24 @@
    {:push-state [:tech.thomas-sojka.shopping-cards.view/error]
     :db (assoc db :loading false)}))
 
-(reg-event-db
- :add-meal-plan
- (fn [db [_ meal-plan]]
-   (update db :meal-plans conj meal-plan)))
-
-(reg-event-db
- :remove-meal-plan
- (fn [db [_ {:keys [date type]}]]
-   (update db :meal-plans #(remove (fn [m] (and (= date (:date m))
-                                               (= type (:type m))))
-                                   %))))
+(reg-event-fx
+ :remove-meal
+ (fn [{:keys [db]}]
+   {:db
+    (let [{:keys [date type]} (:selected-meal db)]
+      (update db :meal-plans #(remove (fn [m] (and (= date (:date m))
+                                                  (= type (:type m))))
+                                      %)))
+    :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
 
 (comment
-  (dispatch [:add-meal-plan
-             {:date (js/Date.)
-              :type :LUNCH
-              :recipe-id "05e32dc9-0531-42c2-878c-b2c7503624cf"}])
-  (dispatch [:remove-meal-plan
+  (dispatch [:remove-meal
              {:date #inst "2021-10-28T06:11:18.005-00:00"
               :type :LUNCH}])
-  (:select-recipe @re-frame.db/app-db)
+  (:selected-meal @re-frame.db/app-db)
   (dispatch [:initialise-db])
   (dispatch [:load-recipes])
-  (:recipes @re-frame.db/app-db)
+  (:meal-plans @re-frame.db/app-db)
   (dispatch [:toggle-selected-recipes "d47bc268-5e9d-45da-af96-143b12d334c5"])
   (:selected-recipes @re-frame.db/app-db)
   (dispatch [:load-ingredients-for-selected-recipes])

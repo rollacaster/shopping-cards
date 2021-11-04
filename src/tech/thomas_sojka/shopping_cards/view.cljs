@@ -5,13 +5,14 @@
             ["globalize/lib/cultures/globalize.culture.de-DE.js"]
             [reagent.core :as r]))
 
-(def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"})
+(def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
+            :trash-can "M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"})
 
 (defn icon
   ([name]
    [icon {} name])
-  ([_ name]
-   [:svg {:viewBox "0 0 24 24"}
+  ([{:keys [class]} name]
+   [:svg {:viewBox "0 0 24 24" :class class}
     [:path {:d (icons name) :fill "currentColor"}]]))
 
 (defn recipe [{:keys [even name image selected? on-click]}]
@@ -79,7 +80,7 @@
          (->> sorted-recipes
               (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])))
 
-(defn select-recipe [{:keys [type recipes get-title]}]
+(defn select-recipe [{:keys [recipes get-title]}]
   [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
    (map
     (fn [[recipe-type recipes]]
@@ -93,7 +94,7 @@
                     :name name
                     :link link
                     :image image
-                    :on-click #(dispatch [:select-recipe type r])}])
+                    :on-click #(dispatch [:add-meal r])}])
          recipes)]])
     (->> recipes
          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))))])
@@ -102,8 +103,7 @@
 
 (defn select-lunch []
   (let [recipes @(subscribe [:lunch-recipes])]
-    [select-recipe {:type :meal-type/lunch
-                    :recipes recipes
+    [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
                                  (case recipe-type
                                    "NORMAL" [:h2.mv3.tc "Normale Gerichte"]
@@ -112,8 +112,7 @@
 
 (defn select-dinner []
   (let [recipes @(subscribe [:sorted-recipes])]
-    [select-recipe {:type :meal-type/dinner
-                    :recipes recipes
+    [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
                                  (case recipe-type
                                    "NORMAL" ""
@@ -165,6 +164,31 @@
             [:li.mb3.f4 {:key id} ingredient])
           ingredients)]]
        [:iframe.w-100 {:src link :style {:height "50rem"}}]])))
+
+(defn recipe-details [{{{:keys [recipe-id]} :path}:parameters}]
+  (dispatch [:load-ingredients-for-recipe recipe-id])
+  (fn [match]
+    (let [{:keys [path]} (:parameters match)
+          {:keys [recipe-id]} path
+          {:keys [name link image]} @(subscribe [:shown-recipe recipe-id])
+          ingredients @(subscribe [:recipe-details])]
+      [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
+       [:div.flex.justify-between.items
+        [:a.link.near-black.underline.mb3.mb0-ns.db {:href link :target "_blank" :referer "norel noopener"}
+         [:h1.mv0 name]]
+        [:button.pv2.br3.bg-orange-200.bn.shadow-2.self-start
+         {:on-click #(dispatch [:remove-meal])}
+         [icon {:class "dark-gray h2"} :trash-can]]]
+       [:div.flex.justify-between.flex-wrap
+        [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
+         [:img.w5.br3.ba.b--orange-300 {:src image}]]
+        [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
+         (map
+          (fn [[id ingredient]]
+            [:li.mb3.f4 {:key id} ingredient])
+          ingredients)]]
+       [:iframe.w-100 {:src link :style {:height "50rem"}}]])))
+
 (defn select-water [ingredients]
   (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
                                               "Wasser"]))
@@ -243,8 +267,24 @@
   (dispatch [:show-meal-plan])
   (js/console.clear))
 
-(defn meal [{:keys [title]}]
-  [:div {:style {:min-height "2rem"}} title])
+(defn event->meal-plan [event]
+  (cond->
+   {:date (.-start ^js event)
+    :type (case (.-resource.type ^js event)
+            "lunch" :meal-type/lunch
+            "dinner" :meal-type/dinner)}
+    (.-resource.recipe ^js event)
+    (assoc :recipe (js->clj (.-resource.recipe ^js event)
+                      :keywordize-keys true))))
+
+(defn meal [{:keys [event]}]
+  (let [meal-plan (event->meal-plan event)]
+    [:div {:style {:min-height "2rem"}}
+     (if (:recipe meal-plan)
+       (:name (:recipe meal-plan))
+       (case (:type meal-plan)
+         :meal-type/lunch "Mittagessen"
+         :meal-type/dinner "Abendessen"))]))
 
 (defn meal-plan []
   (dispatch [:load-recipes])
@@ -256,21 +296,20 @@
         {:localizer (.globalizeLocalizer calendar globalize)
          :events (clj->js meal-plan-events)
          :onSelectEvent (fn [event]
-                          (dispatch
-                           (if (.-resource.id ^js event)
-                             [:show-recipe (.-resource.id ^js event)]
-                             (if (= (.-title ^js event) "Mittagessen")
-                               [:select-lunch (.-start ^js event)]
-                               [:select-dinner (.-start ^js event)]))))
+                          (let [meal-plan (event->meal-plan event)]
+                            (dispatch
+                             (if (:id (:recipe meal-plan))
+                               [:show-meal-details meal-plan]
+                               [:select-meal meal-plan]))))
          :eventPropGetter (fn [props]
-                            (clj->js {:className
-                                      (r/class-names
-                                       "f6 ba bw1"
-                                       (if (.-resource.type ^js props)
-                                         "bg-orange-400 white b--gray"
-                                         "bg-transparent gray b--gray b--dashed")
-                                       (when (< (.-end props) (.setDate (js/Date.) (- (.getDate (js/Date.)) 1)))
-                                         "o-20"))}))
+                            #js {:className
+                                 (r/class-names
+                                  "f6 ba bw1"
+                                  (if (.-resource.recipe ^js props)
+                                    "bg-orange-400 white b--gray"
+                                    "bg-transparent gray b--gray b--dashed")
+                                  (when (< (.-end props) (.setDate (js/Date.) (- (.getDate (js/Date.)) 1)))
+                                    "o-20"))})
          :components #js {:event (r/reactify-component meal)}
          :selectable true
          :views #js["month"]
@@ -288,6 +327,11 @@
    ["/show-recipes/:recipe-id"
     {:name ::recipe
      :view show-recipe
+     :title "Rezept"
+     :parameters {:path {:recipe-id string?}}}]
+   ["/recipes/:recipe-id"
+    {:name ::recipe-details
+     :view recipe-details
      :title "Rezept"
      :parameters {:path {:recipe-id string?}}}]
    ["/deselect-ingredients" {:name ::deselect-ingredients
