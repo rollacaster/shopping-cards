@@ -78,34 +78,31 @@
 (reg-event-fx
  :init-meal-plans
  (fn [{:keys [db]} [_ month]]
-   (if (empty? (:meal-plans db))
-     {:db (assoc db :loading true)
+   (if (nil? (->> (:meal-plans db)
+                  (map #(inc (.getMonth (:date %))))
+                  (some #(= month %))))
+     {:db (-> db
+              (assoc :loading true)
+              (assoc :month month))
       :http-xhrio {:method :get
                    :uri (str "/meal-plans/" month)
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success [:success-meal-plans]
                    :on-failure [:failure-meal-plans]}}
-     {:db db})))
+     {:db (assoc db :month month)})))
 
 (reg-event-db
  :success-meal-plans
  (fn [db [_ data]]
-   (def meal-plans
-    (:meal-plans
-     (-> db
-       (assoc :loading false)
-       (assoc :meal-plans (map (fn [meal-plan]
-                                 (-> meal-plan
-                                     (update :type keyword)
-                                     (update :date #(js/Date. %))))
-                               data)))))
    (-> db
        (assoc :loading false)
-       (assoc :meal-plans (map (fn [meal-plan]
-                                 (-> meal-plan
-                                     (update :type keyword)
-                                     (update :date #(js/Date. %))))
-                               data)))))
+       (update :meal-plans
+               concat
+               (map (fn [meal-plan]
+                      (-> meal-plan
+                          (update :type keyword)
+                          (update :date #(js/Date. %))))
+                    data)))))
 
 (reg-event-db
  :failure-meal-plans

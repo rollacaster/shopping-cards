@@ -1,6 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.subs
   (:require [re-frame.core :refer [reg-sub subscribe]]
-            [tech.thomas-sojka.shopping-cards.util :refer [days-in-current-month]]))
+            [tech.thomas-sojka.shopping-cards.util :refer [days-in-month]]))
 
 (reg-sub
  :selected-recipes
@@ -80,6 +80,11 @@
  (fn [db _]
    (:meal-plans db)))
 
+(reg-sub
+ :month
+ (fn [db _]
+   (:month db)))
+
 (defn meal-plan->event [meal-plan]
   {:title (-> meal-plan :recipe :name)
    :start (:date meal-plan)
@@ -99,10 +104,11 @@
 (reg-sub
  :meal-plan-events
  :<- [:meal-plans]
- (fn [meal-plans]
+ :<- [:month]
+ (fn [[meal-plans month]]
    (mapcat
     (fn [day]
-      (let [date (js/Date. (.getFullYear (js/Date.)) (.getMonth (js/Date.)) (inc day))]
+      (let [date (js/Date. (.getFullYear (js/Date.)) (dec month) (inc day))]
         [(meal-plan->event
           (get-in (group-meal-plans meal-plans)
                   [date :meal-type/lunch]
@@ -113,7 +119,8 @@
                   [date :meal-type/dinner]
                   {:date date
                    :type :meal-type/dinner}))]))
-    (range (days-in-current-month)))))
+    (range (days-in-month month)))))
+
 
 (comment
   @(subscribe [:meal-plan-events])

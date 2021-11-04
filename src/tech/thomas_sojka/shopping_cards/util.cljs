@@ -1,4 +1,4 @@
 (ns tech.thomas-sojka.shopping-cards.util)
 
-(defn days-in-current-month []
-  (.getDate (js/Date. (.getFullYear (js/Date.)) (inc (.getMonth (js/Date.))) 0)))
+(defn days-in-month [month]
+  (.getDate (js/Date. (.getFullYear (js/Date.)) month 0)))

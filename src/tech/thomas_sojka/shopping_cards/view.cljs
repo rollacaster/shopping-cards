@@ -294,6 +294,7 @@
       [:div.ph5-ns.pt2.h-100
        [:> (.-Calendar calendar)
         {:localizer (.globalizeLocalizer calendar globalize)
+         :onNavigate #(dispatch [:init-meal-plans (inc (.getMonth %1))])
          :events (clj->js meal-plan-events)
          :onSelectEvent (fn [event]
                           (let [meal-plan (event->meal-plan event)]

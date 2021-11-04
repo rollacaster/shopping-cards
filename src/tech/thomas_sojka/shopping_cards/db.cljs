@@ -42,8 +42,10 @@
           :opt-un [:meal-plan/recipe]))
 (s/def ::selected-meal (s/nilable :meal-plan/meal))
 (s/def ::meal-plans (s/coll-of :meal-plan/meal))
+(s/def ::month (s/nilable number?))
 
 (s/def ::db (s/keys :req-un [::loading
+                             ::month
                              ::route
                              ::recipes
                              ::selected-recipes
@@ -63,4 +65,5 @@
    :ingredients []
    :meal-plans []
    :recipe-details []
-   :selected-meal nil})
+   :selected-meal nil
+   :month nil})
