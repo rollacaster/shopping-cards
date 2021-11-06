@@ -42,10 +42,10 @@
           :opt-un [:meal-plan/recipe]))
 (s/def ::selected-meal (s/nilable :meal-plan/meal))
 (s/def ::meal-plans (s/coll-of :meal-plan/meal))
-(s/def ::month (s/nilable number?))
+(s/def ::start-of-week inst?)
 
 (s/def ::db (s/keys :req-un [::loading
-                             ::month
+                             ::start-of-week
                              ::route
                              ::recipes
                              ::selected-recipes
@@ -66,4 +66,4 @@
    :meal-plans []
    :recipe-details []
    :selected-meal nil
-   :month nil})
+   :start-of-week (js/Date.)})

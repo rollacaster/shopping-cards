@@ -1,9 +1,8 @@
 (ns tech.thomas-sojka.shopping-cards.view
   (:require [re-frame.core :refer [dispatch subscribe]]
-            ["react-big-calendar" :as calendar]
-            ["globalize" :as globalize]
-            ["globalize/lib/cultures/globalize.culture.de-DE.js"]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            ["date-fns" :refer (format subDays startOfDay addDays)]
+            ["date-fns/locale" :refer (de)]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
             :trash-can "M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"})
@@ -263,10 +262,6 @@
 (defn add-water [ingredients]
   (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
 
-(comment
-  (dispatch [:show-meal-plan])
-  (js/console.clear))
-
 (defn event->meal-plan [event]
   (cond->
    {:date (.-start ^js event)
@@ -277,44 +272,53 @@
     (assoc :recipe (js->clj (.-resource.recipe ^js event)
                       :keywordize-keys true))))
 
-(defn meal [{:keys [event]}]
-  (let [meal-plan (event->meal-plan event)]
-    [:div {:style {:min-height "2rem"}}
-     (if (:recipe meal-plan)
-       (:name (:recipe meal-plan))
-       (case (:type meal-plan)
-         :meal-type/lunch "Mittagessen"
-         :meal-type/dinner "Abendessen"))]))
+(defn meal-name [meal-plan]
+  (if (:recipe meal-plan)
+    (:name (:recipe meal-plan))
+    (case (:type meal-plan)
+      :meal-type/lunch "Mittagessen"
+      :meal-type/dinner "Abendessen")))
+
+(defn meal [meal-plan]
+  (let [has-recipe? (:recipe meal-plan)]
+    [:div.pt2.ph2.h-50
+     [:h4.f4.fw5.mv0.ba.pa2.br3.h-100.b--gray.bw1
+      {:class (r/class-names (if has-recipe? "bg-orange-400 white" "b--dashed gray"))}
+      (meal-name meal-plan)]]))
 
 (defn meal-plan []
   (dispatch [:load-recipes])
-  (dispatch [:init-meal-plans (inc (.getMonth (js/Date.)))])
+  (dispatch [:init-meal-plans (js/Date.)])
   (fn []
-    (let [meal-plan-events @(subscribe [:meal-plan-events])]
-      [:div.ph5-ns.pt2.h-100
-       [:> (.-Calendar calendar)
-        {:localizer (.globalizeLocalizer calendar globalize)
-         :onNavigate #(dispatch [:init-meal-plans (inc (.getMonth %1))])
-         :events (clj->js meal-plan-events)
-         :onSelectEvent (fn [event]
-                          (let [meal-plan (event->meal-plan event)]
-                            (dispatch
-                             (if (:id (:recipe meal-plan))
-                               [:show-meal-details meal-plan]
-                               [:select-meal meal-plan]))))
-         :eventPropGetter (fn [props]
-                            #js {:className
-                                 (r/class-names
-                                  "f6 ba bw1"
-                                  (if (.-resource.recipe ^js props)
-                                    "bg-orange-400 white b--gray"
-                                    "bg-transparent gray b--gray b--dashed")
-                                  (when (< (.-end props) (.setDate (js/Date.) (- (.getDate (js/Date.)) 1)))
-                                    "o-20"))})
-         :components #js {:event (r/reactify-component meal)}
-         :selectable true
-         :views #js["month"]
-         :culture "de-DE"}]])))
+    (let [meals-plans @(subscribe [:weekly-meal-plans])
+          start-of-week @(subscribe [:start-of-week])]
+      [:div.ph5-ns.flex.flex-column.h-100
+       [:div.flex
+        [:div.pv2.w-50
+         [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white
+          {:on-click
+           #(dispatch [:init-meal-plans (startOfDay (js/Date.))])}
+          "Heute"]
+         [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white
+          {:on-click
+           #(dispatch [:init-meal-plans (subDays (startOfDay start-of-week) 6)])}
+          "Zurück"]
+         [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white
+          {:on-click
+           #(dispatch [:init-meal-plans (addDays (startOfDay start-of-week) 6)])}
+          "Vor"]]
+        [:div.w-50.flex.items-center.justify-center
+         (format (:date (ffirst meals-plans)) "MMMM yyyy")]]
+       [:div.flex.flex-wrap.flex-auto
+        (map
+         (fn [[lunch dinner]]
+           ^{:key (:date lunch)}
+           [:div.ba.w-50.pv2.flex.flex-column.b--gray
+            [:div.tr.fw6.ph2 (format (:date lunch) "EEEEEE dd.MM" #js {:locale de})]
+            [:div.flex-auto
+             [meal lunch]
+             [meal dinner]]])
+         meals-plans)]])))
 
 (def routes
   [["/" {:name ::main

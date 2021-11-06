@@ -1,6 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.subs
   (:require [re-frame.core :refer [reg-sub subscribe]]
-            [tech.thomas-sojka.shopping-cards.util :refer [days-in-month]]))
+            [tech.thomas-sojka.shopping-cards.util :refer [days-in-month]]
+            ["date-fns" :refer (addDays startOfDay)]))
 
 (reg-sub
  :selected-recipes
@@ -81,9 +82,9 @@
    (:meal-plans db)))
 
 (reg-sub
- :month
+ :start-of-week
  (fn [db _]
-   (:month db)))
+   (:start-of-week db)))
 
 (defn meal-plan->event [meal-plan]
   {:title (-> meal-plan :recipe :name)
@@ -102,24 +103,22 @@
        (apply merge)))
 
 (reg-sub
- :meal-plan-events
+ :weekly-meal-plans
  :<- [:meal-plans]
- :<- [:month]
- (fn [[meal-plans month]]
-   (mapcat
+ :<- [:start-of-week]
+ (fn [[meal-plans start-date]]
+   (map
     (fn [day]
-      (let [date (js/Date. (.getFullYear (js/Date.)) (dec month) (inc day))]
-        [(meal-plan->event
-          (get-in (group-meal-plans meal-plans)
-                  [date :meal-type/lunch]
-                  {:date date
-                   :type :meal-type/lunch}))
-         (meal-plan->event
-          (get-in (group-meal-plans meal-plans)
-                  [date :meal-type/dinner]
-                  {:date date
-                   :type :meal-type/dinner}))]))
-    (range (days-in-month month)))))
+      (let [date (startOfDay (addDays start-date day))]
+        [(get-in (group-meal-plans meal-plans)
+                 [date :meal-type/lunch]
+                 {:date date
+                  :type :meal-type/lunch})
+         (get-in (group-meal-plans meal-plans)
+                 [date :meal-type/dinner]
+                 {:date date
+                  :type :meal-type/dinner})]))
+    (range 6))))
 
 
 (comment
