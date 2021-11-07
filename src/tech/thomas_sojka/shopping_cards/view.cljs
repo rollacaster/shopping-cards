@@ -1,7 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.view
   (:require [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]
-            ["date-fns" :refer (format subDays startOfDay addDays)]
+            ["date-fns" :refer (format subDays startOfDay addDays isPast)]
             ["date-fns/locale" :refer (de)]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
@@ -281,7 +281,11 @@
 
 (defn meal [meal-plan]
   (let [has-recipe? (:recipe meal-plan)]
-    [:div.pt2.ph2.h-50
+    [:button.pt2.ph2.h-50.bg-transparent.bn.w-100
+     {:on-click #(dispatch
+                 (if has-recipe?
+                   [:show-meal-details meal-plan]
+                   [:select-meal meal-plan]))}
      [:h4.f4.fw5.mv0.ba.pa2.br3.h-100.b--gray.bw1
       {:class (r/class-names (if has-recipe? "bg-orange-400 white" "b--dashed gray"))}
       (meal-name meal-plan)]]))
@@ -316,6 +320,7 @@
            [:div.ba.w-50.pv2.flex.flex-column.b--gray
             [:div.tr.fw6.ph2 (format (:date lunch) "EEEEEE dd.MM" #js {:locale de})]
             [:div.flex-auto
+             {:class (when (isPast (addDays (startOfDay start-of-week) 2)) "o-20")}
              [meal lunch]
              [meal dinner]]])
          meals-plans)]])))
