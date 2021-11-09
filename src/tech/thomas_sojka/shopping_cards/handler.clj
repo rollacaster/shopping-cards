@@ -1,5 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.handler
-  (:require [compojure.api.sweet :refer [api GET POST]]
+  (:require [compojure.api.sweet :refer [api GET POST DELETE]]
             [compojure.route :as route]
             [muuntaja.middleware :refer [wrap-format]]
             [ring.middleware.params :refer [wrap-params]]
@@ -9,7 +9,9 @@
              :refer [create-klaka-shopping-card]]
             [tech.thomas-sojka.shopping-cards.db
              :refer
-             [ingredients-for-recipe load-recipes ingredients-for-recipes load-meal-plans]]))
+             [ingredients-for-recipe load-recipes ingredients-for-recipes load-meal-plans
+              create-meal-plan delete-meal-plan]]
+            [clojure.instant :refer [read-instant-date]]))
 
 (def app-routes
   (api
@@ -24,11 +26,22 @@
           :body (create-klaka-shopping-card (:body-params request))
           :headers {"Content-type" "application/edn"}})
    (GET "/meal-plans/:month" [month]
-        {:status 200
-         :body (load-meal-plans month)
-         :headers {"Content-type" "application/edn"}})
-   (route/not-found "<h1>Page not found</h1>")))
+     {:status 200
+      :body (load-meal-plans month)
+      :headers {"Content-type" "application/edn"}})
+   (POST "/meal-plans" request
+     (let [{:keys [date recipe type]} (:body-params request)]
+          (create-meal-plan
+           {:inst (read-instant-date date)
+            :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
+            :recipe [:recipe/name (:name recipe)]}))
+     {:status 200})
+   (DELETE "/meal-plans" [date type]
+     (delete-meal-plan {:date (read-instant-date date)
+                        :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)})
+     {:status 200})
 
+   (route/not-found "<h1>Page not found</h1>")))
 (def app
   (-> app-routes
       wrap-format

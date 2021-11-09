@@ -125,7 +125,18 @@
    {:db (-> db
             (update :meal-plans conj (assoc (:selected-meal db) :recipe recipe))
             (assoc :selected-meal nil))
-    :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
+    :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]
+    :http-xhrio {:method :post
+                 :uri "/meal-plans"
+                 :params (assoc (:selected-meal db) :recipe recipe)
+                 :format (ajax/json-request-format)
+                 :response-format (ajax/text-response-format)
+                 :on-failure [:failure-add-meal]}}))
+
+(reg-event-db
+ :failure-add-meal
+ (fn []
+   (prn "Fail")))
 
 (reg-event-fx
  :load-ingredients-for-selected-recipes
@@ -240,8 +251,8 @@
       :http-xhrio {:method :post
                    :uri "/shopping-card"
                    :params (->> ingredients
-                              (filter #(contains? selected-ingredients (first %)))
-                              (map second))
+                                (filter #(contains? selected-ingredients (first %)))
+                                (map second))
                    :format (ajax/json-request-format)
                    :response-format (ajax/text-response-format)
                    :on-success [:success-shopping-card]
@@ -262,12 +273,23 @@
 (reg-event-fx
  :remove-meal
  (fn [{:keys [db]}]
-   {:db
-    (let [{:keys [date type]} (:selected-meal db)]
+   (let [{:keys [date type]} (:selected-meal db)]
+     {:db
       (update db :meal-plans #(remove (fn [m] (and (= date (:date m))
                                                   (= type (:type m))))
-                                      %)))
-    :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
+                                      %))
+      :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]
+      :http-xhrio {:method :delete
+                   :uri "/meal-plans"
+                   :url-params {:date (.toISOString date) :type type}
+                   :format (ajax/json-request-format)
+                   :response-format (ajax/text-response-format)
+                   :on-failure [:failure-remove-meal]}})))
+
+(reg-event-db
+ :failure-remove-meal
+ (fn []
+   (prn "Fail")))
 
 (comment
   (dispatch [:remove-meal

@@ -200,11 +200,33 @@
                   (update :recipe transform-recipe-type)
                   (update :type :ref))))))
 
+(defn map->nsmap
+  [m n]
+  (reduce-kv (fn [acc k v]
+               (let [new-kw (if (and (keyword? k)
+                                     (not (qualified-keyword? k)))
+                              (keyword (str n) (name k))
+                              k) ]
+                 (assoc acc new-kw v)))
+             {} m))
+
+(defn create-meal-plan [meal-plan]
+  (transact [(map->nsmap meal-plan (create-ns 'meal-plan))]))
+
+(defn delete-meal-plan [{:keys [date type]}]
+  (retract
+   (ffirst
+    (d/q
+     '[:find ?id
+       :in $ ?date ?type
+       :where
+       [?id :meal-plan/inst ?date]
+       [?id :meal-plan/type ?type]]
+     (d/db conn)
+     date
+     type))))
+
 (comment
-  (load-meal-plans 10)
-  (transact [#:meal-plan{:inst (java.util.Date. 121 9 5)
-                         :type :meal-type/dinner
-                         :recipe [:recipe/name "Teigtaschen mit Spinat-Feta-Füllung"]}])
   (defn find-recipes-by-ingredient [ingredient]
     (d/q '[:find ?name
            :in $ ?ingredient
