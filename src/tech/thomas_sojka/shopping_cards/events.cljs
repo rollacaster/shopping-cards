@@ -1,11 +1,19 @@
 (ns tech.thomas-sojka.shopping-cards.events
-  (:require [ajax.core :as ajax]
-            [cljs.reader :refer [read-string]]
-            [cljs.spec.alpha :as s]
-            [clojure.string :as str]
-            [re-frame.core :refer [dispatch reg-event-db reg-event-fx reg-fx after reg-global-interceptor]]
-            [reitit.frontend.easy :as rfe]
-            [tech.thomas-sojka.shopping-cards.db :refer [default-db]]))
+  (:require
+   [ajax.core :as ajax]
+   [cljs.reader :refer [read-string]]
+   [cljs.spec.alpha :as s]
+   [clojure.string :as str]
+   [re-frame.core
+    :refer [after
+            dispatch
+            reg-event-db
+            reg-event-fx
+            reg-fx
+            reg-global-interceptor]]
+   [reagent.core :as r]
+   [reitit.frontend.easy :as rfe]
+   [tech.thomas-sojka.shopping-cards.db :refer [default-db]]))
 
 (defn check-and-throw
   "Throws an exception if `db` doesn't match the Spec `a-spec`."
@@ -131,12 +139,22 @@
                  :params (assoc (:selected-meal db) :recipe recipe)
                  :format (ajax/json-request-format)
                  :response-format (ajax/text-response-format)
-                 :on-failure [:failure-add-meal]}}))
+                 :on-failure [:failure-add-meal (:selected-meal db)]}}))
 
-(reg-event-db
+(defn remove-meal [meal-plans {:keys [date type]}]
+  (remove (fn [m] (and (= date (:date m))
+                      (= type (:type m))))
+          meal-plans))
+
+(reg-event-fx
  :failure-add-meal
- (fn []
-   (prn "Fail")))
+ (fn [{:keys [db]} [_ failed-meal]]
+   {:db (-> db
+            (update :meal-plans remove-meal failed-meal)
+            (assoc :error "Fehler: Speichern fehlgeschlagen"))
+    :timeout {:id :error-removal
+              :event [:remove-error]
+              :time 2000}}))
 
 (reg-event-fx
  :load-ingredients-for-selected-recipes
@@ -275,21 +293,43 @@
  (fn [{:keys [db]}]
    (let [{:keys [date type]} (:selected-meal db)]
      {:db
-      (update db :meal-plans #(remove (fn [m] (and (= date (:date m))
-                                                  (= type (:type m))))
-                                      %))
+      (update db :meal-plans remove-meal (:selected-meal db))
       :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]
       :http-xhrio {:method :delete
                    :uri "/meal-plans"
                    :url-params {:date (.toISOString date) :type type}
                    :format (ajax/json-request-format)
                    :response-format (ajax/text-response-format)
-                   :on-failure [:failure-remove-meal]}})))
+                   :on-failure [:failure-remove-meal (:selected-meal db)]}})))
+(defonce timeouts (r/atom {}))
+
+(reg-fx
+  :timeout
+  (fn [{:keys [id event time]}]
+    (when-some [existing (get @timeouts id)]
+      (js/clearTimeout existing)
+      (swap! timeouts dissoc id))
+    (when (some? event)
+      (swap! timeouts assoc id
+        (js/setTimeout
+          (fn []
+            (dispatch event))
+          time)))))
+
+(reg-event-fx
+ :failure-remove-meal
+ (fn [{:keys [db]} [_ failed-meal]]
+   {:db
+    (-> db
+        (update :meal-plans conj failed-meal)
+        (assoc :error "Fehler: Löschen fehlgeschlagen"))
+    :timeout {:id :error-removal
+              :event [:remove-error]
+              :time 2000}}))
 
 (reg-event-db
- :failure-remove-meal
- (fn []
-   (prn "Fail")))
+ :remove-error
+ (fn [db] (assoc db :error nil)))
 
 (comment
   (dispatch [:remove-meal

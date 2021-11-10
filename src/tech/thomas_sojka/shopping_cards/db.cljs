@@ -43,8 +43,9 @@
 (s/def ::selected-meal (s/nilable :meal-plan/meal))
 (s/def ::meal-plans (s/coll-of :meal-plan/meal))
 (s/def ::start-of-week inst?)
-
-(s/def ::db (s/keys :req-un [::loading
+(s/def ::error (s/nilable string?))
+(s/def ::db (s/keys :req-un [::error
+                             ::loading
                              ::start-of-week
                              ::route
                              ::recipes
@@ -57,7 +58,8 @@
 
 
 (def default-db
-  {:loading false
+  {:error nil
+   :loading false
    :route {}
    :recipes []
    :selected-recipes #{}

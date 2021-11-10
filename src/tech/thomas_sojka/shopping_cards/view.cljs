@@ -251,13 +251,18 @@
 
 (defn app []
   (fn []
-    (let [route @(subscribe [:route])]
+    (let [route @(subscribe [:route])
+          error @(subscribe [:error])]
       [:div.sans-serif.flex.flex-column.h-100
        [header]
        (when (:view (:data route))
          [:main.flex-auto
           [:div.mw9.center.bg-gray-200.h-100
            [(:view (:data route)) route]]])
+       (when error
+         [:div.absolute.white.bottom-0.flex.justify-center.w-100.mb4
+          [:div.w-80.bg-light-red.ph3.pv2.br2.ba.b--white
+           error]])
        [footer]])))
 (defn add-water [ingredients]
   (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))

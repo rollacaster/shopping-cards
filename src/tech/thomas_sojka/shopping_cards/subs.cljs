@@ -1,6 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.subs
   (:require [re-frame.core :refer [reg-sub subscribe]]
-            [tech.thomas-sojka.shopping-cards.util :refer [days-in-month]]
             ["date-fns" :refer (addDays startOfDay)]))
 
 (reg-sub
@@ -17,6 +16,11 @@
  :recipes
  (fn [db _]
    (:recipes db)))
+
+(reg-sub
+ :error
+ (fn [db _]
+   (:error db)))
 
 (def type-order ["NORMAL" "FAST" "RARE"])
 
