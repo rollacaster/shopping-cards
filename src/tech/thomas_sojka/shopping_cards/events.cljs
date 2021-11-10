@@ -167,6 +167,16 @@
                    :on-success [:success-load-ingredients-for-selected-recipes]
                    :on-failure [:failure-load-ingredients-for-selected-recipes]}})))
 
+(reg-event-fx
+ :load-ingredients-for-meals
+ (fn [{:keys [db]} [_ meals-without-shopping-list]]
+   {:db (assoc db :loading true)
+    :http-xhrio {:method :get
+                 :uri (str "/ingredients?" (str/join "&" (map #(str "recipe-ids=" %) (map (comp :id :recipe)meals-without-shopping-list))))
+                 :response-format (ajax/raw-response-format)
+                 :on-success [:success-load-ingredients-for-selected-recipes]
+                 :on-failure [:failure-load-ingredients-for-selected-recipes]}}))
+
 (defn add-water [ingredients]
   (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
 

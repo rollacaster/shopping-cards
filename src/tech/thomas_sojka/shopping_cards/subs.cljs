@@ -1,6 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.subs
   (:require [re-frame.core :refer [reg-sub subscribe]]
-            ["date-fns" :refer (addDays startOfDay)]))
+            ["date-fns" :refer (addDays startOfDay isAfter)]))
 
 (reg-sub
  :selected-recipes
@@ -84,6 +84,16 @@
  :meal-plans
  (fn [db _]
    (:meal-plans db)))
+
+(reg-sub
+ :meals-without-shopping-list
+ :<- [:weekly-meal-plans]
+ (fn [meals-plans]
+   (filter #(and (not (:shopping-list %))
+                 (:recipe %)
+                 (or (isAfter (:date %) (startOfDay (js/Date.)))
+                     (= (:date %) (startOfDay (js/Date.)))))
+           (flatten meals-plans))))
 
 (reg-sub
  :start-of-week

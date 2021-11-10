@@ -1,7 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.view
   (:require [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]
-            ["date-fns" :refer (format subDays startOfDay addDays isPast)]
+            ["date-fns" :refer (format subDays startOfDay addDays isPast isAfter)]
             ["date-fns/locale" :refer (de)]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
@@ -234,26 +234,33 @@
     [:path {:d "M50 50L20 50A30 30 0 0 1 80 50Z" :fill "#f8b26a" :transform "rotate(-34.8753 50 50)"}
      [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;-45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]]])
 
-(defn footer []
-  (let [selected-recipes @(subscribe [:selected-recipes])
-        route @(subscribe [:route])
-        loading @(subscribe [:loading])]
-    (when (> (count selected-recipes) 0)
-      [:footer.fixed.bottom-0.w-100.bg-orange-400.flex.justify-center.pa3.z-2
-       [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
-        {:on-click (:action (:data route))}
-        [:div.flex.items-center
-         (if loading
-           [:div {:style {:width 128}}
-            [spinner]]
-           [:<>
-            [:span.f2.mr2 "Fertig!"]
-            [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])]]])))
+(defn footer-action [{:keys [loading]}]
+  [:div.flex.items-center
+   (if loading
+     [:div {:style {:width 128}}
+      [spinner]]
+     [:<>
+      [:span.f2.mr2 "Fertig!"]
+      [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])])
+
+(defn footer [{:keys [on-click loading]}]
+  [:footer.bg-orange-400.flex.justify-center.pa3
+   [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
+    {:on-click on-click}
+    [:div.flex.items-center
+     (if loading
+       [:div {:style {:width 128}}
+        [spinner]]
+       [:<>
+        [:span.f2.mr2 "Fertig!"]
+        [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])]]])
 
 (defn app []
   (fn []
     (let [route @(subscribe [:route])
-          error @(subscribe [:error])]
+          error @(subscribe [:error])
+          loading @(subscribe [:loading])
+          selected-recipes @(subscribe [:selected-recipes])]
       [:div.sans-serif.flex.flex-column.h-100
        [header]
        (when (:view (:data route))
@@ -264,7 +271,10 @@
          [:div.absolute.white.bottom-0.flex.justify-center.w-100.mb4
           [:div.w-80.bg-light-red.ph3.pv2.br2.ba.b--white
            error]])
-       [footer]])))
+       (when (> (count selected-recipes) 0)
+         [:div.fixed.bottom-0.w-100.z-2
+          [footer {:on-click (:action (:data route))
+                   :loading loading}]])])))
 (defn add-water [ingredients]
   (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
 
@@ -307,7 +317,8 @@
   (dispatch [:init-meal-plans (js/Date.)])
   (fn []
     (let [meals-plans @(subscribe [:weekly-meal-plans])
-          start-of-week @(subscribe [:start-of-week])]
+          start-of-week @(subscribe [:start-of-week])
+          meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
       [:div.ph5-ns.flex.flex-column.h-100
        [:div.flex
         [:div.pv2.w-50
@@ -335,7 +346,9 @@
              {:class (when (isPast (addDays (startOfDay start-of-week) 2)) "o-20")}
              [meal lunch]
              [meal dinner]]])
-         meals-plans)]])))
+         meals-plans)]
+       (when meals-without-shopping-list
+           [footer {:on-click #(dispatch [:load-ingredients-for-meals meals-without-shopping-list])}])])))
 
 (def routes
   [["/" {:name ::main
