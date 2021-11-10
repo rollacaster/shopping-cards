@@ -47,4 +47,8 @@
      MealPlan
      [^DateTime inst
       ^MealType type
-      ^Recipe recipe]]))
+      ^Recipe recipe]
+
+     ShoppingList
+     [^{:type MealPlan :cardinality [1 n]}
+      meals]]))

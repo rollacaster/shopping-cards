@@ -188,7 +188,8 @@
                                [[:recipe/id :as :id]
                                 [:recipe/name :as :name]
                                 {:recipe/type [[:db/ident]]}
-                                [:recipe/image :as :image]]}])
+                                [:recipe/image :as :image]]}
+                              [:shopping-list/_meals :as :shopping-list]])
               :in $ ?month
               :where
               [?m :meal-plan/inst ?d]
@@ -198,7 +199,8 @@
        (map (fn [meal-plan]
               (-> (first meal-plan)
                   (update :recipe transform-recipe-type)
-                  (update :type :ref))))))
+                  (update :type :ref)
+                  (update :in-shopping-list boolean))))))
 
 (defn map->nsmap
   [m n]
@@ -225,6 +227,19 @@
      (d/db conn)
      date
      type))))
+
+(defn create-shopping-list [meal-plans]
+  (transact
+   [#:shopping-list
+    {:meals
+     (map first
+          (d/q '[:find ?id
+                 :in $ [[?type ?inst]]
+                 :where
+                 [?id :meal-plan/type ?type]
+                 [?id :meal-plan/inst ?inst]]
+               (d/db conn)
+               meal-plans))}]))
 
 (comment
   (defn find-recipes-by-ingredient [ingredient]
