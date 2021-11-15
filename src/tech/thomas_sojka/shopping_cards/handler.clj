@@ -10,7 +10,7 @@
             [tech.thomas-sojka.shopping-cards.db
              :refer
              [ingredients-for-recipe load-recipes ingredients-for-recipes load-meal-plans
-              create-meal-plan delete-meal-plan]]
+              create-meal-plan delete-meal-plan create-shopping-list]]
             [clojure.instant :refer [read-instant-date]]))
 
 (def app-routes
@@ -39,6 +39,14 @@
    (DELETE "/meal-plans" [date type]
      (delete-meal-plan {:date (read-instant-date date)
                         :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)})
+     {:status 200})
+   (POST "/shopping-list" request
+     (create-shopping-list
+      (map
+       (fn [[type date]]
+         [(case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
+          (read-instant-date date)])
+       (:body-params request)))
      {:status 200})
 
    (route/not-found "<h1>Page not found</h1>")))

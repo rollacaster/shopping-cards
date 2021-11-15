@@ -132,11 +132,13 @@
                  [date :meal-type/dinner]
                  {:date date
                   :type :meal-type/dinner})]))
-    (range 6))))
+    (range 4))))
 
 
 (comment
-  @(subscribe [:meal-plan-events])
+  @(subscribe [:weekly-meal-plans (js/Date.)])
+  @(subscribe [:selected-meal])
+  @(subscribe [:start-of-week])
   (get-in
    (->> @(subscribe [:meal-plans])
         (group-by :date)
@@ -146,11 +148,11 @@
   @(subscribe [:recipes])
   @(subscribe [:meal-plans-with-recipes])
 
-  @(subscribe [:meal-plans])
+  (def meal-plans @(subscribe [:meal-plans]))
   @(subscribe [:selected-recipes])
   @(subscribe [:selected-ingredients])
   @(subscribe [:shown-recipe "9bbdb4ef-4934-4a96-be22-881ed37c0fd5"])
-
+  @(subscribe [:meals-without-shopping-list])
   @(subscribe [:recipes])
   @(subscribe [:sorted-recipes])
   @(subscribe [:recipe-details])

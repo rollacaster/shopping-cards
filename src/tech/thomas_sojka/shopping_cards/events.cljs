@@ -62,12 +62,14 @@
 (reg-event-fx
  :load-recipes
  (fn [{:keys [db]}]
-   {:db (assoc db :loading true)
-    :http-xhrio {:method :get
-                 :uri "recipes"
-                 :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success [:success-recipes]
-                 :on-failure [:failure-recipes]}}))
+   (if (empty? (:recipes db))
+     {:db (assoc db :loading true)
+      :http-xhrio {:method :get
+                   :uri "recipes"
+                   :response-format (ajax/json-response-format {:keywords? true})
+                   :on-success [:success-recipes]
+                   :on-failure [:failure-recipes]}}
+     db)))
 
 (reg-event-db
  :success-recipes
@@ -273,7 +275,7 @@
 
 (reg-event-fx
  :create-shopping-card
- (fn [{:keys [db]} _]
+ (fn [{:keys [db]} [_ meals-without-shopping-list]]
    (let [{:keys [ingredients selected-ingredients]} db]
      {:db (assoc db :loading true)
       :http-xhrio {:method :post
@@ -283,14 +285,42 @@
                                 (map second))
                    :format (ajax/json-request-format)
                    :response-format (ajax/text-response-format)
-                   :on-success [:success-shopping-card]
+                   :on-success [:success-shopping-card meals-without-shopping-list]
                    :on-failure [:failure-shopping-card]}})))
 
 (reg-event-fx
  :success-shopping-card
- (fn [{:keys [db]} [_ card-id]]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/finish {:card-id card-id}]
-    :db (assoc db :loading false)}))
+ (fn [{:keys [db]} [_ meals-without-shopping-list card-id]]
+   (if meals-without-shopping-list
+     {:http-xhrio {:method :post
+                   :uri "/shopping-list"
+                   :params (map (fn [{:keys [type date]}] [type date])
+                                meals-without-shopping-list)
+                   :format (ajax/json-request-format)
+                   :response-format (ajax/text-response-format)
+                   :on-success [:success-shopping-list meals-without-shopping-list]
+                   :on-failure [:failure-shopping-list]}}
+     {:push-state [:tech.thomas-sojka.shopping-cards.view/finish {:card-id card-id}]
+      :db (assoc db :loading false)})))
+
+(reg-event-fx
+ :success-shopping-list
+ (fn [{:keys [db]} [_ meals-without-shopping-list]]
+   {:db (-> db
+            (assoc :loading false)
+            ;; TODO update to has shopping-list
+            (update :meal-plans #(map (fn [meal-plan]
+                                        (if
+                                            (some
+                                             (fn [meal-with-shopping-list]
+                                               (and
+                                                (= (:type meal-with-shopping-list) (:type meal-plan))
+                                                (= (:date meal-with-shopping-list) (:date meal-plan))))
+                                             meals-without-shopping-list)
+                                          (assoc meal-plan :shopping-list true)
+                                          meal-plan))
+                                      (:meal-plans db))))
+    :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
 
 (reg-event-fx
  :failure-shopping-card
@@ -342,9 +372,17 @@
  (fn [db] (assoc db :error nil)))
 
 (comment
-  (dispatch [:remove-meal
-             {:date #inst "2021-10-28T06:11:18.005-00:00"
-              :type :LUNCH}])
+  (dispatch [:select-meal
+             {:date #inst "2021-11-09T23:00:00.000-00:00",
+              :type :meal-type/dinner }])
+  (dispatch [:add-meal
+             {:id "a1dae95b-96cf-4278-8015-9ea0fed30750",
+              :name "Broccolicurry mit roten Linsen",
+              :image
+              "https://img.chefkoch-cdn.de/rezepte/3456341515054121/bilder/1156624/crop-360x240/brokkolicurry-mit-roten-linsen.jpg",
+              :link
+              "https://www.weightwatchers.com/de/recipe/broccolicurry-mit-roten-linsen/591aeb9416581df91e8726f4",
+              :type "NORMAL"}])
   (:selected-meal @re-frame.db/app-db)
   (dispatch [:initialise-db])
   (dispatch [:load-recipes])

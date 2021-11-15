@@ -1,7 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.view
   (:require [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]
-            ["date-fns" :refer (format subDays startOfDay addDays isPast isAfter)]
+            ["date-fns" :refer (format subDays startOfDay addDays isPast)]
             ["date-fns/locale" :refer (de)]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
@@ -192,24 +192,6 @@
 (defn select-water [ingredients]
   (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
                                               "Wasser"]))
-(defn deselect-ingredients []
-  (let [selected-ingredients @(subscribe [:selected-ingredients])
-        ingredients @(subscribe [:ingredients])]
-    [:ul.list.pl0.mv0.pb6
-     (doall
-      (map-indexed (fn [i [id content]]
-                     [ingredient
-                      (let [selected?
-                            (contains? selected-ingredients id)]
-                        {:key id
-                         :i i
-                         :id id
-                         :selected? selected?
-                         :on-change
-                         #(dispatch [:toggle-selected-ingredients id])})
-                      content])
-                   ingredients))]))
-
 (defn header []
   (let [route @(subscribe [:route])]
     [:header.bg-orange-400
@@ -275,6 +257,32 @@
          [:div.fixed.bottom-0.w-100.z-2
           [footer {:on-click (:action (:data route))
                    :loading loading}]])])))
+
+(defn deselect-ingredients []
+  (let [selected-ingredients @(subscribe [:selected-ingredients])
+        ingredients @(subscribe [:ingredients])
+        loading @(subscribe [:loading])
+        meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
+    [:<>
+     [:ul.list.pl0.mv0.pb6
+      (doall
+       (map-indexed (fn [i [id content]]
+                      [ingredient
+                       (let [selected?
+                             (contains? selected-ingredients id)]
+                         {:key id
+                          :i i
+                          :id id
+                          :selected? selected?
+                          :on-change
+                          #(dispatch [:toggle-selected-ingredients id])})
+                       content])
+                    ingredients))]
+     [:div.fixed.bottom-0.w-100.z-2
+      [footer {:on-click #(dispatch [:create-shopping-card
+                                     meals-without-shopping-list])
+               :loading loading}]]]))
+
 (defn add-water [ingredients]
   (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
 
@@ -305,7 +313,7 @@
      [:h4.f4.fw5.mv0.ba.pa2.br3.h-100.b--gray.bw1
       {:class (r/class-names
                (if has-recipe?
-                 (str (if (:shopping-list meal-plan) "bg-gray-400" "bg-orange-400") " white")
+                 (if (:shopping-list meal-plan) "bg-gray-400 gray-900" "bg-orange-400 white")
                  "b--dashed gray"))}
       (when (:shopping-list meal-plan)
         [:div.w2.absolute.bottom-0.right-0.mr3.mb1
@@ -320,21 +328,21 @@
           start-of-week @(subscribe [:start-of-week])
           meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
       [:div.ph5-ns.flex.flex-column.h-100
-       [:div.flex
-        [:div.pv2.w-50
-         [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white
+       [:div.flex.items-center.justify-between
+        [:div.pv2
+         [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white.tc
           {:on-click
            #(dispatch [:init-meal-plans (startOfDay (js/Date.))])}
           "Heute"]
-         [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white
+         [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white.tc
           {:on-click
            #(dispatch [:init-meal-plans (subDays (startOfDay start-of-week) 6)])}
           "Zurück"]
-         [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white
+         [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white.tc
           {:on-click
            #(dispatch [:init-meal-plans (addDays (startOfDay start-of-week) 6)])}
           "Vor"]]
-        [:div.w-50.flex.items-center.justify-center
+        [:div.flex.justify-center.flex-auto
          (format (:date (ffirst meals-plans)) "MMMM yyyy")]]
        [:div.flex.flex-wrap.flex-auto
         (map
@@ -347,7 +355,7 @@
              [meal lunch]
              [meal dinner]]])
          meals-plans)]
-       (when meals-without-shopping-list
+       (when (seq meals-without-shopping-list)
            [footer {:on-click #(dispatch [:load-ingredients-for-meals meals-without-shopping-list])}])])))
 
 (def routes
