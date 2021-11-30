@@ -193,6 +193,32 @@
           ingredients)]]
        [:iframe.w-100 {:src link :style {:height "50rem"}}]])))
 
+(defn meal-plan-details []
+  (fn [match]
+    (let [
+          {{:keys [name link image]} :recipe
+           :keys [shopping-list]
+           :as meal-plan}
+          @(subscribe [:selected-meal])
+          ingredients @(subscribe [:recipe-details])]
+      [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
+       [:div.flex.justify-between.items
+        [:a.link.near-black.underline.mb3.mb0-ns.db {:href link :target "_blank" :referer "norel noopener"}
+         [:h1.mv0 name]]
+        (when-not shopping-list
+          [:button.pv2.br3.bg-orange-200.bn.shadow-2.self-start
+           {:on-click #(dispatch [:remove-meal])}
+           [icon {:class "dark-gray h2"} :trash-can]])]
+       [:div.flex.justify-between.flex-wrap
+        [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
+         [:img.w5.br3.ba.b--orange-300 {:src image}]]
+        [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
+         (map
+          (fn [[id ingredient]]
+            [:li.mb3.f4 {:key id} ingredient])
+          ingredients)]]
+       [:iframe.w-100 {:src link :style {:height "50rem"}}]])))
+
 (defn select-water [ingredients]
   (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
                                               "Wasser"]))
@@ -387,6 +413,10 @@
      :view recipe-details
      :title "Rezept"
      :parameters {:path {:recipe-id string?}}}]
+   ["/meal-plan-details"
+    {:name ::meal-plan-details
+     :view meal-plan-details
+     :title "Rezept"}]
    ["/deselect-ingredients" {:name ::deselect-ingredients
                              :view deselect-ingredients
                              :title "Zutaten auswählen"

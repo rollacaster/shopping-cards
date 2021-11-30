@@ -135,6 +135,11 @@
     (range 4))))
 
 (reg-sub
+ :selected-meal
+ (fn [db _]
+   (:selected-meal db)))
+
+(reg-sub
  :bank-holidays
  (fn [db]
    (filter

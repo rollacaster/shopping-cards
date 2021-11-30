@@ -276,8 +276,13 @@
 (reg-event-fx
  :show-meal-details
  (fn [{:keys [db]} [_ meal]]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/recipe-details {:recipe-id (:id (:recipe meal))}]
-    :db (assoc db :selected-meal meal)}))
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan-details]
+    :db (assoc db :selected-meal meal)
+    :http-xhrio {:method :get
+                 :uri (str "/recipes/" (:id (:recipe meal)) "/ingredients")
+                 :response-format (ajax/raw-response-format)
+                 :on-success [:success-load-ingredients-for-recipe]
+                 :on-failure [:failure-load-ingredients-for-recipe]}}))
 
 (reg-event-fx
  :restart
