@@ -203,7 +203,9 @@
           ingredients @(subscribe [:recipe-details])]
       [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
        [:div.flex.justify-between.items
-        [:a.link.near-black.underline.mb3.mb0-ns.db {:href link :target "_blank" :referer "norel noopener"}
+        [:a.link.near-black.mb3.mb0-ns.db
+         {:href link :target "_blank" :referer "norel noopener"
+          :class (when link "underline")}
          [:h1.mv0 name]]
         (when-not shopping-list
           [:button.pv2.br3.bg-orange-200.bn.shadow-2.self-start
@@ -217,7 +219,8 @@
           (fn [[id ingredient]]
             [:li.mb3.f4 {:key id} ingredient])
           ingredients)]]
-       [:iframe.w-100 {:src link :style {:height "50rem"}}]])))
+       (when link
+         [:iframe.w-100 {:src link :style {:height "50rem"}}])])))
 
 (defn select-water [ingredients]
   (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
