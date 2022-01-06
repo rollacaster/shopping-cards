@@ -135,9 +135,11 @@
     (range 4))))
 
 (reg-sub
-  :bank-holidays
-  (fn [db]
-    (:bank-holidays db)))
+ :bank-holidays
+ (fn [db]
+   (filter
+    #(or (nil? (:states %)) ((:states %) :by))
+    (:bank-holidays db))))
 
 (reg-sub
  :bank-holiday
