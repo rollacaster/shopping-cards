@@ -336,11 +336,11 @@
           "Heute"]
          [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white.tc
           {:on-click
-           #(dispatch [:init-meal-plans (subDays (startOfDay start-of-week) 6)])}
+           #(dispatch [:init-meal-plans (subDays (startOfDay start-of-week) 4)])}
           "Zurück"]
          [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white.tc
           {:on-click
-           #(dispatch [:init-meal-plans (addDays (startOfDay start-of-week) 6)])}
+           #(dispatch [:init-meal-plans (addDays (startOfDay start-of-week) 4)])}
           "Vor"]]
         [:div.flex.justify-center.flex-auto
          (format (:date (ffirst meals-plans)) "MMMM yyyy")]]
