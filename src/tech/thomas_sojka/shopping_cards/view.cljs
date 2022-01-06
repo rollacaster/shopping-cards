@@ -345,18 +345,24 @@
         [:div.flex.justify-center.flex-auto
          (format (:date (ffirst meals-plans)) "MMMM yyyy")]]
        [:div.flex.flex-wrap.flex-auto
-        (map
-         (fn [[lunch dinner]]
-           ^{:key (:date lunch)}
-           [:div.ba.w-50.pv2.flex.flex-column.b--gray
-            [:div.tr.fw6.ph2 (format (:date lunch) "EEEEEE dd.MM" #js {:locale de})]
-            [:div.flex-auto
-             {:class (when (isPast (addDays (startOfDay start-of-week) 2)) "o-20")}
-             [meal lunch]
-             [meal dinner]]])
-         meals-plans)]
+        (doall
+         (map
+          (fn [[lunch dinner]]
+            (let [bank-holiday @(subscribe [:bank-holiday (:date lunch)])]
+              ^{:key (:date lunch)}
+              [:div.ba.w-50.pv2.flex.flex-column.b--gray
+               [:div.ph2.flex.justify-between
+                [:span.truncate.dark-red bank-holiday]
+                [:span.tr.fw6
+                 {:style {:white-space "nowrap"}}
+                 (format (:date lunch) "EEEEEE dd.MM" #js {:locale de})]]
+               [:div.flex-auto
+                {:class (when (isPast (addDays (startOfDay start-of-week) 2)) "o-20")}
+                [meal lunch]
+                [meal dinner]]]))
+          meals-plans))]
        (when (seq meals-without-shopping-list)
-           [footer {:on-click #(dispatch [:load-ingredients-for-meals meals-without-shopping-list])}])])))
+         [footer {:on-click #(dispatch [:load-ingredients-for-meals meals-without-shopping-list])}])])))
 
 (def routes
   [["/" {:name ::main

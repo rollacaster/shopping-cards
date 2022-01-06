@@ -24,6 +24,6 @@
   (clear-subscription-cache!)
   (init!))
 
-(defonce start-up (do (dispatch-sync [:initialise-db]) true))
+(defonce start-up (do (dispatch-sync [:initialise (.getFullYear (js/Date.))]) true))
 
 (init!)

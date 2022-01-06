@@ -1,6 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.subs
   (:require [re-frame.core :refer [reg-sub subscribe]]
-            ["date-fns" :refer (addDays startOfDay isAfter)]))
+            ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth getYear)]))
 
 (reg-sub
  :selected-recipes
@@ -134,11 +134,29 @@
                   :type :meal-type/dinner})]))
     (range 4))))
 
+(reg-sub
+  :bank-holidays
+  (fn [db]
+    (:bank-holidays db)))
 
+(reg-sub
+ :bank-holiday
+ :<- [:bank-holidays]
+ (fn [bank-holidays [_ date]]
+   (let [c-day (getDate date)
+         c-month (getMonth date)]
+     (some (fn [{:keys [month day name]}]
+             (when
+              (and (= month (inc c-month))
+                   (= day c-day))
+               name))
+           bank-holidays))))
 (comment
   @(subscribe [:weekly-meal-plans (js/Date.)])
   @(subscribe [:selected-meal])
   @(subscribe [:start-of-week])
+  @(subscribe [:bank-holidays])
+  @(subscribe [:bank-holiday? (js/Date.)])
   (get-in
    (->> @(subscribe [:meal-plans])
         (group-by :date)

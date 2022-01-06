@@ -32,9 +32,28 @@
   (fn [[x y]]
     (.scrollTo js/window x y)))
 
+(reg-event-fx
+ :initialise
+ (fn [_ [_ year]]
+   {:db default-db
+    :http-xhrio {:method :get
+                 :uri (str "https://raw.githubusercontent.com/lambdaschmiede/freitag/master/resources/com/lambdaschmiede/freitag/de/"
+                           year
+                           ".edn")
+                 :response-format (ajax/text-response-format)
+                 :on-success [:success-bank-holidays]
+                 :on-failure [:failure-bank-holidays]}}))
+
 (reg-event-db
- :initialise-db
- (fn [] default-db))
+  :success-bank-holidays
+  (fn [db [_ data]]
+    (assoc db :bank-holidays (read-string data))))
+
+(reg-event-db
+  :failure-bank-holidays
+  (fn [db _]
+    ;; TODO Handle failed bank holiday loading
+    db))
 
 (defn toggle-map [key map]
   ((if (map key) disj conj) map key))
