@@ -242,6 +242,81 @@
                meal-plans))}]))
 
 (comment
+  (transact
+   [{:db/id 79164837199987
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Bohnengulasch mit Räuchertofu"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Kohlrabi in Parmesan-Kräuter-Panade"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Nudeln in Zucchini-Erdnuss-Sauce"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Broccoli-Hähnchen-Penne"]
+     :recipe/type [:db/ident :recipe-type/rare]
+     :recipe/name "Broccoli-Penne"}])
+  (transact
+   [{:db/id [:recipe/name "Nudelsalat mit Schinken und Erbsen"]
+     :recipe/type [:db/ident :recipe-type/rare]
+     :recipe/name "Nudelsalat mit Erbsen"}])
+  (transact
+   [{:db/id [:recipe/name "Broccolicurry mit roten Linsen"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Spätzle Gemüseauflauf"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Teigtaschen mit Spinat-Feta-Füllung"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Vegetarische Frikadellen"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Vegetarisches Chili mit Bulgur"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Vegetarisches Gulasch á la Margarete"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Zucchini-Frischkäse-Taschen"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Gnocchi mit Brokkoli und Pesto Rosso"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Pasta mit Brokkoli"]
+     :recipe/type [:db/ident :recipe-type/rare]}])
+  (transact
+   [{:db/id [:recipe/name "Bunte Gemüse Quesadilla"]
+     :recipe/name "Quesadilla"}])
+  (transact
+   [{:db/id [:recipe/name "Käse-Brezeln"]
+     :recipe/name "Käse-Brezen"}])
+  (transact
+   [{:db/id [:recipe/name "Brezel + Tofu"]
+     :recipe/name "Breze + Tofu"}])
+  (transact
+   [{:db/id [:recipe/name "Camenbert"]
+     :recipe/name "Camembert"}])
+  (transact
+   [{:db/id [:recipe/name "Gebackender Feta"]
+     :recipe/name "Gebackener Feta"}])
+  (transact
+   [{:db/id [:recipe/name "Buntes Ofengemüse"]
+     :recipe/name "Ofengemüse"}])
+  (transact
+   [{:db/id [:recipe/name "Gemüse-Lassange"]
+     :recipe/name "Gemüse-Lasange"}])
+  (transact
+   [{:db/id [:recipe/name "Ofenkartoffeln mit Sour Cream light"]
+     :recipe/name "Ofenkartoffeln mit Sour Cream"}])
+  (transact
+   [{:db/id [:recipe/name "Pasta mit Kichererbsen & Spinat"]
+     :recipe/name "Kichererbsen & Spinat Nudeln"}])
+
   (defn find-recipes-by-ingredient [ingredient]
     (d/q '[:find ?name
            :in $ ?ingredient
