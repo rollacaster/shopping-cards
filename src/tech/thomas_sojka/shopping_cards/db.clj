@@ -30,7 +30,8 @@
       (assoc :type (get
                     {:recipe-type/rare "RARE"
                      :recipe-type/fast "FAST"
-                     :recipe-type/normal "NORMAL"}
+                     :recipe-type/normal "NORMAL"
+                     :recipe-type/new "NEW"}
                     (:db/ident (:recipe/type recipe))))
       (dissoc :recipe/type)))
 

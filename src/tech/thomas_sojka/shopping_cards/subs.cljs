@@ -22,7 +22,7 @@
  (fn [db _]
    (:error db)))
 
-(def type-order ["NORMAL" "FAST" "RARE"])
+(def type-order ["NEW" "NORMAL" "FAST" "RARE"])
 
 (defn sort-recipes [type-order recipes]
   (sort-by
@@ -36,7 +36,7 @@
 (defn sorted-recipes [recipes]
   (->> recipes
         (group-by :type)
-        (sort-recipes ["NORMAL" "FAST" "RARE"])))
+        (sort-recipes ["NORMAL" "NEW" "FAST" "RARE"])))
 
 (reg-sub
  :sorted-recipes

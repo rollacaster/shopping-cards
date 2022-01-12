@@ -62,6 +62,7 @@
            [:div {:key recipe-type}
             (case recipe-type
               "NORMAL" ""
+              "NEW" [:h2.mv3.tc "Neue Gerichte"]
               "FAST" [:h2.mv3.tc "Schnell Gerichte"]
               "RARE" [:h2.mv3.tc "Selten"])
             [:div.flex.flex-wrap
@@ -107,6 +108,7 @@
                     :get-title (fn [recipe-type]
                                  (case recipe-type
                                    "NORMAL" [:h2.mv3.tc "Normale Gerichte"]
+                                   "NEW" [:h2.mv3.tc "Neue Gerichte"]
                                    "FAST" ""
                                    "RARE" [:h2.mv3.tc "Selten"]))}]))
 
@@ -116,6 +118,7 @@
                     :get-title (fn [recipe-type]
                                  (case recipe-type
                                    "NORMAL" ""
+                                   "NEW" [:h2.mv3.tc "Neue Gerichte"]
                                    "FAST" [:h2.mv3.tc "Schnell Gerichte"]
                                    "RARE" [:h2.mv3.tc "Selten"]))}]))
 
@@ -130,6 +133,7 @@
            [:div {:key recipe-type}
             (case recipe-type
               "NORMAL" ""
+              "NEW" [:h2.ph3 "Neue Gerichte"]
               "FAST" [:h2.ph3 "Schnell Gerichte"]
               "RARE" [:h2.ph3 "Selten"])
             (doall

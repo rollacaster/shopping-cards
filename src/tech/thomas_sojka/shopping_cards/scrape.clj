@@ -185,7 +185,7 @@
 (defn load-edn [path] (read-string (slurp (io/resource path))))
 
 (defn dedup-ingredients [ingredients]
-  (map (fn [{:keys [name] :as ingredient}]
+  (mapv (fn [{:keys [name] :as ingredient}]
          (let [ingredient-name (or
                                 (some (fn [[ingredient-group-name duplicated-name]]
                                         (when (or (= name ingredient-group-name)
@@ -253,15 +253,23 @@
               (take-while #(or (s/starts-with? % "*")
                                (s/starts-with? % "•")))))))
 
+(defn fetch-gdrive-title [link]
+  (let [recipe-id ((s/split link #"/") 5)
+        doc
+        (:body (client/get (str drive-api-url "/files/" recipe-id)
+                           {:oauth-token (oauth-token)
+                            :query-params {:mimeType "text/plain"}}))]
+    (:name (parse-string doc true))))
+
+
 (defn as-hickory [link]
   (->> (:body (client/get link {:headers {"Accept-Language" "de-DE,de;q=0.9,en-DE;q=0.8,en;q=0.7,en-US;q=0.6"}}))
        html/parse
        html/as-hickory))
 
-
-(defn scrape-recipe [{:keys [link type name] :or {type "NORMAL"}}]
+(defn scrape-recipe [{:keys [link type name image] :or {type "NORMAL"}}]
   (if (s/includes? link "kptncook")
-    (let [{:keys [name ingredients]}(parse-string (:out (sh "node" "src/js/scrape.js" link)) true)]
+    (let [{:keys [name ingredients]} (parse-string (:out (sh "node" "src/js/scrape.js" link)) true)]
       (-> {:name name
            :ingredients ingredients
            :inactive false
@@ -270,13 +278,16 @@
            :link link}
           (update :ingredients dedup-ingredients)))
     (let [recipe-hickory (as-hickory link)
-          name (or name (recipe-name link recipe-hickory))]
+          name (or name
+                   (when (s/includes? link "docs.google")
+                         (fetch-gdrive-title link))
+                   (recipe-name link recipe-hickory))]
       (->
        {:name name
         :link link
         :type type
         :inactive false}
-       (assoc :image (find-image name))
+       (assoc :image (or image (find-image name)))
        (assoc :ingredients
               (if (s/includes? link "docs.google")
                 (fetch-gdrive-ingredients link)
