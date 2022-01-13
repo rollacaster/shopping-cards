@@ -1,6 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.subs
   (:require [re-frame.core :refer [reg-sub subscribe]]
-            ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth getYear)]))
+            ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth)]))
 
 (reg-sub
  :selected-recipes
@@ -18,11 +18,36 @@
    (:recipes db)))
 
 (reg-sub
+ :ingredients
+ (fn [db _]
+   (:ingredients db)))
+
+(reg-sub
+  :extra-ingredients
+  (fn [db _]
+    (:extra-ingredients db)))
+
+(reg-sub
+ :addable-ingredients
+ :<- [:ingredients]
+ :<- [:extra-ingredients]
+ :<- [:recipe-ingredients]
+ (fn [[ingredients extra-ingredients recipe-ingredients] _]
+   (->> ingredients
+        (remove (fn [ingredients]
+                  ((set (map first recipe-ingredients))
+                   (:id ingredients))))
+        (map
+         (fn [ingredient]
+           (assoc ingredient :count
+                  (if (and extra-ingredients (extra-ingredients (:id ingredient)))
+                    (js/parseInt (first (re-seq #"\d+" (extra-ingredients (:id ingredient)))))
+                    0)))))))
+
+(reg-sub
  :error
  (fn [db _]
    (:error db)))
-
-(def type-order ["NEW" "NORMAL" "FAST" "RARE"])
 
 (defn sort-recipes [type-order recipes]
   (sort-by
@@ -46,7 +71,7 @@
 (defn lunch-recipes [recipes]
   (->> recipes
         (group-by :type)
-        (sort-recipes ["FAST" "NORMAL" "RARE"])))
+        (sort-recipes ["FAST" "NORMAL" "NEW" "RARE"])))
 
 (reg-sub
  :lunch-recipes
@@ -66,9 +91,9 @@
         (some #(when (= (:id %) recipe-id) %)))))
 
 (reg-sub
- :ingredients
+ :recipe-ingredients
  (fn [db _]
-   (:ingredients db)))
+   (:recipe-ingredients db)))
 
 (reg-sub
  :route

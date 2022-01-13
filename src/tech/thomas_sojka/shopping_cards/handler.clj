@@ -9,7 +9,7 @@
              :refer [create-klaka-shopping-card]]
             [tech.thomas-sojka.shopping-cards.db
              :refer
-             [ingredients-for-recipe load-recipes ingredients-for-recipes load-meal-plans
+             [ingredients-for-recipe load-recipes load-ingredients ingredients-for-recipes load-meal-plans
               create-meal-plan delete-meal-plan create-shopping-list]]
             [clojure.instant :refer [read-instant-date]]))
 
@@ -20,7 +20,11 @@
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
         (pr-str (ingredients-for-recipe recipe-id)))
    (GET "/ingredients" [recipe-ids]
-        (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids))))
+     (if recipe-ids
+       (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids)))
+       {:status 200
+        :body (load-ingredients)
+        :headers {"Content-type" "application/edn"}}))
    (POST "/shopping-card" request
          {:status 201
           :body (create-klaka-shopping-card (:body-params request))

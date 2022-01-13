@@ -19,7 +19,7 @@
 (s/def :ingredient/name string?)
 (s/def :ingredient/ingredient (s/keys :req [:ingredient/id :ingredient/category :ingredient/name]))
 (s/def ::read-ingredient (s/tuple :ingredient/id :ingredient/name))
-(s/def ::ingredients (s/coll-of ::read-ingredient))
+(s/def ::recipe-ingredients (s/coll-of ::read-ingredient))
 (s/def ::selected-ingredients (s/coll-of :ingredient/id :kind set?))
 (s/def ::recipe-details (s/coll-of ::read-ingredient))
 
@@ -51,7 +51,7 @@
                              ::recipes
                              ::selected-recipes
                              ::selected-meal
-                             ::ingredients
+                             ::recipe-ingredients
                              ::selected-ingredients
                              ::recipe-details
                              ::meal-plans]))
@@ -64,7 +64,7 @@
    :recipes []
    :selected-recipes #{}
    :selected-ingredients #{}
-   :ingredients []
+   :recipe-ingredients []
    :meal-plans []
    :recipe-details []
    :selected-meal nil

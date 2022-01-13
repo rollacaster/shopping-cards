@@ -92,8 +92,12 @@
                         [:ingredient/name :as :name]
                         {[:ingredient/category :as :category] [[:db/ident]]}])
               :where
-              [?i :ingredient/id ]])
-       (map (fn [[ingredient]] (update ingredient :category :db/ident)))))
+              [?i :ingredient/id]])
+       (map (fn [[ingredient]] (update ingredient :category :db/ident)))
+       (sort-by :category
+                (fn [category1 category2]
+                  (< (.indexOf penny-order category1)
+                     (.indexOf penny-order category2))))))
 
 (defn load-entity [lookup-ref]
   (d/pull (d/db conn) '[*] lookup-ref))
@@ -196,7 +200,8 @@
               [?m :meal-plan/inst ?d]
               [(tech.thomas-sojka.shopping-cards.db/month ?d) ?month]]
             (d/db conn)
-            (str month))
+            ;; FIXME Use year as well
+            (format "%02d" (Long/parseLong month)))
        (map (fn [meal-plan]
               (-> (first meal-plan)
                   (update :recipe transform-recipe-type)

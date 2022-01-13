@@ -72,12 +72,6 @@
                          (assoc :recipe recipes)
                          (assoc :loading false))))
 
-(reg-event-db
- :add-ingredients
- (fn [db [_ ingredients]] (-> db
-                             (assoc :ingredient ingredients)
-                             (assoc :loading false))))
-
 (reg-event-fx
  :load-recipes
  (fn [{:keys [db]}]
@@ -209,14 +203,14 @@
     :db
     (let [data (read-string res)]
       (-> db
-          (assoc :ingredients data)
+          (assoc :recipe-ingredients data)
           (assoc :loading false)
           (assoc :selected-ingredients (add-water (set (map first data))))))}))
 
 (reg-event-db
  :failure-load-ingredients-for-selected-recipes
  (fn [db _]
-   (assoc db :ingredients :ERROR)))
+   (assoc db :recipe-ingredients :ERROR)))
 
 (reg-event-fx
  :load-ingredients-for-recipe
@@ -243,6 +237,24 @@
  (fn [_ _]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/recipes]}))
 
+(reg-event-fx
+ :show-deselect-ingredients
+ (fn [_ _]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/deselect-ingredients]}))
+
+(reg-event-fx
+ :show-add-ingredients
+ (fn [_ _]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/add-ingredients]
+    :http-xhrio {:method :get
+                 :uri "/ingredients"
+                 :response-format (ajax/json-response-format {:keywords? true})
+                 :on-success [:success-load-ingredients]
+                 :on-failure [:success-failure-ingredients]}}))
+(reg-event-db
+  :success-load-ingredients
+  (fn [db [_ ingredients]]
+    (assoc db :ingredients ingredients)))
 (reg-event-fx
  :show-meal-plan
  (fn [_ _]
@@ -300,13 +312,17 @@
 (reg-event-fx
  :create-shopping-card
  (fn [{:keys [db]} [_ meals-without-shopping-list]]
-   (let [{:keys [ingredients selected-ingredients]} db]
+   (let [{:keys [recipe-ingredients
+                 selected-ingredients
+                 extra-ingredients]}
+         db]
      {:db (assoc db :loading true)
       :http-xhrio {:method :post
                    :uri "/shopping-card"
-                   :params (->> ingredients
+                   :params (->> recipe-ingredients
                                 (filter #(contains? selected-ingredients (first %)))
-                                (map second))
+                                (map second)
+                                (concat (vals extra-ingredients)))
                    :format (ajax/json-request-format)
                    :response-format (ajax/text-response-format)
                    :on-success [:success-shopping-card meals-without-shopping-list]
@@ -343,7 +359,8 @@
                                              meals-without-shopping-list)
                                           (assoc meal-plan :shopping-list true)
                                           meal-plan))
-                                      (:meal-plans db))))
+                                      (:meal-plans db)))
+            (assoc :extra-ingredients {}))
     :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
 
 (reg-event-fx
@@ -394,6 +411,15 @@
 (reg-event-db
  :remove-error
  (fn [db] (assoc db :error nil)))
+
+(reg-event-db
+ :update-extra-ingredient
+ (fn [db [_ id count name]]
+   (if (= count 0)
+     (update db :extra-ingredients dissoc id)
+     (assoc-in db
+               [:extra-ingredients id]
+               (str count " " name)))))
 
 (comment
   (dispatch [:select-meal
