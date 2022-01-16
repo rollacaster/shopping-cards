@@ -362,18 +362,19 @@
   (let [has-recipe? (:recipe meal-plan)]
     [:button.pt2.ph2.h-50.bg-transparent.bn.w-100.relative
      {:on-click #(dispatch
-                 (if has-recipe?
-                   [:show-meal-details meal-plan]
-                   [:select-meal meal-plan]))}
-     [:h4.f4.fw5.mv0.ba.pa2.br3.h-100.b--gray.bw1.overflow-hidden.flex.justify-center.items-center
-      {:class (r/class-names
-               (if has-recipe?
-                 (if (:shopping-list meal-plan) "bg-gray-400 gray-900" "bg-orange-400 white")
-                 "b--dashed gray"))}
-      (when (:shopping-list meal-plan)
-        [:div.w2.absolute.bottom-0.right-0.mr3.mb1.bg-gray-400
-         [icon :shopping-cart]])
-      (meal-name meal-plan)]]))
+                  (if has-recipe?
+                    [:show-meal-details meal-plan]
+                    [:select-meal meal-plan]))}
+     [:div.h-100.br3.bg-center.cover.relative
+      {:style {:background-image (if has-recipe? (str "url(" (:image (:recipe meal-plan)) ")") "")}}
+      (when has-recipe? [:div.o-40.bg-orange.absolute.h-100.w-100.br3])
+      [:h4.f4.fw5.mv0.br3.h-100.bw1.overflow-hidden.flex.justify-center.items-center.absolute.w-100
+       {:class (r/class-names (if has-recipe? "white" "ba b--gray b--dashed gray"))}
+       (when (:shopping-list meal-plan)
+         [:div.absolute.bottom-0.right-0.mr1.bg-orange-400.br-100
+          {:style {:width "1.8rem" :padding 5}}
+          [icon :shopping-cart]])
+       (meal-name meal-plan)]]]))
 
 (defn meal-plan []
   (dispatch [:load-recipes])
