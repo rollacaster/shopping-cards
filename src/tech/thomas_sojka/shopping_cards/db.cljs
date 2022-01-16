@@ -4,7 +4,7 @@
 (s/def ::route map?)
 (s/def :recipe/id string?)
 (s/def :recipe/name string?)
-(s/def :recipe/type #{"NORMAL" "FAST" "RARE" "NEW"})
+(s/def :recipe/type #{"NORMAL" "FAST" "RARE" "NEW" "MISC"})
 (s/def :recipe/image string?)
 (s/def :recipe/link (s/nilable string?))
 (s/def :recipe/inactive boolean?)

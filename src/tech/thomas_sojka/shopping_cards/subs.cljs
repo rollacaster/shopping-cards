@@ -61,7 +61,7 @@
 (defn sorted-recipes [recipes]
   (->> recipes
         (group-by :type)
-        (sort-recipes ["NORMAL" "NEW" "FAST" "RARE"])))
+        (sort-recipes ["NORMAL" "NEW" "MISC" "FAST" "RARE"])))
 
 (reg-sub
  :sorted-recipes
@@ -71,7 +71,7 @@
 (defn lunch-recipes [recipes]
   (->> recipes
         (group-by :type)
-        (sort-recipes ["FAST" "NORMAL" "NEW" "RARE"])))
+        (sort-recipes ["FAST" "NEW" "NORMAL" "MISC" "RARE"])))
 
 (reg-sub
  :lunch-recipes

@@ -57,6 +57,14 @@
       {:href (str "https://trello.com/c/" card-id)}
       "In Trello anzeigen"]]))
 
+(defn recipe-type-title [recipe-type]
+  (case recipe-type
+    "NORMAL" [:h2.mv3.tc "Normale Gerichte"]
+    "NEW" [:h2.mv3.tc "Neue Gerichte"]
+    "FAST" [:h2.mv3.tc "Schnell Gerichte"]
+    "MISC" [:h2.mv3.tc "Keine Gerichte"]
+    "RARE" [:h2.mv3.tc "Selten"]))
+
 
 (defn select-recipes []
   (dispatch [:load-recipes])
@@ -68,11 +76,7 @@
         (map
          (fn [[recipe-type recipes]]
            [:div {:key recipe-type}
-            (case recipe-type
-              "NORMAL" ""
-              "NEW" [:h2.mv3.tc "Neue Gerichte"]
-              "FAST" [:h2.mv3.tc "Schnell Gerichte"]
-              "RARE" [:h2.mv3.tc "Selten"])
+            [recipe-type-title recipe-type]
             [:div.flex.flex-wrap
              (doall
               (map-indexed
@@ -92,9 +96,10 @@
 (defn select-recipe [{:keys [recipes get-title]}]
   [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
    (map
-    (fn [[recipe-type recipes]]
+    (fn [[recipe-type recipe-type-recipes]]
       [:div {:key recipe-type}
-       (get-title recipe-type)
+       (when (not= (ffirst recipes) recipe-type)
+         (get-title recipe-type))
        [:div.flex.flex-wrap
         (map-indexed
          (fn [idx {:keys [id name link image] :as r}]
@@ -104,7 +109,7 @@
                     :link link
                     :image image
                     :on-click #(dispatch [:add-meal r])}])
-         recipes)]])
+         recipe-type-recipes)]])
     (->> recipes
          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))))])
 
@@ -114,21 +119,13 @@
   (let [recipes @(subscribe [:lunch-recipes])]
     [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
-                                 (case recipe-type
-                                   "NORMAL" [:h2.mv3.tc "Normale Gerichte"]
-                                   "NEW" [:h2.mv3.tc "Neue Gerichte"]
-                                   "FAST" ""
-                                   "RARE" [:h2.mv3.tc "Selten"]))}]))
+                                 [recipe-type-title recipe-type])}]))
 
 (defn select-dinner []
   (let [recipes @(subscribe [:sorted-recipes])]
     [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
-                                 (case recipe-type
-                                   "NORMAL" ""
-                                   "NEW" [:h2.mv3.tc "Neue Gerichte"]
-                                   "FAST" [:h2.mv3.tc "Schnell Gerichte"]
-                                   "RARE" [:h2.mv3.tc "Selten"]))}]))
+                                 [recipe-type-title recipe-type])}]))
 
 (defn show-recipes []
   (dispatch [:load-recipes])
@@ -139,11 +136,7 @@
         (map
          (fn [[recipe-type recipes]]
            [:div {:key recipe-type}
-            (case recipe-type
-              "NORMAL" ""
-              "NEW" [:h2.ph3 "Neue Gerichte"]
-              "FAST" [:h2.ph3 "Schnell Gerichte"]
-              "RARE" [:h2.ph3 "Selten"])
+            [recipe-type-title recipe-type]
             (doall
              (->> recipes
                   (remove #(or (= (:link %) "") (= (:link %) nil)))

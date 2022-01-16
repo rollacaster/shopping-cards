@@ -29,7 +29,7 @@
 
      ^{:enum true :graphviz/tag-recursive true}
      RecipeType
-     [NORMAL RARE FAST NEW]
+     [NORMAL RARE FAST NEW MISC]
 
      ^{:graphviz/tag-recursive true}
      CookedWith

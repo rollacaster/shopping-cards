@@ -31,7 +31,8 @@
                     {:recipe-type/rare "RARE"
                      :recipe-type/fast "FAST"
                      :recipe-type/normal "NORMAL"
-                     :recipe-type/new "NEW"}
+                     :recipe-type/new "NEW"
+                     :recipe-type/misc "MISC"}
                     (:db/ident (:recipe/type recipe))))
       (dissoc :recipe/type)))
 
