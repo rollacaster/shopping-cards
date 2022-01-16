@@ -364,13 +364,13 @@
                  (if has-recipe?
                    [:show-meal-details meal-plan]
                    [:select-meal meal-plan]))}
-     [:h4.f4.fw5.mv0.ba.pa2.br3.h-100.b--gray.bw1
+     [:h4.f4.fw5.mv0.ba.pa2.br3.h-100.b--gray.bw1.overflow-hidden.flex.justify-center.items-center
       {:class (r/class-names
                (if has-recipe?
                  (if (:shopping-list meal-plan) "bg-gray-400 gray-900" "bg-orange-400 white")
                  "b--dashed gray"))}
       (when (:shopping-list meal-plan)
-        [:div.w2.absolute.bottom-0.right-0.mr3.mb1
+        [:div.w2.absolute.bottom-0.right-0.mr3.mb1.bg-gray-400
          [icon :shopping-cart]])
       (meal-name meal-plan)]]))
 
@@ -383,16 +383,16 @@
           meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
       [:div.ph5-ns.flex.flex-column.h-100
        [:div.flex.items-center.justify-between
-        [:div.pv2
-         [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white.tc
+        [:div.pv2.flex
+         [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white.tc.flex.justify-center
           {:on-click
            #(dispatch [:init-meal-plans (startOfDay (js/Date.))])}
           "Heute"]
-         [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white.tc
+         [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white.tc.flex.justify-center
           {:on-click
            #(dispatch [:init-meal-plans (subDays (startOfDay start-of-week) 4)])}
           "Zurück"]
-         [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white.tc
+         [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white.tc.flex.justify-center
           {:on-click
            #(dispatch [:init-meal-plans (addDays (startOfDay start-of-week) 4)])}
           "Vor"]]
@@ -404,7 +404,7 @@
           (fn [[lunch dinner]]
             (let [bank-holiday @(subscribe [:bank-holiday (:date lunch)])]
               ^{:key (:date lunch)}
-              [:div.ba.w-50.pv2.flex.flex-column.b--gray
+              [:div.ba.w-50.pv2.flex.flex-column.b--gray.h-50
                [:div.ph2.flex.justify-between
                 [:span.truncate.dark-red bank-holiday]
                 [:span.tr.fw6
