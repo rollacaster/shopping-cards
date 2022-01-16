@@ -194,7 +194,8 @@
                                [[:recipe/id :as :id]
                                 [:recipe/name :as :name]
                                 {:recipe/type [[:db/ident]]}
-                                [:recipe/image :as :image]]}
+                                [:recipe/image :as :image]
+                                [:recipe/link :as :link]]}
                               [:shopping-list/_meals :as :shopping-list]])
               :in $ ?month
               :where
