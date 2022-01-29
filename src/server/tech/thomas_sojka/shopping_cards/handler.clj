@@ -5,7 +5,7 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :refer [resource-response]]
-            [tech.thomas-sojka.shopping-cards.core
+            [tech.thomas-sojka.shopping-cards.trello
              :refer [create-klaka-shopping-card]]
             [tech.thomas-sojka.shopping-cards.db
              :refer
