@@ -18,4 +18,4 @@
  :paths ["src/server" "classes" "resources"]
  :aliases {:uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
                       :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.main"]}
-           :test {:extra-paths ["test"]}}}
+           :test {:extra-paths ["test/server"]}}}
