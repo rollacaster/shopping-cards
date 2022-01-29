@@ -50,6 +50,12 @@
     (assoc db :bank-holidays (read-string data))))
 
 (reg-event-db
+  :filter-ingredients
+  (fn [db [_ filter]]
+    (assoc db :ingredient-filter filter)))
+
+
+(reg-event-db
   :failure-bank-holidays
   (fn [db _]
     ;; TODO Handle failed bank holiday loading
@@ -203,7 +209,7 @@
     :db
     (let [data (read-string res)]
       (-> db
-          (assoc :recipe-ingredients data)
+          (assoc :recipe-ingredients (vec data))
           (assoc :loading false)
           (assoc :selected-ingredients (add-water (set (map first data))))))}))
 
@@ -246,6 +252,7 @@
  :show-add-ingredients
  (fn [_ _]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/add-ingredients]
+    :scroll-to [0 0]
     :http-xhrio {:method :get
                  :uri "/ingredients"
                  :response-format (ajax/json-response-format {:keywords? true})
@@ -412,14 +419,14 @@
  :remove-error
  (fn [db] (assoc db :error nil)))
 
-(reg-event-db
- :update-extra-ingredient
- (fn [db [_ id count name]]
-   (if (= count 0)
-     (update db :extra-ingredients dissoc id)
-     (assoc-in db
-               [:extra-ingredients id]
-               (str count " " name)))))
+(reg-event-fx
+ :add-extra-ingredient
+ (fn [{:keys [db]} [_ id name]]
+   {:db (-> db
+            (update :recipe-ingredients conj [id name])
+            (update :selected-ingredients conj id)
+            (assoc :ingredient-filter ""))
+    :push-state [:tech.thomas-sojka.shopping-cards.view/deselect-ingredients]}))
 
 (comment
   (dispatch [:select-meal

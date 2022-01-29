@@ -1,6 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.subs
   (:require [re-frame.core :refer [reg-sub subscribe]]
-            ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth)]))
+            ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth)]
+            [clojure.string :as str]))
 
 (reg-sub
  :selected-recipes
@@ -23,26 +24,20 @@
    (:ingredients db)))
 
 (reg-sub
-  :extra-ingredients
-  (fn [db _]
-    (:extra-ingredients db)))
-
-(reg-sub
  :addable-ingredients
  :<- [:ingredients]
- :<- [:extra-ingredients]
  :<- [:recipe-ingredients]
- (fn [[ingredients extra-ingredients recipe-ingredients] _]
+ :<- [:ingredient-filter]
+ (fn [[ingredients recipe-ingredients ingredient-filter] _]
    (->> ingredients
-        (remove (fn [ingredients]
-                  ((set (map first recipe-ingredients))
-                   (:id ingredients))))
-        (map
-         (fn [ingredient]
-           (assoc ingredient :count
-                  (if (and extra-ingredients (extra-ingredients (:id ingredient)))
-                    (js/parseInt (first (re-seq #"\d+" (extra-ingredients (:id ingredient)))))
-                    0)))))))
+        (remove (fn [ingredient]
+                  (or
+                   ((set (map first recipe-ingredients))
+                    (:id ingredient))
+                   (not (str/includes? (str/lower-case (:name ingredient))
+                                       (str/lower-case ingredient-filter)))))))))
+
+
 
 (reg-sub
  :error
@@ -163,6 +158,11 @@
  :selected-meal
  (fn [db _]
    (:selected-meal db)))
+
+(reg-sub
+  :ingredient-filter
+  (fn [db _]
+    (:ingredient-filter db)))
 
 (reg-sub
  :bank-holidays

@@ -37,8 +37,8 @@
     {:class (when selected? "o-40")}
     [:span.f4 name]]])
 
-(defn ingredient [{:keys [i id]} children]
-  [:li.mh2.mh5-ns.ph4.pv3.mv3.br2 {:class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")}
+(defn ingredient [{:keys [i id class]} children]
+  [:li.mh2.mh5-ns.ph4.pv3.mt3.br2 {:class [class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")]}
    [:label.flex.items-center.pointer.f4 {:for id}
     children]])
 
@@ -227,17 +227,13 @@
 (defn select-water [ingredients]
   (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
                                               "Wasser"]))
-(defn header [{:keys [action]}]
+(defn header []
   (let [route @(subscribe [:route])]
     [:header.bg-orange-400
      [:div.mw9.center
       [:div.pv3.ph5-ns.ph3.flex.justify-between.w-100.items-center
        [:h1.ma0.gray-800.ml2-ns.truncate
-        (:title (:data route))]
-       (when action
-         (let [{:keys [icon-name on-click]} action]
-           [:button.bn.bg-transparent {:on-click on-click}
-            [icon {:class "w2 h2"} icon-name]]))]]]))
+        (:title (:data route))]]]]))
 
 (defn spinner []
   [:svg {:width 38 :height 38
@@ -283,7 +279,7 @@
           loading @(subscribe [:loading])
           selected-recipes @(subscribe [:selected-recipes])]
       [:div.sans-serif.flex.flex-column.h-100
-       [header {:action (:header-action (:data route))}]
+       [header]
        (when (:view (:data route))
          [:main.flex-auto
           [:div.mw9.center.bg-gray-200.h-100
@@ -299,43 +295,29 @@
 
 (defn deselect-ingredients []
   (let [selected-ingredients @(subscribe [:selected-ingredients])
-        extra-ingredients @(subscribe [:extra-ingredients])
         ingredients @(subscribe [:recipe-ingredients])
         loading @(subscribe [:loading])
         meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
     [:<>
-     (when (seq extra-ingredients)
-       [:<>
-        [:h2.ph2.mv0.pt3 "Extra Zutaten"]
-        [:ul.list.pl0.mv0.pb3
-         (doall
-          (map-indexed (fn [i [id content]]
-                         [ingredient-select
-                          (let [selected?
-                                (contains? extra-ingredients id)]
-                            {:key id
-                             :i i
-                             :id id
-                             :selected? selected?
-                             :on-change
-                             #(dispatch [:update-extra-ingredient id 0 ""])})
-                          content])
-                       extra-ingredients))]
-        [:h2.ph2.mv0 "Rezept Zutaten"]])
      [:ul.list.pl0.mv0.pb6
-      (doall
-       (map-indexed (fn [i [id content]]
-                      [ingredient-select
-                       (let [selected?
-                             (contains? selected-ingredients id)]
-                         {:key id
-                          :i i
-                          :id id
-                          :selected? selected?
-                          :on-change
-                          #(dispatch [:toggle-selected-ingredients id])})
-                       content])
-                    ingredients))]
+      (map-indexed (fn [i [id content]]
+                     [ingredient-select
+                      (let [selected? (contains? selected-ingredients id)]
+                        {:key id
+                         :i i
+                         :id id
+                         :selected? selected?
+                         :on-change
+                         #(dispatch [:toggle-selected-ingredients id])})
+                      content])
+                   ingredients)
+      [:button.bn.bg-transparent.w-100.pa0
+       {:on-click #(dispatch [:show-add-ingredients])}
+       [ingredient {:i (count ingredients) :id "add-ingredient" :class "ba b--dashed"}
+        [:div.flex.items-center
+         [:div.w2.flex.items-center.mr3
+          [icon :add]]
+         "Zutat hinzufügen"]]]]
      [:div.fixed.bottom-0.w-100.z-2
       [footer {:on-click #(dispatch [:create-shopping-card
                                      meals-without-shopping-list])
@@ -421,35 +403,28 @@
          [footer {:on-click #(dispatch [:load-ingredients-for-meals meals-without-shopping-list])}])])))
 
 (defn add-ingredients []
-  (let [ingredients @(subscribe [:addable-ingredients])]
+  (let [ingredients @(subscribe [:addable-ingredients])
+        ingredient-filter @(subscribe [:ingredient-filter])]
     [:div.ph5-ns.flex.flex-column.h-100
+     [:div.ph2.pt3
+      [:input.h2.br3.ba.b--gray.ph2 {:value ingredient-filter
+                                     :autoFocus true
+                                     :on-change (fn [e] (dispatch [:filter-ingredients ^js (.-target.value e)]))
+                                     :placeholder "Suche..."}]]
      [:ul.list.pl0.mv0.pb6
-      (doall
-       (map-indexed (fn [i {:keys [id name count]}]
+      (map-indexed (fn [i {:keys [id name]}]
+                     [:button.bn.pa0.w-100.ma0.dib
+                      {:key id
+                       :on-click #(dispatch [:add-extra-ingredient id name])}
                       [ingredient
-                       {:key id
-                        :i i
+                       {:i i
                         :id id
                         :selected? false}
-                       [:div.flex.justify-between.w-100
-                        name
-                        [:div.flex.items-center
-                         [:button.bn.bg-transparent.flex.items-center
-                          {:class (when (even? i) "white")
-                           :on-click #(dispatch [:update-extra-ingredient
-                                                 id
-                                                 (dec count)
-                                                 name])}
-                          [icon {:style {:width 20}} :remove]]
-                         [:span.ph2 count]
-                         [:button.bn.bg-transparent.flex.items-center
-                          {:class (when (even? i) "white")
-                           :on-click #(dispatch [:update-extra-ingredient
-                                                 id
-                                                 (inc count)
-                                                 name])}
-                          [icon {:style {:width 20}} :add]]]]])
-                    ingredients))]
+                       [:div.flex.w-100
+                        [:div.mr3.flex.items-center
+                         [icon {:style {:width 20}} :add]]
+                        name]]])
+                   ingredients)]
      (when (seq [])
        [footer {:on-click #(dispatch [:add-ingredients []])}])]))
 
@@ -479,14 +454,10 @@
    ["/deselect-ingredients" {:name ::deselect-ingredients
                              :view deselect-ingredients
                              :title "Zutaten auswählen"
-                             :header-action {:icon-name :add
-                                             :on-click (fn [] (dispatch [:show-add-ingredients]))}
                              :action #(dispatch [:create-shopping-card])}]
    ["/add-ingredients" {:name ::add-ingredients
                         :view add-ingredients
-                        :title "Zutaten hinzufügen"
-                        :header-action {:icon-name :back
-                                        :on-click (fn [] (dispatch [:show-deselect-ingredients]))}}]
+                        :title "Zutaten hinzufügen"}]
    ["/finish/:card-id" {:name ::finish
                         :view finish
                         :title "Einkaufszettel erstellt"

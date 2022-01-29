@@ -68,4 +68,5 @@
    :meal-plans []
    :recipe-details []
    :selected-meal nil
-   :start-of-week (js/Date.)})
+   :start-of-week (js/Date.)
+   :ingredient-filter ""})
