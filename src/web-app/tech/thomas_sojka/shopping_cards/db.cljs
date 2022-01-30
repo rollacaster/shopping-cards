@@ -28,12 +28,13 @@
 (s/def :ingredient/id string?)
 (s/def :ingredient/category string?)
 (s/def :ingredient/name string?)
-(s/def :ingredient/ingredient (s/keys :req [:ingredient/id :ingredient/category :ingredient/name]))
+(s/def :ingredient/ingredient (s/keys :req-un [:ingredient/id :ingredient/category :ingredient/name]))
 (s/def :shopping-card/read-ingredient (s/tuple :ingredient/id :ingredient/name))
 (s/def :shopping-card/ingredients (s/coll-of :shopping-card/read-ingredient))
 (s/def :shopping-card/selected-ingredient-ids (s/coll-of :ingredient/id :kind set?))
 
 (s/def :extra-ingredients/filter string?)
+(s/def :extra-ingredients/ingredients (s/coll-of :ingredient/ingredient))
 
 (s/def :recipe-details/ingredients (s/coll-of :shopping-card/read-ingredient))
 (s/def :recipe-details/meal (s/nilable :meal-plan/meal))
@@ -60,5 +61,6 @@
    :shopping-card/selected-ingredient-ids #{}
    :shopping-card/ingredients []
    :extra-ingredients/filter ""
+   :extra-ingredients/ingredients []
    :recipe-details/ingredients []
    :recipe-details/meal nil})

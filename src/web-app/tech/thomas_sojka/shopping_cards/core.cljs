@@ -15,7 +15,7 @@
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})
    (fn [m]
-     (dispatch [:navigate m]))
+     (dispatch [:app/navigate m]))
    {:use-fragment true})
   (dom/render [app] (.getElementById js/document "app")))
 
@@ -24,6 +24,6 @@
   (clear-subscription-cache!)
   (init!))
 
-(defonce start-up (do (dispatch-sync [:initialise (.getFullYear (js/Date.))]) true))
+(defonce start-up (do (dispatch-sync [:app/initialise (.getFullYear (js/Date.))]) true))
 
 (init!)

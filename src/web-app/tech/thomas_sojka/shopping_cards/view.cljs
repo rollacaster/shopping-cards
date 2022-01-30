@@ -81,20 +81,20 @@
                     :name name
                     :link link
                     :image image
-                    :on-click #(dispatch [:add-meal r])}])
+                    :on-click #(dispatch [:main/add-meal r])}])
          recipe-type-recipes)]])
     (->> recipes
          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))))])
 
 (defn select-lunch []
   (let [recipes @(subscribe [:lunch-recipes])]
-    [select-recipe {:main/recipes recipes
+    [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
                                  [recipe-type-title recipe-type])}]))
 
 (defn select-dinner []
   (let [recipes @(subscribe [:sorted-recipes])]
-    [select-recipe {:main/recipes recipes
+    [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
                                  [recipe-type-title recipe-type])}]))
 
@@ -112,7 +112,7 @@
          [:h1.mv0 name]]
         (when-not shopping-list
           [:button.pv2.br3.bg-orange-200.bn.shadow-2.self-start
-           {:on-click #(dispatch [:remove-meal])}
+           {:on-click #(dispatch [:main/remove-meal])}
            [icon {:class "dark-gray h2"} :trash-can]])]
        [:div.flex.justify-between.flex-wrap
         [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
@@ -194,18 +194,18 @@
                          :id id
                          :selected? selected?
                          :on-change
-                         #(dispatch [:toggle-selected-ingredients id])})
+                         #(dispatch [:shopping-card/toggle-selected-ingredients id])})
                       content])
                    ingredients)
       [:button.bn.bg-transparent.w-100.pa0
-       {:on-click #(dispatch [:show-add-ingredients])}
+       {:on-click #(dispatch [:extra-ingredients/show])}
        [ingredient {:i (count ingredients) :id "add-ingredient" :class "ba b--dashed"}
         [:div.flex.items-center
          [:div.w2.flex.items-center.mr3
           [icon :add]]
          "Zutat hinzufügen"]]]]
      [:div.fixed.bottom-0.w-100.z-2
-      [footer {:on-click #(dispatch [:create-shopping-card
+      [footer {:on-click #(dispatch [:shopping-card/create
                                      meals-without-shopping-list])
                :app/loading loading}]]]))
 
@@ -221,8 +221,8 @@
     [:button.pt2.ph2.h-50.bg-transparent.bn.w-100.relative
      {:on-click #(dispatch
                   (if has-recipe?
-                    [:show-meal-details meal-plan]
-                    [:select-meal meal-plan]))}
+                    [:recipe-details/show-meal-details meal-plan]
+                    [:main/select-meal meal-plan]))}
      [:div.h-100.br3.bg-center.cover.relative
       {:style {:background-image (if has-recipe? (str "url(" (:image (:recipe meal-plan)) ")") "")}}
       (when has-recipe? [:div.o-40.bg-orange.absolute.h-100.w-100.br3])
@@ -235,8 +235,8 @@
        (meal-name meal-plan)]]]))
 
 (defn meal-plan []
-  (dispatch [:load-recipes])
-  (dispatch [:init-meal-plans (js/Date.)])
+  (dispatch [:main/load-recipes])
+  (dispatch [:main/init-meal-plans (js/Date.)])
   (fn []
     (let [meals-plans @(subscribe [:weekly-meal-plans])
           start-of-week @(subscribe [:main/start-of-week])
@@ -246,15 +246,15 @@
         [:div.pv2.flex
          [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white.tc.flex.justify-center
           {:on-click
-           #(dispatch [:init-meal-plans (startOfDay (js/Date.))])}
+           #(dispatch [:main/init-meal-plans (startOfDay (js/Date.))])}
           "Heute"]
          [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white.tc.flex.justify-center
           {:on-click
-           #(dispatch [:init-meal-plans (subDays (startOfDay start-of-week) 4)])}
+           #(dispatch [:main/init-meal-plans (subDays (startOfDay start-of-week) 4)])}
           "Zurück"]
          [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white.tc.flex.justify-center
           {:on-click
-           #(dispatch [:init-meal-plans (addDays (startOfDay start-of-week) 4)])}
+           #(dispatch [:main/init-meal-plans (addDays (startOfDay start-of-week) 4)])}
           "Vor"]]
         [:div.flex.justify-center.flex-auto
          (format (:date (ffirst meals-plans)) "MMMM yyyy" #js {:locale de})]]
@@ -276,7 +276,7 @@
                 [meal dinner]]]))
           meals-plans))]
        (when (seq meals-without-shopping-list)
-         [footer {:on-click #(dispatch [:load-ingredients-for-meals meals-without-shopping-list])}])])))
+         [footer {:on-click #(dispatch [:shopping-card/load-ingredients-for-meals meals-without-shopping-list])}])])))
 
 (defn add-ingredients []
   (let [ingredients @(subscribe [:addable-ingredients])
@@ -285,13 +285,13 @@
      [:div.ph2.pt3
       [:input.h2.br3.ba.b--gray.ph2 {:value ingredient-filter
                                      :autoFocus true
-                                     :on-change (fn [e] (dispatch [:filter-ingredients ^js (.-target.value e)]))
+                                     :on-change (fn [e] (dispatch [:extra-ingredients/filter-ingredients ^js (.-target.value e)]))
                                      :placeholder "Suche..."}]]
      [:ul.list.pl0.mv0.pb6
       (map-indexed (fn [i {:keys [id name]}]
                      [:button.bn.pa0.w-100.ma0.dib
                       {:key id
-                       :on-click #(dispatch [:add-extra-ingredient id name])}
+                       :on-click #(dispatch [:extra-ingredients/add id name])}
                       [ingredient
                        {:i i
                         :id id
@@ -314,16 +314,14 @@
      :title "Rezept"}]
    ["/deselect-ingredients" {:name ::deselect-ingredients
                              :view deselect-ingredients
-                             :title "Zutaten auswählen"
-                             :action #(dispatch [:create-shopping-card])}]
+                             :title "Zutaten auswählen"}]
    ["/add-ingredients" {:name ::add-ingredients
                         :view add-ingredients
                         :title "Zutaten hinzufügen"}]
    ["/finish/:card-id" {:name ::finish
                         :view finish
                         :title "Einkaufszettel erstellt"
-                        :parameters {:path {:card-id string?}}
-                        :action #(dispatch [:restart])}]
+                        :parameters {:path {:card-id string?}}}]
    ["/meal-plan" {:name ::meal-plan
                   :view meal-plan
                   :title "Essensplan"}]

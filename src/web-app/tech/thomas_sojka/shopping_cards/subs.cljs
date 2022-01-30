@@ -1,5 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.subs
-  (:require [re-frame.core :refer [reg-sub]]
+  (:require [re-frame.core :refer [reg-sub] :as rf]
             ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth)]
             [clojure.string :as str]))
 
@@ -14,13 +14,13 @@
    (:main/recipes db)))
 
 (reg-sub
- :ingredients
+ :extra-ingredients/ingredients
  (fn [db _]
-   (:ingredients db)))
+   (:extra-ingredients/ingredients db)))
 
 (reg-sub
  :addable-ingredients
- :<- [:ingredients]
+ :<- [:extra-ingredients/ingredients]
  :<- [:shopping-card/ingredients]
  :<- [:extra-ingredients/filter]
  (fn [[ingredients recipe-ingredients ingredient-filter] _]
