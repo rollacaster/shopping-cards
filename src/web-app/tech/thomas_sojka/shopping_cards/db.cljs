@@ -11,7 +11,6 @@
 (s/def :recipe/recipe (s/keys :req-un [:recipe/name :recipe/type :recipe/image]
                               :opt-un [:recipe/link :recipe/inactive]))
 (s/def ::recipes (s/coll-of :recipe/recipe))
-(s/def ::selected-recipes (s/coll-of :recipe/name :kind set?))
 
 
 (s/def :ingredient/id string?)
@@ -49,7 +48,6 @@
                              ::start-of-week
                              ::route
                              ::recipes
-                             ::selected-recipes
                              ::selected-meal
                              ::recipe-ingredients
                              ::selected-ingredients
@@ -62,7 +60,6 @@
    :loading false
    :route {}
    :recipes []
-   :selected-recipes #{}
    :selected-ingredients #{}
    :recipe-ingredients []
    :meal-plans []

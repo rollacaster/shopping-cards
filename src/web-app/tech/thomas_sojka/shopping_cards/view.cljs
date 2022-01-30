@@ -66,33 +66,6 @@
     "RARE" [:h2.mv3.tc "Selten"]))
 
 
-(defn select-recipes []
-  (dispatch [:load-recipes])
-  (fn []
-    (let [selected-recipes @(subscribe [:selected-recipes])
-          sorted-recipes @(subscribe [:sorted-recipes])]
-      [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
-       (doall
-        (map
-         (fn [[recipe-type recipes]]
-           [:div {:key recipe-type}
-            [recipe-type-title recipe-type]
-            [:div.flex.flex-wrap
-             (doall
-              (map-indexed
-               (fn [idx {:keys [id name link image]}]
-                 [recipe (let [selected? (contains? selected-recipes id)]
-                           {:key id
-                            :even (even? idx)
-                            :name name
-                            :link link
-                            :image image
-                            :selected? selected?
-                            :on-click #(dispatch [:toggle-selected-recipes id])})])
-               recipes))]])
-         (->> sorted-recipes
-              (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])))
-
 (defn select-recipe [{:keys [recipes get-title]}]
   [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
    (map
@@ -113,8 +86,6 @@
     (->> recipes
          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))))])
 
-
-
 (defn select-lunch []
   (let [recipes @(subscribe [:lunch-recipes])]
     [select-recipe {:recipes recipes
@@ -126,73 +97,6 @@
     [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
                                  [recipe-type-title recipe-type])}]))
-
-(defn show-recipes []
-  (dispatch [:load-recipes])
-  (fn []
-    (let [sorted-recipes @(subscribe [:sorted-recipes])]
-      [:div.flex.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns.bg-gray-200
-       (doall
-        (map
-         (fn [[recipe-type recipes]]
-           [:div {:key recipe-type}
-            [recipe-type-title recipe-type]
-            (doall
-             (->> recipes
-                  (remove #(or (= (:link %) "") (= (:link %) nil)))
-                  (map (fn [{:keys [id name link image]}]
-                         [recipe {:key id
-                                  :name name
-                                  :link link
-                                  :image image
-                                  :on-click #(dispatch [:show-recipe id])}]))))])
-         (->> sorted-recipes
-              (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)])))))])))
-
-
-(defn show-recipe [{{{:keys [recipe-id]} :path}:parameters}]
-  (dispatch [:load-ingredients-for-recipe recipe-id])
-  (fn [match]
-    (let [{:keys [path]} (:parameters match)
-          {:keys [recipe-id]} path
-          {:keys [name link image]} @(subscribe [:shown-recipe recipe-id])
-          ingredients @(subscribe [:recipe-details])]
-      [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
-       [:a.link.near-black.underline.mb3.mb0-ns.db {:href link :target "_blank" :referer "norel noopener"}
-        [:h1.mv0 name]]
-       [:div.flex.justify-between.flex-wrap
-        [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
-         [:img.w5.br3.ba.b--orange-300 {:src image}]]
-        [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-         (map
-          (fn [[id ingredient]]
-            [:li.mb3.f4 {:key id} ingredient])
-          ingredients)]]
-       [:iframe.w-100 {:src link :style {:height "50rem"}}]])))
-
-(defn recipe-details [{{{:keys [recipe-id]} :path}:parameters}]
-  (dispatch [:load-ingredients-for-recipe recipe-id])
-  (fn [match]
-    (let [{:keys [path]} (:parameters match)
-          {:keys [recipe-id]} path
-          {:keys [name link image]} @(subscribe [:shown-recipe recipe-id])
-          ingredients @(subscribe [:recipe-details])]
-      [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
-       [:div.flex.justify-between.items
-        [:a.link.near-black.underline.mb3.mb0-ns.db {:href link :target "_blank" :referer "norel noopener"}
-         [:h1.mv0 name]]
-        [:button.pv2.br3.bg-orange-200.bn.shadow-2.self-start
-         {:on-click #(dispatch [:remove-meal])}
-         [icon {:class "dark-gray h2"} :trash-can]]]
-       [:div.flex.justify-between.flex-wrap
-        [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
-         [:img.w5.br3.ba.b--orange-300 {:src image}]]
-        [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-         (map
-          (fn [[id ingredient]]
-            [:li.mb3.f4 {:key id} ingredient])
-          ingredients)]]
-       [:iframe.w-100 {:src link :style {:height "50rem"}}]])))
 
 (defn meal-plan-details []
   (fn []
@@ -224,9 +128,6 @@
            {:href link}
            "Rezept anzeigen"]])])))
 
-(defn select-water [ingredients]
-  (conj ingredients ["6175d1a2-0af7-43fb-8a53-212af7b72c9c"
-                                              "Wasser"]))
 (defn header []
   (let [route @(subscribe [:route])]
     [:header.bg-orange-400
@@ -251,15 +152,6 @@
     [:path {:d "M50 50L20 50A30 30 0 0 1 80 50Z" :fill "#f8b26a" :transform "rotate(-34.8753 50 50)"}
      [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;-45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]]])
 
-(defn footer-action [{:keys [loading]}]
-  [:div.flex.items-center
-   (if loading
-     [:div {:style {:width 128}}
-      [spinner]]
-     [:<>
-      [:span.f2.mr2 "Fertig!"]
-      [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])])
-
 (defn footer [{:keys [on-click loading]}]
   [:footer.bg-orange-400.flex.justify-center.pa3
    [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
@@ -275,9 +167,7 @@
 (defn app []
   (fn []
     (let [route @(subscribe [:route])
-          error @(subscribe [:error])
-          loading @(subscribe [:loading])
-          selected-recipes @(subscribe [:selected-recipes])]
+          error @(subscribe [:error])]
       [:div.sans-serif.flex.flex-column.h-100
        [header]
        (when (:view (:data route))
@@ -287,11 +177,7 @@
        (when error
          [:div.absolute.white.bottom-0.flex.justify-center.w-100.mb4
           [:div.w-80.bg-light-red.ph3.pv2.br2.ba.b--white
-           error]])
-       (when (> (count selected-recipes) 0)
-         [:div.fixed.bottom-0.w-100.z-2
-          [footer {:on-click (:action (:data route))
-                   :loading loading}]])])))
+           error]])])))
 
 (defn deselect-ingredients []
   (let [selected-ingredients @(subscribe [:selected-ingredients])
@@ -322,16 +208,6 @@
       [footer {:on-click #(dispatch [:create-shopping-card
                                      meals-without-shopping-list])
                :loading loading}]]]))
-
-(defn event->meal-plan [event]
-  (cond->
-   {:date (.-start ^js event)
-    :type (case (.-resource.type ^js event)
-            "lunch" :meal-type/lunch
-            "dinner" :meal-type/dinner)}
-    (.-resource.recipe ^js event)
-    (assoc :recipe (js->clj (.-resource.recipe ^js event)
-                      :keywordize-keys true))))
 
 (defn meal-name [meal-plan]
   (if (:recipe meal-plan)
@@ -430,23 +306,8 @@
 
 (def routes
   [["/" {:name ::main
-         :view select-recipes
-         :title "Rezepte"
-         :action #(dispatch [:load-ingredients-for-selected-recipes])}]
-   ["/show-recipes"
-    {:name ::recipes
-     :view show-recipes
-     :title "Rezepte"}]
-   ["/show-recipes/:recipe-id"
-    {:name ::recipe
-     :view show-recipe
-     :title "Rezept"
-     :parameters {:path {:recipe-id string?}}}]
-   ["/recipes/:recipe-id"
-    {:name ::recipe-details
-     :view recipe-details
-     :title "Rezept"
-     :parameters {:path {:recipe-id string?}}}]
+         :view meal-plan
+         :title "Essensplan"}]
    ["/meal-plan-details"
     {:name ::meal-plan-details
      :view meal-plan-details

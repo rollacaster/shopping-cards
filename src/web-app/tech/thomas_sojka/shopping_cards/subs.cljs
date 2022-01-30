@@ -1,12 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.subs
-  (:require [re-frame.core :refer [reg-sub subscribe]]
+  (:require [re-frame.core :refer [reg-sub]]
             ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth)]
             [clojure.string :as str]))
-
-(reg-sub
- :selected-recipes
- (fn [db _]
-   (:selected-recipes db)))
 
 (reg-sub
  :selected-ingredients
@@ -36,8 +31,6 @@
                     (:id ingredient))
                    (not (str/includes? (str/lower-case (:name ingredient))
                                        (str/lower-case ingredient-filter)))))))))
-
-
 
 (reg-sub
  :error
@@ -79,13 +72,6 @@
    (:recipe-details db)))
 
 (reg-sub
- :shown-recipe
- :<- [:recipes]
- (fn [recipes [_ recipe-id]]
-   (->> recipes
-        (some #(when (= (:id %) recipe-id) %)))))
-
-(reg-sub
  :recipe-ingredients
  (fn [db _]
    (:recipe-ingredients db)))
@@ -119,13 +105,6 @@
  :start-of-week
  (fn [db _]
    (:start-of-week db)))
-
-(defn meal-plan->event [meal-plan]
-  {:title (-> meal-plan :recipe :name)
-   :start (:date meal-plan)
-   :end (:date meal-plan)
-   :resource {:recipe (:recipe meal-plan)
-              :type (:type meal-plan)}})
 
 (defn group-meal-plans [meal-plans]
   (->> meal-plans
@@ -183,29 +162,3 @@
                    (= day c-day))
                name))
            bank-holidays))))
-(comment
-  @(subscribe [:weekly-meal-plans (js/Date.)])
-  @(subscribe [:selected-meal])
-  @(subscribe [:start-of-week])
-  @(subscribe [:bank-holidays])
-  @(subscribe [:bank-holiday? (js/Date.)])
-  (get-in
-   (->> @(subscribe [:meal-plans])
-        (group-by :date)
-        (map #(hash-map (first %) (group-by :type (second %))))
-        first)
-   [#inst "2021-11-02T23:00:00.000-00:00" :meal-type/dinner])
-  @(subscribe [:recipes])
-  @(subscribe [:meal-plans-with-recipes])
-
-  (def meal-plans @(subscribe [:meal-plans]))
-  @(subscribe [:selected-recipes])
-  @(subscribe [:selected-ingredients])
-  @(subscribe [:shown-recipe "9bbdb4ef-4934-4a96-be22-881ed37c0fd5"])
-  @(subscribe [:meals-without-shopping-list])
-  @(subscribe [:recipes])
-  @(subscribe [:sorted-recipes])
-  @(subscribe [:recipe-details])
-  @(subscribe [:ingredients])
-  @(subscribe [:route])
-  @(subscribe [:loading]))

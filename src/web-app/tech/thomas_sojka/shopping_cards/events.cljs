@@ -44,6 +44,21 @@
                  :on-success [:success-bank-holidays]
                  :on-failure [:failure-bank-holidays]}}))
 
+(defonce timeouts (r/atom {}))
+
+(reg-fx
+  :timeout
+  (fn [{:keys [id event time]}]
+    (when-some [existing (get @timeouts id)]
+      (js/clearTimeout existing)
+      (swap! timeouts dissoc id))
+    (when (some? event)
+      (swap! timeouts assoc id
+        (js/setTimeout
+          (fn []
+            (dispatch event))
+          time)))))
+
 (reg-event-db
   :success-bank-holidays
   (fn [db [_ data]]
@@ -53,7 +68,6 @@
   :filter-ingredients
   (fn [db [_ filter]]
     (assoc db :ingredient-filter filter)))
-
 
 (reg-event-db
   :failure-bank-holidays
@@ -71,12 +85,6 @@
     db
     :selected-ingredients
     (partial toggle-map id))))
-
-(reg-event-db
- :add-recipes
- (fn [db [_ recipes]] (-> db
-                         (assoc :recipe recipes)
-                         (assoc :loading false))))
 
 (reg-event-fx
  :load-recipes
@@ -140,14 +148,6 @@
        (assoc :loading false)
        (assoc :meal-plans :ERROR))))
 
-(reg-event-db
- :toggle-selected-recipes
- (fn [db [_ id]]
-   (update
-    db
-    :selected-recipes
-    (partial toggle-map id))))
-
 (reg-event-fx
  :add-meal
  (fn [{:keys [db]} [_ recipe]]
@@ -176,17 +176,6 @@
     :timeout {:id :error-removal
               :event [:remove-error]
               :time 2000}}))
-
-(reg-event-fx
- :load-ingredients-for-selected-recipes
- (fn [{:keys [db]} _]
-   (let [{:keys [selected-recipes]} db]
-     {:db (assoc db :loading true)
-      :http-xhrio {:method :get
-                   :uri (str "/ingredients?" (str/join "&" (map #(str "recipe-ids=" %) selected-recipes)))
-                   :response-format (ajax/raw-response-format)
-                   :on-success [:success-load-ingredients-for-selected-recipes]
-                   :on-failure [:failure-load-ingredients-for-selected-recipes]}})))
 
 (reg-event-fx
  :load-ingredients-for-meals
@@ -218,16 +207,6 @@
  (fn [db _]
    (assoc db :recipe-ingredients :ERROR)))
 
-(reg-event-fx
- :load-ingredients-for-recipe
- (fn [{:keys [db]} [_ recipe-id]]
-   {:db (assoc db :loading true)
-    :http-xhrio {:method :get
-                 :uri (str "/recipes/" recipe-id "/ingredients")
-                 :response-format (ajax/raw-response-format)
-                 :on-success [:success-load-ingredients-for-recipe]
-                 :on-failure [:failure-load-ingredients-for-recipe]}}))
-
 (reg-event-db
  :success-load-ingredients-for-recipe
  (fn [db [_ data]]
@@ -237,16 +216,6 @@
  :failure-load-ingredients-for-recipe
  (fn [db _]
    (assoc db :recipe-details :ERROR)))
-
-(reg-event-fx
- :show-recipes
- (fn [_ _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/recipes]}))
-
-(reg-event-fx
- :show-deselect-ingredients
- (fn [_ _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/deselect-ingredients]}))
 
 (reg-event-fx
  :show-add-ingredients
@@ -262,15 +231,6 @@
   :success-load-ingredients
   (fn [db [_ ingredients]]
     (assoc db :ingredients ingredients)))
-(reg-event-fx
- :show-meal-plan
- (fn [_ _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
-
-(reg-event-fx
- :show-main
- (fn [_ _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/main]}))
 
 (reg-event-fx
  :select-meal
@@ -286,11 +246,6 @@
  (fn [{:keys [db]} [_ meal]]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/select-dinner]
     :db (assoc db :selected-meal meal)}))
-
-(reg-event-fx
- :show-recipe
- (fn [_ [_ id]]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/recipe {:recipe-id id}]}))
 
 (reg-event-fx
  :show-meal-details
@@ -336,6 +291,12 @@
                    :on-failure [:failure-shopping-card]}})))
 
 (reg-event-fx
+  :failure-shopping-card
+ (fn [{:keys [db]} _]
+   {:push-state [:tech.thomas-sojka.shopping-cards.view/error]
+    :db (assoc db :loading false)}))
+
+(reg-event-fx
  :success-shopping-card
  (fn [{:keys [db]} [_ meals-without-shopping-list card-id]]
    (if meals-without-shopping-list
@@ -371,12 +332,6 @@
     :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
 
 (reg-event-fx
- :failure-shopping-card
- (fn [{:keys [db]} _]
-   {:push-state [:tech.thomas-sojka.shopping-cards.view/error]
-    :db (assoc db :loading false)}))
-
-(reg-event-fx
  :remove-meal
  (fn [{:keys [db]}]
    (let [{:keys [date type]} (:selected-meal db)]
@@ -389,20 +344,6 @@
                    :format (ajax/json-request-format)
                    :response-format (ajax/text-response-format)
                    :on-failure [:failure-remove-meal (:selected-meal db)]}})))
-(defonce timeouts (r/atom {}))
-
-(reg-fx
-  :timeout
-  (fn [{:keys [id event time]}]
-    (when-some [existing (get @timeouts id)]
-      (js/clearTimeout existing)
-      (swap! timeouts dissoc id))
-    (when (some? event)
-      (swap! timeouts assoc id
-        (js/setTimeout
-          (fn []
-            (dispatch event))
-          time)))))
 
 (reg-event-fx
  :failure-remove-meal
@@ -427,36 +368,5 @@
             (update :selected-ingredients conj id)
             (assoc :ingredient-filter ""))
     :push-state [:tech.thomas-sojka.shopping-cards.view/deselect-ingredients]}))
-
-(comment
-  (dispatch [:select-meal
-             {:date #inst "2021-11-09T23:00:00.000-00:00",
-              :type :meal-type/dinner }])
-  (dispatch [:add-meal
-             {:id "a1dae95b-96cf-4278-8015-9ea0fed30750",
-              :name "Broccolicurry mit roten Linsen",
-              :image
-              "https://img.chefkoch-cdn.de/rezepte/3456341515054121/bilder/1156624/crop-360x240/brokkolicurry-mit-roten-linsen.jpg",
-              :link
-              "https://www.weightwatchers.com/de/recipe/broccolicurry-mit-roten-linsen/591aeb9416581df91e8726f4",
-              :type "NORMAL"}])
-  (:selected-meal @re-frame.db/app-db)
-  (dispatch [:initialise-db])
-  (dispatch [:load-recipes])
-  (:meal-plans @re-frame.db/app-db)
-  (dispatch [:toggle-selected-recipes "d47bc268-5e9d-45da-af96-143b12d334c5"])
-  (:selected-recipes @re-frame.db/app-db)
-  (dispatch [:load-ingredients-for-selected-recipes])
-  (:selected-ingredients @re-frame.db/app-db)
-  (dispatch [:toggle-selected-ingredients "7cc3f4e2-fc7a-41d5-a2c8-65e53d9ad641"])
-  (:selected-ingredients @re-frame.db/app-db)
-  (dispatch [:load-ingredients-for-recipe "d47bc268-5e9d-45da-af96-143b12d334c5"])
-  (:recipe-details @re-frame.db/app-db)
-  (dispatch [:create-shopping-card])
-  (dispatch [:show-recipes])
-  (dispatch [:show-recipe "d0bb942b-0165-417d-9153-6c770c036fe8"])
-  (dispatch [:show-main])
-  (dispatch [:restart])
-  )
 
 
