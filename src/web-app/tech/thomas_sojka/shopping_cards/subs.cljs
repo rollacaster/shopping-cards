@@ -4,38 +4,24 @@
             [clojure.string :as str]))
 
 (reg-sub
- :shopping-card/selected-ingredient-ids
+ :app/error
  (fn [db _]
-   (:shopping-card/selected-ingredient-ids db)))
+   (:app/error db)))
+
+(reg-sub
+ :app/route
+ (fn [db _]
+   (:app/route db)))
+
+(reg-sub
+ :app/loading
+ (fn [db _]
+   (:app/loading db)))
 
 (reg-sub
  :main/recipes
  (fn [db _]
    (:main/recipes db)))
-
-(reg-sub
- :extra-ingredients/ingredients
- (fn [db _]
-   (:extra-ingredients/ingredients db)))
-
-(reg-sub
- :addable-ingredients
- :<- [:extra-ingredients/ingredients]
- :<- [:shopping-card/ingredients]
- :<- [:extra-ingredients/filter]
- (fn [[ingredients recipe-ingredients ingredient-filter] _]
-   (->> ingredients
-        (remove (fn [ingredient]
-                  (or
-                   ((set (map first recipe-ingredients))
-                    (:id ingredient))
-                   (not (str/includes? (str/lower-case (:name ingredient))
-                                       (str/lower-case ingredient-filter)))))))))
-
-(reg-sub
- :app/error
- (fn [db _]
-   (:app/error db)))
 
 (defn sort-recipes [type-order recipes]
   (sort-by
@@ -52,7 +38,7 @@
         (sort-recipes ["NORMAL" "NEW" "MISC" "FAST" "RARE"])))
 
 (reg-sub
- :sorted-recipes
+ :main/sorted-recipes
  :<- [:main/recipes]
  sorted-recipes)
 
@@ -62,29 +48,9 @@
         (sort-recipes ["FAST" "NEW" "NORMAL" "MISC" "RARE"])))
 
 (reg-sub
- :lunch-recipes
+ :main/lunch-recipes
  :<- [:main/recipes]
  lunch-recipes)
-
-(reg-sub
- :recipe-details/ingredients
- (fn [db _]
-   (:recipe-details/ingredients db)))
-
-(reg-sub
- :shopping-card/ingredients
- (fn [db _]
-   (:shopping-card/ingredients db)))
-
-(reg-sub
- :app/route
- (fn [db _]
-   (:app/route db)))
-
-(reg-sub
- :app/loading
- (fn [db _]
-   (:app/loading db)))
 
 (reg-sub
  :main/meal-plans
@@ -92,8 +58,8 @@
    (:main/meal-plans db)))
 
 (reg-sub
- :meals-without-shopping-list
- :<- [:weekly-meal-plans]
+ :main/meals-without-shopping-list
+ :<- [:main/weekly-meal-plans]
  (fn [meals-plans]
    (filter #(and (not (:shopping-list %))
                  (:recipe %)
@@ -116,7 +82,7 @@
        (apply merge)))
 
 (reg-sub
- :weekly-meal-plans
+ :main/weekly-meal-plans
  :<- [:main/meal-plans]
  :<- [:main/start-of-week]
  (fn [[meal-plans start-date]]
@@ -134,25 +100,15 @@
     (range 4))))
 
 (reg-sub
- :recipe-details/meal
- (fn [db _]
-   (:recipe-details/meal db)))
-
-(reg-sub
-  :extra-ingredients/filter
-  (fn [db _]
-    (:extra-ingredients/filter db)))
-
-(reg-sub
- :bank-holidays
+ :main/bank-holidays
  (fn [db]
    (filter
     #(or (nil? (:states %)) ((:states %) :by))
-    (:bank-holidays db))))
+    (:main/bank-holidays db))))
 
 (reg-sub
- :bank-holiday
- :<- [:bank-holidays]
+ :main/bank-holiday
+ :<- [:main/bank-holidays]
  (fn [bank-holidays [_ date]]
    (let [c-day (getDate date)
          c-month (getMonth date)]
@@ -162,3 +118,49 @@
                    (= day c-day))
                name))
            bank-holidays))))
+
+(reg-sub
+ :shopping-card/ingredients
+ (fn [db _]
+   (:shopping-card/ingredients db)))
+
+(reg-sub
+ :shopping-card/selected-ingredient-ids
+ (fn [db _]
+   (:shopping-card/selected-ingredient-ids db)))
+
+(reg-sub
+ :extra-ingredients/ingredients
+ (fn [db _]
+   (:extra-ingredients/ingredients db)))
+
+(reg-sub
+ :extra-ingredients/addable-ingredients
+ :<- [:extra-ingredients/ingredients]
+ :<- [:shopping-card/ingredients]
+ :<- [:extra-ingredients/filter]
+ (fn [[ingredients recipe-ingredients ingredient-filter] _]
+   (->> ingredients
+        (remove (fn [ingredient]
+                  (or
+                   ((set (map first recipe-ingredients))
+                    (:id ingredient))
+                   (not (str/includes? (str/lower-case (:name ingredient))
+                                       (str/lower-case ingredient-filter)))))))))
+
+(reg-sub
+  :extra-ingredients/filter
+  (fn [db _]
+    (:extra-ingredients/filter db)))
+
+(reg-sub
+ :recipe-details/ingredients
+ (fn [db _]
+   (:recipe-details/ingredients db)))
+
+(reg-sub
+ :recipe-details/meal
+ (fn [db _]
+   (:recipe-details/meal db)))
+
+

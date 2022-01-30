@@ -87,13 +87,13 @@
          (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))))])
 
 (defn select-lunch []
-  (let [recipes @(subscribe [:lunch-recipes])]
+  (let [recipes @(subscribe [:main/lunch-recipes])]
     [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
                                  [recipe-type-title recipe-type])}]))
 
 (defn select-dinner []
-  (let [recipes @(subscribe [:sorted-recipes])]
+  (let [recipes @(subscribe [:main/sorted-recipes])]
     [select-recipe {:recipes recipes
                     :get-title (fn [recipe-type]
                                  [recipe-type-title recipe-type])}]))
@@ -183,7 +183,7 @@
   (let [selected-ingredients @(subscribe [:shopping-card/selected-ingredient-ids])
         ingredients @(subscribe [:shopping-card/ingredients])
         loading @(subscribe [:app/loading])
-        meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
+        meals-without-shopping-list @(subscribe [:main/meals-without-shopping-list])]
     [:<>
      [:ul.list.pl0.mv0.pb6
       (map-indexed (fn [i [id content]]
@@ -238,9 +238,9 @@
   (dispatch [:main/load-recipes])
   (dispatch [:main/init-meal-plans (js/Date.)])
   (fn []
-    (let [meals-plans @(subscribe [:weekly-meal-plans])
+    (let [meals-plans @(subscribe [:main/weekly-meal-plans])
           start-of-week @(subscribe [:main/start-of-week])
-          meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
+          meals-without-shopping-list @(subscribe [:main/meals-without-shopping-list])]
       [:div.ph5-ns.flex.flex-column.h-100
        [:div.flex.items-center.justify-between
         [:div.pv2.flex
@@ -262,7 +262,7 @@
         (doall
          (map
           (fn [[lunch dinner]]
-            (let [bank-holiday @(subscribe [:bank-holiday (:date lunch)])]
+            (let [bank-holiday @(subscribe [:main/bank-holiday (:date lunch)])]
               ^{:key (:date lunch)}
               [:div.ba.w-50.pv2.flex.flex-column.b--gray.h-50
                [:div.ph2.flex.justify-between
@@ -279,7 +279,7 @@
          [footer {:on-click #(dispatch [:shopping-card/load-ingredients-for-meals meals-without-shopping-list])}])])))
 
 (defn add-ingredients []
-  (let [ingredients @(subscribe [:addable-ingredients])
+  (let [ingredients @(subscribe [:extra-ingredients/addable-ingredients])
         ingredient-filter @(subscribe [:extra-ingredients/filter])]
     [:div.ph5-ns.flex.flex-column.h-100
      [:div.ph2.pt3
