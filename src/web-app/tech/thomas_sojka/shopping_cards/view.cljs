@@ -88,13 +88,13 @@
 
 (defn select-lunch []
   (let [recipes @(subscribe [:lunch-recipes])]
-    [select-recipe {:recipes recipes
+    [select-recipe {:main/recipes recipes
                     :get-title (fn [recipe-type]
                                  [recipe-type-title recipe-type])}]))
 
 (defn select-dinner []
   (let [recipes @(subscribe [:sorted-recipes])]
-    [select-recipe {:recipes recipes
+    [select-recipe {:main/recipes recipes
                     :get-title (fn [recipe-type]
                                  [recipe-type-title recipe-type])}]))
 
@@ -102,8 +102,8 @@
   (fn []
     (let [{{:keys [name link image]} :recipe
            :keys [shopping-list]}
-          @(subscribe [:selected-meal])
-          ingredients @(subscribe [:recipe-details])]
+          @(subscribe [:recipe-details/meal])
+          ingredients @(subscribe [:recipe-details/ingredients])]
       [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
        [:div.flex.justify-between.items
         [:a.link.near-black.mb3.mb0-ns.db
@@ -129,7 +129,7 @@
            "Rezept anzeigen"]])])))
 
 (defn header []
-  (let [route @(subscribe [:route])]
+  (let [route @(subscribe [:app/route])]
     [:header.bg-orange-400
      [:div.mw9.center
       [:div.pv3.ph5-ns.ph3.flex.justify-between.w-100.items-center
@@ -166,8 +166,8 @@
 
 (defn app []
   (fn []
-    (let [route @(subscribe [:route])
-          error @(subscribe [:error])]
+    (let [route @(subscribe [:app/route])
+          error @(subscribe [:app/error])]
       [:div.sans-serif.flex.flex-column.h-100
        [header]
        (when (:view (:data route))
@@ -180,9 +180,9 @@
            error]])])))
 
 (defn deselect-ingredients []
-  (let [selected-ingredients @(subscribe [:selected-ingredients])
-        ingredients @(subscribe [:recipe-ingredients])
-        loading @(subscribe [:loading])
+  (let [selected-ingredients @(subscribe [:shopping-card/selected-ingredient-ids])
+        ingredients @(subscribe [:shopping-card/ingredients])
+        loading @(subscribe [:app/loading])
         meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
     [:<>
      [:ul.list.pl0.mv0.pb6
@@ -207,7 +207,7 @@
      [:div.fixed.bottom-0.w-100.z-2
       [footer {:on-click #(dispatch [:create-shopping-card
                                      meals-without-shopping-list])
-               :loading loading}]]]))
+               :app/loading loading}]]]))
 
 (defn meal-name [meal-plan]
   (if (:recipe meal-plan)
@@ -239,7 +239,7 @@
   (dispatch [:init-meal-plans (js/Date.)])
   (fn []
     (let [meals-plans @(subscribe [:weekly-meal-plans])
-          start-of-week @(subscribe [:start-of-week])
+          start-of-week @(subscribe [:main/start-of-week])
           meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
       [:div.ph5-ns.flex.flex-column.h-100
        [:div.flex.items-center.justify-between
@@ -280,7 +280,7 @@
 
 (defn add-ingredients []
   (let [ingredients @(subscribe [:addable-ingredients])
-        ingredient-filter @(subscribe [:ingredient-filter])]
+        ingredient-filter @(subscribe [:extra-ingredients/filter])]
     [:div.ph5-ns.flex.flex-column.h-100
      [:div.ph2.pt3
       [:input.h2.br3.ba.b--gray.ph2 {:value ingredient-filter

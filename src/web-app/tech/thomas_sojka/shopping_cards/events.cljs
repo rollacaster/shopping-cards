@@ -22,7 +22,7 @@
     (prn (s/explain-str a-spec db))
     (throw (ex-info (str "spec check failed: " (s/explain-str a-spec db)) {}))))
 
-(def check-spec-interceptor (after (partial check-and-throw :tech.thomas-sojka.shopping-cards.db/db)))
+(def check-spec-interceptor (after (partial check-and-throw :app/db)))
 (reg-global-interceptor check-spec-interceptor)
 (reg-fx :push-state
   (fn [route]
@@ -67,7 +67,7 @@
 (reg-event-db
   :filter-ingredients
   (fn [db [_ filter]]
-    (assoc db :ingredient-filter filter)))
+    (assoc db :extra-ingredients/filter filter)))
 
 (reg-event-db
   :failure-bank-holidays
@@ -83,14 +83,14 @@
  (fn [db [_ id]]
    (update
     db
-    :selected-ingredients
+    :shopping-card/selected-ingredient-ids
     (partial toggle-map id))))
 
 (reg-event-fx
  :load-recipes
  (fn [{:keys [db]}]
-   (if (empty? (:recipes db))
-     {:db (assoc db :loading true)
+   (if (empty? (:main/recipes db))
+     {:db (assoc db :app/loading true)
       :http-xhrio {:method :get
                    :uri "recipes"
                    :response-format (ajax/json-response-format {:keywords? true})
@@ -102,38 +102,38 @@
  :success-recipes
  (fn [db [_ data]]
    (-> db
-       (assoc :loading false)
-       (assoc :recipes data))))
+       (assoc :app/loading false)
+       (assoc :main/recipes data))))
 
 (reg-event-db
  :failure-recipes
  (fn [db _]
    (-> db
-       (assoc :loading false)
-       (assoc :recipes :ERROR))))
+       (assoc :app/loading false)
+       (assoc :main/recipes :ERROR))))
 
 (reg-event-fx
  :init-meal-plans
  (fn [{:keys [db]} [_ start-of-week]]
-   (if (nil? (->> (:meal-plans db)
+   (if (nil? (->> (:main/meal-plans db)
                   (map #(.getMonth (:date %)))
                   (some #(= (.getMonth start-of-week) %))))
      {:db (-> db
-              (assoc :loading true)
-              (assoc :start-of-week start-of-week))
+              (assoc :app/loading true)
+              (assoc :main/start-of-week start-of-week))
       :http-xhrio {:method :get
                    :uri (str "/meal-plans/" (inc (.getMonth start-of-week)))
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success [:success-meal-plans]
                    :on-failure [:failure-meal-plans]}}
-     {:db (assoc db :start-of-week start-of-week)})))
+     {:db (assoc db :main/start-of-week start-of-week)})))
 
 (reg-event-db
  :success-meal-plans
  (fn [db [_ data]]
    (-> db
-       (assoc :loading false)
-       (update :meal-plans
+       (assoc :app/loading false)
+       (update :main/meal-plans
                concat
                (map (fn [meal-plan]
                       (-> meal-plan
@@ -145,22 +145,22 @@
  :failure-meal-plans
  (fn [db _]
    (-> db
-       (assoc :loading false)
-       (assoc :meal-plans :ERROR))))
+       (assoc :app/loading false)
+       (assoc :main/meal-plans :ERROR))))
 
 (reg-event-fx
  :add-meal
  (fn [{:keys [db]} [_ recipe]]
    {:db (-> db
-            (update :meal-plans conj (assoc (:selected-meal db) :recipe recipe))
-            (assoc :selected-meal nil))
+            (update :main/meal-plans conj (assoc (:recipe-details/meal db) :recipe recipe))
+            (assoc :recipe-details/meal nil))
     :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]
     :http-xhrio {:method :post
                  :uri "/meal-plans"
-                 :params (assoc (:selected-meal db) :recipe recipe)
+                 :params (assoc (:recipe-details/meal db) :recipe recipe)
                  :format (ajax/json-request-format)
                  :response-format (ajax/text-response-format)
-                 :on-failure [:failure-add-meal (:selected-meal db)]}}))
+                 :on-failure [:failure-add-meal (:recipe-details/meal db)]}}))
 
 (defn remove-meal [meal-plans {:keys [date type]}]
   (remove (fn [m] (and (= date (:date m))
@@ -171,16 +171,16 @@
  :failure-add-meal
  (fn [{:keys [db]} [_ failed-meal]]
    {:db (-> db
-            (update :meal-plans remove-meal failed-meal)
-            (assoc :error "Fehler: Speichern fehlgeschlagen"))
-    :timeout {:id :error-removal
+            (update :main/meal-plans remove-meal failed-meal)
+            (assoc :app/error "Fehler: Speichern fehlgeschlagen"))
+    :timeout {:id :app/error-removal
               :event [:remove-error]
               :time 2000}}))
 
 (reg-event-fx
  :load-ingredients-for-meals
  (fn [{:keys [db]} [_ meals-without-shopping-list]]
-   {:db (assoc db :loading true)
+   {:db (assoc db :app/loading true)
     :http-xhrio {:method :get
                  :uri (str "/ingredients?" (str/join "&" (map #(str "recipe-ids=" %) (map (comp :id :recipe)meals-without-shopping-list))))
                  :response-format (ajax/raw-response-format)
@@ -198,24 +198,24 @@
     :db
     (let [data (read-string res)]
       (-> db
-          (assoc :recipe-ingredients (vec data))
-          (assoc :loading false)
-          (assoc :selected-ingredients (add-water (set (map first data))))))}))
+          (assoc :shopping-card/ingredients (vec data))
+          (assoc :app/loading false)
+          (assoc :shopping-card/selected-ingredient-ids (add-water (set (map first data))))))}))
 
 (reg-event-db
  :failure-load-ingredients-for-selected-recipes
  (fn [db _]
-   (assoc db :recipe-ingredients :ERROR)))
+   (assoc db :shopping-card/ingredients :ERROR)))
 
 (reg-event-db
  :success-load-ingredients-for-recipe
  (fn [db [_ data]]
-   (assoc db :recipe-details (read-string data))))
+   (assoc db :recipe-details/ingredients (read-string data))))
 
 (reg-event-db
  :failure-load-ingredients-for-recipe
  (fn [db _]
-   (assoc db :recipe-details :ERROR)))
+   (assoc db :recipe-details/ingredients :ERROR)))
 
 (reg-event-fx
  :show-add-ingredients
@@ -239,19 +239,19 @@
     (if (= (:type meal) :meal-type/lunch)
       [:tech.thomas-sojka.shopping-cards.view/select-lunch]
       [:tech.thomas-sojka.shopping-cards.view/select-dinner])
-    :db (assoc db :selected-meal meal)}))
+    :db (assoc db :recipe-details/meal meal)}))
 
 (reg-event-fx
  :select-dinner
  (fn [{:keys [db]} [_ meal]]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/select-dinner]
-    :db (assoc db :selected-meal meal)}))
+    :db (assoc db :recipe-details/meal meal)}))
 
 (reg-event-fx
  :show-meal-details
  (fn [{:keys [db]} [_ meal]]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan-details]
-    :db (assoc db :selected-meal meal)
+    :db (assoc db :recipe-details/meal meal)
     :http-xhrio {:method :get
                  :uri (str "/recipes/" (:id (:recipe meal)) "/ingredients")
                  :response-format (ajax/raw-response-format)
@@ -263,13 +263,13 @@
  (fn [{:keys [db]} _]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/main]
     :db (-> db
-            (assoc :selected-ingredients #{})
+            (assoc :shopping-card/selected-ingredient-ids #{})
             (assoc :selected-recipes #{}))}))
 
 (reg-event-db
  :navigate
  (fn [db [_ match]]
-   (assoc db :route match)))
+   (assoc db :app/route match)))
 
 (reg-event-fx
  :create-shopping-card
@@ -278,7 +278,7 @@
                  selected-ingredients
                  extra-ingredients]}
          db]
-     {:db (assoc db :loading true)
+     {:db (assoc db :app/loading true)
       :http-xhrio {:method :post
                    :uri "/shopping-card"
                    :params (->> recipe-ingredients
@@ -294,7 +294,7 @@
   :failure-shopping-card
  (fn [{:keys [db]} _]
    {:push-state [:tech.thomas-sojka.shopping-cards.view/error]
-    :db (assoc db :loading false)}))
+    :db (assoc db :app/loading false)}))
 
 (reg-event-fx
  :success-shopping-card
@@ -309,15 +309,15 @@
                    :on-success [:success-shopping-list meals-without-shopping-list]
                    :on-failure [:failure-shopping-list]}}
      {:push-state [:tech.thomas-sojka.shopping-cards.view/finish {:card-id card-id}]
-      :db (assoc db :loading false)})))
+      :db (assoc db :app/loading false)})))
 
 (reg-event-fx
  :success-shopping-list
  (fn [{:keys [db]} [_ meals-without-shopping-list]]
    {:db (-> db
-            (assoc :loading false)
+            (assoc :app/loading false)
             ;; TODO update to has shopping-list
-            (update :meal-plans #(map (fn [meal-plan]
+            (update :main/meal-plans #(map (fn [meal-plan]
                                         (if
                                             (some
                                              (fn [meal-with-shopping-list]
@@ -327,46 +327,46 @@
                                              meals-without-shopping-list)
                                           (assoc meal-plan :shopping-list true)
                                           meal-plan))
-                                      (:meal-plans db)))
+                                      (:main/meal-plans db)))
             (assoc :extra-ingredients {}))
     :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]}))
 
 (reg-event-fx
  :remove-meal
  (fn [{:keys [db]}]
-   (let [{:keys [date type]} (:selected-meal db)]
+   (let [{:keys [date type]} (:recipe-details/meal db)]
      {:db
-      (update db :meal-plans remove-meal (:selected-meal db))
+      (update db :main/meal-plans remove-meal (:recipe-details/meal db))
       :push-state [:tech.thomas-sojka.shopping-cards.view/meal-plan]
       :http-xhrio {:method :delete
                    :uri "/meal-plans"
                    :url-params {:date (.toISOString date) :type type}
                    :format (ajax/json-request-format)
                    :response-format (ajax/text-response-format)
-                   :on-failure [:failure-remove-meal (:selected-meal db)]}})))
+                   :on-failure [:failure-remove-meal (:recipe-details/meal db)]}})))
 
 (reg-event-fx
  :failure-remove-meal
  (fn [{:keys [db]} [_ failed-meal]]
    {:db
     (-> db
-        (update :meal-plans conj failed-meal)
-        (assoc :error "Fehler: Löschen fehlgeschlagen"))
-    :timeout {:id :error-removal
+        (update :main/meal-plans conj failed-meal)
+        (assoc :app/error "Fehler: Löschen fehlgeschlagen"))
+    :timeout {:id :app/error-removal
               :event [:remove-error]
               :time 2000}}))
 
 (reg-event-db
  :remove-error
- (fn [db] (assoc db :error nil)))
+ (fn [db] (assoc db :app/error nil)))
 
 (reg-event-fx
  :add-extra-ingredient
  (fn [{:keys [db]} [_ id name]]
    {:db (-> db
-            (update :recipe-ingredients conj [id name])
-            (update :selected-ingredients conj id)
-            (assoc :ingredient-filter ""))
+            (update :shopping-card/ingredients conj [id name])
+            (update :shopping-card/selected-ingredient-ids conj id)
+            (assoc :extra-ingredients/filter ""))
     :push-state [:tech.thomas-sojka.shopping-cards.view/deselect-ingredients]}))
 
 

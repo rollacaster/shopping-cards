@@ -4,14 +4,14 @@
             [clojure.string :as str]))
 
 (reg-sub
- :selected-ingredients
+ :shopping-card/selected-ingredient-ids
  (fn [db _]
-   (:selected-ingredients db)))
+   (:shopping-card/selected-ingredient-ids db)))
 
 (reg-sub
- :recipes
+ :main/recipes
  (fn [db _]
-   (:recipes db)))
+   (:main/recipes db)))
 
 (reg-sub
  :ingredients
@@ -21,8 +21,8 @@
 (reg-sub
  :addable-ingredients
  :<- [:ingredients]
- :<- [:recipe-ingredients]
- :<- [:ingredient-filter]
+ :<- [:shopping-card/ingredients]
+ :<- [:extra-ingredients/filter]
  (fn [[ingredients recipe-ingredients ingredient-filter] _]
    (->> ingredients
         (remove (fn [ingredient]
@@ -33,9 +33,9 @@
                                        (str/lower-case ingredient-filter)))))))))
 
 (reg-sub
- :error
+ :app/error
  (fn [db _]
-   (:error db)))
+   (:app/error db)))
 
 (defn sort-recipes [type-order recipes]
   (sort-by
@@ -53,7 +53,7 @@
 
 (reg-sub
  :sorted-recipes
- :<- [:recipes]
+ :<- [:main/recipes]
  sorted-recipes)
 
 (defn lunch-recipes [recipes]
@@ -63,33 +63,33 @@
 
 (reg-sub
  :lunch-recipes
- :<- [:recipes]
+ :<- [:main/recipes]
  lunch-recipes)
 
 (reg-sub
- :recipe-details
+ :recipe-details/ingredients
  (fn [db _]
-   (:recipe-details db)))
+   (:recipe-details/ingredients db)))
 
 (reg-sub
- :recipe-ingredients
+ :shopping-card/ingredients
  (fn [db _]
-   (:recipe-ingredients db)))
+   (:shopping-card/ingredients db)))
 
 (reg-sub
- :route
+ :app/route
  (fn [db _]
-   (:route db)))
+   (:app/route db)))
 
 (reg-sub
- :loading
+ :app/loading
  (fn [db _]
-   (:loading db)))
+   (:app/loading db)))
 
 (reg-sub
- :meal-plans
+ :main/meal-plans
  (fn [db _]
-   (:meal-plans db)))
+   (:main/meal-plans db)))
 
 (reg-sub
  :meals-without-shopping-list
@@ -102,9 +102,9 @@
            (flatten meals-plans))))
 
 (reg-sub
- :start-of-week
+ :main/start-of-week
  (fn [db _]
-   (:start-of-week db)))
+   (:main/start-of-week db)))
 
 (defn group-meal-plans [meal-plans]
   (->> meal-plans
@@ -117,8 +117,8 @@
 
 (reg-sub
  :weekly-meal-plans
- :<- [:meal-plans]
- :<- [:start-of-week]
+ :<- [:main/meal-plans]
+ :<- [:main/start-of-week]
  (fn [[meal-plans start-date]]
    (map
     (fn [day]
@@ -134,14 +134,14 @@
     (range 4))))
 
 (reg-sub
- :selected-meal
+ :recipe-details/meal
  (fn [db _]
-   (:selected-meal db)))
+   (:recipe-details/meal db)))
 
 (reg-sub
-  :ingredient-filter
+  :extra-ingredients/filter
   (fn [db _]
-    (:ingredient-filter db)))
+    (:extra-ingredients/filter db)))
 
 (reg-sub
  :bank-holidays
