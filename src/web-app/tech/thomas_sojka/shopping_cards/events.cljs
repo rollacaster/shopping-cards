@@ -78,7 +78,7 @@
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success [:main/success-recipes]
                    :on-failure [:main/failure-recipes]}}
-     db)))
+     {:db db})))
 
 (reg-event-db
  :main/success-recipes
