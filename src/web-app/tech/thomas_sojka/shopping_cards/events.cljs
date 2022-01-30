@@ -147,7 +147,7 @@
 (reg-event-db
  :main/success-bank-holidays
  (fn [db [_ data]]
-   (assoc db :bank-holidays (read-string data))))
+  (assoc db :main/bank-holidays (read-string data))))
 
 (reg-event-db
  :main/failure-bank-holidays

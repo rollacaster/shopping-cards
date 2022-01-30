@@ -24,6 +24,7 @@
 (s/def :main/meal-plans (s/coll-of :meal-plan/meal))
 
 (s/def :main/start-of-week inst?)
+(s/def :main/bank-holidays (s/coll-of map? :kind set?))
 
 (s/def :ingredient/id string?)
 (s/def :ingredient/category string?)
@@ -58,6 +59,7 @@
    :main/recipes []
    :main/meal-plans []
    :main/start-of-week (js/Date.)
+   :main/bank-holidays #{}
    :shopping-card/selected-ingredient-ids #{}
    :shopping-card/ingredients []
    :extra-ingredients/filter ""
