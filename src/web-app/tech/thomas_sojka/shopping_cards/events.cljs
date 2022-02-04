@@ -94,12 +94,18 @@
        (assoc :app/loading false)
        (assoc :main/recipes :ERROR))))
 
+
+(defn meal-plans-loaded-for-month? [db month-idx]
+  (->> (:main/meal-plans db)
+       (map #(.getMonth (:date %)))
+       (some #(= month-idx %))))
+
 (reg-event-fx
  :main/init-meal-plans
  (fn [{:keys [db]} [_ start-of-week]]
-   (if (nil? (->> (:main/meal-plans db)
-                  (map #(.getMonth (:date %)))
-                  (some #(= (.getMonth start-of-week) %))))
+   ;; TODO Load meals for all visible days
+   (if (meal-plans-loaded-for-month? db (.getMonth start-of-week))
+     {:db (assoc db :main/start-of-week start-of-week)}
      {:db (-> db
               (assoc :app/loading true)
               (assoc :main/start-of-week start-of-week))
@@ -107,8 +113,7 @@
                    :uri (str "/meal-plans/" (inc (.getMonth start-of-week)))
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success [:main/success-meal-plans]
-                   :on-failure [:main/failure-meal-plans]}}
-     {:db (assoc db :main/start-of-week start-of-week)})))
+                   :on-failure [:main/failure-meal-plans]}})))
 
 (reg-event-db
  :main/success-meal-plans
@@ -252,20 +257,24 @@
  (fn [db _]
    (assoc db :shopping-card/ingredients :ERROR)))
 
+(defn shopping-card-ingredients [db]
+  (let [{:keys [shopping-card/ingredients shopping-card/selected-ingredient-ids]}
+        db]
+    (->> ingredients
+         (filter #(contains? selected-ingredient-ids (first %)))
+         (map second))))
+
 (reg-event-fx
  :shopping-card/create
  (fn [{:keys [db]} [_ meals-without-shopping-list]]
-   (let [{:keys [shopping-card/ingredients shopping-card/selected-ingredient-ids]} db]
-     {:db (assoc db :app/loading true)
-      :http-xhrio {:method :post
-                   :uri "/shopping-card"
-                   :params (->> ingredients
-                                (filter #(contains? selected-ingredient-ids (first %)))
-                                (map second))
-                   :format (ajax/json-request-format)
-                   :response-format (ajax/text-response-format)
-                   :on-success [:shopping-card/success-shopping-card meals-without-shopping-list]
-                   :on-failure [:shopping-card/failure-shopping-card]}})))
+   {:db (assoc db :app/loading true)
+    :http-xhrio {:method :post
+                 :uri "/shopping-card"
+                 :params (shopping-card-ingredients db)
+                 :format (ajax/json-request-format)
+                 :response-format (ajax/text-response-format)
+                 :on-success [:shopping-card/success-shopping-card meals-without-shopping-list]
+                 :on-failure [:shopping-card/failure-shopping-card]}}))
 
 (reg-event-fx
  :shopping-card/failure-shopping-card

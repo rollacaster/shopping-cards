@@ -11,3 +11,4 @@
 /.shadow-cljs/
 /resources/public/js/
 /resources/public/css/react-big-calendar.css
+/out/

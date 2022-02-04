@@ -1,4 +1,8 @@
+set -e;
 mkdir -p classes;
+npm i;
+shadow-cljs compile ci;
+npx karma start --single-run;
 clj -e "(compile 'tech.thomas-sojka.shopping-cards.main)";
 npm run css;
 shadow-cljs compile app;
