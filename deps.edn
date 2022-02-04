@@ -18,4 +18,10 @@
  :paths ["src/server" "classes" "resources"]
  :aliases {:uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
                       :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.main"]}
-           :test {:extra-paths ["test/server"]}}}
+           :test {:extra-paths ["test/server"]}
+           :test-runner-cognitect
+           {:extra-paths ["test/server"]
+            :extra-deps  {com.cognitect/test-runner
+                          {:git/url "https://github.com/cognitect-labs/test-runner.git"
+                           :sha     "f7ef16dc3b8332b0d77bc0274578ad5270fbfedd"}}
+            :main-opts   ["-m" "cognitect.test-runner"]}}}

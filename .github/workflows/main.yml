@@ -1,4 +1,4 @@
-name: CI/CD
+name: CI
 
 on: [push]
 
@@ -9,9 +9,13 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - uses: DeLaGuardo/setup-clojure@master
+    - name: Install clojure tools
+      uses: DeLaGuardo/setup-clojure@3.7
       with:
-        cli: 1.11.0-beta1
+        cli: 1.10.1.693
+    - uses: DeLaGuardo/setup-clj-kondo@master
+      with:
+        version: '2022.01.15'
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
@@ -20,5 +24,5 @@ jobs:
       run: npm install
     - name: Build Tests
       run: npx shadow-cljs compile ci
-    - name: Run Tests
+    - name: Run FE Tests
       run: npx karma start --single-run;
