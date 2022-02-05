@@ -1,5 +1,5 @@
-(ns tech.thomas-sojka.shopping-cards.subs-test
-  (:require [tech.thomas-sojka.shopping-cards.subs :as sut]
+(ns tech.thomas-sojka.shopping-cards.main.subs-test
+  (:require [tech.thomas-sojka.shopping-cards.main.subs :as sut]
             [cljs.test :as t :include-macros true]))
 
 (def recipes [{:id "501c77c8-498b-4bec-a2fa-6ea1837eae6b",
