@@ -3,7 +3,7 @@
             ["date-fns" :refer (addDays startOfDay format subDays addDays isPast)]
             ["date-fns/locale" :refer (de)]
             [reagent.core :as r]
-            [tech.thomas-sojka.shopping-cards.components :as c]))
+            [tech.thomas-sojka.shopping-cards.main.components :as c]))
 
 (defn meal-name [meal-plan]
   (if (:recipe meal-plan)

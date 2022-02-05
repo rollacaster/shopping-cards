@@ -1,7 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.main.subs
   (:require [re-frame.core :refer [reg-sub]]
-            ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth addDays)]
-            [tech.thomas-sojka.shopping-cards.main.handlers]))
+            ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth addDays)]))
 
 (reg-sub
  :main/recipes

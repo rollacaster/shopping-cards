@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.shopping-cards.main.handlers
+(ns tech.thomas-sojka.shopping-cards.main.events
   (:require [re-frame.core :refer [reg-event-db reg-event-fx]]
             [ajax.core :as ajax]
             [cljs.reader :refer [read-string]]))
@@ -116,8 +116,8 @@
  (fn [{:keys [db]} [_ meal]]
    {:app/push-state
     (if (= (:type meal) :meal-type/lunch)
-      [:tech.thomas-sojka.shopping-cards.view/select-lunch]
-      [:tech.thomas-sojka.shopping-cards.view/select-dinner])
+      [:route/select-lunch]
+      [:route/select-dinner])
     :db (assoc db :recipe-details/meal meal)}))
 
 (reg-event-fx
