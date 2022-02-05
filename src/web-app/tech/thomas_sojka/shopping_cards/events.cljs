@@ -13,8 +13,7 @@
             reg-global-interceptor]]
    [reagent.core :as r]
    [reitit.frontend.easy :as rfe]
-   [tech.thomas-sojka.shopping-cards.db :refer [default-db]]
-   [tech.thomas-sojka.shopping-cards.main]))
+   [tech.thomas-sojka.shopping-cards.db :refer [default-db]]))
 
 (defn check-and-throw
   "Throws an exception if `db` doesn't match the Spec `a-spec`."

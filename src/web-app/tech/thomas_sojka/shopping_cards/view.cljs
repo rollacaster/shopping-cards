@@ -1,7 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.view
   (:require [re-frame.core :refer [dispatch subscribe]]
             [tech.thomas-sojka.shopping-cards.components :as c]
-            [tech.thomas-sojka.shopping-cards.main :as main]))
+            [tech.thomas-sojka.shopping-cards.main.core :as main]))
 
 (defn recipe [{:keys [even name image selected? on-click]}]
   [:button.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-trbg-gray-600-ns.white-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns
