@@ -3,7 +3,6 @@
                                                                (compojure.api.sweet/POST)
                                                                (compojure.api.sweet/DELETE)]}}}}
   (:require [compojure.api.sweet :refer [api GET POST DELETE]]
-            [compojure.route :as route]
             [muuntaja.middleware :refer [wrap-format]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
@@ -54,9 +53,7 @@
          [(case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
           (read-instant-date date)])
        (:body-params request)))
-     {:status 200})
-
-   (route/not-found "<h1>Page not found</h1>")))
+     {:status 200})))
 (def app
   (-> app-routes
       wrap-format
