@@ -184,19 +184,28 @@
 
 (defn load-edn [path] (read-string (slurp (io/resource path))))
 
+(defn ingredient-name [name]
+  (some (fn [[ingredient-group-name duplicated-name]]
+          (when (or (= name ingredient-group-name)
+                    (contains? duplicated-name name))
+            ingredient-group-name))
+        (load-edn "duplicated-ingredients.edn")))
+
+(defn throw-for-unknown-ingredients [ingredients]
+  (let [unknown-ingredients (remove :id ingredients)]
+    (if (seq unknown-ingredients)
+      (throw (ex-info "Unkown ingredients found!"
+                      {:unknown-ingredients (map :name unknown-ingredients)}))
+      ingredients)))
+
 (defn dedup-ingredients [ingredients]
-  (mapv (fn [{:keys [name] :as ingredient}]
-         (let [ingredient-name (or
-                                (some (fn [[ingredient-group-name duplicated-name]]
-                                        (when (or (= name ingredient-group-name)
-                                                  (contains? duplicated-name name))
-                                          ingredient-group-name))
-                                      (load-edn "duplicated-ingredients.edn"))
-                                name)]
-           (assoc ingredient
-                  :name ingredient-name
-                  :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-ingredients)))))
-       ingredients))
+  (->> ingredients
+       (mapv (fn [{:keys [name] :as ingredient}]
+               (let [ingredient-name (or (ingredient-name name) name)]
+                 (assoc ingredient
+                        :name ingredient-name
+                        :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-ingredients))))))
+       throw-for-unknown-ingredients))
 
 (defmulti recipe-name (fn [link _] (cond
                                   (s/includes? link "kptncook") :kptncook
@@ -293,16 +302,6 @@
                 (fetch-gdrive-ingredients link)
                 (add-ingredients link recipe-hickory)))
        (update :ingredients dedup-ingredients)))))
-
-;; TODO Handle new ingredients before adding recipe
-(defn new-ingredients [new-recipes]
-  (->> new-recipes
-       (map :ingredients)
-       flatten
-       (remove :id)))
-
-(defn uuid [] (str (java.util.UUID/randomUUID)))
-
 
 (comment
   (scrape-recipe {:name "Vegetarisches Gulasch á la Margarete"
