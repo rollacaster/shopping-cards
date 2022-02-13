@@ -4,7 +4,6 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "css": "cp node_modules/react-big-calendar/lib/css/react-big-calendar.css resources/public/css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
