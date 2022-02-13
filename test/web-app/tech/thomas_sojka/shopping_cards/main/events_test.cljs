@@ -6,7 +6,7 @@
 (t/deftest main
   (t/testing "meal-plans-loaded?"
     (t/is
-     (sut/meal-plans-loaded-for-month?
+     (sut/meal-plans-loaded-for-today?
       {:main/meal-plans
        [{:date #inst "2022-01-09T23:00:00.000-00:00",
          :type :meal-type/dinner,
@@ -28,6 +28,5 @@
           "http://annalee-eats.de/wp-content/uploads/2017/04/P1010782-768x1024.jpg",
           :type "FAST"},
          :in-shopping-list false}]}
-      0 ;; January
-      ))))
+      #inst "2022-01-09T23:00:00.000-00:00"))))
 

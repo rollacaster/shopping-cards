@@ -1,6 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.db
   (:require [clojure.string :as str]
-            [datomic.client.api :as d]))
+            [datomic.client.api :as d]
+            [tick.core :as t]))
 
 
 (def client (d/client {:server-type :dev-local
@@ -183,10 +184,14 @@
 (defn retract [lookup-ref]
   (transact [[:db/retractEntity lookup-ref]]))
 
-(defn month [date]
-  (.format (java.text.SimpleDateFormat. "MM") date))
+(defn within-next-four-days? [d1 d2]
+  (let [i1 (t/instant (t/date-time (str d1 "T00:00")))
+        i2 (t/instant d2)]
+    (and
+     (t/>= i2 i1)
+     (t/< i2 (t/+ i1 (t/new-duration 4 :days))))))
 
-(defn load-meal-plans [month]
+(defn load-meal-plans [date]
   (->> (d/q '[:find (pull ?m [[:meal-plan/inst :as :date]
                               {[:meal-plan/type :as :type]
                                [[:db/ident :as :ref]]}
@@ -197,13 +202,12 @@
                                 [:recipe/image :as :image]
                                 [:recipe/link :as :link]]}
                               [:shopping-list/_meals :as :shopping-list]])
-              :in $ ?month
+              :in $ ?date
               :where
               [?m :meal-plan/inst ?d]
-              [(tech.thomas-sojka.shopping-cards.db/month ?d) ?month]]
+              [(tech.thomas-sojka.shopping-cards.db/within-next-four-days? ?date ?d)]]
             (d/db conn)
-            ;; FIXME Use year as well
-            (format "%02d" (Long/parseLong month)))
+            date)
        (map (fn [meal-plan]
               (-> (first meal-plan)
                   (update :recipe transform-recipe-type)

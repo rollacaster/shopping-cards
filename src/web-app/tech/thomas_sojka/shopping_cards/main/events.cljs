@@ -1,7 +1,8 @@
 (ns tech.thomas-sojka.shopping-cards.main.events
   (:require [re-frame.core :refer [reg-event-db reg-event-fx]]
             [ajax.core :as ajax]
-            [cljs.reader :refer [read-string]]))
+            [cljs.reader :refer [read-string]]
+            ["date-fns" :refer (startOfDay format)]))
 
 (reg-event-fx
  :main/load-recipes
@@ -30,22 +31,21 @@
        (assoc :main/recipes :ERROR))))
 
 
-(defn meal-plans-loaded-for-month? [db month-idx]
+(defn meal-plans-loaded-for-today? [db today]
   (->> (:main/meal-plans db)
-       (map #(.getMonth (:date %)))
-       (some #(= month-idx %))))
+       (map #(:date %))
+       (some #(= today %))))
 
 (reg-event-fx
  :main/init-meal-plans
- (fn [{:keys [db]} [_ start-of-week]]
-   ;; TODO Load meals for all visible days
-   (if (meal-plans-loaded-for-month? db (.getMonth start-of-week))
-     {:db (assoc db :main/start-of-week start-of-week)}
+ (fn [{:keys [db]} [_ today]]
+   (if (meal-plans-loaded-for-today? db today)
+     {:db (assoc db :main/start-of-week (startOfDay today))}
      {:db (-> db
               (assoc :app/loading true)
-              (assoc :main/start-of-week start-of-week))
+              (assoc :main/start-of-week today))
       :http-xhrio {:method :get
-                   :uri (str "/meal-plans/" (inc (.getMonth start-of-week)))
+                   :uri (str "/meal-plans/" (format today "yyyy-MM-dd"))
                    :response-format (ajax/json-response-format {:keywords? true})
                    :on-success [:main/success-meal-plans]
                    :on-failure [:main/failure-meal-plans]}})))

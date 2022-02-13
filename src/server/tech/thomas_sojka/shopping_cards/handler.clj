@@ -31,9 +31,9 @@
      {:status 201
       :body (create-klaka-shopping-card (:body-params request))
       :headers {"Content-type" "application/edn"}})
-   (GET "/meal-plans/:month" [month]
+   (GET "/meal-plans/:date" [date]
      {:status 200
-      :body (load-meal-plans month)
+      :body (load-meal-plans date)
       :headers {"Content-type" "application/edn"}})
    (POST "/meal-plans" request
      (let [{:keys [date recipe type]} (:body-params request)]
