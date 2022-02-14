@@ -90,11 +90,13 @@
  (fn [db [_ data]]
    (assoc db :main/bank-holidays (read-string data))))
 
-(reg-event-db
+(reg-event-fx
  :main/failure-bank-holidays
- (fn [db _]
-   ;; TODO Handle failed bank holiday loading
-   db))
+ (fn [{:keys [db]} _]
+   {:db (assoc db :app/error "Fehler: Feiertage nicht geladen")
+    :app/timeout {:id :app/error-removal
+                  :event [:app/remove-error]
+                  :time 2000}}))
 
 (defn remove-meal [meal-plans {:keys [date type]}]
   (remove (fn [m] (and (= date (:date m))
