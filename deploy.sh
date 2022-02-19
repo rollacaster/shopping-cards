@@ -4,7 +4,7 @@ clojure -M:test-runner-cognitect;
 npm i;
 shadow-cljs compile ci;
 npx karma start --single-run;
-clojure -e "(compile 'tech.thomas-sojka.shopping-cards.main)";
+clojure -e "(compile 'tech.thomas-sojka.shopping-cards.system)";
 shadow-cljs release app;
 clojure -M:uberdeps;
 scp target/shopping-cards.jar pi@ubi-hub:/home/pi;

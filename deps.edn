@@ -14,10 +14,13 @@
         com.datomic/dev-local {:mvn/version "1.0.238"}
         hodur/engine {:mvn/version "0.1.8"}
         hodur/datomic-schema {:mvn/version "0.1.0"}
-        hodur/graphviz-schema {:mvn/version "0.1.1"}}
+        hodur/graphviz-schema {:mvn/version "0.1.1"}
+        integrant/integrant {:mvn/version "0.8.0"}}
  :paths ["src/server" "classes" "resources"]
- :aliases {:uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
-                      :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.main"]}
+ :aliases {:dev {:extra-paths ["dev"]
+                 :extra-deps {integrant/repl {:mvn/version "0.3.2"}}}
+           :uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
+                      :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.system"]}
            :test {:extra-paths ["test/server"]}
            :test-runner-cognitect
            {:extra-paths ["test/server"]
