@@ -7,7 +7,7 @@
 
 (def klaka-board-id "48aas65T")
 
-(defn load-trello-lists [board-id]
+(defn- load-trello-lists [board-id]
   (client/get (str trello-api "/boards/" board-id "/lists")
               {:query-params
                {:key (:trello-key creds-file)
@@ -15,7 +15,7 @@
                :as :json
                :throw-entire-message? true}))
 
-(defn create-trello-shopping-card [list-id]
+(defn- create-trello-shopping-card [list-id]
   (:body (client/post (str trello-api "/cards/")
                       {:query-params
                        {:key (:trello-key creds-file)
@@ -25,7 +25,7 @@
                        :as :json
                        :throw-entire-message? true})))
 
-(defn create-trello-checklist [card-id]
+(defn- create-trello-checklist [card-id]
   (:body
    (client/post (str trello-api "/checklists")
                 {:query-params
@@ -35,7 +35,7 @@
                  :as :json
                  :throw-entire-message? true})))
 
-(defn create-trell-checklist-item [checklist-id item]
+(defn- create-trell-checklist-item [checklist-id item]
   (:body (client/post (str trello-api (str "/checklists/" checklist-id "/checkItems"))
                       {:query-params
                        {:key (:trello-key creds-file)

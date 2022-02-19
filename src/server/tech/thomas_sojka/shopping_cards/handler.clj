@@ -7,15 +7,13 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :refer [resource-response]]
-            [tech.thomas-sojka.shopping-cards.trello
-             :refer [create-klaka-shopping-card]]
             [tech.thomas-sojka.shopping-cards.db
              :refer
              [ingredients-for-recipe load-recipes load-ingredients ingredients-for-recipes load-meal-plans
               create-meal-plan delete-meal-plan create-shopping-list]]
             [clojure.instant :refer [read-instant-date]]))
 
-(def app-routes
+(defn app-routes [trello-client]
   (api
    (GET "/" [] (resource-response "index.html" {:root "public"}))
    (GET "/recipes" [] {:status 200 :body (vec (filter (comp not :inactive) (load-recipes))) :headers {"Content-type" "application/edn"}})
@@ -29,7 +27,15 @@
         :headers {"Content-type" "application/edn"}}))
    (POST "/shopping-card" request
      {:status 201
-      :body (create-klaka-shopping-card (:body-params request))
+      :body (let [{:keys [create-klaka-shopping-card]} trello-client
+                  trello-card-id (create-klaka-shopping-card (:body-params request))]
+              (create-shopping-list
+               (map
+                (fn [[type date]]
+                  [(case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
+                   (read-instant-date date)])
+                (:body-params request)))
+              trello-card-id)
       :headers {"Content-type" "application/edn"}})
    (GET "/meal-plans/:date" [date]
      {:status 200
@@ -54,8 +60,9 @@
           (read-instant-date date)])
        (:body-params request)))
      {:status 200})))
-(def app
-  (-> app-routes
+
+(defn app [{:keys [trello-client]}]
+  (-> (app-routes trello-client)
       wrap-format
       wrap-params
       (wrap-resource "public")))
