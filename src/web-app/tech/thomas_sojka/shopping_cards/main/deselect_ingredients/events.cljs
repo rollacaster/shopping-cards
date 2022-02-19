@@ -13,19 +13,6 @@
 
 (reg-event-fx
  :shopping-card/success-shopping-card
- (fn [_ [_ meals-without-shopping-list card-id]]
-   ;; TODO Why is the client calling that?!
-   {:http-xhrio {:method :post
-                 :uri "/shopping-list"
-                 :params (map (fn [{:keys [type date]}] [type date])
-                              meals-without-shopping-list)
-                 :format (ajax/json-request-format)
-                 :response-format (ajax/text-response-format)
-                 :on-success [:shopping-card/success-shopping-list meals-without-shopping-list card-id]
-                 :on-failure [:shopping-card/failure-shopping-list]}}))
-
-(reg-event-fx
- :shopping-card/success-shopping-list
  (fn [{:keys [db]} [_ meals-without-shopping-list card-id]]
    {:db (-> db
             (assoc :app/loading false)
@@ -99,7 +86,8 @@
    {:db (assoc db :app/loading true)
     :http-xhrio {:method :post
                  :uri "/shopping-card"
-                 :params (shopping-card-ingredients db)
+                 :params {:ingredients (shopping-card-ingredients db)
+                          :meals meals-without-shopping-list}
                  :format (ajax/json-request-format)
                  :response-format (ajax/text-response-format)
                  :on-success [:shopping-card/success-shopping-card meals-without-shopping-list]

@@ -28,13 +28,14 @@
    (POST "/shopping-card" request
      {:status 201
       :body (let [{:keys [create-klaka-shopping-card]} trello-client
-                  trello-card-id (create-klaka-shopping-card (:body-params request))]
+                  {:keys [ingredients meals]} (:body-params request)
+                  trello-card-id (create-klaka-shopping-card ingredients)]
               (create-shopping-list
                (map
-                (fn [[type date]]
+                (fn [{:keys [type date]}]
                   [(case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
                    (read-instant-date date)])
-                (:body-params request)))
+                meals))
               trello-card-id)
       :headers {"Content-type" "application/edn"}})
    (GET "/meal-plans/:date" [date]
@@ -51,14 +52,6 @@
    (DELETE "/meal-plans" [date type]
      (delete-meal-plan {:date (read-instant-date date)
                         :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)})
-     {:status 200})
-   (POST "/shopping-list" request
-     (create-shopping-list
-      (map
-       (fn [[type date]]
-         [(case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
-          (read-instant-date date)])
-       (:body-params request)))
      {:status 200})))
 
 (defn app [{:keys [trello-client]}]

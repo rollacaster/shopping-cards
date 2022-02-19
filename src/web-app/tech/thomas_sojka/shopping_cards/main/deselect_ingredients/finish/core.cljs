@@ -9,6 +9,6 @@
       {:href (str "https://trello.com/c/" card-id)}
       "In Trello anzeigen"]]))
 
-(defmethod core/content :view/finish [] [finish])
+(defmethod core/content :view/finish [_ match] [finish match])
 (defmethod core/title :view/finish [] "Einkaufszettel erstellt")
 

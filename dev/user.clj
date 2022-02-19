@@ -6,7 +6,9 @@
 (ig-repl/set-prep! (fn [] system/config))
 
 (defmethod ig/init-key :external/trello-client [_ _]
-  {:create-klaka-shopping-card (fn [_] "mock")})
+  {:create-klaka-shopping-card (fn [ingredients]
+                                 (prn "New Card" ingredients)
+                                 "mock")})
 
 (comment
   (ig-repl/go)

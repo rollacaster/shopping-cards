@@ -23,7 +23,9 @@
        [header]
        [:main.flex-auto
         [:div.mw9.center.bg-gray-200.h-100
-         [content {:view (:view (:data route))}]]]
+         [content
+          {:view (:view (:data route))}
+          @(subscribe [:app/route])]]]
        (when error
          [:div.absolute.white.bottom-0.flex.justify-center.w-100.mb4
           [:div.w-80.bg-light-red.ph3.pv2.br2.ba.b--white
