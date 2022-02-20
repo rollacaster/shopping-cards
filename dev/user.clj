@@ -9,7 +9,7 @@
   {:create-klaka-shopping-card (fn [ingredients]
                                  (prn "New Card" ingredients)
                                  "mock")})
-
+(ig-repl/go)
 (comment
   (ig-repl/go)
   (ig-repl/halt)
