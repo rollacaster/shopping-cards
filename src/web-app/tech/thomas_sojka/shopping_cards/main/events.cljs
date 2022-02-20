@@ -73,7 +73,6 @@
 (reg-event-fx
  :main/add-meal
  (fn [{:keys [db]} [_ recipe]]
-   (prn :main/add-meal recipe)
    {:db (-> db
             (update :main/meal-plans conj (assoc (:recipe-details/meal db) :recipe recipe))
             (assoc :recipe-details/meal nil))
@@ -132,15 +131,19 @@
  :main/remove-meal
  (fn [{:keys [db]}]
    (let [{:keys [date type]} (:recipe-details/meal db)]
-     {:db
-      (update db :main/meal-plans remove-meal (:recipe-details/meal db))
+     {:db (update db :main/meal-plans remove-meal (:recipe-details/meal db))
       :app/push-state [:route/meal-plan]
       :http-xhrio {:method :delete
                    :uri "/meal-plans"
                    :url-params {:date (.toISOString date) :type type}
                    :format (ajax/json-request-format)
                    :response-format (ajax/text-response-format)
+                   :on-success [:main/success-remove-meal]
                    :on-failure [:main/failure-remove-meal (:recipe-details/meal db)]}})))
+
+(reg-event-db
+  :main/success-remove-meal
+  identity)
 
 (reg-event-fx
  :main/failure-remove-meal

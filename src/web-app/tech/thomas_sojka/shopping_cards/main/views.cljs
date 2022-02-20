@@ -31,45 +31,42 @@
        (meal-name meal-plan)]]]))
 
 (defn meal-plan []
-  (dispatch [:main/load-recipes])
-  (dispatch [:main/init-meal-plans (js/Date.)])
-  (fn []
-    (let [meals-plans @(subscribe [:main/weekly-meal-plans])
-          start-of-week @(subscribe [:main/start-of-week])
-          meals-without-shopping-list @(subscribe [:main/meals-without-shopping-list])]
-      [:div.ph5-ns.flex.flex-column.h-100
-       [:div.flex.items-center.justify-between
-        [:div.pv2.flex
-         [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white.tc.flex.justify-center
-          {:on-click
-           #(dispatch [:main/init-meal-plans (startOfDay (js/Date.))])}
-          "Heute"]
-         [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white.tc.flex.justify-center
-          {:on-click
-           #(dispatch [:main/init-meal-plans (subDays (startOfDay start-of-week) 4)])}
-          "Zurück"]
-         [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white.tc.flex.justify-center
-          {:on-click
-           #(dispatch [:main/init-meal-plans (addDays (startOfDay start-of-week) 4)])}
-          "Vor"]]
-        [:div.flex.justify-center.flex-auto
-         (format (:date (ffirst meals-plans)) "MMMM yyyy" #js {:locale de})]]
-       [:div.flex.flex-wrap.flex-auto
-        (doall
-         (map
-          (fn [[lunch dinner]]
-            (let [bank-holiday @(subscribe [:main/bank-holiday (:date lunch)])]
-              ^{:key (:date lunch)}
-              [:div.ba.w-50.pv2.flex.flex-column.b--gray.h-50
-               [:div.ph2.flex.justify-between
-                [:span.truncate.dark-red bank-holiday]
-                [:span.tr.fw6
-                 {:style {:white-space "nowrap"}}
-                 (format (:date lunch) "EEEEEE dd.MM" #js {:locale de})]]
-               [:div.flex-auto
-                {:class (when (isPast (addDays (startOfDay start-of-week) 2)) "o-20")}
-                [meal lunch]
-                [meal dinner]]]))
-          meals-plans))]
-       (when (seq meals-without-shopping-list)
-         [c/footer {:on-click #(dispatch [:shopping-card/load-ingredients-for-meals meals-without-shopping-list])}])])))
+  (let [meals-plans @(subscribe [:main/weekly-meal-plans])
+        start-of-week @(subscribe [:main/start-of-week])
+        meals-without-shopping-list @(subscribe [:main/meals-without-shopping-list])]
+    [:div.ph5-ns.flex.flex-column.h-100
+     [:div.flex.items-center.justify-between
+      [:div.pv2.flex
+       [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white.tc.flex.justify-center
+        {:on-click
+         #(dispatch [:main/init-meal-plans (startOfDay (js/Date.))])}
+        "Heute"]
+       [:button.pv2.w3.bg-gray-600.ba.bl-0.br-0.white.b--white.tc.flex.justify-center
+        {:on-click
+         #(dispatch [:main/init-meal-plans (subDays (startOfDay start-of-week) 4)])}
+        "Zurück"]
+       [:button.pv2.w3.bg-gray-600.ba.br3.br--right.white.b--white.tc.flex.justify-center
+        {:on-click
+         #(dispatch [:main/init-meal-plans (addDays (startOfDay start-of-week) 4)])}
+        "Vor"]]
+      [:div.flex.justify-center.flex-auto
+       (format (:date (ffirst meals-plans)) "MMMM yyyy" #js {:locale de})]]
+     [:div.flex.flex-wrap.flex-auto
+      (doall
+       (map
+        (fn [[lunch dinner]]
+          (let [bank-holiday @(subscribe [:main/bank-holiday (:date lunch)])]
+            ^{:key (:date lunch)}
+            [:div.ba.w-50.pv2.flex.flex-column.b--gray.h-50
+             [:div.ph2.flex.justify-between
+              [:span.truncate.dark-red bank-holiday]
+              [:span.tr.fw6
+               {:style {:white-space "nowrap"}}
+               (format (:date lunch) "EEEEEE dd.MM" #js {:locale de})]]
+             [:div.flex-auto
+              {:class (when (isPast (addDays (startOfDay start-of-week) 2)) "o-20")}
+              [meal lunch]
+              [meal dinner]]]))
+        meals-plans))]
+     (when (seq meals-without-shopping-list)
+       [c/footer {:on-click #(dispatch [:shopping-card/load-ingredients-for-meals meals-without-shopping-list])}])]))

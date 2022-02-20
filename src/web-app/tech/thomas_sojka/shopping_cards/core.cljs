@@ -40,7 +40,9 @@
    (fn [m]
      (dispatch [:app/navigate m]))
    {:use-fragment true})
-  (dom/render [app] (.getElementById js/document "app")))
+  (dom/render [app] (.getElementById js/document "app"))
+  (dispatch [:main/load-recipes])
+  (dispatch [:main/init-meal-plans (js/Date.)]))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []
