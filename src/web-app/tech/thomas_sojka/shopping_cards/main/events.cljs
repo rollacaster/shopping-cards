@@ -63,12 +63,17 @@
                           (update :date #(js/Date. %))))
                     data)))))
 
-(reg-event-db
+(reg-event-fx
  :main/failure-meal-plans
- (fn [db _]
-   (-> db
-       (assoc :app/loading false)
-       (assoc :main/meal-plans :ERROR))))
+ (fn [{:keys [db]} _]
+   {:db
+    (assoc db
+           :app/loading false
+           :app/error "Fehler: Essen nicht geladen."
+           :main/meal-plans [])
+    :app/timeout {:id :app/error-removal
+                  :event [:app/remove-error]
+                  :time 2000}}))
 
 (reg-event-fx
  :main/add-meal
