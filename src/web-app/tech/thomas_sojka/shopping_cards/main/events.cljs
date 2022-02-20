@@ -82,7 +82,12 @@
                  :params (assoc (:recipe-details/meal db) :recipe recipe)
                  :format (ajax/json-request-format)
                  :response-format (ajax/text-response-format)
+                 :on-success [:main/success-add-meal]
                  :on-failure [:main/failure-add-meal (:recipe-details/meal db)]}}))
+
+(reg-event-db
+  :main/success-add-meal
+  identity)
 
 (reg-event-db
  :main/success-bank-holidays
