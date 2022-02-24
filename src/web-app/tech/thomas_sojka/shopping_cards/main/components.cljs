@@ -34,7 +34,7 @@
 (defn footer [{:keys [on-click loading]}]
   [:footer.bg-orange-400.flex.justify-center.pa3
    [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
-    {:on-click on-click}
+    {:on-click on-click :disabled loading}
     [:div.flex.items-center
      (if loading
        [:div {:style {:width 128}}
