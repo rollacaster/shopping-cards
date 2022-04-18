@@ -1,6 +1,5 @@
 {:deps {cheshire/cheshire {:mvn/version "5.10.2"}
         clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
-        com.datomic/dev-local {:mvn/version "1.0.243"}
         day8.re-frame/http-fx {:mvn/version "0.2.4"}
         hickory/hickory {:mvn/version "0.7.1"}
         hodur/datomic-schema {:mvn/version "0.1.0"}
@@ -25,8 +24,10 @@
         com.google.guava/guava {:mvn/version "31.0.1-jre"}}
  :paths ["src/server" "src/web_app" "test/web_app" "classes" "resources"]
  :aliases {:dev {:extra-paths ["dev"]
-                 :extra-deps {integrant/repl {:mvn/version "0.3.2"}}}
-           :uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
+                 :extra-deps {integrant/repl {:mvn/version "0.3.2"}
+                              com.datomic/dev-local {:mvn/version "1.0.243"}}}
+           :uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}
+                                   com.datomic/dev-local {:mvn/version "1.0.243"}}
                       :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.system"]}
            :test {:extra-paths ["test/server"]}
            :test-runner-cognitect
