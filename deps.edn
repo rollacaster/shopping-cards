@@ -34,5 +34,6 @@
            {:extra-paths ["test/server"]
             :extra-deps  {com.cognitect/test-runner
                           {:git/url "https://github.com/cognitect-labs/test-runner.git"
-                           :sha     "f7ef16dc3b8332b0d77bc0274578ad5270fbfedd"}}
+                           :sha     "f7ef16dc3b8332b0d77bc0274578ad5270fbfedd"}
+                          com.datomic/dev-local {:mvn/version "1.0.243"}}
             :main-opts   ["-m" "cognitect.test-runner"]}}}
