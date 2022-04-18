@@ -10,7 +10,8 @@
             [day8.re-frame.http-fx]
             [tech.thomas-sojka.shopping-cards.events]
             [tech.thomas-sojka.shopping-cards.subs]
-            [tech.thomas-sojka.shopping-cards.main.core]))
+            [tech.thomas-sojka.shopping-cards.main.core]
+            [tech.thomas-sojka.shopping-cards.edit-recipes.core]))
 
 (def routes
   [[["/" {:name :route/main
@@ -32,7 +33,10 @@
      :view :view/select-lunch}]
    ["/select-dinner"
     {:name :route/select-dinner
-     :view :view/select-dinner}]])
+     :view :view/select-dinner}]
+   ["/edit-recipes"
+    {:name :route/edit-recipes
+     :view :view/edit-recipes}]])
 
 (defn init! []
   (rfe/start!
