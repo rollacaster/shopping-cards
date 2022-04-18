@@ -36,7 +36,11 @@
      :view :view/select-dinner}]
    ["/edit-recipes"
     {:name :route/edit-recipes
-     :view :view/edit-recipes}]])
+     :view :view/edit-recipes}]
+   ["/edit-recipe/:recipe-id"
+    {:name :route/edit-recipe
+     :view :view/edit-recipe
+     :parameters {:path {:recipe-id string?}}}]])
 
 (defn init! []
   (rfe/start!

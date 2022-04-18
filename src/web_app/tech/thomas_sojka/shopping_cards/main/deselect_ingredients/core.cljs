@@ -1,11 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.main.deselect-ingredients.core
-  (:require [re-frame.core :refer [dispatch subscribe]]
-            [tech.thomas-sojka.shopping-cards.main.components :as c]
-            [tech.thomas-sojka.shopping-cards.view :as core]
-            [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.core]
-            [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.subs]
-            [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.events]
-            [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.finish.core]))
+  (:require
+   [re-frame.core :refer [dispatch subscribe]]
+   [tech.thomas-sojka.shopping-cards.components :refer [icon]]
+   [tech.thomas-sojka.shopping-cards.main.components :as c]
+   [tech.thomas-sojka.shopping-cards.view :as core]))
 
 (defn ingredient-select [{:keys [i id selected? on-change]} children]
   [c/ingredient {:i i :id id}
@@ -37,7 +35,7 @@
        [c/ingredient {:i (count ingredients) :id "add-ingredient" :class "ba b--dashed"}
         [:div.flex.items-center
          [:div.w2.flex.items-center.mr3
-          [c/icon :add]]
+          [icon :add]]
          "Zutat hinzufügen"]]]]
      [:div.fixed.bottom-0.w-100.z-2
       [c/footer {:on-click #(dispatch [:shopping-card/create

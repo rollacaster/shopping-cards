@@ -1,9 +1,11 @@
 (ns tech.thomas-sojka.shopping-cards.main.views
-  (:require [re-frame.core :refer [dispatch subscribe]]
-            ["date-fns" :refer (addDays startOfDay format subDays addDays isPast)]
-            ["date-fns/locale" :refer (de)]
-            [reagent.core :as r]
-            [tech.thomas-sojka.shopping-cards.main.components :as c]))
+  (:require
+   ["date-fns" :refer [addDays format isPast startOfDay subDays]]
+   ["date-fns/locale" :refer [de]]
+   [re-frame.core :refer [dispatch subscribe]]
+   [reagent.core :as r]
+   [tech.thomas-sojka.shopping-cards.components :refer [icon]]
+   [tech.thomas-sojka.shopping-cards.main.components :as c]))
 
 (defn meal-name [meal-plan]
   (if (:recipe meal-plan)
@@ -27,7 +29,7 @@
        (when (:shopping-list meal-plan)
          [:div.absolute.bottom-0.right-0.mr1.bg-orange-400.br-100
           {:style {:width "1.8rem" :padding 5}}
-          [c/icon :shopping-cart]])
+          [icon :shopping-cart]])
        (meal-name meal-plan)]]]))
 
 (defn meal-plan []

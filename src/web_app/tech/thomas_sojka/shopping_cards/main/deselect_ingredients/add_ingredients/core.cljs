@@ -1,9 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.core
-  (:require [re-frame.core :refer [dispatch subscribe]]
-            [tech.thomas-sojka.shopping-cards.main.components :as c]
-            [tech.thomas-sojka.shopping-cards.view :as core]
-            [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.events]
-            [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.subs]))
+  (:require
+   [re-frame.core :refer [dispatch subscribe]]
+   [tech.thomas-sojka.shopping-cards.components :refer [icon]]
+   [tech.thomas-sojka.shopping-cards.main.components :as c]
+   [tech.thomas-sojka.shopping-cards.view :as core]))
 
 (defn add-ingredients []
   (let [ingredients @(subscribe [:extra-ingredients/addable-ingredients])
@@ -25,7 +25,7 @@
                         :selected? false}
                        [:div.flex.w-100
                         [:div.mr3.flex.items-center
-                         [c/icon {:style {:width 20}} :add]]
+                         [icon {:style {:width 20}} :add]]
                         name]]])
                    ingredients)]
      (when (seq [])
