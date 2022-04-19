@@ -3,7 +3,11 @@
    [re-frame.core :refer [dispatch subscribe]]
    [tech.thomas-sojka.shopping-cards.components :refer [icon]]
    [tech.thomas-sojka.shopping-cards.main.components :as c]
-   [tech.thomas-sojka.shopping-cards.view :as core]))
+   [tech.thomas-sojka.shopping-cards.view :as core]
+   [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.core]
+   [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.subs]
+   [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.events]
+   [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.finish.core]))
 
 (defn ingredient-select [{:keys [i id selected? on-change]} children]
   [c/ingredient {:i i :id id}

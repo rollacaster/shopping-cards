@@ -3,7 +3,9 @@
    [re-frame.core :refer [dispatch subscribe]]
    [tech.thomas-sojka.shopping-cards.components :refer [icon]]
    [tech.thomas-sojka.shopping-cards.main.components :as c]
-   [tech.thomas-sojka.shopping-cards.view :as core]))
+   [tech.thomas-sojka.shopping-cards.view :as core]
+   [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.events]
+   [tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.subs]))
 
 (defn add-ingredients []
   (let [ingredients @(subscribe [:extra-ingredients/addable-ingredients])
