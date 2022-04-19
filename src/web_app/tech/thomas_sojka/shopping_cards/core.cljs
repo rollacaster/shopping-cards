@@ -37,6 +37,10 @@
    ["/edit-recipes"
     {:name :route/edit-recipes
      :view :view/edit-recipes}]
+   ["/edit-recipe/:recipe-id/new-ingredient"
+    {:name :route/edit-recipe-add-ingredient
+     :view :view/edit-recipe-add-ingredient
+     :parameters {:path {:recipe-id string?}}}]
    ["/edit-recipe/:recipe-id"
     {:name :route/edit-recipe
      :view :view/edit-recipe

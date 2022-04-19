@@ -1,4 +1,6 @@
-(ns tech.thomas-sojka.shopping-cards.components)
+(ns tech.thomas-sojka.shopping-cards.components
+  (:require
+   [re-frame.core :refer [dispatch subscribe]]))
 
 (def icons {:check-mark "M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"
             :trash-can "M3 6v18h18v-18h-18zm5 14c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm5 0c0 .552-.448 1-1 1s-1-.448-1-1v-10c0-.552.448-1 1-1s1 .448 1 1v10zm4-18v2h-20v-2h5.711c.9 0 1.631-1.099 1.631-2h5.315c0 .901.73 2 1.631 2h5.712z"
@@ -32,27 +34,3 @@
    [:div.absolute-ns.pa2.mb2-ns.mh2.bottom-0.w-80.w-auto-ns
     {:class (when selected? "o-40")}
     [:span.f4 name]]])
-
-(defn recipe-details [{:keys [name link on-remove image ingredients]}]
-  [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
-   [:div.flex.justify-between.items
-    [:a.link.near-black.mb3.mb0-ns.db
-     {:href link :target "_blank" :referer "norel noopener"
-      :class (when-not (empty? link) "underline")}
-     [:h1.mv0 name]]
-    [:button.pv2.br3.bg-orange-200.bn.shadow-2.self-start
-     {:on-click on-remove}
-     [icon {:class "dark-gray h2"} :trash-can]]]
-   [:div.flex.justify-between.flex-wrap
-    [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
-     [:img.w5.br3.ba.b--orange-300 {:src image}]]
-    [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-     (map
-      (fn [[id ingredient]]
-        [:li.mb3.f4 {:key id} ingredient])
-      ingredients)]]
-   (when-not (empty? link)
-     [:div.flex.justify-center
-      [:a.link.shadow-3.bn.pv2.ph3.br2.bg-orange-400.f3.gray-800
-       {:href link}
-       "Rezept anzeigen"]])])

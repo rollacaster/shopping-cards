@@ -8,6 +8,17 @@
    (some #(when (= (:id %) id) %) (:main/recipes db))))
 
 (reg-sub
+ :edit-recipe/recipe-types
+ :<- [:main/recipes]
+ (fn [recipes]
+   (set (map :type recipes))))
+
+(reg-sub
  :edit-recipe/ingredients
  (fn [db [_ id]]
    (get-in db [:edit-recipe/ingredients id])))
+
+(reg-sub
+ :edit-recipe/all-ingredients
+ (fn [db _]
+   (get-in db [:edit-recipe/ingredients :all])))
