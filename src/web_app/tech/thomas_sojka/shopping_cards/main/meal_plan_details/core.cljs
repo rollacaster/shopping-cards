@@ -2,7 +2,9 @@
   (:require
    [re-frame.core :refer [dispatch subscribe]]
    [tech.thomas-sojka.shopping-cards.components :as c]
-   [tech.thomas-sojka.shopping-cards.view :as core]))
+   [tech.thomas-sojka.shopping-cards.view :as core]
+   [tech.thomas-sojka.shopping-cards.main.meal-plan-details.events]
+   [tech.thomas-sojka.shopping-cards.main.meal-plan-details.subs]))
 
 (defn meal-plan-details []
   (fn []
