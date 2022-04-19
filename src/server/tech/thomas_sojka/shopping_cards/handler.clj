@@ -59,7 +59,8 @@
         (let [{:keys [type]} (:body-params request)
               {:keys [recipe-id]} (:params request)]
           (recipe-edit/update-recipe-type recipe-id type)
-          {:status 200}))
+          {:status 200
+           :body type}))
    (PUT "/recipes/:recipe-id/ingredients/new" [recipe-id])
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
