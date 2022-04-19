@@ -53,7 +53,7 @@
      {:status 200})
    (DELETE "/meal-plans" [date type]
      (delete-meal-plan {:date (read-instant-date date)
-                        :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)})
+                        :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
    (PUT "/recipes/:recipe-id" request
         (let [{:keys [type]} (:body-params request)
