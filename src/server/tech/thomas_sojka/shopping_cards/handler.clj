@@ -1,8 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.handler
   {:clj-kondo/config '{:linters {:unresolved-symbol {:exclude [(compojure.api.sweet/GET)
                                                                (compojure.api.sweet/POST)
+                                                               (compojure.api.sweet/PUT)
                                                                (compojure.api.sweet/DELETE)]}}}}
-  (:require [compojure.api.sweet :refer [api GET POST DELETE]]
+  (:require [compojure.api.sweet :refer [api GET POST DELETE PUT]]
             [muuntaja.middleware :refer [wrap-format]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
@@ -11,7 +12,8 @@
              :refer
              [ingredients-for-recipe load-recipes load-ingredients ingredients-for-recipes load-meal-plans
               create-meal-plan delete-meal-plan create-shopping-list]]
-            [clojure.instant :refer [read-instant-date]]))
+            [clojure.instant :refer [read-instant-date]]
+            [tech.thomas-sojka.shopping-cards.recipe-editing :as recipe-edit]))
 
 (defn app-routes [trello-client]
   (api
@@ -52,12 +54,19 @@
    (DELETE "/meal-plans" [date type]
      (delete-meal-plan {:date (read-instant-date date)
                         :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)})
-     {:status 200})))
+     {:status 200})
+   (PUT "/recipes/:recipe-id" request
+        (let [{:keys [type]} (:body-params request)
+              {:keys [recipe-id]} (:params request)]
+          (recipe-edit/update-recipe-type recipe-id type)
+          {:status 200}))
+   (PUT "/recipes/:recipe-id/ingredients/new" [recipe-id])
+   (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
+   (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
+   (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id])))
 
 (defn app [{:keys [trello-client]}]
   (-> (app-routes trello-client)
       wrap-format
       wrap-params
       (wrap-resource "public")))
-
-

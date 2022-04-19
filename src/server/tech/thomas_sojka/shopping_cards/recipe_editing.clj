@@ -41,6 +41,11 @@
                                      :unit unit}))
         ingredients)))
 
+(defn update-recipe-type [recipe-id new-type]
+  (db/transact
+   [{:db/id [:recipe/id recipe-id]
+     :recipe/type (keyword (str "recipe-type/" (str/lower-case new-type)))}]))
+
 (defn remove-recipe [recipe-ref]
   (cons
    [:db/retractEntity recipe-ref]
