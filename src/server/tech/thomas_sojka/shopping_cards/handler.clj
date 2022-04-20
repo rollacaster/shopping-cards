@@ -3,36 +3,33 @@
                                                                (compojure.api.sweet/POST)
                                                                (compojure.api.sweet/PUT)
                                                                (compojure.api.sweet/DELETE)]}}}}
-  (:require [compojure.api.sweet :refer [api GET POST DELETE PUT]]
+  (:require [clojure.instant :refer [read-instant-date]]
+            [compojure.api.sweet :refer [api GET POST DELETE PUT]]
             [muuntaja.middleware :refer [wrap-format]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
-            [ring.util.response :refer [resource-response]]
-            [tech.thomas-sojka.shopping-cards.db
-             :refer
-             [ingredients-for-recipe load-recipes load-ingredients ingredients-for-recipes load-meal-plans
-              create-meal-plan delete-meal-plan create-shopping-list]]
-            [clojure.instant :refer [read-instant-date]]
+            [ring.util.response :as util.response]
+            [tech.thomas-sojka.shopping-cards.db :as db]
             [tech.thomas-sojka.shopping-cards.recipe-editing :as recipe-edit]))
 
 (defn app-routes [trello-client]
   (api
-   (GET "/" [] (resource-response "index.html" {:root "public"}))
-   (GET "/recipes" [] {:status 200 :body (vec (filter (comp not :inactive) (load-recipes))) :headers {"Content-type" "application/edn"}})
+   (GET "/" [] (util.response/resource-response "index.html" {:root "public"}))
+   (GET "/recipes" [] {:status 200 :body (vec (filter (comp not :inactive) (db/load-recipes))) :headers {"Content-type" "application/edn"}})
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
-     (pr-str (ingredients-for-recipe recipe-id)))
+     (pr-str (db/ingredients-for-recipe recipe-id)))
    (GET "/ingredients" [recipe-ids]
      (if recipe-ids
-       (pr-str (ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids)))
+       (pr-str (db/ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids)))
        {:status 200
-        :body (load-ingredients)
+        :body (db/load-ingredients)
         :headers {"Content-type" "application/edn"}}))
    (POST "/shopping-card" request
      {:status 201
       :body (let [{:keys [create-klaka-shopping-card]} trello-client
                   {:keys [ingredients meals]} (:body-params request)
                   trello-card-id (create-klaka-shopping-card ingredients)]
-              (create-shopping-list
+              (db/create-shopping-list
                (map
                 (fn [{:keys [type date]}]
                   [(case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
@@ -42,25 +39,25 @@
       :headers {"Content-type" "application/edn"}})
    (GET "/meal-plans/:date" [date]
      {:status 200
-      :body (load-meal-plans date)
+      :body (db/load-meal-plans date)
       :headers {"Content-type" "application/edn"}})
    (POST "/meal-plans" request
      (let [{:keys [date recipe type]} (:body-params request)]
-       (create-meal-plan
+       (db/create-meal-plan
         {:inst (read-instant-date date)
          :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
          :recipe [:recipe/name (:name recipe)]}))
      {:status 200})
    (DELETE "/meal-plans" [date type]
-     (delete-meal-plan {:date (read-instant-date date)
-                        :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
+     (db/delete-meal-plan {:date (read-instant-date date)
+                           :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
    (PUT "/recipes/:recipe-id" request
-        (let [{:keys [type]} (:body-params request)
-              {:keys [recipe-id]} (:params request)]
-          (recipe-edit/update-recipe-type recipe-id type)
-          {:status 200
-           :body type}))
+     (let [{:keys [type]} (:body-params request)
+           {:keys [recipe-id]} (:params request)]
+       (recipe-edit/update-recipe-type recipe-id type)
+       {:status 200
+        :body type}))
    (PUT "/recipes/:recipe-id/ingredients/new" request
      (let [{:keys [ingredient-id]} (:body-params request)
            {:keys [recipe-id]} (:params request)]
@@ -69,7 +66,7 @@
         [:ingredient/id ingredient-id]
         {:amount-desc "1"
          :amount 1.0})
-       (pr-str (ingredients-for-recipe recipe-id))))
+       (pr-str (db/ingredients-for-recipe recipe-id))))
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
    (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id])))
