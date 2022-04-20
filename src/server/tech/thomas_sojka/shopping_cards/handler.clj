@@ -61,7 +61,15 @@
           (recipe-edit/update-recipe-type recipe-id type)
           {:status 200
            :body type}))
-   (PUT "/recipes/:recipe-id/ingredients/new" [recipe-id])
+   (PUT "/recipes/:recipe-id/ingredients/new" request
+     (let [{:keys [ingredient-id]} (:body-params request)
+           {:keys [recipe-id]} (:params request)]
+       (recipe-edit/add-ingredient-to-recipe
+        [:recipe/id recipe-id]
+        [:ingredient/id ingredient-id]
+        {:amount-desc "1"
+         :amount 1.0})
+       (pr-str (ingredients-for-recipe recipe-id))))
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
    (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id])))

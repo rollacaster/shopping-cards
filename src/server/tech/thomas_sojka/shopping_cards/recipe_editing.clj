@@ -9,16 +9,17 @@
 (defn add-ingredient-to-recipe [recipe-ref
                                 ingredient-ref
                                 {:keys [amount amount-desc unit]}]
-  (cond->
-      #:cooked-with{:recipe recipe-ref
-                    :ingredient ingredient-ref
-                    :id (uuid)}
-    amount-desc
-    (assoc :cooked-with/amount-desc amount-desc)
-    amount
-    (assoc :cooked-with/amount amount)
-    unit
-    (assoc :cooked-with/unit unit)))
+  (db/transact
+   [(cond->
+        #:cooked-with{:recipe recipe-ref
+                      :ingredient ingredient-ref
+                      :id (uuid)}
+      amount-desc
+      (assoc :cooked-with/amount-desc amount-desc)
+      amount
+      (assoc :cooked-with/amount amount)
+      unit
+      (assoc :cooked-with/unit unit))]))
 
 (defn add-ingredient [{:keys [category name]}]
   #:ingredient{:id (uuid),
