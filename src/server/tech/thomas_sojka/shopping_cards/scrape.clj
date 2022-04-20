@@ -1,15 +1,17 @@
 (ns tech.thomas-sojka.shopping-cards.scrape
-  (:require [clojure.java.io :as io]
-            [cheshire.core :refer [parse-string]]
-            [clj-http.client :as client]
-            [clojure.edn :as edn]
-            [clojure.java.shell :refer [sh]]
-            [clojure.string :as s]
-            [clojure.walk :as w]
-            [hickory.core :as html]
-            [hickory.select :as select]
-            [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
-            [tech.thomas-sojka.shopping-cards.db :as db]))
+  (:require
+   [cheshire.core :refer [parse-string]]
+   [clj-http.client :as client]
+   [clojure.edn :as edn]
+   [clojure.java.io :as io]
+   [clojure.java.shell :refer [sh]]
+   [clojure.string :as s]
+   [clojure.walk :as w]
+   [datomic.client.api :as d]
+   [hickory.core :as html]
+   [hickory.select :as select]
+   [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
+   [tech.thomas-sojka.shopping-cards.db :as db]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def search-engine-cx "005510767845232759155:zdkkvfzersx")
@@ -198,13 +200,13 @@
                       {:unknown-ingredients (map :name unknown-ingredients)}))
       ingredients)))
 
-(defn dedup-ingredients [ingredients]
+(defn dedup-ingredients [conn ingredients]
   (->> ingredients
        (mapv (fn [{:keys [name] :as ingredient}]
                (let [ingredient-name (or (ingredient-name name) name)]
                  (assoc ingredient
                         :name ingredient-name
-                        :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-ingredients))))))
+                        :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-ingredients conn))))))
        throw-for-unknown-ingredients))
 
 (defmulti recipe-name (fn [link _] (cond
@@ -276,7 +278,7 @@
        html/parse
        html/as-hickory))
 
-(defn scrape-recipe [{:keys [link type name image] :or {type "NORMAL"}}]
+(defn scrape-recipe [conn {:keys [link type name image] :or {type "NORMAL"}}]
   (if (s/includes? link "kptncook")
     (let [{:keys [name ingredients]} (parse-string (:out (sh "node" "src/js/scrape.js" link)) true)]
       (-> {:name name
@@ -285,7 +287,7 @@
            :type type
            :image (find-image name)
            :link link}
-          (update :ingredients dedup-ingredients)))
+          (update :ingredients (partial dedup-ingredients conn))))
     (let [recipe-hickory (as-hickory link)
           name (or name
                    (when (s/includes? link "docs.google")
@@ -301,18 +303,24 @@
               (if (s/includes? link "docs.google")
                 (fetch-gdrive-ingredients link)
                 (add-ingredients link recipe-hickory)))
-       (update :ingredients dedup-ingredients)))))
+       (update :ingredients (partial dedup-ingredients conn))))))
 
 (comment
-  (scrape-recipe {:name "Vegetarisches Gulasch á la Margarete"
-                  :link "https://docs.google.com/document/d/1SDgNCPGMwaKdHEmF1yTOHndItLqkIdiLN879BhMlaZE/edit"})
-  (->> "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"
-       as-hickory
-          scrape-eatsmarter
-       )
-  (assoc (scrape-recipe {:link "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"})
-         :image
-         "https://images.eatsmarter.de/sites/default/files/styles/576x432/public/veganes-pilzragout-mit-brokkoli-661993.jpg")
-  (scrape-recipe {:link "http://mobile.kptncook.com/recipe/pinterest/Zucchini-Nudeln-in-cremiger-Ricotta-Sauce/360183b7?_branch_match_id=732898497676962929&utm_source=Clipboard&utm_medium=sharing"}
-                 )
-  )
+  (let [client (d/client {:server-type :dev-local :system "dev"})
+        conn (d/connect client {:db-name "shopping-cards"})]
+    (scrape-recipe
+     conn
+     {:name "Vegetarisches Gulasch á la Margarete"
+      :link "https://docs.google.com/document/d/1SDgNCPGMwaKdHEmF1yTOHndItLqkIdiLN879BhMlaZE/edit"})
+    (->> "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"
+         as-hickory
+         scrape-eatsmarter)
+    (assoc
+     (scrape-recipe
+      conn
+      {:link "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"})
+     :image
+     "https://images.eatsmarter.de/sites/default/files/styles/576x432/public/veganes-pilzragout-mit-brokkoli-661993.jpg")
+    (scrape-recipe
+     conn
+     {:link "http://mobile.kptncook.com/recipe/pinterest/Zucchini-Nudeln-in-cremiger-Ricotta-Sauce/360183b7?_branch_match_id=732898497676962929&utm_source=Clipboard&utm_medium=sharing"})))

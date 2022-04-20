@@ -4,10 +4,6 @@
             [tick.core :as t]))
 
 
-(def client (d/client {:server-type :dev-local
-                       :system "dev"}))
-(def conn (d/connect client {:db-name "shopping-cards"}))
-
 (def penny-order
   [:ingredient-category/obst
    :ingredient-category/gemüse
@@ -37,7 +33,7 @@
                     (:db/ident (:recipe/type recipe))))
       (dissoc :recipe/type)))
 
-(defn load-recipes []
+(defn load-recipes [conn]
   (->> (d/db conn)
        (d/q '[:find (pull ?r [[:recipe/id :as :id]
                               [:recipe/name :as :name]
@@ -48,7 +44,7 @@
               [?r :recipe/id ]])
        (map (comp transform-recipe-type first))))
 
-(defn load-recipe [recipe-ref]
+(defn load-recipe [conn recipe-ref]
   (d/pull
    (d/db conn)
    [[:recipe/id :as :id]
@@ -66,28 +62,7 @@
         [:ingredient/id :as :id]]}]}]
    recipe-ref))
 
-(defn load-cooked-with []
-  (->> (d/db conn)
-       (d/q '[:find
-              (pull ?c
-                    [[:cooked-with/amount :as :amount]
-                     [:cooked-with/ingredient :as :ingredient-id]
-                     [:cooked-with/unit :as :unit]
-                     [:cooked-with/amount-desc :as :amount-desc]
-                     [:cooked-with/id :as :id]])
-              ?recipe-id
-              ?ingredient-id
-              :where
-              [?c :cooked-with/id]
-              [?c :cooked-with/recipe ?r]
-              [?c :cooked-with/ingredient ?i]
-              [?r :recipe/id ?recipe-id]
-              [?i :ingredient/id ?ingredient-id]])
-       (map (fn [[cooked-with recipe-id ingredient-id]]
-              (merge cooked-with {:recipe-id recipe-id
-                                  :ingredient-id ingredient-id})))))
-
-(defn load-ingredients []
+(defn load-ingredients [conn]
   (->> (d/db conn)
        (d/q '[:find
               (pull ?i [[:ingredient/id :as :id]
@@ -101,10 +76,10 @@
                   (< (.indexOf penny-order category1)
                      (.indexOf penny-order category2))))))
 
-(defn load-entity [lookup-ref]
+(defn load-entity [conn lookup-ref]
   (d/pull (d/db conn) '[*] lookup-ref))
 
-(defn ingredients-for-recipe [id]
+(defn ingredients-for-recipe [conn id]
   (map
    (fn [[{:keys [ingredient/id ingredient/name]}
         {:keys [cooked-with/amount-desc]}]]
@@ -145,7 +120,7 @@
                       " " name
                       " (" (str/join ", " amount-descs) ")")))))
 
-(defn ingredients-for-recipes [selected-recipe-ids]
+(defn ingredients-for-recipes [conn selected-recipe-ids]
   (->> (d/q '[:find
             (pull ?c [:cooked-with/unit
                       :cooked-with/amount-desc
@@ -178,11 +153,11 @@
             (let [{:keys [ingredient/id]} (second (first ingredients))]
               [id (ingredient-text ingredients)])))))
 
-(defn transact [tx-data]
+(defn transact [conn tx-data]
   (d/transact conn {:tx-data tx-data}))
 
-(defn retract [lookup-ref]
-  (transact [[:db/retractEntity lookup-ref]]))
+(defn retract [conn lookup-ref]
+  (transact conn [[:db/retractEntity lookup-ref]]))
 
 (defn within-next-four-days? [d1 d2]
   (let [i1 (t/instant (t/date-time (str d1 "T00:00")))
@@ -191,7 +166,7 @@
      (t/>= i2 i1)
      (t/< i2 (t/+ i1 (t/new-duration 4 :days))))))
 
-(defn load-meal-plans [date]
+(defn load-meal-plans [conn date]
   (->> (d/q '[:find (pull ?m [[:meal-plan/inst :as :date]
                               {[:meal-plan/type :as :type]
                                [[:db/ident :as :ref]]}
@@ -224,11 +199,12 @@
                  (assoc acc new-kw v)))
              {} m))
 
-(defn create-meal-plan [meal-plan]
-  (transact [(map->nsmap meal-plan (create-ns 'meal-plan))]))
+(defn create-meal-plan [conn meal-plan]
+  (transact conn [(map->nsmap meal-plan (create-ns 'meal-plan))]))
 
-(defn delete-meal-plan [{:keys [date type]}]
+(defn delete-meal-plan [conn {:keys [date type]}]
   (retract
+   conn
    (ffirst
     (d/q
      '[:find ?id
@@ -240,8 +216,9 @@
      date
      type))))
 
-(defn create-shopping-list [meal-plans]
+(defn create-shopping-list [conn meal-plans]
   (transact
+   conn
    [#:shopping-list
     {:meals
      (map first
@@ -254,82 +231,7 @@
                meal-plans))}]))
 
 (comment
-  (transact
-   [{:db/id 79164837199987
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Bohnengulasch mit Räuchertofu"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Kohlrabi in Parmesan-Kräuter-Panade"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Nudeln in Zucchini-Erdnuss-Sauce"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Broccoli-Hähnchen-Penne"]
-     :recipe/type [:db/ident :recipe-type/rare]
-     :recipe/name "Broccoli-Penne"}])
-  (transact
-   [{:db/id [:recipe/name "Nudelsalat mit Schinken und Erbsen"]
-     :recipe/type [:db/ident :recipe-type/rare]
-     :recipe/name "Nudelsalat mit Erbsen"}])
-  (transact
-   [{:db/id [:recipe/name "Broccolicurry mit roten Linsen"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Spätzle Gemüseauflauf"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Teigtaschen mit Spinat-Feta-Füllung"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Vegetarische Frikadellen"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Vegetarisches Chili mit Bulgur"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Vegetarisches Gulasch á la Margarete"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Zucchini-Frischkäse-Taschen"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Gnocchi mit Brokkoli und Pesto Rosso"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Pasta mit Brokkoli"]
-     :recipe/type [:db/ident :recipe-type/rare]}])
-  (transact
-   [{:db/id [:recipe/name "Bunte Gemüse Quesadilla"]
-     :recipe/name "Quesadilla"}])
-  (transact
-   [{:db/id [:recipe/name "Käse-Brezeln"]
-     :recipe/name "Käse-Brezen"}])
-  (transact
-   [{:db/id [:recipe/name "Brezel + Tofu"]
-     :recipe/name "Breze + Tofu"}])
-  (transact
-   [{:db/id [:recipe/name "Camenbert"]
-     :recipe/name "Camembert"}])
-  (transact
-   [{:db/id [:recipe/name "Gebackender Feta"]
-     :recipe/name "Gebackener Feta"}])
-  (transact
-   [{:db/id [:recipe/name "Buntes Ofengemüse"]
-     :recipe/name "Ofengemüse"}])
-  (transact
-   [{:db/id [:recipe/name "Gemüse-Lassange"]
-     :recipe/name "Gemüse-Lasange"}])
-  (transact
-   [{:db/id [:recipe/name "Ofenkartoffeln mit Sour Cream light"]
-     :recipe/name "Ofenkartoffeln mit Sour Cream"}])
-  (transact
-   [{:db/id [:recipe/name "Pasta mit Kichererbsen & Spinat"]
-     :recipe/name "Kichererbsen & Spinat Nudeln"}])
-
-  (defn find-recipes-by-ingredient [ingredient]
+  (defn find-recipes-by-ingredient [conn ingredient]
     (d/q '[:find ?name
            :in $ ?ingredient
            :where
@@ -339,4 +241,23 @@
            [?i :ingredient/name ?ingredient]]
          (d/db conn)
          ingredient))
-  (find-recipes-by-ingredient "Brokkoli"))
+  (defn load-cooked-with [conn]
+    (->> (d/db conn)
+         (d/q '[:find
+                (pull ?c
+                      [[:cooked-with/amount :as :amount]
+                       [:cooked-with/ingredient :as :ingredient-id]
+                       [:cooked-with/unit :as :unit]
+                       [:cooked-with/amount-desc :as :amount-desc]
+                       [:cooked-with/id :as :id]])
+                ?recipe-id
+                ?ingredient-id
+                :where
+                [?c :cooked-with/id]
+                [?c :cooked-with/recipe ?r]
+                [?c :cooked-with/ingredient ?i]
+                [?r :recipe/id ?recipe-id]
+                [?i :ingredient/id ?ingredient-id]])
+         (map (fn [[cooked-with recipe-id ingredient-id]]
+                (merge cooked-with {:recipe-id recipe-id
+                                    :ingredient-id ingredient-id}))))))

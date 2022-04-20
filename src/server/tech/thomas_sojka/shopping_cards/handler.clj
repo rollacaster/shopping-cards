@@ -12,17 +12,19 @@
             [tech.thomas-sojka.shopping-cards.db :as db]
             [tech.thomas-sojka.shopping-cards.recipe-editing :as recipe-edit]))
 
-(defn app-routes [trello-client]
+(defn app-routes [trello-client conn]
   (api
    (GET "/" [] (util.response/resource-response "index.html" {:root "public"}))
-   (GET "/recipes" [] {:status 200 :body (vec (filter (comp not :inactive) (db/load-recipes))) :headers {"Content-type" "application/edn"}})
+   (GET "/recipes" [] {:status 200
+                       :body (vec (filter (comp not :inactive) (db/load-recipes conn)))
+                       :headers {"Content-type" "application/edn"}})
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
-     (pr-str (db/ingredients-for-recipe recipe-id)))
+     (pr-str (db/ingredients-for-recipe conn recipe-id)))
    (GET "/ingredients" [recipe-ids]
      (if recipe-ids
-       (pr-str (db/ingredients-for-recipes ((if (vector? recipe-ids) set hash-set) recipe-ids)))
+       (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))
        {:status 200
-        :body (db/load-ingredients)
+        :body (db/load-ingredients conn)
         :headers {"Content-type" "application/edn"}}))
    (POST "/shopping-card" request
      {:status 201
@@ -30,6 +32,7 @@
                   {:keys [ingredients meals]} (:body-params request)
                   trello-card-id (create-klaka-shopping-card ingredients)]
               (db/create-shopping-list
+               conn
                (map
                 (fn [{:keys [type date]}]
                   [(case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
@@ -39,18 +42,21 @@
       :headers {"Content-type" "application/edn"}})
    (GET "/meal-plans/:date" [date]
      {:status 200
-      :body (db/load-meal-plans date)
+      :body (db/load-meal-plans conn date)
       :headers {"Content-type" "application/edn"}})
    (POST "/meal-plans" request
      (let [{:keys [date recipe type]} (:body-params request)]
        (db/create-meal-plan
+        conn
         {:inst (read-instant-date date)
          :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
          :recipe [:recipe/name (:name recipe)]}))
      {:status 200})
    (DELETE "/meal-plans" [date type]
-     (db/delete-meal-plan {:date (read-instant-date date)
-                           :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
+     (db/delete-meal-plan
+      conn
+      {:date (read-instant-date date)
+       :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
    (PUT "/recipes/:recipe-id" request
      (let [{:keys [type]} (:body-params request)
@@ -62,17 +68,18 @@
      (let [{:keys [ingredient-id]} (:body-params request)
            {:keys [recipe-id]} (:params request)]
        (recipe-edit/add-ingredient-to-recipe
+        conn
         [:recipe/id recipe-id]
         [:ingredient/id ingredient-id]
         {:amount-desc "1"
          :amount 1.0})
-       (pr-str (db/ingredients-for-recipe recipe-id))))
+       (pr-str (db/ingredients-for-recipe conn recipe-id))))
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
    (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id])))
 
-(defn app [{:keys [trello-client]}]
-  (-> (app-routes trello-client)
+(defn app [{:keys [trello-client conn]}]
+  (-> (app-routes trello-client conn)
       wrap-format
       wrap-params
       (wrap-resource "public")))

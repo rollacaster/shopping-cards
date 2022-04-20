@@ -1,15 +1,18 @@
 (ns tech.thomas-sojka.shopping-cards.recipe-editing
   (:require
    [clojure.string :as str]
+   [datomic.client.api :as d]
    [tech.thomas-sojka.shopping-cards.db :as db]
    [tech.thomas-sojka.shopping-cards.scrape :as scrape]))
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
-(defn add-ingredient-to-recipe [recipe-ref
+(defn add-ingredient-to-recipe [conn
+                                recipe-ref
                                 ingredient-ref
                                 {:keys [amount amount-desc unit]}]
   (db/transact
+   conn
    [(cond->
         #:cooked-with{:recipe recipe-ref
                       :ingredient ingredient-ref
@@ -26,7 +29,7 @@
                :name name,
                :category category})
 
-(defn add-new-recipe [{:keys [name link image type ingredients]}]
+(defn add-new-recipe [conn {:keys [name link image type ingredients]}]
   (cons
    {:db/id "new-recipe"
     :recipe/id (uuid),
@@ -35,11 +38,13 @@
     :recipe/image image,
     :recipe/link link}
    (map (fn [{:keys [amount amount-desc unit] :as ingredient}]
-          (add-ingredient-to-recipe "new-recipe"
-                                    [:ingredient/name (:name ingredient)]
-                                    {:amount (when amount (float amount))
-                                     :amount-desc amount-desc
-                                     :unit unit}))
+          (add-ingredient-to-recipe
+           conn
+           "new-recipe"
+           [:ingredient/name (:name ingredient)]
+           {:amount (when amount (float amount))
+            :amount-desc amount-desc
+            :unit unit}))
         ingredients)))
 
 (defn update-recipe-type [recipe-id new-type]
@@ -47,22 +52,29 @@
    [{:db/id [:recipe/id recipe-id]
      :recipe/type (keyword (str "recipe-type/" (str/lower-case new-type)))}]))
 
-(defn remove-recipe [recipe-ref]
+(defn remove-recipe [conn recipe-ref]
   (cons
    [:db/retractEntity recipe-ref]
    (map (fn [{:keys [id]}] [:db/retractEntity [:cooked-with/id id]])
-        (:ingredients (db/load-recipe recipe-ref)))))
+        (:ingredients (db/load-recipe conn recipe-ref)))))
 
 (comment
-  (add-new-recipe
-   {:name "Misosuppe mit Gemüse und Tofu2",
-    :link "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
-    :type "FAST",
-    :inactive false,
-    :image "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
-    :ingredients [{:amount-desc "1 große", :name "Karotte", :amount 1, :id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9"}]})
-  (add-ingredient {:category "Obst" :name "Mandarine"})
-  (db/load-entity [:ingredient/name "Eier"])
-  (-> {:name "temp" :link "https://www.meinestube.de/zucchini-frischkaese/"}
-      scrape/scrape-recipe
-      add-new-recipe))
+  (let [client (d/client {:server-type :dev-local :system "dev"})
+        conn (d/connect client {:db-name "shopping-cards"})]
+    (db/load-recipes conn)
+    (db/transact
+     [(update-recipe-type "38ba8e5b-61c7-4827-a848-45efd46717eb"
+                          "RARE")])
+    (add-new-recipe
+     conn
+     {:name "Misosuppe mit Gemüse und Tofu2",
+      :link "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
+      :type "FAST",
+      :inactive false,
+      :image "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
+      :ingredients [{:amount-desc "1 große", :name "Karotte", :amount 1, :id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9"}]})
+    (add-ingredient {:category "Obst" :name "Mandarine"})
+    (db/load-entity conn [:ingredient/name "Eier"])
+    (-> {:name "temp" :link "https://www.meinestube.de/zucchini-frischkaese/"}
+        (partial scrape/scrape-recipe conn)
+        (partial add-new-recipe conn))))
