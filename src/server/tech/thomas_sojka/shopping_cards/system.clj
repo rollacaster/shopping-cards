@@ -4,7 +4,8 @@
             [integrant.core :as ig]
             [ring.adapter.jetty :refer [run-jetty]]
             [tech.thomas-sojka.shopping-cards.handler :refer [app]]
-            [tech.thomas-sojka.shopping-cards.trello :as trello]))
+            [tech.thomas-sojka.shopping-cards.trello :as trello]
+            [tech.thomas-sojka.shopping-cards.migrate :as migrate]))
 
 (def config
   {:adapter/jetty {:port 3000
@@ -15,7 +16,9 @@
 
 (defmethod ig/init-key :datomic/dev-local [_ {:keys [db-name]}]
   (let [client (d/client {:server-type :dev-local :system "dev"})
+        _ (d/create-database client {:db-name db-name})
         conn (d/connect client {:db-name db-name})]
+    (migrate/migrate-schema conn)
     conn))
 
 (defmethod ig/init-key :adapter/jetty [_ {:keys [trello-client port conn]}]

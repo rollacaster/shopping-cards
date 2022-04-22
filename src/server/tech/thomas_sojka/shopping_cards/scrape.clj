@@ -200,13 +200,13 @@
                       {:unknown-ingredients (map :name unknown-ingredients)}))
       ingredients)))
 
-(defn dedup-ingredients [conn ingredients]
-  (->> ingredients
+(defn dedup-ingredients [all-ingredients ingredients-to-dedup]
+  (->> ingredients-to-dedup
        (mapv (fn [{:keys [name] :as ingredient}]
                (let [ingredient-name (or (ingredient-name name) name)]
                  (assoc ingredient
                         :name ingredient-name
-                        :id (some #(when (= (:name %) ingredient-name) (:id %)) (db/load-ingredients conn))))))
+                        :id (some #(when (= (:name %) ingredient-name) (:id %)) all-ingredients)))))
        throw-for-unknown-ingredients))
 
 (defmulti recipe-name (fn [link _] (cond
@@ -287,7 +287,7 @@
            :type type
            :image (find-image name)
            :link link}
-          (update :ingredients (partial dedup-ingredients conn))))
+          (update :ingredients (partial dedup-ingredients (db/load-ingredients conn)))))
     (let [recipe-hickory (as-hickory link)
           name (or name
                    (when (s/includes? link "docs.google")
@@ -303,7 +303,7 @@
               (if (s/includes? link "docs.google")
                 (fetch-gdrive-ingredients link)
                 (add-ingredients link recipe-hickory)))
-       (update :ingredients (partial dedup-ingredients conn))))))
+       (update :ingredients (partial dedup-ingredients (db/load-ingredients conn)))))))
 
 (comment
   (let [client (d/client {:server-type :dev-local :system "dev"})
