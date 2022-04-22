@@ -7,45 +7,39 @@
 
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
-(defn add-ingredient-to-recipe [conn
-                                recipe-ref
-                                ingredient-ref
-                                {:keys [amount amount-desc unit]}]
-  (db/transact
-   conn
-   [(cond->
-        #:cooked-with{:recipe recipe-ref
-                      :ingredient ingredient-ref
-                      :id (uuid)}
-      amount-desc
-      (assoc :cooked-with/amount-desc amount-desc)
-      amount
-      (assoc :cooked-with/amount amount)
-      unit
-      (assoc :cooked-with/unit unit))]))
+(defn add-ingredient-to-recipe [recipe-ref ingredient-ref {:keys [amount amount-desc unit]}]
+  (cond->
+      #:cooked-with{:recipe recipe-ref
+                    :ingredient ingredient-ref
+                    :id (uuid)}
+    amount-desc
+    (assoc :cooked-with/amount-desc amount-desc)
+    amount
+    (assoc :cooked-with/amount amount)
+    unit
+    (assoc :cooked-with/unit unit)))
 
 (defn add-ingredient [{:keys [category name]}]
   #:ingredient{:id (uuid),
                :name name,
                :category category})
 
-(defn add-new-recipe [conn {:keys [name link image type ingredients]}]
-  (cons
+(defn add-new-recipe [{:keys [name link image type ingredients]}]
+  (conj
+   (mapv (fn [{:keys [amount amount-desc unit]}]
+          (add-ingredient-to-recipe
+           "new-recipe"
+           "new-ingredient" ;; TODO How to handle existent ingredients
+           {:amount (when amount (float amount))
+            :amount-desc amount-desc
+            :unit unit}))
+        ingredients)
    {:db/id "new-recipe"
     :recipe/id (uuid),
     :recipe/name name,
     :recipe/type (keyword (str "recipe-type/" (str/lower-case type))),
     :recipe/image image,
-    :recipe/link link}
-   (map (fn [{:keys [amount amount-desc unit] :as ingredient}]
-          (add-ingredient-to-recipe
-           conn
-           "new-recipe"
-           [:ingredient/name (:name ingredient)]
-           {:amount (when amount (float amount))
-            :amount-desc amount-desc
-            :unit unit}))
-        ingredients)))
+    :recipe/link link}))
 
 (defn update-recipe-type [recipe-id new-type]
   (db/transact

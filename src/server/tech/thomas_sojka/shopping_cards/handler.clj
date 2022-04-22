@@ -67,12 +67,13 @@
    (PUT "/recipes/:recipe-id/ingredients/new" request
      (let [{:keys [ingredient-id]} (:body-params request)
            {:keys [recipe-id]} (:params request)]
-       (recipe-edit/add-ingredient-to-recipe
+       (db/transact
         conn
-        [:recipe/id recipe-id]
-        [:ingredient/id ingredient-id]
-        {:amount-desc "1"
-         :amount 1.0})
+        (recipe-edit/add-ingredient-to-recipe
+         [:recipe/id recipe-id]
+         [:ingredient/id ingredient-id]
+         {:amount-desc "1"
+          :amount 1.0}))
        (pr-str (db/ingredients-for-recipe conn recipe-id))))
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
