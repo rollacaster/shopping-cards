@@ -15,17 +15,6 @@
 (defn app-routes [trello-client conn]
   (api
    (GET "/" [] (util.response/resource-response "index.html" {:root "public"}))
-   (GET "/recipes" [] {:status 200
-                       :body (vec (filter (comp not :inactive) (db/load-recipes conn)))
-                       :headers {"Content-type" "application/edn"}})
-   (GET "/recipes/:recipe-id/ingredients" [recipe-id]
-     (pr-str (db/ingredients-for-recipe conn recipe-id)))
-   (GET "/ingredients" [recipe-ids]
-     (if recipe-ids
-       (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))
-       {:status 200
-        :body (db/load-ingredients conn)
-        :headers {"Content-type" "application/edn"}}))
    (POST "/shopping-card" request
      {:status 201
       :body (let [{:keys [create-klaka-shopping-card]} trello-client
@@ -58,6 +47,11 @@
       {:date (read-instant-date date)
        :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
+   (GET "/recipes" [] {:status 200
+                       :body (vec (filter (comp not :inactive) (db/load-recipes conn)))
+                       :headers {"Content-type" "application/edn"}})
+   (GET "/recipes/:recipe-id/ingredients" [recipe-id]
+     (pr-str (db/ingredients-for-recipe conn recipe-id)))
    (PUT "/recipes/:recipe-id" request
      (let [{:keys [type]} (:body-params request)
            {:keys [recipe-id]} (:params request)]
@@ -69,15 +63,21 @@
            {:keys [recipe-id]} (:params request)]
        (db/transact
         conn
-        (recipe-edit/add-ingredient-to-recipe
-         [:recipe/id recipe-id]
-         [:ingredient/id ingredient-id]
-         {:amount-desc "1"
-          :amount 1.0}))
+        [(recipe-edit/add-ingredient-to-recipe
+          [:recipe/id recipe-id]
+          [:ingredient/id ingredient-id]
+          {:amount-desc "1"
+           :amount 1.0})])
        (pr-str (db/ingredients-for-recipe conn recipe-id))))
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
-   (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id])))
+   (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id])
+   (GET "/ingredients" [recipe-ids]
+     (if recipe-ids
+       (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))
+       {:status 200
+        :body (db/load-ingredients conn)
+        :headers {"Content-type" "application/edn"}}))))
 
 (defn app [{:keys [trello-client conn]}]
   (-> (app-routes trello-client conn)
