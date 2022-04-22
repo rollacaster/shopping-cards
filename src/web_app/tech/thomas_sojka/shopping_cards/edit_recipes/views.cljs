@@ -23,10 +23,13 @@
    [:div.w-100
     [:label.mr2 {:for "recipe-type"}
      "Rezept-Art"]
-    [:select {:name "type" :id "recipe-type" :on-change (fn [e] (dispatch [:edit-recipe/edit-type id  ^js (.-target.value e)]))}
+    [:select {:name "type" :id "recipe-type"
+              :value type
+              :on-change (fn [e] (dispatch [:edit-recipe/edit-type id  ^js (.-target.value e)]))}
      (map
       (fn [t]
-        [:option.w-100 {:value t :selected (= t type)} t])
+        ^{:key t}
+        [:option.w-100 {:value t} t])
       @(subscribe [:edit-recipe/recipe-types]))]]
    [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
     ingredients]

@@ -61,7 +61,7 @@
    (PUT "/recipes/:recipe-id" request
      (let [{:keys [type]} (:body-params request)
            {:keys [recipe-id]} (:params request)]
-       (recipe-edit/update-recipe-type recipe-id type)
+       (recipe-edit/update-recipe-type conn recipe-id type)
        {:status 200
         :body type}))
    (PUT "/recipes/:recipe-id/ingredients/new" request

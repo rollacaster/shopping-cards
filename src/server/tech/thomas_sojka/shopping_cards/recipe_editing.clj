@@ -41,8 +41,9 @@
     :recipe/image image,
     :recipe/link link}))
 
-(defn update-recipe-type [recipe-id new-type]
+(defn update-recipe-type [conn recipe-id new-type]
   (db/transact
+   conn
    [{:db/id [:recipe/id recipe-id]
      :recipe/type (keyword (str "recipe-type/" (str/lower-case new-type)))}]))
 
@@ -56,11 +57,9 @@
   (let [client (d/client {:server-type :dev-local :system "dev"})
         conn (d/connect client {:db-name "shopping-cards"})]
     (db/load-recipes conn)
-    (db/transact
-     [(update-recipe-type "38ba8e5b-61c7-4827-a848-45efd46717eb"
-                          "RARE")])
+    (update-recipe-type conn "38ba8e5b-61c7-4827-a848-45efd46717eb"
+                        "RARE")
     (add-new-recipe
-     conn
      {:name "Misosuppe mit Gemüse und Tofu2",
       :link "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
       :type "FAST",
