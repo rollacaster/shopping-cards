@@ -27,11 +27,6 @@
     unit
     (assoc :cooked-with/unit unit)))
 
-(defn add-ingredient [{:keys [category name]}]
-  #:ingredient{:id (uuid),
-               :name name,
-               :category category})
-
 (defn add-new-recipe [{:keys [name link image type ingredients]}]
   (conj
    (mapv (fn [{:keys [amount amount-desc unit]}]
@@ -78,7 +73,6 @@
       :inactive false,
       :image "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
       :ingredients [{:amount-desc "1 große", :name "Karotte", :amount 1, :id "960f20f5-64e9-4c8a-ac8e-ce8e52a5e9e9"}]})
-    (add-ingredient {:category "Obst" :name "Mandarine"})
     (db/load-entity conn [:ingredient/name "Eier"])
     (-> {:name "temp" :link "https://www.meinestube.de/zucchini-frischkaese/"}
         (partial scrape/scrape-recipe conn)

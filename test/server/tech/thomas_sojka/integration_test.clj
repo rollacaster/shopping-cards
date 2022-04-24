@@ -6,8 +6,8 @@
    [datomic.client.api :as d]
    [integrant.core :as ig]
    [integrant.repl :as ig-repl]
-   [tech.thomas-sojka.shopping-cards.db :as db]
-   [tech.thomas-sojka.shopping-cards.recipe-editing :as recipes]))
+   [tech.thomas-sojka.integration-test :as fixtures]
+   [tech.thomas-sojka.shopping-cards.db :as db]))
 
 (def db-name "shopping-cards-test")
 (def config
@@ -19,18 +19,9 @@
 
 (defn populate []
   (let [client (d/client {:server-type :dev-local :system "dev"})
-        conn (d/connect client {:db-name db-name})
-        {:keys [ingredient/id ingredient/name] :as ingredient} (assoc (recipes/add-ingredient {:category :ingredient-category/obst :name "Mandarine"})
-                                                                      :db/id "new-ingredient")
-        recipe (recipes/add-new-recipe
-                 {:name "Misosuppe mit Gemüse und Tofu2",
-                  :link "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
-                  :type "FAST",
-                  :inactive false,
-                  :image "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
-                  :ingredients [{:amount-desc "1 große", :name name, :amount 1, :id id}]})]
-    (db/transact conn (conj recipe ingredient))))
-
+        conn (d/connect client {:db-name db-name})]
+    (db/transact conn fixtures/ingredients)
+    (db/transact conn fixtures/recipes)))
 
 (defn db-setup [test-run]
   (ig-repl/set-prep! (fn [] config))
@@ -70,3 +61,6 @@
                 {:body (json/generate-string {:type test-type}) :content-type :json})
     (let [[{:keys [type]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
       (is (= type test-type)))))
+
+(deftest add-ingredient-to-recipe
+  )
