@@ -1,6 +1,6 @@
 (ns tech.thomas-sojka.integration-test
   (:require
-   [cheshire.core :refer [parse-string]]
+   [cheshire.core :as json :refer [parse-string]]
    [clj-http.client :as client]
    [clojure.test :refer [deftest is use-fixtures]]
    [datomic.client.api :as d]
@@ -41,7 +41,7 @@
                      {:db-name db-name})
   (ig-repl/halt))
 
-(use-fixtures :once db-setup)
+(use-fixtures :each db-setup)
 
 (deftest load-recipes
   (let [[{:keys [name image link type]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
@@ -62,3 +62,11 @@
     (is
      (= (mapv second (read-string (:body (client/get (str "http://localhost:3001/recipes/" id "/ingredients")))))
         ["1 große Mandarine"]))))
+
+(deftest update-type-of-recipe
+  (let [test-type "RARE"
+        [{:keys [id]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
+    (client/put (str "http://localhost:3001/recipes/" id)
+                {:body (json/generate-string {:type test-type}) :content-type :json})
+    (let [[{:keys [type]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
+      (is (= type test-type)))))

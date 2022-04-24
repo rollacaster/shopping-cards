@@ -5,6 +5,14 @@
    [tech.thomas-sojka.shopping-cards.db :as db]
    [tech.thomas-sojka.shopping-cards.scrape :as scrape]))
 
+;; URLS to implement
+;; PUT /recipes/dc20d162-3405-4e41-8f58-34ebc7626124/ingredients/new
+;; {ingredient-id: "cfc2741b-c361-4d05-b71e-a2a118881400"}
+;; PUT /recipes/dc20d162-3405-4e41-8f58-34ebc7626124
+;; {type: "RARE"}
+;; POST /recipes/dc20d162-3405-4e41-8f58-34ebc7626124/ingredients/9580eac9-5902-4420-917d-7d6539c64c9b/inc
+;; POST /recipes/dc20d162-3405-4e41-8f58-34ebc7626124/ingredients/9580eac9-5902-4420-917d-7d6539c64c9b/dec
+;; DELETE /recipes/dc20d162-3405-4e41-8f58-34ebc7626124/ingredients/9580eac9-5902-4420-917d-7d6539c64c9b
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
 (defn add-ingredient-to-recipe [recipe-ref ingredient-ref {:keys [amount amount-desc unit]}]
@@ -41,11 +49,15 @@
     :recipe/image image,
     :recipe/link link}))
 
-(defn update-recipe-type [conn recipe-id new-type]
-  (db/transact
-   conn
-   [{:db/id [:recipe/id recipe-id]
-     :recipe/type (keyword (str "recipe-type/" (str/lower-case new-type)))}]))
+(defn update-recipe-type [conn request]
+  (let [{:keys [type]} (:body-params request)
+       {:keys [recipe-id]} (:params request)]
+    (db/transact
+     conn
+     [{:db/id [:recipe/id recipe-id]
+       :recipe/type (keyword (str "recipe-type/" (str/lower-case type)))}])
+    {:status 200
+     :body type}))
 
 (defn remove-recipe [conn recipe-ref]
   (cons

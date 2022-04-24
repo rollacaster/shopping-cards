@@ -53,11 +53,7 @@
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
      (pr-str (db/ingredients-for-recipe conn recipe-id)))
    (PUT "/recipes/:recipe-id" request
-     (let [{:keys [type]} (:body-params request)
-           {:keys [recipe-id]} (:params request)]
-       (recipe-edit/update-recipe-type conn recipe-id type)
-       {:status 200
-        :body type}))
+     (recipe-edit/update-recipe-type conn request))
    (PUT "/recipes/:recipe-id/ingredients/new" request
      (let [{:keys [ingredient-id]} (:body-params request)
            {:keys [recipe-id]} (:params request)]
