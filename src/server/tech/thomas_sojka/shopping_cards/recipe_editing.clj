@@ -66,7 +66,7 @@
          (d/db conn)
          recipe-id
          ingredient-id)))
-  {:status 200})
+  (pr-str (db/ingredients-for-recipe conn recipe-id)))
 
 (comment
   (let [client (d/client {:server-type :dev-local :system "dev"})

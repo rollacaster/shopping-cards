@@ -159,7 +159,7 @@
  :edit-recipe/success-remove-ingredient
  (fn [{:keys [db]} [_ recipe-id ingredients]]
    {:db (-> db
-            (assoc-in [:edit-recipe/ingredients recipe-id] ingredients)
+            (assoc-in [:edit-recipe/ingredients recipe-id] (read-string ingredients))
             (assoc :app/loading false))
     :app/push-state [:route/edit-recipe {:recipe-id recipe-id}]}))
 

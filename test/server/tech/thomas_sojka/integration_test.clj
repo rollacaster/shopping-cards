@@ -53,5 +53,8 @@
   (let [recipe (first fixtures/recipes)
         ingredient-id-to-remove
         (ffirst (read-string (:body (client/get (url "/recipes/" (:recipe/id recipe) "/ingredients")))))]
-    (client/delete (url "/recipes/" (:recipe/id recipe) "/ingredients/" ingredient-id-to-remove))
-    (is (empty? (read-string (:body (client/get (url "/recipes/" (:recipe/id recipe) "/ingredients"))))))))
+    (is (-> "/recipes/"
+            (url (:recipe/id recipe) "/ingredients/" ingredient-id-to-remove)
+            client/delete
+            :body
+            empty?))))
