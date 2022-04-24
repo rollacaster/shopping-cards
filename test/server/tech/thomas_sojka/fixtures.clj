@@ -1,4 +1,9 @@
-(ns tech.thomas-sojka.fixtures)
+(ns tech.thomas-sojka.fixtures
+  (:require
+   [datomic.client.api :as d]
+   [integrant.core :as ig]
+   [integrant.repl :as ig-repl]
+   [tech.thomas-sojka.shopping-cards.db :as db]))
 
 (def ingredients
   [#:ingredient{:id "690fdb5c-711b-4b1b-918b-148d2a4eb355",
@@ -54,12 +59,7 @@
                 :category :ingredient-category/obst}])
 
 (def recipes
-  [#:cooked-with{:ingredient [:ingredient/name "Mandarine"],
-                 :id "ab52a4b5-46c3-4d1e-9e42-a66a02e19ba9",
-                 :recipe "new-recipe",
-                 :amount-desc "1 große",
-                 :amount 1.0}
-   {:recipe/id "2aa44c10-bf40-476b-b95f-3bbe96a3835f",
+  [{:recipe/id "2aa44c10-bf40-476b-b95f-3bbe96a3835f",
     :recipe/link
     "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
     :recipe/image
@@ -67,3 +67,38 @@
     :db/id "new-recipe",
     :recipe/type :recipe-type/fast,
     :recipe/name "Misosuppe mit Gemüse und Tofu2"}])
+
+(def cooked-with [#:cooked-with{:ingredient [:ingredient/name "Mandarine"],
+                                :id "ab52a4b5-46c3-4d1e-9e42-a66a02e19ba9",
+                                :recipe [:recipe/name "Misosuppe mit Gemüse und Tofu2"],
+                                :amount-desc "1 große",
+                                :amount 1.0}])
+
+(def db-name "shopping-cards-test")
+(def port 3001)
+
+(defn url [& endpoint]
+  (apply str "http://localhost:" port endpoint))
+
+(def config
+  {:adapter/jetty {:port port
+                   :trello-client (ig/ref :external/trello-client)
+                   :conn (ig/ref :datomic/dev-local)}
+   :external/trello-client {}
+   :datomic/dev-local {:db-name db-name}})
+
+(defn- populate []
+  (let [client (d/client {:server-type :dev-local :system "dev"})
+        conn (d/connect client {:db-name db-name})]
+    (db/transact conn ingredients)
+    (db/transact conn recipes)
+    (db/transact conn cooked-with)))
+
+(defn db-setup [test-run]
+  (ig-repl/set-prep! (fn [] config))
+  (ig-repl/go)
+  (populate)
+  (test-run)
+  (d/delete-database (d/client {:server-type :dev-local :system "dev"})
+                     {:db-name db-name})
+  (ig-repl/halt))

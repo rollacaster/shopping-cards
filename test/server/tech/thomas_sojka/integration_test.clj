@@ -3,36 +3,9 @@
    [cheshire.core :as json :refer [parse-string]]
    [clj-http.client :as client]
    [clojure.test :refer [deftest is use-fixtures]]
-   [datomic.client.api :as d]
-   [integrant.core :as ig]
-   [integrant.repl :as ig-repl]
-   [tech.thomas-sojka.integration-test :as fixtures]
-   [tech.thomas-sojka.shopping-cards.db :as db]))
+   [tech.thomas-sojka.fixtures :refer [url] :as fixtures]))
 
-(def db-name "shopping-cards-test")
-(def config
-  {:adapter/jetty {:port 3001
-                   :trello-client (ig/ref :external/trello-client)
-                   :conn (ig/ref :datomic/dev-local)}
-   :external/trello-client {}
-   :datomic/dev-local {:db-name db-name}})
-
-(defn populate []
-  (let [client (d/client {:server-type :dev-local :system "dev"})
-        conn (d/connect client {:db-name db-name})]
-    (db/transact conn fixtures/ingredients)
-    (db/transact conn fixtures/recipes)))
-
-(defn db-setup [test-run]
-  (ig-repl/set-prep! (fn [] config))
-  (ig-repl/go)
-  (populate)
-  (test-run)
-  (d/delete-database (d/client {:server-type :dev-local :system "dev"})
-                     {:db-name db-name})
-  (ig-repl/halt))
-
-(use-fixtures :each db-setup)
+(use-fixtures :each fixtures/db-setup)
 
 (deftest load-recipes
   (let [[{:keys [name image link type]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
@@ -43,24 +16,35 @@
           (= type "FAST")))))
 
 (deftest ingredients-for-recipes
-  (let [[{:keys [id]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
+  (let [[{:keys [id]}] (parse-string (:body (client/get (url "/recipes"))) true)]
     (is
-     (= (mapv second (read-string (:body (client/get (str "http://localhost:3001/ingredients?recipe-ids=" id)))))
+     (= (mapv second (read-string (:body (client/get (url "/ingredients?recipe-ids=" id)))))
         ["1 große Mandarine"]))))
 
 (deftest ingredients-for-recipe
-  (let [[{:keys [id]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
+  (let [[{:keys [id]}] (parse-string (:body (client/get (url "/recipes"))) true)]
     (is
-     (= (mapv second (read-string (:body (client/get (str "http://localhost:3001/recipes/" id "/ingredients")))))
+     (= (mapv second (read-string (:body (client/get (url "/recipes/" id "/ingredients")))))
         ["1 große Mandarine"]))))
 
 (deftest update-type-of-recipe
   (let [test-type "RARE"
-        [{:keys [id]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
+        [{:keys [id]}] (parse-string (:body (client/get (url "/recipes"))) true)]
     (client/put (str "http://localhost:3001/recipes/" id)
                 {:body (json/generate-string {:type test-type}) :content-type :json})
-    (let [[{:keys [type]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
+    (let [[{:keys [type]}] (parse-string (:body (client/get (url "/recipes"))) true)]
       (is (= type test-type)))))
 
 (deftest add-ingredient-to-recipe
-  )
+  (let [recipe (first fixtures/recipes)
+        ingredient (first fixtures/ingredients)]
+    (client/put (url "/recipes/" (:recipe/id recipe) "/ingredients/new")
+                {:body (json/generate-string {:ingredient-id (:ingredient/id ingredient)})
+                 :content-type :json})
+    (let [ingredients (read-string (:body (client/get (url "/recipes/" (:recipe/id recipe) "/ingredients"))))]
+      (is
+       (some
+        (fn [[id name]]
+          (and (= id (:ingredient/id ingredient))
+               (= name (str "1 " (:ingredient/name ingredient)))))
+        ingredients)))))
