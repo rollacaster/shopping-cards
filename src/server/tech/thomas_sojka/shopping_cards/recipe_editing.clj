@@ -72,8 +72,6 @@
   (let [client (d/client {:server-type :dev-local :system "dev"})
         conn (d/connect client {:db-name "shopping-cards"})]
     (db/load-recipes conn)
-    (update-recipe-type conn "38ba8e5b-61c7-4827-a848-45efd46717eb"
-                        "RARE")
     (add-new-recipe
      {:name "Misosuppe mit Gemüse und Tofu2",
       :link "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
