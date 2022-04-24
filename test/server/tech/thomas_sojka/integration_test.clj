@@ -48,3 +48,10 @@
           (and (= id (:ingredient/id ingredient))
                (= name (str "1 " (:ingredient/name ingredient)))))
         ingredients)))))
+
+(deftest remove-ingredient-from-recipe
+  (let [recipe (first fixtures/recipes)
+        ingredient-id-to-remove
+        (ffirst (read-string (:body (client/get (url "/recipes/" (:recipe/id recipe) "/ingredients")))))]
+    (client/delete (url "/recipes/" (:recipe/id recipe) "/ingredients/" ingredient-id-to-remove))
+    (is (empty? (read-string (:body (client/get (url "/recipes/" (:recipe/id recipe) "/ingredients"))))))))

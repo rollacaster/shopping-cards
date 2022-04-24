@@ -67,7 +67,8 @@
        (pr-str (db/ingredients-for-recipe conn recipe-id))))
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
    (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
-   (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id])
+   (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id]
+     (recipe-edit/remove-ingredient-from-recipe conn recipe-id ingredient-id))
    (GET "/ingredients" [recipe-ids]
      (if recipe-ids
        (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))

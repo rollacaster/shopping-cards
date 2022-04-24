@@ -5,14 +5,6 @@
    [tech.thomas-sojka.shopping-cards.db :as db]
    [tech.thomas-sojka.shopping-cards.scrape :as scrape]))
 
-;; URLS to implement
-;; PUT /recipes/dc20d162-3405-4e41-8f58-34ebc7626124/ingredients/new
-;; {ingredient-id: "cfc2741b-c361-4d05-b71e-a2a118881400"}
-;; PUT /recipes/dc20d162-3405-4e41-8f58-34ebc7626124
-;; {type: "RARE"}
-;; POST /recipes/dc20d162-3405-4e41-8f58-34ebc7626124/ingredients/9580eac9-5902-4420-917d-7d6539c64c9b/inc
-;; POST /recipes/dc20d162-3405-4e41-8f58-34ebc7626124/ingredients/9580eac9-5902-4420-917d-7d6539c64c9b/dec
-;; DELETE /recipes/dc20d162-3405-4e41-8f58-34ebc7626124/ingredients/9580eac9-5902-4420-917d-7d6539c64c9b
 (defn uuid [] (str (java.util.UUID/randomUUID)))
 
 (defn add-ingredient-to-recipe [recipe-ref ingredient-ref {:keys [amount amount-desc unit]}]
@@ -59,6 +51,22 @@
    [:db/retractEntity recipe-ref]
    (map (fn [{:keys [id]}] [:db/retractEntity [:cooked-with/id id]])
         (:ingredients (db/load-recipe conn recipe-ref)))))
+
+(defn remove-ingredient-from-recipe [conn recipe-id ingredient-id]
+  (db/retract
+   conn
+   (ffirst
+    (d/q '[:find ?c
+           :in $ ?recipe-id ?ingredient-id
+           :where
+           [?r :recipe/id ?recipe-id]
+           [?i :ingredient/id ?ingredient-id]
+           [?c :cooked-with/recipe ?r]
+           [?c :cooked-with/ingredient ?i]]
+         (d/db conn)
+         recipe-id
+         ingredient-id)))
+  {:status 200})
 
 (comment
   (let [client (d/client {:server-type :dev-local :system "dev"})
