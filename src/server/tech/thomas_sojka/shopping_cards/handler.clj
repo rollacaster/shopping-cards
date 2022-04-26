@@ -55,17 +55,9 @@
      (pr-str (db/ingredients-for-recipe conn recipe-id)))
    (PUT "/recipes/:recipe-id" request
      (recipe-edit/update-recipe-type conn request))
-   (PUT "/recipes/:recipe-id/ingredients/new" request
-     (let [{:keys [ingredient-id]} (:body-params request)
-           {:keys [recipe-id]} (:params request)]
-       (db/transact
-        conn
-        [(recipe-edit/add-ingredient-to-recipe
-          [:recipe/id recipe-id]
-          [:ingredient/id ingredient-id]
-          {:amount-desc "1"
-           :amount 1.0})])
-       (pr-str (db/ingredients-for-recipe conn recipe-id))))
+   (POST "/cooked-with" request
+     (let [{:keys [recipe-id ingredient-id]} (:body-params request)]
+       (cooked-with/create conn recipe-id ingredient-id)))
    (PUT "/recipes/:recipe-id/cooked-with/:cooked-with-id" [recipe-id cooked-with-id :as request]
      (recipe-edit/edit-cooked-with conn recipe-id cooked-with-id (:body-params request)))
    (DELETE "/cooked-with/:cooked-with-id" [cooked-with-id]

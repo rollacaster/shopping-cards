@@ -36,19 +36,20 @@
     (let [[{:keys [type]}] (parse-string (:body (client/get (url "/recipes"))) true)]
       (is (= type test-type)))))
 
-(deftest add-ingredient-to-recipe
-  (let [recipe (first fixtures/recipes)
-        ingredient (first fixtures/ingredients)]
-    (client/put (url "/recipes/" (:recipe/id recipe) "/ingredients/new")
-                {:body (json/generate-string {:ingredient-id (:ingredient/id ingredient)})
-                 :content-type :json})
-    (let [ingredients (read-string (:body (client/get (url "/recipes/" (:recipe/id recipe) "/ingredients"))))]
-      (is
-       (some
-        (fn [[id name]]
-          (and (= id (:ingredient/id ingredient))
-               (= name (str "1 " (:ingredient/name ingredient)))))
-        ingredients)))))
+(deftest create-cooked-with
+  (let [ingredient (first fixtures/ingredients)]
+    (client/post (url "/cooked-with")
+                 {:body (json/generate-string
+                         {:ingredient-id (:ingredient/id ingredient)
+                          :recipe-id (:recipe/id (first fixtures/recipes))})
+                  :content-type :json})
+    (is
+     (some
+      (fn [[_ ingredient-name]]
+        (str/includes? ingredient-name (:ingredient/name ingredient)))
+      (-> (client/get (url "/recipes/" (:recipe/id (first fixtures/recipes)) "/ingredients"))
+          :body
+          read-string)))))
 
 (deftest remove-cooked-with
   (client/delete (url "/cooked-with/" (:cooked-with/id (first fixtures/cooked-with))))
