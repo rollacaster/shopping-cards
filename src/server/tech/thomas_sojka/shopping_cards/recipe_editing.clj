@@ -52,6 +52,15 @@
    (map (fn [{:keys [id]}] [:db/retractEntity [:cooked-with/id id]])
         (:ingredients (db/load-recipe conn recipe-ref)))))
 
+(defn edit-cooked-with [conn recipe-id cooked-with-id cooked-with-update]
+  (let [{:keys [amount unit amount-desc]} cooked-with-update
+        new-cooked-with (cond-> {:db/id [:cooked-with/id cooked-with-id]}
+                          amount-desc (assoc :cooked-with/amount-desc amount-desc)
+                          amount (assoc :cooked-with/amount amount)
+                          unit (assoc :cooked-with/unit unit))]
+    (db/transact conn [new-cooked-with]))
+  (pr-str (db/ingredients-for-recipe conn recipe-id)))
+
 (defn remove-ingredient-from-recipe [conn recipe-id ingredient-id]
   (db/retract
    conn

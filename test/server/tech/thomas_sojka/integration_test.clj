@@ -2,8 +2,9 @@
   (:require
    [cheshire.core :as json :refer [parse-string]]
    [clj-http.client :as client]
+   [clojure.string :as str]
    [clojure.test :refer [deftest is use-fixtures]]
-   [tech.thomas-sojka.fixtures :refer [url] :as fixtures]))
+   [tech.thomas-sojka.fixtures :as fixtures :refer [url]]))
 
 (use-fixtures :each fixtures/db-setup)
 
@@ -53,8 +54,16 @@
   (let [recipe (first fixtures/recipes)
         ingredient-id-to-remove
         (ffirst (read-string (:body (client/get (url "/recipes/" (:recipe/id recipe) "/ingredients")))))]
-    (is (-> "/recipes/"
-            (url (:recipe/id recipe) "/ingredients/" ingredient-id-to-remove)
-            client/delete
-            :body
-            empty?))))
+    (is
+     (let [ingredients (client/delete (url "/recipes/" (:recipe/id recipe) "/ingredients/" ingredient-id-to-remove))]
+       (-> ingredients :body read-string empty?)))))
+
+(deftest edit-ingredient
+  (let [recipe (first fixtures/recipes)
+        cooked-with (first fixtures/cooked-with)
+        ingredient-update {:amount 100.0 :unit "g" :amount-desc "100g"}]
+    (is
+     (let [ingredients (client/put (url "/recipes/" (:recipe/id recipe) "/cooked-with/" (:cooked-with/id cooked-with))
+                                   {:body (json/generate-string ingredient-update)
+                                    :content-type :json})]
+       (some (fn [[_ name]] (str/includes? name "100g ")) (read-string (:body ingredients)))))))

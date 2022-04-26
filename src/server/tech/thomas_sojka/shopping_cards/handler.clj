@@ -65,8 +65,8 @@
           {:amount-desc "1"
            :amount 1.0})])
        (pr-str (db/ingredients-for-recipe conn recipe-id))))
-   (POST "/recipes/:recipe-id/ingredients/:ingredient-id/inc" [recipe-id ingredient-id])
-   (POST "/recipes/:recipe-id/ingredients/:ingredient-id/dec" [recipe-id ingredient-id])
+   (PUT "/recipes/:recipe-id/cooked-with/:cooked-with-id" [recipe-id cooked-with-id :as request]
+     (recipe-edit/edit-cooked-with conn recipe-id cooked-with-id (:body-params request)))
    (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id]
      (recipe-edit/remove-ingredient-from-recipe conn recipe-id ingredient-id))
    (GET "/ingredients" [recipe-ids]
