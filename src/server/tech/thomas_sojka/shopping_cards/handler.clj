@@ -10,7 +10,8 @@
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :as util.response]
             [tech.thomas-sojka.shopping-cards.db :as db]
-            [tech.thomas-sojka.shopping-cards.recipe-editing :as recipe-edit]))
+            [tech.thomas-sojka.shopping-cards.recipe-editing :as recipe-edit]
+            [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]))
 
 (defn app-routes [trello-client conn]
   (api
@@ -67,8 +68,8 @@
        (pr-str (db/ingredients-for-recipe conn recipe-id))))
    (PUT "/recipes/:recipe-id/cooked-with/:cooked-with-id" [recipe-id cooked-with-id :as request]
      (recipe-edit/edit-cooked-with conn recipe-id cooked-with-id (:body-params request)))
-   (DELETE "/recipes/:recipe-id/ingredients/:ingredient-id" [recipe-id ingredient-id]
-     (recipe-edit/remove-ingredient-from-recipe conn recipe-id ingredient-id))
+   (DELETE "/cooked-with/:cooked-with-id" [cooked-with-id]
+     (cooked-with/delete conn cooked-with-id))
    (GET "/ingredients" [recipe-ids]
      (if recipe-ids
        (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))

@@ -50,13 +50,13 @@
                (= name (str "1 " (:ingredient/name ingredient)))))
         ingredients)))))
 
-(deftest remove-ingredient-from-recipe
-  (let [recipe (first fixtures/recipes)
-        ingredient-id-to-remove
-        (ffirst (read-string (:body (client/get (url "/recipes/" (:recipe/id recipe) "/ingredients")))))]
-    (is
-     (let [ingredients (client/delete (url "/recipes/" (:recipe/id recipe) "/ingredients/" ingredient-id-to-remove))]
-       (-> ingredients :body read-string empty?)))))
+(deftest remove-cooked-with
+  (client/delete (url "/cooked-with/" (:cooked-with/id (first fixtures/cooked-with))))
+  (is
+   (empty?
+    (-> (client/get (url "/recipes/" (:recipe/id (first fixtures/recipes)) "/ingredients"))
+        :body
+        read-string))))
 
 (deftest edit-ingredient
   (let [recipe (first fixtures/recipes)
