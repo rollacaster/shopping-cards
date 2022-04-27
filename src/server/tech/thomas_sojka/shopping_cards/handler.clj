@@ -10,7 +10,7 @@
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :as util.response]
             [tech.thomas-sojka.shopping-cards.db :as db]
-            [tech.thomas-sojka.shopping-cards.recipe-editing :as recipe-edit]
+            [tech.thomas-sojka.shopping-cards.recipe :as recipe]
             [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]))
 
 (defn app-routes [trello-client conn]
@@ -53,13 +53,13 @@
                        :headers {"Content-type" "application/edn"}})
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
      (pr-str (db/ingredients-for-recipe conn recipe-id)))
-   (PUT "/recipes/:recipe-id" request
-     (recipe-edit/update-recipe-type conn request))
+   (PUT "/recipes/:recipe-id" [recipe-id :as request]
+     (recipe/edit conn recipe-id (:body-params request)))
    (POST "/cooked-with" request
      (let [{:keys [recipe-id ingredient-id]} (:body-params request)]
        (cooked-with/create conn recipe-id ingredient-id)))
-   (PUT "/recipes/:recipe-id/cooked-with/:cooked-with-id" [recipe-id cooked-with-id :as request]
-     (recipe-edit/edit-cooked-with conn recipe-id cooked-with-id (:body-params request)))
+   (PUT "/cooked-with/:cooked-with-id" [cooked-with-id :as request]
+     (cooked-with/edit conn cooked-with-id (:body-params request)))
    (DELETE "/cooked-with/:cooked-with-id" [cooked-with-id]
      (cooked-with/delete conn cooked-with-id))
    (GET "/ingredients" [recipe-ids]

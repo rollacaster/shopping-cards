@@ -28,10 +28,9 @@
      (= (mapv second (read-string (:body (client/get (url "/recipes/" id "/ingredients")))))
         ["1 große Mandarine"]))))
 
-(deftest update-type-of-recipe
-  (let [test-type "RARE"
-        [{:keys [id]}] (parse-string (:body (client/get (url "/recipes"))) true)]
-    (client/put (str "http://localhost:3001/recipes/" id)
+(deftest edit-recipe
+  (let [test-type "RARE"]
+    (client/put (url "/recipes/" (:recipe/id (first fixtures/recipes)))
                 {:body (json/generate-string {:type test-type}) :content-type :json})
     (let [[{:keys [type]}] (parse-string (:body (client/get (url "/recipes"))) true)]
       (is (= type test-type)))))
@@ -59,12 +58,11 @@
         :body
         read-string))))
 
-(deftest edit-ingredient
-  (let [recipe (first fixtures/recipes)
-        cooked-with (first fixtures/cooked-with)
-        ingredient-update {:amount 100.0 :unit "g" :amount-desc "100g"}]
-    (is
-     (let [ingredients (client/put (url "/recipes/" (:recipe/id recipe) "/cooked-with/" (:cooked-with/id cooked-with))
-                                   {:body (json/generate-string ingredient-update)
-                                    :content-type :json})]
-       (some (fn [[_ name]] (str/includes? name "100g ")) (read-string (:body ingredients)))))))
+(deftest edit-cooked-with
+  (client/put (url "/cooked-with/" (:cooked-with/id (first fixtures/cooked-with)))
+              {:body (json/generate-string {:amount 100.0 :unit "g" :amount-desc "100g"})
+               :content-type :json})
+  (is
+   (-> (client/get (url "/recipes/" (:recipe/id (first fixtures/recipes)) "/ingredients"))
+       :body
+       read-string)))
