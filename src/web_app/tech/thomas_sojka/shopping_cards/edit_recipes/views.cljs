@@ -17,15 +17,15 @@
 
 (defn recipe-details [{:keys [id name image ingredients add-new-ingredient type]}]
   [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
-   [:h1.mb2 name]
-   [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100.mb2
-    [:img.w5.br3.ba.b--orange-300 {:src image}]]
-   [:div.w-100
-    [:label.mr2 {:for "recipe-type"}
+   [:h1.mb3.mt0 name]
+   [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100.mb3
+    [:img.w-100.br3.ba.b--orange-300 {:src image}]]
+   [:div.w-100.bg-gray-700.white.pa2.flex.items-center.br2
+    [:label.w-40 {:for "recipe-type"}
      "Rezept-Art"]
-    [:select {:name "type" :id "recipe-type"
-              :value type
-              :on-change (fn [e] (dispatch [:edit-recipe/edit-type id  ^js (.-target.value e)]))}
+    [:select.pa1.w-60.br1 {:name "type" :id "recipe-type"
+                           :value type
+                           :on-change (fn [e] (dispatch [:edit-recipe/edit-type id  ^js (.-target.value e)]))}
      (map
       (fn [t]
         ^{:key t}
@@ -41,8 +41,7 @@
 (defn recipe-editing [match]
   (let [{:keys [path]} (:parameters match)
         {:keys [recipe-id]} path
-        {:keys [id name image type]} @(subscribe [:edit-recipe/recipe-details recipe-id])
-        ingredients @(subscribe [:edit-recipe/ingredients recipe-id])]
+        {:keys [id name image type cooked-with]} @(subscribe [:edit-recipe/recipe-details recipe-id])]
     [recipe-details
      {:id id
       :name name
@@ -50,20 +49,25 @@
       :type type
       :add-new-ingredient #(dispatch [:edit-recipe/show-add-ingredient id])
       :ingredients (map
-                    (fn [[id ingredient]]
+                    (fn [{:keys [amount-desc amount unit ingredient]}]
                       ^{:key id}
-                      [:div.flex.items-center
-                       [:p.mr2 ingredient]
-                       [:button.bn.bg-orange-200.shadow-1.pa2.mr2
-                        {:on-click #(dispatch [:edit-recipe/increase-ingredient-count recipe-id id])}
-                        [icon {:class "h1"} :add]]
-                       [:button.bn.bg-orange-200.shadow-1.pa2.mr2
-                        {:on-click #(dispatch [:edit-recipe/decrease-ingredient-count recipe-id id])}
-                        [icon {:class "h1"} :remove]]
-                       [:button.bn.bg-orange-200.shadow-1.pa2
-                        {:on-click #(dispatch [:edit-recipe/remove-ingredient recipe-id id])}
-                        [icon {:class "h1"} :trash-can]]])
-                    ingredients)
+                      [:div.bg-gray-700.white.pa2.mb3.br2
+                       [:div.flex.justify-between.items-center.mb3
+                        [:div.f3.fw3.mr2 (:name ingredient)]
+                        [:button.bn.bg-orange-200.shadow-1.pa2.br3
+                         {:on-click #(dispatch [:edit-recipe/remove-ingredient recipe-id id])}
+                         [icon {:class "h1"} :trash-can]]]
+                       [:div.flex.flex-column
+                        [:div.flex.mb1.items-center
+                         [:label.w-40 {:for "amount-desc"} "Beschreibung"]
+                         [:input.pa1.w-60.br1 {:value amount-desc :id "amount-desc"}]]
+                        [:div.flex.mb1.items-center
+                         [:label.w-40 {:for "amount"} "Menge"]
+                         [:input.pa1.w-60.br1 {:value amount :id "amount"}]]
+                        [:div.flex.mb1.items-center
+                         [:label.w-40 {:for "unit"} "Einheit"]
+                         [:input.pa1.w-60.br1 {:value unit :id "unit"}]]]])
+                    cooked-with)
       :on-remove #(prn "deleted")}]))
 
 (defn ingredient [{:keys [i id class]} children]

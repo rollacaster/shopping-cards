@@ -8,7 +8,7 @@
  :edit-recipe/show-recipe
  (fn [_ [_ id]]
    {:app/push-state [:route/edit-recipe {:recipe-id id}]
-    :dispatch [:edit-recipe/load-ingredients id]}))
+    :dispatch [:edit-recipe/load-recipe id]}))
 
 (reg-event-fx
  :edit-recipe/show-add-ingredient
@@ -48,23 +48,24 @@
                   :time 2000}}))
 
 (reg-event-fx
- :edit-recipe/load-ingredients
+ :edit-recipe/load-recipe
  (fn [_ [_ id]]
    {:http-xhrio {:method :get
-                 :uri (str "/recipes/" id "/ingredients")
+                 :uri (str "/recipes/" id)
                  :response-format (ajax/raw-response-format)
-                 :on-success [:edit-recipe/success-load-ingredients-for-recipe id]
+                 :on-success [:edit-recipe/success-load-ingredients-for-recipe]
                  :on-failure [:edit-recipe/failure-load-ingredients-for-recipe id]}}))
 
 (reg-event-db
  :edit-recipe/success-load-ingredients-for-recipe
- (fn [db [_ id data]]
-   (assoc-in db [:edit-recipe/ingredients id] (read-string data))))
+ (fn [db [_ data]]
+   (let [recipe (read-string data)]
+     (assoc-in db [:edit-recipe/recipes (:id recipe)] (read-string data)))))
 
 (reg-event-db
  :edit-recipe/failure-load-ingredients-for-recipe
  (fn [db [_ id]]
-   (assoc-in db [:edit-recipe/ingredients id] :ERROR)))
+   (assoc-in db [:edit-recipe/recipes id] :ERROR)))
 
 (reg-event-fx
  :edit-recipe/load-all-ingredients
@@ -83,66 +84,6 @@
  :edit-recipe/failure-load-all-ingredients
  (fn [db _]
    (assoc-in db [:edit-recipe/ingredients :all] :ERROR)))
-
-(reg-event-fx
- :edit-recipe/increase-ingredient-count
- (fn [{:keys [db]} [_ recipe-id ingredient-id]]
-   {:http-xhrio {:method :post
-                 :uri (str "/recipes/" recipe-id "/ingredients/" ingredient-id "/inc")
-                 :format (ajax/json-request-format)
-                 :response-format (ajax/raw-response-format)
-                 :on-success [:edit-recipe/success-increase-ingredient-count recipe-id]
-                 :on-failure [:edit-recipe/failure-increase-ingredient-count recipe-id]}
-    :db (assoc db :app/loading true)}))
-
-(reg-event-fx
- :edit-recipe/success-increase-ingredient-count
- (fn [{:keys [db]} [_ recipe-id ingredients]]
-   {:db (-> db
-            (assoc-in [:edit-recipe/ingredients recipe-id] ingredients)
-            (assoc :app/loading false))
-    :app/push-state [:route/edit-recipe {:recipe-id recipe-id}]}))
-
-(reg-event-fx
- :edit-recipe/failure-increase-ingredient-count
- (fn [{:keys [db]} _]
-   {:db
-    (assoc db
-           :app/loading false
-           :app/error "Fehler")
-    :app/timeout {:id :app/error-removal
-                  :event [:app/remove-error]
-                  :time 2000}}))
-
-(reg-event-fx
- :edit-recipe/decrease-ingredient-count
- (fn [{:keys [db]} [_ recipe-id ingredient-id]]
-   {:http-xhrio {:method :post
-                 :uri (str "/recipes/" recipe-id "/ingredients/" ingredient-id "/dec")
-                 :format (ajax/json-request-format)
-                 :response-format (ajax/raw-response-format)
-                 :on-success [:edit-recipe/success-decrease-ingredient-count recipe-id]
-                 :on-failure [:edit-recipe/failure-decrease-ingredient-count recipe-id]}
-    :db (assoc db :app/loading true)}))
-
-(reg-event-fx
- :edit-recipe/success-decrease-ingredient-count
- (fn [{:keys [db]} [_ recipe-id ingredients]]
-   {:db (-> db
-            (assoc-in [:edit-recipe/ingredients recipe-id] ingredients)
-            (assoc :app/loading false))
-    :app/push-state [:route/edit-recipe {:recipe-id recipe-id}]}))
-
-(reg-event-fx
- :edit-recipe/failure-decrease-ingredient-count
- (fn [{:keys [db]} _]
-   {:db
-    (assoc db
-           :app/loading false
-           :app/error "Fehler")
-    :app/timeout {:id :app/error-removal
-                  :event [:app/remove-error]
-                  :time 2000}}))
 
 (reg-event-fx
  :edit-recipe/remove-ingredient

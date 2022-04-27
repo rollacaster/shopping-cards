@@ -5,7 +5,7 @@
 (reg-sub
  :edit-recipe/recipe-details
  (fn [db [_ id]]
-   (some #(when (= (:id %) id) %) (:main/recipes db))))
+   (get-in db [:edit-recipe/recipes id])))
 
 (reg-sub
  :edit-recipe/recipe-types
