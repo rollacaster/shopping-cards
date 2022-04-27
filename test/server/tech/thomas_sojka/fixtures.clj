@@ -64,7 +64,6 @@
     "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
     :recipe/image
     "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
-    :db/id "new-recipe",
     :recipe/type :recipe-type/fast,
     :recipe/name "Misosuppe mit Gemüse und Tofu2"}])
 

@@ -28,6 +28,22 @@
      (= (mapv second (read-string (:body (client/get (url "/recipes/" id "/ingredients")))))
         ["1 große Mandarine"]))))
 
+(deftest get-recipe
+  (is (= (-> (client/get (url "/recipes/" (:recipe/id (first fixtures/recipes))))
+             :body
+             read-string)
+         {:id "2aa44c10-bf40-476b-b95f-3bbe96a3835f",
+          :link
+          "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
+          :image
+          "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
+          :type {:type :recipe-type/fast},
+          :name "Misosuppe mit Gemüse und Tofu2"
+          :cooked-with [{:ingredient {:name "Mandarine"},
+                         :amount-desc "1 große",
+                         :id "ab52a4b5-46c3-4d1e-9e42-a66a02e19ba9",
+                         :amount 1.0}]})))
+
 (deftest edit-recipe
   (let [test-type "RARE"]
     (client/put (url "/recipes/" (:recipe/id (first fixtures/recipes)))
