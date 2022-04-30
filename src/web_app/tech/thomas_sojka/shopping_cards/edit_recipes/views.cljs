@@ -24,14 +24,14 @@
       ^{:key id}
       [:div.bg-gray-700.white.pa2.mb3.br2
        [:div.flex.justify-between.items-center.mb3
-        [:input.f3.fw3.mr2 {:value (:ingredient/name ingredient)
+        [:input.f3.fw3.mr2.w-90 {:value (:ingredient/name ingredient)
                             :name "cooked-with/ingredient"
                             :on-change (fn [^js e]
                                          (set-handle-change
                                           {:value (.-target.value e)
                                            :path [:cooked-with/_recipe idx :cooked-with/ingredient :ingredient/name]}))
                             :on-blur #(handle-blur % idx) }]
-        [:button.bn.bg-orange-200.shadow-1.pa2.br3
+        [:button.bn.bg-orange-200.shadow-1.pa2.br3.w-10
          {:on-click #(remove idx)
           :type :button}
          [icon {:class "h1"} :trash-can]]]
@@ -113,7 +113,8 @@
             [fork/field-array {:props props
                                :name :cooked-with/_recipe}
              cooked-with-c]]
-           (when dirty
+           (when (or dirty (not= (count (:cooked-with/_recipe recipe))
+                                 (count (:cooked-with/_recipe values))))
              [:div.fixed.bottom-0.w-100.z-2
               [c/footer {:submit "true" :loading @(subscribe [:app/loading])}]])])])]))
 
@@ -122,8 +123,7 @@
         {:keys [recipe-id]} path
         recipe @(subscribe [:edit-recipe/recipe-details recipe-id])]
     [recipe-details
-     {:recipe recipe
-      :on-remove #(prn "deleted")}]))
+     {:recipe recipe}]))
 
 (defn ingredient [{:keys [i id class]} children]
   [:li.mh2.mh5-ns.ph4.pv3.mt3.br2 {:class [class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")]}
