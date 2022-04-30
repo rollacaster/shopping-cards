@@ -11,8 +11,7 @@
             [ring.util.response :as util.response]
             [tech.thomas-sojka.shopping-cards.db :as db]
             [tech.thomas-sojka.shopping-cards.recipe :as recipe]
-            [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]
-            [datomic.client.api :as d]))
+            [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]))
 
 (defn app-routes [trello-client conn]
   (api

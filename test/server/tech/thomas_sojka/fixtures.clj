@@ -3,7 +3,8 @@
    [datomic.client.api :as d]
    [integrant.core :as ig]
    [integrant.repl :as ig-repl]
-   [tech.thomas-sojka.shopping-cards.db :as db]))
+   [tech.thomas-sojka.shopping-cards.db :as db]
+   [tech.thomas-sojka.shopping-cards.system]))
 
 (def ingredients
   [#:ingredient{:id "690fdb5c-711b-4b1b-918b-148d2a4eb355",
