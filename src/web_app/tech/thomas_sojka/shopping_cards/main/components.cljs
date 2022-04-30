@@ -18,10 +18,12 @@
     [:path {:d "M50 50L20 50A30 30 0 0 1 80 50Z" :fill "#f8b26a" :transform "rotate(-34.8753 50 50)"}
      [:animateTransform {:attributeName "transform" :type "rotate" :repeatCount "indefinite" :dur "1s" :values "0 50 50;-45 50 50;0 50 50" :keyTimes "0;0.5;1"}]]]])
 
-(defn footer [{:keys [on-click loading]}]
+(defn footer [{:keys [on-click loading submit]}]
   [:footer.bg-orange-400.flex.justify-center.pa3
    [:button.br3.bg-gray-700.pointer.bn.shadow-3.ph3.pv2.white
-    {:on-click on-click :disabled loading}
+    (cond-> {:disabled loading}
+      on-click (assoc :on-click on-click)
+      submit (assoc :submit submit))
     [:div.flex.items-center
      (if loading
        [:div {:style {:width 128}}
