@@ -7,18 +7,19 @@
 (defn load-by-id [conn recipe-id]
   (d/pull
    (d/db conn)
-   [[:recipe/id :as :id]
-    [:recipe/name :as :name]
-    [:recipe/image :as :image]
-    [:recipe/link :as :link]
-    {[:recipe/type :as :type] [[:db/ident :as :type]]}
-    {[:cooked-with/_recipe :as :cooked-with]
-     [[:cooked-with/id :as :id]
-      [:cooked-with/amount :as :amount]
-      [:cooked-with/unit :as :unit]
-      [:cooked-with/amount-desc :as :amount-desc]
-      {[:cooked-with/ingredient :as :ingredient]
-       [[:ingredient/name :as :name]]}]}]
+   [[:recipe/id]
+    [:recipe/name]
+    [:recipe/image]
+    [:recipe/link]
+    {[:recipe/type] [[:db/ident]]}
+    {[:cooked-with/_recipe]
+     [[:cooked-with/id]
+      [:cooked-with/amount]
+      [:cooked-with/unit]
+      [:cooked-with/amount-desc]
+      {[:cooked-with/ingredient]
+       [[:ingredient/name]
+        [:ingredient/id]]}]}]
    [:recipe/id recipe-id]))
 
 (defn edit [conn recipe-id recipe-upddate]

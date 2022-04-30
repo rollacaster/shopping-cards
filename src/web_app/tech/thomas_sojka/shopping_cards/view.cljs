@@ -27,6 +27,7 @@
           {:view (:view (:data route))}
           @(subscribe [:app/route])]]]
        (when error
-         [:div.absolute.white.bottom-0.flex.justify-center.w-100.mb4
+         [:div.absolute.white.flex.justify-center.w-100.mb4
+          {:style {:bottom "3rem"}}
           [:div.w-80.bg-light-red.ph3.pv2.br2.ba.b--white
            error]])])))

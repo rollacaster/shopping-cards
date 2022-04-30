@@ -19,7 +19,7 @@
         _ (d/create-database client {:db-name db-name})
         conn (d/connect client {:db-name db-name})]
     (migrate/migrate-schema conn)
-    (migrate/migrate-ingredient-amounts conn)
+    #_(migrate/migrate-ingredient-amounts conn)
     conn))
 
 (defmethod ig/init-key :adapter/jetty [_ {:keys [trello-client port conn]}]

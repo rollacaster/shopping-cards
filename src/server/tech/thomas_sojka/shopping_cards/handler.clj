@@ -11,7 +11,8 @@
             [ring.util.response :as util.response]
             [tech.thomas-sojka.shopping-cards.db :as db]
             [tech.thomas-sojka.shopping-cards.recipe :as recipe]
-            [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]))
+            [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]
+            [datomic.client.api :as d]))
 
 (defn app-routes [trello-client conn]
   (api
@@ -69,7 +70,10 @@
        (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))
        {:status 200
         :body (db/load-ingredients conn)
-        :headers {"Content-type" "application/edn"}}))))
+        :headers {"Content-type" "application/edn"}}))
+   (PUT "/transact" request
+     (db/transact conn (mapv (fn [c] (cond-> c (:cooked-with/amount c) (update :cooked-with/amount float))) (:body-params request)))
+     {:status 200})))
 
 (defn app [{:keys [trello-client conn]}]
   (-> (app-routes trello-client conn)

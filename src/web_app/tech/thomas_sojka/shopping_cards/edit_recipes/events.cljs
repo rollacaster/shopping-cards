@@ -56,11 +56,39 @@
                  :on-success [:edit-recipe/success-load-ingredients-for-recipe]
                  :on-failure [:edit-recipe/failure-load-ingredients-for-recipe id]}}))
 
+(reg-event-fx
+ :transact
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :app/loading true)
+     :http-xhrio {:method :put
+                 :uri "/transact"
+                 :params data
+                 :format (ajax/transit-request-format)
+                 :response-format (ajax/raw-response-format)
+                 :on-success [:edit-recipe/success-update-recipe]
+                 :on-failure [:edit-recipe/failure-update-recipe]}}))
+
+(reg-event-fx
+  :edit-recipe/success-update-recipe
+  (fn [{:keys [db]} _]
+    {:db (assoc db :app/loading false)
+     :app/push-state [:route/edit-recipes]}))
+
+(reg-event-fx
+  :edit-recipe/failure-update-recipe
+  (fn [{:keys [db]} _]
+    {:db (assoc db
+                :app/loading false
+                :app/error "Fehler: Update fehlgeschlagen.")
+     :app/timeout {:id :app/error-removal
+                   :event [:app/remove-error]
+                   :time 2000}}))
+
 (reg-event-db
  :edit-recipe/success-load-ingredients-for-recipe
  (fn [db [_ data]]
    (let [recipe (read-string data)]
-     (assoc-in db [:edit-recipe/recipes (:id recipe)] (read-string data)))))
+     (assoc-in db [:edit-recipe/recipes (:recipe/id recipe)] (read-string data)))))
 
 (reg-event-db
  :edit-recipe/failure-load-ingredients-for-recipe
