@@ -4,6 +4,7 @@
    [clj-http.client :as client]
    [clojure.string :as str]
    [clojure.test :refer [deftest is use-fixtures]]
+   [clojure.walk :as walk]
    [tech.thomas-sojka.fixtures :as fixtures :refer [url]]))
 
 (use-fixtures :each fixtures/db-setup)
@@ -83,3 +84,23 @@
    (-> (client/get (url "/recipes/" (:recipe/id (first fixtures/recipes)) "/ingredients"))
        :body
        read-string)))
+
+(def remove-ids (partial walk/postwalk (fn [a] (cond-> a (get a "db/id") (dissoc a "db/id")))))
+
+(deftest query
+  (let [res (-> (client/post (url "/query")
+                         {:form-params '[:find (pull ?r [*])
+                                         :where [?r :recipe/id]]
+                          :content-type :transit+json
+                          :as :transit+json})
+            :body
+            remove-ids)]
+    (is (=
+         [[{"recipe/id" "2aa44c10-bf40-476b-b95f-3bbe96a3835f",
+            "recipe/image"
+            "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
+            "recipe/link"
+            "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
+            "recipe/name" "Misosuppe mit Gemüse und Tofu2",
+            "recipe/type" {"db/ident" "recipe-type/fast"}}]]
+         res))))

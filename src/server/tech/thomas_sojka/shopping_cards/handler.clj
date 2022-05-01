@@ -4,14 +4,15 @@
                                                                (compojure.api.sweet/PUT)
                                                                (compojure.api.sweet/DELETE)]}}}}
   (:require [clojure.instant :refer [read-instant-date]]
-            [compojure.api.sweet :refer [api GET POST DELETE PUT]]
+            [compojure.api.sweet :refer [api DELETE GET POST PUT]]
+            [datomic.client.api :as d]
             [muuntaja.middleware :refer [wrap-format]]
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :as util.response]
+            [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]
             [tech.thomas-sojka.shopping-cards.db :as db]
-            [tech.thomas-sojka.shopping-cards.recipe :as recipe]
-            [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]))
+            [tech.thomas-sojka.shopping-cards.recipe :as recipe]))
 
 (defn app-routes [trello-client conn]
   (api
@@ -72,7 +73,9 @@
         :headers {"Content-type" "application/edn"}}))
    (PUT "/transact" request
      (db/transact conn (mapv (fn [c] (cond-> c (:cooked-with/amount c) (update :cooked-with/amount float))) (:body-params request)))
-     {:status 200})))
+     {:status 200})
+   (POST "/query" request
+     {:status 200 :body (d/q (:body-params request) (d/db conn))})))
 
 (defn app [{:keys [trello-client conn]}]
   (-> (app-routes trello-client conn)
