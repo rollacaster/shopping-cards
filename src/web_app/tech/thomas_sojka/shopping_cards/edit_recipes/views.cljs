@@ -65,7 +65,7 @@
 (defn recipe-details [{:keys [recipe]}]
   (let [{:recipe/keys [image]
          recipe-name :recipe/name} recipe]
-    [:div.ph5-ns.pv4.ml2-ns.bg-gray-200
+    [:div.ph5-ns.pt4.pb6.ml2-ns.bg-gray-200
      [:div.ph3
       [:h1.mb3.mt0 recipe-name]
       [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100.mb3
@@ -108,11 +108,11 @@
                (fn [t]
                  ^{:key t}
                  [:option.w-100 {:value (str "recipe-type/" (str/lower-case t))} t])
-               @(subscribe [:edit-recipe/recipe-types]))]]]
-           [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns.ph3
-            [fork/field-array {:props props
-                               :name :cooked-with/_recipe}
-             cooked-with-c]]
+               @(subscribe [:edit-recipe/recipe-types]))]]
+            [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
+             [fork/field-array {:props props
+                                :name :cooked-with/_recipe}
+              cooked-with-c]]]
            (when (or dirty (not= (count (:cooked-with/_recipe recipe))
                                  (count (:cooked-with/_recipe values))))
              [:div.fixed.bottom-0.w-100.z-2
