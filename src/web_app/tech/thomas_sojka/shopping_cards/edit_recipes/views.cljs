@@ -151,22 +151,3 @@
   [:li.mh2.mh5-ns.ph4.pv3.mt3.br2 {:class [class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")]}
    [:label.flex.items-center.pointer.f4 {:for id}
     children]])
-
-(defn add-ingredient [match]
-  (let [ingredients @(subscribe [:edit-recipe/all-ingredients])
-        {:keys [path]} (:parameters match)
-        {:keys [recipe-id]} path]
-    [:ul.list.pl0.mv0.pb6
-     (map-indexed (fn [i {:keys [id name]}]
-                    [:button.bn.pa0.w-100.ma0.dib
-                     {:key id
-                      :on-click #(dispatch [:edit-recipe/add-ingredient recipe-id id])}
-                     [ingredient
-                      {:i i
-                       :id id
-                       :selected? false}
-                      [:div.flex.w-100
-                       [:div.mr3.flex.items-center
-                        [icon {:style {:width 20}} :add]]
-                       name]]])
-                  ingredients)]))

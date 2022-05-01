@@ -102,3 +102,8 @@
   (d/delete-database (d/client {:server-type :dev-local :system "dev"})
                      {:db-name db-name})
   (ig-repl/halt))
+
+(comment
+  (do
+    (ig-repl/halt)
+    (ig-repl/go)))

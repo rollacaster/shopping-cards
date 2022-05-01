@@ -9,7 +9,3 @@
 
 (defmethod core/content :view/edit-recipe [_ match] [views/recipe-editing match])
 (defmethod core/title :view/edit-recipe [] "Rezept bearbeiten")
-
-(defmethod core/content :view/edit-recipe-add-ingredient [_ match]
-  [views/add-ingredient match])
-(defmethod core/title :view/edit-recipe-add-ingredient [] "Zutat hinzufügen")

@@ -10,7 +10,6 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :as util.response]
-            [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]
             [tech.thomas-sojka.shopping-cards.db :as db]
             [tech.thomas-sojka.shopping-cards.recipe :as recipe]))
 
@@ -56,13 +55,6 @@
      (pr-str (db/ingredients-for-recipe conn recipe-id)))
    (PUT "/recipes/:recipe-id" [recipe-id :as request]
      (recipe/edit conn recipe-id (:body-params request)))
-   (POST "/cooked-with" request
-     (let [{:keys [recipe-id ingredient-id]} (:body-params request)]
-       (cooked-with/create conn recipe-id ingredient-id)))
-   (PUT "/cooked-with/:cooked-with-id" [cooked-with-id :as request]
-     (cooked-with/edit conn cooked-with-id (:body-params request)))
-   (DELETE "/cooked-with/:cooked-with-id" [cooked-with-id]
-     (cooked-with/delete conn cooked-with-id))
    (GET "/ingredients" [recipe-ids]
      (if recipe-ids
        (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))

@@ -66,45 +66,6 @@
               {"ingredient/name" "Mandarine",
                "ingredient/id" "61858d61-a9d0-4ba6-b341-bdcdffec50d1"}}]}]])))
 
-(deftest edit-recipe
-  (let [test-type "RARE"]
-    (client/put (url "/recipes/" (:recipe/id (first fixtures/recipes)))
-                {:body (json/generate-string {:type test-type}) :content-type :json})
-    (let [[{:keys [type]}] (parse-string (:body (client/get (url "/recipes"))) true)]
-      (is (= type test-type)))))
-
-(deftest create-cooked-with
-  (let [ingredient (first fixtures/ingredients)]
-    (client/post (url "/cooked-with")
-                 {:body (json/generate-string
-                         {:ingredient-id (:ingredient/id ingredient)
-                          :recipe-id (:recipe/id (first fixtures/recipes))})
-                  :content-type :json})
-    (is
-     (some
-      (fn [[_ ingredient-name]]
-        (str/includes? ingredient-name (:ingredient/name ingredient)))
-      (-> (client/get (url "/recipes/" (:recipe/id (first fixtures/recipes)) "/ingredients"))
-          :body
-          read-string)))))
-
-(deftest remove-cooked-with
-  (client/delete (url "/cooked-with/" (:cooked-with/id (first fixtures/cooked-with))))
-  (is
-   (empty?
-    (-> (client/get (url "/recipes/" (:recipe/id (first fixtures/recipes)) "/ingredients"))
-        :body
-        read-string))))
-
-(deftest edit-cooked-with
-  (client/put (url "/cooked-with/" (:cooked-with/id (first fixtures/cooked-with)))
-              {:body (json/generate-string {:amount 100.0 :unit "g" :amount-desc "100g"})
-               :content-type :json})
-  (is
-   (-> (client/get (url "/recipes/" (:recipe/id (first fixtures/recipes)) "/ingredients"))
-       :body
-       read-string)))
-
 (def remove-ids (partial walk/postwalk (fn [a] (cond-> a (get a "db/id") (dissoc a "db/id")))))
 
 (deftest query
