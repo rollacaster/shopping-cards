@@ -1,6 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.recipes.events
   (:require
-   [ajax.core :as ajax]
    [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
 (reg-event-fx
