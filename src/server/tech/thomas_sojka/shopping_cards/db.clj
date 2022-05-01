@@ -148,29 +148,6 @@
      (t/>= i2 i1)
      (t/< i2 (t/+ i1 (t/new-duration 4 :days))))))
 
-(defn load-meal-plans [conn date]
-  (->> (d/q '[:find (pull ?m [[:meal-plan/inst :as :date]
-                              {[:meal-plan/type :as :type]
-                               [[:db/ident :as :ref]]}
-                              {[:meal-plan/recipe :as :recipe]
-                               [[:recipe/id :as :id]
-                                [:recipe/name :as :name]
-                                {:recipe/type [[:db/ident]]}
-                                [:recipe/image :as :image]
-                                [:recipe/link :as :link]]}
-                              [:shopping-list/_meals :as :shopping-list]])
-              :in $ ?date
-              :where
-              [?m :meal-plan/inst ?d]
-              [(tech.thomas-sojka.shopping-cards.db/within-next-four-days? ?date ?d)]]
-            (d/db conn)
-            date)
-       (map (fn [meal-plan]
-              (-> (first meal-plan)
-                  (update :recipe transform-recipe-type)
-                  (update :type :ref)
-                  (update :in-shopping-list boolean))))))
-
 (defn map->nsmap
   [m n]
   (reduce-kv (fn [acc k v]

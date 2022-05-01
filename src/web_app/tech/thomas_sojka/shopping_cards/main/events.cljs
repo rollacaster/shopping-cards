@@ -32,11 +32,23 @@
      {:db (-> db
               (assoc :app/loading true)
               (assoc :main/start-of-week today))
-      :http-xhrio {:method :get
-                   :uri (str "/meal-plans/" (format today "yyyy-MM-dd"))
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success [:main/success-meal-plans]
-                   :on-failure [:main/failure-meal-plans]}})))
+      :dispatch [:query {:q '[:find (pull ?m [[:meal-plan/inst :as :date]
+                                              {[:meal-plan/type :as :type]
+                                               [[:db/ident :as :ref]]}
+                                              {[:meal-plan/recipe :as :recipe]
+                                               [[:recipe/id :as :id]
+                                                [:recipe/name :as :name]
+                                                {:recipe/type [[:db/ident]]}
+                                                [:recipe/image :as :image]
+                                                [:recipe/link :as :link]]}
+                                              [:shopping-list/_meals :as :shopping-list]])
+                              :in $ ?date
+                              :where
+                              [?m :meal-plan/inst ?d]
+                              [(tech.thomas-sojka.shopping-cards.db/within-next-four-days? ?date ?d)]]
+                         :params [(format today "yyyy-MM-dd")]
+                         :on-success [:main/success-meal-plans]
+                         :on-failure [:main/failure-meal-plans]}]})))
 
 (reg-event-db
  :main/success-meal-plans
@@ -47,8 +59,10 @@
                concat
                (map (fn [meal-plan]
                       (-> meal-plan
-                          (update :type keyword)
-                          (update :date #(js/Date. %))))
+                          first
+                          (update :type :ref)
+                          (update :date #(js/Date. %))
+                          (update-in [:recipe :recipe/type] :db/ident)))
                     data)))))
 
 (reg-event-fx
