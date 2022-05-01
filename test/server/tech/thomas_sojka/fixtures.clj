@@ -106,4 +106,5 @@
 (comment
   (do
     (ig-repl/halt)
-    (ig-repl/go)))
+    (ig-repl/go)
+    (populate)))

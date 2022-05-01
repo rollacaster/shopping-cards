@@ -4,24 +4,12 @@
             [cljs.reader :refer [read-string]]
             ["date-fns" :refer (startOfDay format)]))
 
-(reg-event-fx
- :main/load-recipes
- (fn [{:keys [db]}]
-   (if (empty? (:main/recipes db))
-     {:db (assoc db :app/loading true)
-      :http-xhrio {:method :get
-                   :uri "recipes"
-                   :response-format (ajax/json-response-format {:keywords? true})
-                   :on-success [:main/success-recipes]
-                   :on-failure [:main/failure-recipes]}}
-     {:db db})))
-
 (reg-event-db
  :main/success-recipes
  (fn [db [_ data]]
    (-> db
        (assoc :app/loading false)
-       (assoc :main/recipes data))))
+       (assoc :main/recipes (map (fn [r] (update (first r) :recipe/type :db/ident)) data)))))
 
 (reg-event-db
  :main/failure-recipes

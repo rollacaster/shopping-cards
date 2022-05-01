@@ -48,9 +48,6 @@
       {:date (read-instant-date date)
        :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
-   (GET "/recipes" [] {:status 200
-                       :body (vec (filter (comp not :inactive) (db/load-recipes conn)))
-                       :headers {"Content-type" "application/edn"}})
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
      (pr-str (db/ingredients-for-recipe conn recipe-id)))
    (PUT "/recipes/:recipe-id" [recipe-id :as request]

@@ -53,6 +53,29 @@
 
 (defonce timeouts (r/atom {}))
 
+(reg-event-fx :query
+  (fn [{:keys [db]} [_ {:keys [q params on-success on-failure]}]]
+    {:db (assoc db :app/loading true)
+     :http-xhrio {:method :post
+                  :uri "/query"
+                  :params {:q q
+                           :params params}
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
+                  :on-success on-success
+                  :on-failure on-failure}}))
+
+(reg-event-fx :transact
+  (fn [{:keys [db]} [_ {:keys [tx-data on-success on-failure]}]]
+    {:db (assoc db :app/loading true)
+     :http-xhrio {:method :put
+                  :uri "/transact"
+                  :params tx-data
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/raw-response-format)
+                  :on-success on-success
+                  :on-failure on-failure}}))
+
 (reg-fx
  :app/timeout
  (fn [{:keys [id event time]}]

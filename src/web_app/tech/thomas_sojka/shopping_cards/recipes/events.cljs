@@ -9,32 +9,6 @@
    {:app/push-state [:route/edit-recipe {:recipe-id id}]}))
 
 (reg-event-fx
- :transact
-  (fn [{:keys [db]} [_ {:keys [tx-data on-success on-failure]}]]
-    {:db (assoc db :app/loading true)
-     :http-xhrio {:method :put
-                 :uri "/transact"
-                 :params tx-data
-                 :format (ajax/transit-request-format)
-                 :response-format (ajax/raw-response-format)
-                 :on-success on-success
-                 :on-failure on-failure}}))
-
-(reg-event-fx
- :query
-  (fn [{:keys [db]} [_ {:keys [q params on-success on-failure]}]]
-    {:db (assoc db :app/loading true)
-     :http-xhrio {:method :post
-                  :uri "/query"
-                  :params {:q q
-                           :params params}
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success on-success
-                  :on-failure on-failure}}))
-
-
-(reg-event-fx
   :recipes/success-update
   (fn [{:keys [db]} [_ recipe-id]]
     {:db (-> db

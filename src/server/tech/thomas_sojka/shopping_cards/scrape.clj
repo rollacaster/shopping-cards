@@ -278,7 +278,7 @@
        html/parse
        html/as-hickory))
 
-(defn scrape-recipe [conn {:keys [link type name image] :or {type "NORMAL"}}]
+(defn scrape-recipe [conn {:keys [link type name image] :or {type :recipe-type/normal}}]
   (if (s/includes? link "kptncook")
     (let [{:keys [name ingredients]} (parse-string (:out (sh "node" "src/js/scrape.js" link)) true)]
       (-> {:name name

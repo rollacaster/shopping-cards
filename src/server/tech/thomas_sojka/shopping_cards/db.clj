@@ -44,24 +44,6 @@
               [?r :recipe/id ]])
        (map (comp transform-recipe-type first))))
 
-(defn load-recipe [conn recipe-ref]
-  (d/pull
-   (d/db conn)
-   [[:recipe/id :as :id]
-    [:recipe/name :as :name]
-    [:recipe/image :as :image]
-    [:recipe/link :as :link]
-    {[:recipe/type :as :type] [[:db/ident :as :type]]}
-    {[:cooked-with/_recipe :as :ingredients]
-     [[:cooked-with/id :as :id]
-      [:cooked-with/amount :as :amount]
-      [:cooked-with/unit :as :unit]
-      [:cooked-with/amount-desc :as :amount-desc]
-      {[:cooked-with/ingredient :as :ingredient]
-       [[:ingredient/name :as :name]
-        [:ingredient/id :as :id]]}]}]
-   recipe-ref))
-
 (defn load-ingredients [conn]
   (->> (d/db conn)
        (d/q '[:find

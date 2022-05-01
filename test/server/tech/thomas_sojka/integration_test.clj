@@ -1,30 +1,45 @@
 (ns tech.thomas-sojka.integration-test
   (:require
-   [cheshire.core :as json :refer [parse-string]]
    [clj-http.client :as client]
-   [clojure.string :as str]
    [clojure.test :refer [deftest is use-fixtures]]
    [clojure.walk :as walk]
    [tech.thomas-sojka.fixtures :as fixtures :refer [url]]))
 
 (use-fixtures :each fixtures/db-setup)
 
+(defn query-recipes []
+  (-> (client/post (url "/query")
+                   {:form-params {:q '[:find (pull ?r [[:recipe/id :as :id]
+                                                       [:recipe/name :as :name]
+                                                       [:recipe/image :as :image]
+                                                       [:recipe/link :as :link]
+                                                       {:recipe/type [[:db/ident]]}])
+                                       :where
+                                       [?r :recipe/id ]]}
+                    :content-type :transit+json
+                    :as :transit+json})
+      :body))
+
 (deftest load-recipes
-  (let [[{:keys [name image link type]}] (parse-string (:body (client/get "http://localhost:3001/recipes")) true)]
+  (let [[[recipe]] (query-recipes)]
     (is
-     (and (= name "Misosuppe mit Gemüse und Tofu2")
-          (= image "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg")
-          (= link "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html")
-          (= type "FAST")))))
+     (=
+      (dissoc recipe "id")
+      {"name" "Misosuppe mit Gemüse und Tofu2",
+       "image"
+       "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
+       "link"
+       "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
+       "recipe/type" {"db/ident" "recipe-type/fast"}}))))
 
 (deftest ingredients-for-recipes
-  (let [[{:keys [id]}] (parse-string (:body (client/get (url "/recipes"))) true)]
+  (let [[[{:strs [id]}]] (query-recipes)]
     (is
      (= (mapv second (read-string (:body (client/get (url "/ingredients?recipe-ids=" id)))))
         ["1 große Mandarine"]))))
 
 (deftest ingredients-for-recipe
-  (let [[{:keys [id]}] (parse-string (:body (client/get (url "/recipes"))) true)]
+  (let [[[{:strs [id]}]] (query-recipes)]
     (is
      (= (mapv second (read-string (:body (client/get (url "/recipes/" id "/ingredients")))))
         ["1 große Mandarine"]))))

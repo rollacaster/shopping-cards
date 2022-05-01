@@ -39,11 +39,11 @@
 
 (defn recipe-type-title [recipe-type]
   (case recipe-type
-    "NORMAL" [:h2.mv3.tc "Normale Gerichte"]
-    "NEW" [:h2.mv3.tc "Neue Gerichte"]
-    "FAST" [:h2.mv3.tc "Schnell Gerichte"]
-    "MISC" [:h2.mv3.tc "Keine Gerichte"]
-    "RARE" [:h2.mv3.tc "Selten"]))
+    :recipe-type/normal [:h2.mv3.tc "Normale Gerichte"]
+    :recipe-type/new [:h2.mv3.tc "Neue Gerichte"]
+    :recipe-type/fast [:h2.mv3.tc "Schnell Gerichte"]
+    :recipe-type/misc [:h2.mv3.tc "Keine Gerichte"]
+    :recipe-type/rare [:h2.mv3.tc "Selten"]))
 
 (defn recipe [{:keys [even name image selected? on-click]}]
   [:button.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-trbg-gray-600-ns.white-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns

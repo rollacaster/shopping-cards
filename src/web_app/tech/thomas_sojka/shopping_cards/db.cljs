@@ -7,11 +7,12 @@
 
 (s/def :recipe/id string?)
 (s/def :recipe/name string?)
-(s/def :recipe/type #{"NORMAL" "FAST" "RARE" "NEW" "MISC"})
+(s/def :recipe/type #{:recipe-type/normal :recipe-type/new :recipe-type/misc :recipe-type/fast :recipe-type/rare})
 (s/def :recipe/image string?)
 (s/def :recipe/link (s/nilable string?))
 (s/def :recipe/inactive boolean?)
-(s/def :recipe/recipe (s/keys :req-un [:recipe/name :recipe/type :recipe/image]
+(s/def :recipe/recipe (s/keys :req-un [:recipe/name :recipe/image]
+                              :req [:recipe/type]
                               :opt-un [:recipe/link :recipe/inactive]))
 (s/def :main/recipes (s/coll-of :recipe/recipe))
 
