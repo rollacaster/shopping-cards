@@ -7,5 +7,5 @@ npx karma start --single-run;
 clojure -Sdeps '{:deps {com.datomic/dev-local {:mvn/version "1.0.243"}}}' -e "(compile 'tech.thomas-sojka.shopping-cards.system)";
 shadow-cljs -Afe release app;
 clojure -M:uberdeps --aliases release;
-# scp target/shopping-cards.jar pi@ubi-hub:/home/pi;
-# ssh pi@ubi-hub sudo systemctl restart shoppinglist.service;
+scp target/shopping-cards.jar pi@ubi-hub:/home/pi;
+ssh pi@ubi-hub sudo systemctl restart shoppinglist.service;
