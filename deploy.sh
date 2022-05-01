@@ -6,6 +6,6 @@ shadow-cljs compile ci;
 npx karma start --single-run;
 clojure -e "(compile 'tech.thomas-sojka.shopping-cards.system)";
 shadow-cljs -Afe release app;
-clojure -M:uberdeps;
+clojure -M:uberdeps --aliases release;
 scp target/shopping-cards.jar pi@ubi-hub:/home/pi;
 ssh pi@ubi-hub sudo systemctl restart shoppinglist.service;
