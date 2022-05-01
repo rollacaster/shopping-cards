@@ -88,7 +88,10 @@
                                                            (fn [c] (cond-> c
                                                                     true (assoc :cooked-with/recipe (dissoc values :cooked-with/_recipe))
                                                                     (:cooked-with/amount c) (update :cooked-with/amount float)))))]
-                                  (dispatch [:transact (into updated-recipe removed-cooked-with)])))}
+                                  (dispatch [:transact
+                                             {:tx-data (into updated-recipe removed-cooked-with)
+                                              :on-success [:edit-recipe/success-update-recipe (:recipe/id recipe)]
+                                              :on-failure [:edit-recipe/failure-update-recipe]}])))}
         (fn [{:keys [form-id handle-submit values set-handle-change handle-blur dirty] :as props}]
           [:form {:id form-id
                   :on-submit handle-submit}
@@ -122,6 +125,7 @@
   (let [{:keys [path]} (:parameters match)
         {:keys [recipe-id]} path
         recipe @(subscribe [:edit-recipe/recipe-details recipe-id])]
+    (dispatch [:edit-recipe/load-recipe recipe-id])
     [recipe-details
      {:recipe recipe}]))
 

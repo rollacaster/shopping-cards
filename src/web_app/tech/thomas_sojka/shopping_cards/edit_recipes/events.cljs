@@ -7,8 +7,7 @@
 (reg-event-fx
  :edit-recipe/show-recipe
  (fn [_ [_ id]]
-   {:app/push-state [:route/edit-recipe {:recipe-id id}]
-    :dispatch [:edit-recipe/load-recipe id]}))
+   {:app/push-state [:route/edit-recipe {:recipe-id id}]}))
 
 (reg-event-fx
  :edit-recipe/show-add-ingredient
@@ -46,32 +45,34 @@
     :app/timeout {:id :app/error-removal
                   :event [:app/remove-error]
                   :time 2000}}))
-
 (reg-event-fx
  :edit-recipe/load-recipe
- (fn [_ [_ id]]
-   {:http-xhrio {:method :get
-                 :uri (str "/recipes/" id)
-                 :response-format (ajax/raw-response-format)
-                 :on-success [:edit-recipe/success-load-ingredients-for-recipe]
-                 :on-failure [:edit-recipe/failure-load-ingredients-for-recipe id]}}))
+ (fn [{:keys [db]} [_ id]]
+   (when-not (get-in db [:edit-recipe/recipes id])
+     {:http-xhrio {:method :get
+                   :uri (str "/recipes/" id)
+                   :response-format (ajax/raw-response-format)
+                   :on-success [:edit-recipe/success-load-ingredients-for-recipe]
+                   :on-failure [:edit-recipe/failure-load-ingredients-for-recipe id]}})))
 
 (reg-event-fx
  :transact
-  (fn [{:keys [db]} [_ data]]
+  (fn [{:keys [db]} [_ {:keys [tx-data on-success on-failure]}]]
     {:db (assoc db :app/loading true)
      :http-xhrio {:method :put
                  :uri "/transact"
-                 :params data
+                 :params tx-data
                  :format (ajax/transit-request-format)
                  :response-format (ajax/raw-response-format)
-                 :on-success [:edit-recipe/success-update-recipe]
-                 :on-failure [:edit-recipe/failure-update-recipe]}}))
+                 :on-success on-success
+                 :on-failure on-failure}}))
 
 (reg-event-fx
   :edit-recipe/success-update-recipe
-  (fn [{:keys [db]} _]
-    {:db (assoc db :app/loading false)
+  (fn [{:keys [db]} [_ recipe-id]]
+    {:db (-> db
+             (assoc :app/loading false)
+             (update :edit-recipe/recipes dissoc recipe-id))
      :app/push-state [:route/edit-recipes]}))
 
 (reg-event-fx
