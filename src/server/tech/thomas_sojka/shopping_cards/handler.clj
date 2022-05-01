@@ -10,8 +10,7 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :as util.response]
-            [tech.thomas-sojka.shopping-cards.db :as db]
-            [tech.thomas-sojka.shopping-cards.recipe :as recipe]))
+            [tech.thomas-sojka.shopping-cards.db :as db]))
 
 (defn app-routes [trello-client conn]
   (api
@@ -46,8 +45,6 @@
      {:status 200})
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
      (pr-str (db/ingredients-for-recipe conn recipe-id)))
-   (PUT "/recipes/:recipe-id" [recipe-id :as request]
-     (recipe/edit conn recipe-id (:body-params request)))
    (GET "/ingredients" [recipe-ids]
      (if recipe-ids
        (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))
