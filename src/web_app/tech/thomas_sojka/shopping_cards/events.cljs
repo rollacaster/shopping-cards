@@ -4,13 +4,9 @@
    [cljs.spec.alpha :as s]
    [re-frame.core
     :refer [after
-            dispatch
             reg-event-db
             reg-event-fx
-            reg-fx
             reg-global-interceptor]]
-   [reagent.core :as r]
-   [reitit.frontend.easy :as rfe]
    [tech.thomas-sojka.shopping-cards.db :refer [default-db]]))
 
 (defn check-and-throw
@@ -22,18 +18,12 @@
 
 (def check-spec-interceptor (after (partial check-and-throw :app/db)))
 (reg-global-interceptor check-spec-interceptor)
-(reg-fx :app/push-state
-        (fn [route]
-          (apply rfe/push-state route)))
+
 
 (reg-event-db
  :app/navigate
  (fn [db [_ match]]
    (assoc db :app/route match)))
-
-(reg-fx :app/scroll-to
-        (fn [[x y]]
-          (.scrollTo js/window x y)))
 
 (reg-event-db
  :app/remove-error
@@ -51,7 +41,7 @@
                  :on-success [:main/success-bank-holidays]
                  :on-failure [:main/failure-bank-holidays]}}))
 
-(defonce timeouts (r/atom {}))
+
 
 (reg-event-fx :query
   (fn [{:keys [db]} [_ {:keys [q params on-success on-failure]}]]
@@ -65,6 +55,16 @@
                   :on-success on-success
                   :on-failure on-failure}}))
 
+(reg-event-fx :query/log
+  (fn [_ [_ props]]
+    {:dispatch [:query
+                (assoc props
+                       :on-success [:log] :on-failure [:log])]}))
+
+(reg-event-fx :log
+  (fn [_ [_ d]]
+    (js/console.log d)))
+
 (reg-event-fx :transact
   (fn [{:keys [db]} [_ {:keys [tx-data on-success on-failure]}]]
     {:db (assoc db :app/loading true)
@@ -75,16 +75,3 @@
                   :response-format (ajax/raw-response-format)
                   :on-success on-success
                   :on-failure on-failure}}))
-
-(reg-fx
- :app/timeout
- (fn [{:keys [id event time]}]
-   (when-some [existing (get @timeouts id)]
-     (js/clearTimeout existing)
-     (swap! timeouts dissoc id))
-   (when (some? event)
-     (swap! timeouts assoc id
-            (js/setTimeout
-             (fn []
-               (dispatch event))
-             time)))))

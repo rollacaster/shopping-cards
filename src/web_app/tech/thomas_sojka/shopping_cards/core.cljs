@@ -9,6 +9,7 @@
             [tech.thomas-sojka.shopping-cards.view :refer [app]]
             [day8.re-frame.http-fx]
             [tech.thomas-sojka.shopping-cards.events]
+            [tech.thomas-sojka.shopping-cards.fx]
             [tech.thomas-sojka.shopping-cards.subs]
             [tech.thomas-sojka.shopping-cards.main.core]
             [tech.thomas-sojka.shopping-cards.recipes.core]))
