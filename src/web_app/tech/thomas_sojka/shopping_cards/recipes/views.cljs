@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.shopping-cards.edit-recipes.views
+(ns tech.thomas-sojka.shopping-cards.recipes.views
   (:require
    [clojure.set :as set]
    [clojure.string :as str]
@@ -15,7 +15,7 @@
           (map
            (fn [{:keys [id name image]}]
              ^{:key id}
-             [recipe {:name name :image image :on-click #(dispatch [:edit-recipe/show-recipe id])}])))]))
+             [recipe {:name name :image image :on-click #(dispatch [:recipes/show-recipe id])}])))]))
 
 (defn cooked-with-c [_ {:fieldarray/keys [fields remove insert handle-change handle-blur set-handle-change]}]
   [:<>
@@ -90,8 +90,8 @@
                                                                     (:cooked-with/amount c) (update :cooked-with/amount float)))))]
                                   (dispatch [:transact
                                              {:tx-data (into updated-recipe removed-cooked-with)
-                                              :on-success [:edit-recipe/success-update-recipe (:recipe/id recipe)]
-                                              :on-failure [:edit-recipe/failure-update-recipe]}])))}
+                                              :on-success [:recipes/success-update (:recipe/id recipe)]
+                                              :on-failure [:recipes/failure-update]}])))}
         (fn [{:keys [form-id handle-submit values set-handle-change handle-blur dirty] :as props}]
           [:form {:id form-id
                   :on-submit handle-submit}
@@ -111,7 +111,7 @@
                (fn [t]
                  ^{:key t}
                  [:option.w-100 {:value (str "recipe-type/" (str/lower-case t))} t])
-               @(subscribe [:edit-recipe/recipe-types]))]]
+               @(subscribe [:recipes/recipe-types]))]]
             [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
              [fork/field-array {:props props
                                 :name :cooked-with/_recipe}
@@ -124,7 +124,7 @@
 (defn recipe-editing [match]
   (let [{:keys [path]} (:parameters match)
         {:keys [recipe-id]} path
-        recipe @(subscribe [:edit-recipe/recipe-details recipe-id])]
+        recipe @(subscribe [:recipes/details recipe-id])]
     (dispatch [:query {:q '[:find (pull ?r
                                         [[:recipe/id]
                                          [:recipe/name]
@@ -142,12 +142,7 @@
                             :in $ ?recipe-id
                             :where [?r :recipe/id ?recipe-id]]
                        :params [recipe-id]
-                       :on-success [:edit-recipe/success-load-ingredients-for-recipe]
-                       :on-failure [:edit-recipe/failure-load-ingredients-for-recipe recipe-id]}])
+                       :on-success [:recipes/success-load]
+                       :on-failure [:recipes/failure-load recipe-id]}])
     [recipe-details
      {:recipe recipe}]))
-
-(defn ingredient [{:keys [i id class]} children]
-  [:li.mh2.mh5-ns.ph4.pv3.mt3.br2 {:class [class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")]}
-   [:label.flex.items-center.pointer.f4 {:for id}
-    children]])

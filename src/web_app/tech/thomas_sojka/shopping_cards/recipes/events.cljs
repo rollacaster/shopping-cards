@@ -1,10 +1,10 @@
-(ns tech.thomas-sojka.shopping-cards.edit-recipes.events
+(ns tech.thomas-sojka.shopping-cards.recipes.events
   (:require
    [ajax.core :as ajax]
    [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
 (reg-event-fx
- :edit-recipe/show-recipe
+ :recipes/show-recipe
  (fn [_ [_ id]]
    {:app/push-state [:route/edit-recipe {:recipe-id id}]}))
 
@@ -35,7 +35,7 @@
 
 
 (reg-event-fx
-  :edit-recipe/success-update-recipe
+  :recipes/success-update
   (fn [{:keys [db]} [_ recipe-id]]
     {:db (-> db
              (assoc :app/loading false)
@@ -43,7 +43,7 @@
      :app/push-state [:route/edit-recipes]}))
 
 (reg-event-fx
-  :edit-recipe/failure-update-recipe
+  :recipes/failure-update
   (fn [{:keys [db]} _]
     {:db (assoc db
                 :app/loading false
@@ -53,25 +53,15 @@
                    :time 2000}}))
 
 (reg-event-db
- :edit-recipe/success-load-ingredients-for-recipe
+ :recipes/success-load
  (fn [db [_ [[recipe]]]]
    (-> db
        (assoc :app/loading false)
        (assoc-in [:edit-recipe/recipes (:recipe/id recipe)] recipe))))
 
 (reg-event-db
- :edit-recipe/failure-load-ingredients-for-recipe
+ :recipes/failure-load
  (fn [db [_ id]]
    (-> db
        (assoc :app/loading false)
        (assoc-in [:edit-recipe/recipes id] :ERROR))))
-
-(reg-event-db
- :edit-recipe/success-load-all-ingredients
- (fn [db [_ ingredients]]
-   (assoc-in db [:edit-recipe/ingredients :all] ingredients)))
-
-(reg-event-db
- :edit-recipe/failure-load-all-ingredients
- (fn [db _]
-   (assoc-in db [:edit-recipe/ingredients :all] :ERROR)))

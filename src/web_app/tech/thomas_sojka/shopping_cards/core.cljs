@@ -11,7 +11,7 @@
             [tech.thomas-sojka.shopping-cards.events]
             [tech.thomas-sojka.shopping-cards.subs]
             [tech.thomas-sojka.shopping-cards.main.core]
-            [tech.thomas-sojka.shopping-cards.edit-recipes.core]))
+            [tech.thomas-sojka.shopping-cards.recipes.core]))
 
 (def routes
   [[["/" {:name :route/main
@@ -36,10 +36,10 @@
      :view :view/select-dinner}]
    ["/recipes"
     {:name :route/edit-recipes
-     :view :view/edit-recipes}]
+     :view :view/recipes}]
    ["/recipes/:recipe-id"
     {:name :route/edit-recipe
-     :view :view/edit-recipe
+     :view :view/recipe
      :parameters {:path {:recipe-id string?}}}]])
 
 (defn init! []
