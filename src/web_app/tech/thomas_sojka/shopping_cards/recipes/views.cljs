@@ -123,8 +123,7 @@
 
 (defn recipe-editing [match]
   (let [{:keys [path]} (:parameters match)
-        {:keys [recipe-id]} path
-        recipe @(subscribe [:recipes/details recipe-id])]
+        {:keys [recipe-id]} path]
     (dispatch [:query {:q '[:find (pull ?r
                                         [[:recipe/id]
                                          [:recipe/name]
@@ -143,6 +142,10 @@
                             :where [?r :recipe/id ?recipe-id]]
                        :params [recipe-id]
                        :on-success [:recipes/success-load]
-                       :on-failure [:recipes/failure-load recipe-id]}])
-    [recipe-details
-     {:recipe recipe}]))
+                       :on-failure [:recipes/failure-load recipe-id]}]))
+  (fn []
+    (let [{:keys [path]} (:parameters match)
+          {:keys [recipe-id]} path
+          recipe @(subscribe [:recipes/details recipe-id])]
+      [recipe-details
+       {:recipe recipe}])))
