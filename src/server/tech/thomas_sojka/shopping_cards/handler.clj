@@ -54,8 +54,6 @@
                        :headers {"Content-type" "application/edn"}})
    (GET "/recipes/:recipe-id/ingredients" [recipe-id]
      (pr-str (db/ingredients-for-recipe conn recipe-id)))
-   (GET "/recipes/:recipe-id" [recipe-id]
-     (pr-str (recipe/load-by-id conn recipe-id)))
    (PUT "/recipes/:recipe-id" [recipe-id :as request]
      (recipe/edit conn recipe-id (:body-params request)))
    (POST "/cooked-with" request
@@ -75,7 +73,8 @@
      (db/transact conn (mapv (fn [c] (cond-> c (:cooked-with/amount c) (update :cooked-with/amount float))) (:body-params request)))
      {:status 200})
    (POST "/query" request
-     {:status 200 :body (d/q (:body-params request) (d/db conn))})))
+     (let [{:keys [q params]} (:body-params request)]
+       {:status 200 :body (apply (partial d/q q (d/db conn)) params)}))))
 
 (defn app [{:keys [trello-client conn]}]
   (-> (app-routes trello-client conn)

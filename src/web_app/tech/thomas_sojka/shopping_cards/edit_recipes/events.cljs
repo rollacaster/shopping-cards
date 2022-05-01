@@ -68,6 +68,20 @@
                  :on-failure on-failure}}))
 
 (reg-event-fx
+ :query
+  (fn [{:keys [db]} [_ {:keys [q params on-success on-failure]}]]
+    {:db (assoc db :app/loading true)
+     :http-xhrio {:method :post
+                  :uri "/query"
+                  :params {:q q
+                           :params params}
+                  :format (ajax/transit-request-format)
+                  :response-format (ajax/transit-response-format)
+                  :on-success on-success
+                  :on-failure on-failure}}))
+
+
+(reg-event-fx
   :edit-recipe/success-update-recipe
   (fn [{:keys [db]} [_ recipe-id]]
     {:db (-> db
@@ -87,14 +101,17 @@
 
 (reg-event-db
  :edit-recipe/success-load-ingredients-for-recipe
- (fn [db [_ data]]
-   (let [recipe (read-string data)]
-     (assoc-in db [:edit-recipe/recipes (:recipe/id recipe)] (read-string data)))))
+ (fn [db [_ [[recipe]]]]
+   (-> db
+       (assoc :app/loading false)
+       (assoc-in [:edit-recipe/recipes (:recipe/id recipe)] recipe))))
 
 (reg-event-db
  :edit-recipe/failure-load-ingredients-for-recipe
  (fn [db [_ id]]
-   (assoc-in db [:edit-recipe/recipes id] :ERROR)))
+   (-> db
+       (assoc :app/loading false)
+       (assoc-in [:edit-recipe/recipes id] :ERROR))))
 
 (reg-event-fx
  :edit-recipe/load-all-ingredients

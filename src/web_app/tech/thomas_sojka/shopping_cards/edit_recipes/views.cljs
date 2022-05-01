@@ -125,7 +125,25 @@
   (let [{:keys [path]} (:parameters match)
         {:keys [recipe-id]} path
         recipe @(subscribe [:edit-recipe/recipe-details recipe-id])]
-    (dispatch [:edit-recipe/load-recipe recipe-id])
+    (dispatch [:query {:q '[:find (pull ?r
+                                        [[:recipe/id]
+                                         [:recipe/name]
+                                         [:recipe/image]
+                                         [:recipe/link]
+                                         {[:recipe/type] [[:db/ident]]}
+                                         {[:cooked-with/_recipe]
+                                          [[:cooked-with/id]
+                                           [:cooked-with/amount]
+                                           [:cooked-with/unit]
+                                           [:cooked-with/amount-desc]
+                                           {[:cooked-with/ingredient]
+                                            [[:ingredient/name]
+                                             [:ingredient/id]]}]}])
+                            :in $ ?recipe-id
+                            :where [?r :recipe/id ?recipe-id]]
+                       :params [recipe-id]
+                       :on-success [:edit-recipe/success-load-ingredients-for-recipe]
+                       :on-failure [:edit-recipe/failure-load-ingredients-for-recipe recipe-id]}])
     [recipe-details
      {:recipe recipe}]))
 
