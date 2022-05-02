@@ -28,9 +28,10 @@
 (s/def :main/bank-holidays (s/coll-of map? :kind set?))
 
 (s/def :ingredient/id string?)
-(s/def :ingredient/category string?)
+(s/def :ingredient/category keyword?)
 (s/def :ingredient/name string?)
-(s/def :ingredient/ingredient (s/keys :req-un [:ingredient/id :ingredient/category :ingredient/name]))
+(s/def :ingredient/ingredient (s/keys :req [:ingredient/id :ingredient/name]
+                                      :opt [:ingredient/category]))
 (s/def :shopping-card/read-ingredient (s/tuple :ingredient/id :ingredient/name))
 (s/def :shopping-card/ingredients (s/coll-of :shopping-card/read-ingredient))
 (s/def :shopping-card/selected-ingredient-ids (s/coll-of :ingredient/id :kind set?))

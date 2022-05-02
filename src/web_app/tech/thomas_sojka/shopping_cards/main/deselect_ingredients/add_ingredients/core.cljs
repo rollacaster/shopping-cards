@@ -17,7 +17,7 @@
                                      :on-change (fn [e] (dispatch [:extra-ingredients/filter-ingredients ^js (.-target.value e)]))
                                      :placeholder "Suche..."}]]
      [:ul.list.pl0.mv0.pb6
-      (map-indexed (fn [i {:keys [id name]}]
+      (map-indexed (fn [i {:ingredient/keys [id name]}]
                      [:button.bn.pa0.w-100.ma0.dib
                       {:key id
                        :on-click #(dispatch [:extra-ingredients/add id name])}

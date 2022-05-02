@@ -1,6 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.events
-  (:require [re-frame.core :refer [reg-event-db reg-event-fx]]
-            [ajax.core :as ajax]))
+  (:require [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
 (reg-event-db
  :extra-ingredients/filter-ingredients
@@ -12,16 +11,19 @@
  (fn [_ _]
    {:app/push-state [:route/add-ingredients]
     :app/scroll-to [0 0]
-    :http-xhrio {:method :get
-                 :uri "/ingredients"
-                 :response-format (ajax/json-response-format {:keywords? true})
-                 :on-success [:extra-ingredients/success-load-ingredients]
-                 :on-failure [:extra-ingredients/success-failure-ingredients]}}))
+    :dispatch [:query {:q '[:find (pull ?i [[:ingredient/id]
+                                            [:ingredient/name]
+                                            [:ingredient/category]])
+                            :where
+                            [?i :ingredient/id ]]
+                       :on-success [:extra-ingredients/success-load-ingredients]
+                       :on-failure [:extra-ingredients/success-failure-ingredients]}]}))
 
 (reg-event-db
  :extra-ingredients/success-load-ingredients
  (fn [db [_ ingredients]]
-   (assoc db :extra-ingredients/ingredients ingredients)))
+   (assoc db :extra-ingredients/ingredients
+          (map (fn [[i]] (update i :ingredient/category :db/ident)) ingredients))))
 
 (reg-event-fx
  :extra-ingredients/add
@@ -31,4 +33,3 @@
             (update :shopping-card/selected-ingredient-ids conj id)
             (assoc :extra-ingredients/filter ""))
     :app/push-state [:route/deselect-ingredients]}))
-

@@ -17,13 +17,11 @@
         (remove (fn [ingredient]
                   (or
                    ((set (map first recipe-ingredients))
-                    (:id ingredient))
-                   (not (str/includes? (str/lower-case (:name ingredient))
+                    (:ingredient/id ingredient))
+                   (not (str/includes? (str/lower-case (:ingredient/name ingredient))
                                        (str/lower-case ingredient-filter)))))))))
 
 (reg-sub
  :extra-ingredients/filter
  (fn [db _]
    (:extra-ingredients/filter db)))
-
-
