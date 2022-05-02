@@ -8,9 +8,8 @@
 
 (defn meal-plan-details []
   (fn []
-    (let [{{:keys [name link image]} :recipe}
-          @(subscribe [:recipe-details/meal])
-          ingredients @(subscribe [:recipe-details/ingredients])]
+    (let [{{:keys [id]} :recipe} @(subscribe [:recipe-details/meal])
+          {:recipe/keys [name link image] :as recipe} @(subscribe [:recipes/details id])]
       [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
        [:div.flex.justify-between.items
         [:a.link.near-black.mb3.mb0-ns.db
@@ -23,11 +22,13 @@
        [:div.flex.justify-between.flex-wrap
         [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
          [:img.w5.br3.ba.b--orange-300 {:src image}]]
-        [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-         (map
-          (fn [[id ingredient]]
-            [:li.mb3.f4 {:key id} ingredient])
-          ingredients)]]
+        [:div
+         [:h2.fw6.mb3 "Zutaten"]
+         [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
+          (map
+           (fn [{:cooked-with/keys [id ingredient amount-desc]}]
+             [:li.mb2.f4 {:key id} (str amount-desc " " (:ingredient/name ingredient))])
+           (:cooked-with/_recipe recipe))]]]
        (when-not (empty? link)
          [:div.flex.justify-center
           [:a.link.shadow-3.bn.pv2.ph3.br2.bg-orange-400.f3.gray-800

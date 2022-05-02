@@ -38,12 +38,6 @@
      (= (mapv second (read-string (:body (client/get (url "/ingredients?recipe-ids=" id)))))
         ["1 große Mandarine"]))))
 
-(deftest ingredients-for-recipe
-  (let [[[{:strs [id]}]] (query-recipes)]
-    (is
-     (= (mapv second (read-string (:body (client/get (url "/recipes/" id "/ingredients")))))
-        ["1 große Mandarine"]))))
-
 (deftest get-recipe
   (is (= (-> (client/post (url "/query")
                           {:form-params {:q '[:find (pull ?r

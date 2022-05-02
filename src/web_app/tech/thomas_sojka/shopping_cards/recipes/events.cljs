@@ -3,6 +3,29 @@
    [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
 (reg-event-fx
+  :recipes/load
+  (fn [_ [_ recipe-id]]
+    {:dispatch [:query {:q '[:find (pull ?r
+                                         [[:recipe/id]
+                                          [:recipe/name]
+                                          [:recipe/image]
+                                          [:recipe/link]
+                                          {[:recipe/type] [[:db/ident]]}
+                                          {[:cooked-with/_recipe]
+                                           [[:cooked-with/id]
+                                            [:cooked-with/amount]
+                                            [:cooked-with/unit]
+                                            [:cooked-with/amount-desc]
+                                            {[:cooked-with/ingredient]
+                                             [[:ingredient/name]
+                                              [:ingredient/id]]}]}])
+                             :in $ ?recipe-id
+                             :where [?r :recipe/id ?recipe-id]]
+                        :params [recipe-id]
+                        :on-success [:recipes/success-load]
+                        :on-failure [:recipes/failure-load recipe-id]}]}))
+
+(reg-event-fx
  :recipes/show-recipe
  (fn [_ [_ id]]
    {:app/push-state [:route/edit-recipe {:recipe-id id}]}))
@@ -12,7 +35,7 @@
   (fn [{:keys [db]} [_ recipe-id]]
     {:db (-> db
              (assoc :app/loading false)
-             (update :edit-recipe/recipes dissoc recipe-id))
+             (update :recipes dissoc recipe-id))
      :app/push-state [:route/edit-recipes]}))
 
 (reg-event-fx
@@ -30,11 +53,11 @@
  (fn [db [_ [[recipe]]]]
    (-> db
        (assoc :app/loading false)
-       (assoc-in [:edit-recipe/recipes (:recipe/id recipe)] recipe))))
+       (assoc-in [:recipes (:recipe/id recipe)] recipe))))
 
 (reg-event-db
  :recipes/failure-load
  (fn [db [_ id]]
    (-> db
        (assoc :app/loading false)
-       (assoc-in [:edit-recipe/recipes id] :ERROR))))
+       (assoc-in [:recipes id] :ERROR))))

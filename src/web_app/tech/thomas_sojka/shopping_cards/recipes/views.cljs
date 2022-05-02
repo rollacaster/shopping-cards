@@ -101,16 +101,16 @@
               "Rezept-Art"]
              [:select.pa1.w-60.br1 {:name "recipe/type"
                                     :id "recipe-type"
-                                    :value (str "recipe-type/" (name (:db/ident (:recipe/type values))))
+                                    :value (:db/ident (:recipe/type values))
                                     :on-change (fn [^js e]
                                                  (set-handle-change
-                                                  {:value (keyword (.-target.value e))
+                                                  {:value (keyword (str "recipe-type/" (.-target.value e)))
                                                    :path [:recipe/type :db/ident]}))
                                     :on-blur handle-blur}
               (map
                (fn [t]
                  ^{:key t}
-                 [:option.w-100 {:value (str "recipe-type/" (str/lower-case t))} t])
+                 [:option.w-100 {:value t} t])
                @(subscribe [:recipes/recipe-types]))]]
             [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
              [fork/field-array {:props props
@@ -124,25 +124,7 @@
 (defn recipe-editing [match]
   (let [{:keys [path]} (:parameters match)
         {:keys [recipe-id]} path]
-    (dispatch [:query {:q '[:find (pull ?r
-                                        [[:recipe/id]
-                                         [:recipe/name]
-                                         [:recipe/image]
-                                         [:recipe/link]
-                                         {[:recipe/type] [[:db/ident]]}
-                                         {[:cooked-with/_recipe]
-                                          [[:cooked-with/id]
-                                           [:cooked-with/amount]
-                                           [:cooked-with/unit]
-                                           [:cooked-with/amount-desc]
-                                           {[:cooked-with/ingredient]
-                                            [[:ingredient/name]
-                                             [:ingredient/id]]}]}])
-                            :in $ ?recipe-id
-                            :where [?r :recipe/id ?recipe-id]]
-                       :params [recipe-id]
-                       :on-success [:recipes/success-load]
-                       :on-failure [:recipes/failure-load recipe-id]}]))
+    (dispatch [:recipes/load recipe-id]))
   (fn []
     (let [{:keys [path]} (:parameters match)
           {:keys [recipe-id]} path

@@ -43,8 +43,6 @@
       {:date (read-instant-date date)
        :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
-   (GET "/recipes/:recipe-id/ingredients" [recipe-id]
-     (pr-str (db/ingredients-for-recipe conn recipe-id)))
    (GET "/ingredients" [recipe-ids]
      (if recipe-ids
        (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))
