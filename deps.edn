@@ -16,7 +16,8 @@
         clj-http/clj-http {:mvn/version "3.10.1"}
         com.google.guava/guava {:mvn/version "31.0.1-jre"}
         fork/fork {:mvn/version "2.4.2"}}
- :paths ["src/server" "src/web_app" "test/web_app" "classes" "resources"]
+ :paths ["src/server" "src/web_app" "test/web_app" "classes" "resources"
+         "src/shared"]
  :aliases {:fe {:extra-deps {thheller/shadow-cljs {:mvn/version "2.18.0"}
                              reagent/reagent {:mvn/version "1.1.0"}
                              re-frame/re-frame {:mvn/version "1.2.0"}

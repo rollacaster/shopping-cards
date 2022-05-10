@@ -1,5 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.main.deselect-ingredients.add-ingredients.events
-  (:require [re-frame.core :refer [reg-event-db reg-event-fx]]))
+  (:require [re-frame.core :refer [reg-event-db reg-event-fx]]
+            [tech.thomas-sojka.shopping-cards.queries :as queries]))
 
 (reg-event-db
  :extra-ingredients/filter-ingredients
@@ -11,11 +12,7 @@
  (fn [_ _]
    {:app/push-state [:route/add-ingredients]
     :app/scroll-to [0 0]
-    :dispatch [:query {:q '[:find (pull ?i [[:ingredient/id]
-                                            [:ingredient/name]
-                                            [:ingredient/category]])
-                            :where
-                            [?i :ingredient/id ]]
+    :dispatch [:query {:q queries/load-ingredients
                        :on-success [:extra-ingredients/success-load-ingredients]
                        :on-failure [:extra-ingredients/success-failure-ingredients]}]}))
 

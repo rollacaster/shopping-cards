@@ -43,18 +43,12 @@
       {:date (read-instant-date date)
        :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
-   (GET "/ingredients" [recipe-ids]
-     (if recipe-ids
-       (pr-str (db/ingredients-for-recipes conn ((if (vector? recipe-ids) set hash-set) recipe-ids)))
-       {:status 200
-        :body (db/load-ingredients conn)
-        :headers {"Content-type" "application/edn"}}))
    (PUT "/transact" request
      (db/transact conn (mapv (fn [c] (cond-> c (:cooked-with/amount c) (update :cooked-with/amount float))) (:body-params request)))
      {:status 200})
    (POST "/query" request
      (let [{:keys [q params]} (:body-params request)]
-       {:status 200 :body (apply (partial d/q q (d/db conn)) params)}))))
+       {:status 200 :body (d/q q (d/db conn) params)}))))
 
 (defn app [{:keys [trello-client conn]}]
   (-> (app-routes trello-client conn)

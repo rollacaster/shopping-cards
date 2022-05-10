@@ -36,7 +36,9 @@
   (let [[[{:strs [id]}]] (query-recipes)]
     (is
      (= (mapv second (read-string (:body (client/get (url "/ingredients?recipe-ids=" id)))))
-        ["1 große Mandarine"]))))
+        [#:ingredient{:id "61858d61-a9d0-4ba6-b341-bdcdffec50d1",
+                      :name "Mandarine",
+                      :category #:db{:ident :ingredient-category/obst}}]))))
 
 (deftest get-recipe
   (is (= (-> (client/post (url "/query")
@@ -56,7 +58,7 @@
                                                                [:ingredient/id]]}]}])
                                               :in $ ?recipe-id
                                               :where [?r :recipe/id ?recipe-id]]
-                                         :params ["2aa44c10-bf40-476b-b95f-3bbe96a3835f"]}
+                                         :params "2aa44c10-bf40-476b-b95f-3bbe96a3835f"}
                            :content-type :transit+json
                            :as :transit+json})
              :body)

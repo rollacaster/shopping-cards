@@ -11,7 +11,8 @@
    [hickory.core :as html]
    [hickory.select :as select]
    [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
-   [tech.thomas-sojka.shopping-cards.db :as db]))
+   [tech.thomas-sojka.shopping-cards.db :as db]
+   [tech.thomas-sojka.shopping-cards.queries :as queries]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def search-engine-cx "005510767845232759155:zdkkvfzersx")
@@ -287,7 +288,7 @@
            :type type
            :image (find-image name)
            :link link}
-          (update :ingredients (partial dedup-ingredients (db/load-ingredients conn)))))
+          (update :ingredients (partial dedup-ingredients (d/q queries/load-ingredients conn)))))
     (let [recipe-hickory (as-hickory link)
           name (or name
                    (when (s/includes? link "docs.google")
@@ -303,7 +304,7 @@
               (if (s/includes? link "docs.google")
                 (fetch-gdrive-ingredients link)
                 (add-ingredients link recipe-hickory)))
-       (update :ingredients (partial dedup-ingredients (db/load-ingredients conn)))))))
+       (update :ingredients (partial dedup-ingredients (d/q queries/load-ingredients conn)))))))
 
 (comment
   (let [client (d/client {:server-type :dev-local :system "dev"})

@@ -46,7 +46,7 @@
                               :where
                               [?m :meal-plan/inst ?d]
                               [(tech.thomas-sojka.shopping-cards.db/within-next-four-days? ?date ?d)]]
-                         :params [(format today "yyyy-MM-dd")]
+                         :params (format today "yyyy-MM-dd")
                          :on-success [:main/success-meal-plans]
                          :on-failure [:main/failure-meal-plans]}]})))
 

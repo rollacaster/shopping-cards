@@ -2,8 +2,8 @@
   (:require
    [ajax.core :as ajax]
    [re-frame.core :refer [reg-event-fx reg-event-db]]
-   [clojure.string :as str]
-   [cljs.reader :refer [read-string]]))
+   [tech.thomas-sojka.shopping-cards.ingredients-processing :as ingredients]
+   [tech.thomas-sojka.shopping-cards.queries :as queries]))
 
 (reg-event-fx
  :shopping-card/failure-shopping-card
@@ -47,11 +47,10 @@
  :shopping-card/load-ingredients-for-meals
  (fn [{:keys [db]} [_ meals-without-shopping-list]]
    {:db (assoc db :app/loading true)
-    :http-xhrio {:method :get
-                 :uri (str "/ingredients?" (str/join "&" (map #(str "recipe-ids=" %) (map (comp :id :recipe) meals-without-shopping-list))))
-                 :response-format (ajax/raw-response-format)
-                 :on-success [:shopping-card/success-load-ingredients-for-selected-recipes]
-                 :on-failure [:shopping-card/failure-load-ingredients-for-selected-recipes]}}))
+    :dispatch [:query {:q queries/load-ingredients-by-recipe-id
+                       :params (map (comp :id :recipe) meals-without-shopping-list)
+                       :on-success [:shopping-card/success-load-ingredients-for-selected-recipes]
+                       :on-failure [:shopping-card/failure-load-ingredients-for-selected-recipes]}]}))
 
 (defn add-water [ingredients]
   (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
@@ -62,7 +61,7 @@
    {:app/push-state [:route/deselect-ingredients]
     :app/scroll-to [0 0]
     :db
-    (let [data (read-string res)]
+    (let [data (ingredients/process-ingredients res)]
       (-> db
           (assoc :shopping-card/ingredients (vec data))
           (assoc :app/loading false)
@@ -92,4 +91,3 @@
                  :response-format (ajax/text-response-format)
                  :on-success [:shopping-card/success-shopping-card meals-without-shopping-list]
                  :on-failure [:shopping-card/failure-shopping-card]}}))
-
