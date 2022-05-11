@@ -61,3 +61,7 @@
    (-> db
        (assoc :app/loading false)
        (assoc-in [:recipes id] :ERROR))))
+
+(reg-event-fx :recipes/new
+  (fn []
+    {:app/push-state [:route/new-recipe]}))

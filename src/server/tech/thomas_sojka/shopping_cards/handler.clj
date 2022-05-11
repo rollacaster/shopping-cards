@@ -10,7 +10,8 @@
             [ring.middleware.params :refer [wrap-params]]
             [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :as util.response]
-            [tech.thomas-sojka.shopping-cards.db :as db]))
+            [tech.thomas-sojka.shopping-cards.db :as db]
+            [tech.thomas-sojka.shopping-cards.scrape :as scrape]))
 
 (defn app-routes [trello-client conn]
   (api
@@ -43,6 +44,14 @@
       {:date (read-instant-date date)
        :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
+   (POST "/recipe-add" request
+         (let [{:keys [link image]} (:body-params request)]
+           (db/transact
+            conn
+            (scrape/scrape-recipe conn
+                                  {:link link
+                                   :image image
+                                   :type :recipe-type/new}))))
    (PUT "/transact" request
      (db/transact conn (mapv (fn [c] (cond-> c (:cooked-with/amount c) (update :cooked-with/amount float))) (:body-params request)))
      {:status 200})

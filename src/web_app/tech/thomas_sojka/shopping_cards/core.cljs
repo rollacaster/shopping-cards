@@ -1,18 +1,19 @@
 (ns tech.thomas-sojka.shopping-cards.core
-  (:require [re-frame.core
+  (:require [day8.re-frame.http-fx]
+            [re-frame.core
              :refer
              [clear-subscription-cache! dispatch dispatch-sync]]
             [reagent.dom :as dom]
             [reitit.coercion.spec :as rss]
             [reitit.frontend :as rf]
             [reitit.frontend.easy :as rfe]
-            [tech.thomas-sojka.shopping-cards.view :refer [app]]
-            [day8.re-frame.http-fx]
             [tech.thomas-sojka.shopping-cards.events]
             [tech.thomas-sojka.shopping-cards.fx]
-            [tech.thomas-sojka.shopping-cards.subs]
             [tech.thomas-sojka.shopping-cards.main.core]
-            [tech.thomas-sojka.shopping-cards.recipes.core]))
+            [tech.thomas-sojka.shopping-cards.recipe-add.core]
+            [tech.thomas-sojka.shopping-cards.recipes.core]
+            [tech.thomas-sojka.shopping-cards.subs]
+            [tech.thomas-sojka.shopping-cards.view :refer [app]]))
 
 (def routes
   [[["/" {:name :route/main
@@ -38,6 +39,9 @@
    ["/recipes"
     {:name :route/edit-recipes
      :view :view/recipes}]
+   ["/recipe-add"
+    {:name :route/new-recipe
+     :view :view/new-recipe}]
    ["/recipes/:recipe-id"
     {:name :route/edit-recipe
      :view :view/recipe
