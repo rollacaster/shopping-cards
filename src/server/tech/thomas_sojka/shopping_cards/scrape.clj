@@ -181,6 +181,20 @@
                  :unit unit
                  :amount amount})))))
 
+(defn scrape-kitchenstories [recipe-hickory]
+  (->> recipe-hickory
+       (select/select
+        (select/child
+         (select/class "ingredients")
+         (select/tag "tbody")
+         (select/tag "tr")))
+       (map (fn [r] (let [[[amount-desc-c] [name]] (map :content (:content r))
+                         amount-desc (when amount-desc-c (s/replace amount-desc-c " " ""))
+                         unit (some (fn [unit] (when (and amount-desc (s/includes? amount-desc (str " " unit))) unit)) units)]
+                     (cond-> {:name name}
+                       amount-desc (assoc :amount-desc amount-desc)
+                       unit (assoc :unit unit)
+                       (parse-int amount-desc) (assoc :amount (parse-int amount-desc))))))))
 
 (defn add-ingredients [link recipe-hickory]
   (cond (s/includes? link "chefkoch")
@@ -197,7 +211,9 @@
         (s/includes? link "eatsmarter")
         (scrape-eatsmarter recipe-hickory)
         (s/includes? link "cookidoo")
-        (scrape-cookidoo recipe-hickory)))
+        (scrape-cookidoo recipe-hickory)
+        (s/includes? link "kitchenstories")
+        (scrape-kitchenstories recipe-hickory)))
 
 (defn find-image [recipe-name]
   (-> (client/get "https://customsearch.googleapis.com/customsearch/v1"
@@ -239,7 +255,16 @@
 (defmulti recipe-name (fn [link _] (cond
                                   (s/includes? link "kptncook") :kptncook
                                   (s/includes? link "meinestube") :meinestube
+                                  (s/includes? link "kitchenstories") :kitchenstories
                                   :else :chefkoch)))
+
+(defmethod recipe-name :kitchenstories [_ recipe-hickory]
+  (->> recipe-hickory
+       (select/select (select/class "recipe-title"))
+       first
+       :content
+       first
+       s/trim))
 
 (defmethod recipe-name :cookidoo [_ recipe-hickory]
   (->> recipe-hickory
@@ -336,9 +361,9 @@
                 (map (fn [{:keys [amount-desc unit id]}]
                        (cond->
                            #:cooked-with{:id (str (random-uuid))
-                                         :amount-desc amount-desc
                                          :ingredient [:ingredient/id id]
                                          :recipe name}
+                         amount-desc (assoc :cooked-with/amount-desc amount-desc)
                          unit (assoc :cooked-with/unit unit)))))
            (->
             {:db/id name
@@ -361,4 +386,23 @@
    conn
    {:tx-data
     (scrape-recipe conn {:link "https://cookidoo.de/recipes/recipe/de/r673004"
-                         :image "https://assets.tmecosys.com/image/upload/t_web667x528/img/recipe/ras/Assets/c277dd26-4973-4802-8e98-0281491c9ac3/Derivates/ea5f1a84-a9bb-40ed-98c3-598ded6cd11f.jpg"})}))
+                         :image "https://assets.tmecosys.com/image/upload/t_web667x528/img/recipe/ras/Assets/c277dd26-4973-4802-8e98-0281491c9ac3/Derivates/ea5f1a84-a9bb-40ed-98c3-598ded6cd11f.jpg"
+                         :type :recipe-type/new})})
+  (d/transact
+   conn
+   {:tx-data
+    (scrape-recipe conn {:link "https://www.kitchenstories.com/de/rezepte/chili-sin-carne-de"
+                         :image "https://images.kitchenstories.io/recipeImages/C69-photo-final-4x3/C69-photo-final-4x3-medium-landscape-150.jpg"
+                         :type :recipe-type/new})})
+  (d/transact
+   conn
+   {:tx-data
+    [{:ingredient/category #:db{:ident :ingredient-category/gemüse},
+      :ingredient/id (str (random-uuid)),
+      :ingredient/name "Kürbis"}]})
+  (d/transact
+   conn
+   {:tx-data
+    (scrape-recipe conn
+                   {:link "https://www.chefkoch.de/rezepte/2051831331801614/Kuerbis-Spinat-Eintopf-mit-Linsen.html?utm_source=com.apple.UIKit.activity.CopyToPasteboard&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS"
+                    :type :recipe-type/new})}))
