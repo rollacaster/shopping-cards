@@ -9,6 +9,8 @@
             [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.events]
             [tech.thomas-sojka.shopping-cards.fx]
+            tech.thomas-sojka.shopping-cards.ingredient-add.core
+            [tech.thomas-sojka.shopping-cards.ingredients.core]
             [tech.thomas-sojka.shopping-cards.main.core]
             [tech.thomas-sojka.shopping-cards.recipe-add.core]
             [tech.thomas-sojka.shopping-cards.recipes.core]
@@ -45,7 +47,12 @@
    ["/recipes/:recipe-id"
     {:name :route/edit-recipe
      :view :view/recipe
-     :parameters {:path {:recipe-id string?}}}]])
+     :parameters {:path {:recipe-id string?}}}]
+   ["/ingredients"
+    :route/ingredients]
+   ["/ingredient-add"
+    {:name :route/new-ingredient
+     :view :view/new-ingredient}]])
 
 (defn init! []
   (rfe/start!

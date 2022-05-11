@@ -1,7 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.recipe-add.events
   (:require
    [ajax.core :as ajax]
-   [re-frame.core :refer [reg-event-db reg-event-fx]]))
+   [re-frame.core :refer [reg-event-fx]]))
 
 (reg-event-fx :recipe-add/new
   (fn [_ [_ recipe-url]]
@@ -13,7 +13,7 @@
                   :on-success [:recipe-add/success]
                   :on-failure [:recipe-add/failure]}}))
 
-(reg-event-db :recipe-add/success
+(reg-event-fx :recipe-add/success
   (fn []
     {:app/push-state [:route/edit-recipes]}))
 
