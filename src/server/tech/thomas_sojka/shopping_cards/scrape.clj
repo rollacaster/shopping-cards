@@ -11,7 +11,6 @@
    [hickory.core :as html]
    [hickory.select :as select]
    [tech.thomas-sojka.shopping-cards.auth :refer [access-token creds-file]]
-   [tech.thomas-sojka.shopping-cards.db :as db]
    [tech.thomas-sojka.shopping-cards.queries :as queries]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
@@ -43,8 +42,9 @@
        (clojure.string/join " ")))
 
 (defn parse-int [s]
-  (when (and s (re-find #"\d+" s))
-    (edn/read-string (re-find #"[\d/]+" s))))
+  (when s
+    (cond (re-find #"[\d]+" s) (edn/read-string (re-find #"[\d/]+" s))
+          (re-find #"¼" s) 0.25)))
 
 
 (defn scrape-chefkoch-ingredients [recipe-hickory]
@@ -158,6 +158,30 @@
                  :amount-desc (str amount unit " " name)
                  :name name})))))
 
+(defn scrape-cookidoo [recipe-hickory]
+  (->> recipe-hickory
+       (select/select (select/id "ingredients"))
+       first
+       :content
+       (drop 3)
+       (mapcat :content)
+       (drop 3)
+       (mapcat :content)
+       (filter map?)
+       (map (fn [node]
+              (let [ing-text (-> node
+                                 :content
+                                 first
+                                 (s/trim )
+                                 (s/replace #"\s+" " "))
+                    unit (some #(when (.contains ing-text (str " " % " ")) %) units)
+                    amount (parse-int ing-text)]
+                {:name (s/trim (s/replace ing-text (str amount " " unit) ""))
+                 :amount-desc (s/trim (str amount " " unit))
+                 :unit unit
+                 :amount amount})))))
+
+
 (defn add-ingredients [link recipe-hickory]
   (cond (s/includes? link "chefkoch")
         (scrape-chefkoch-ingredients recipe-hickory)
@@ -171,7 +195,9 @@
         (s/includes? link "springlane")
         (scrape-springlane recipe-hickory)
         (s/includes? link "eatsmarter")
-        (scrape-eatsmarter recipe-hickory)))
+        (scrape-eatsmarter recipe-hickory)
+        (s/includes? link "cookidoo")
+        (scrape-cookidoo recipe-hickory)))
 
 (defn find-image [recipe-name]
   (-> (client/get "https://customsearch.googleapis.com/customsearch/v1"
@@ -207,13 +233,22 @@
                (let [ingredient-name (or (ingredient-name name) name)]
                  (assoc ingredient
                         :name ingredient-name
-                        :id (some #(when (= (:name %) ingredient-name) (:id %)) all-ingredients)))))
+                        :id (some #(when (= (:ingredient/name %) ingredient-name) (:ingredient/id %)) (map first all-ingredients))))))
        throw-for-unknown-ingredients))
 
 (defmulti recipe-name (fn [link _] (cond
                                   (s/includes? link "kptncook") :kptncook
                                   (s/includes? link "meinestube") :meinestube
                                   :else :chefkoch)))
+
+(defmethod recipe-name :cookidoo [_ recipe-hickory]
+  (->> recipe-hickory
+       (select/select (select/class "recipe-card__title"))
+       first
+       :content
+       first
+       s/trim))
+
 (defmethod recipe-name :kptncook [_ recipe-hickory]
   (->> recipe-hickory
        (select/select (select/tag "title"))
@@ -294,34 +329,36 @@
                    (when (s/includes? link "docs.google")
                          (fetch-gdrive-title link))
                    (recipe-name link recipe-hickory))]
-      (->
-       {:name name
-        :link link
-        :type type
-        :inactive false}
-       (assoc :image (or image (find-image name)))
-       (assoc :ingredients
-              (if (s/includes? link "docs.google")
-                (fetch-gdrive-ingredients link)
-                (add-ingredients link recipe-hickory)))
-       (update :ingredients (partial dedup-ingredients (d/q queries/load-ingredients conn)))))))
+      (conj (->> recipe-hickory
+                (add-ingredients link)
+                (if (s/includes? link "docs.google") (fetch-gdrive-ingredients link))
+                (dedup-ingredients (d/q queries/load-ingredients (d/db conn)))
+                (map (fn [{:keys [amount-desc unit id]}]
+                       (cond->
+                           #:cooked-with{:id (str (random-uuid))
+                                         :amount-desc amount-desc
+                                         :ingredient [:ingredient/id id]
+                                         :recipe name}
+                         unit (assoc :cooked-with/unit unit)))))
+           (->
+            {:db/id name
+             :recipe/id (str (random-uuid))
+             :recipe/name name
+             :recipe/link link
+             :recipe/type type}
+            (assoc :recipe/image (or image (find-image name))))))))
 
 (comment
-  (let [client (d/client {:server-type :dev-local :system "dev"})
-        conn (d/connect client {:db-name "shopping-cards"})]
-    (scrape-recipe
-     conn
-     {:name "Vegetarisches Gulasch á la Margarete"
-      :link "https://docs.google.com/document/d/1SDgNCPGMwaKdHEmF1yTOHndItLqkIdiLN879BhMlaZE/edit"})
-    (->> "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"
-         as-hickory
-         scrape-eatsmarter)
-    (assoc
-     (scrape-recipe
-      conn
-      {:link "https://eatsmarter.de/rezepte/veganes-pilzragout-mit-brokkoli"})
-     :image
-     "https://images.eatsmarter.de/sites/default/files/styles/576x432/public/veganes-pilzragout-mit-brokkoli-661993.jpg")
-    (scrape-recipe
-     conn
-     {:link "http://mobile.kptncook.com/recipe/pinterest/Zucchini-Nudeln-in-cremiger-Ricotta-Sauce/360183b7?_branch_match_id=732898497676962929&utm_source=Clipboard&utm_medium=sharing"})))
+  (def client (d/client {:server-type :dev-local :system "dev"}))
+  (def conn (d/connect client {:db-name "shopping-cards"}))
+  (d/transact
+   conn
+   {:tx-data
+    [{:ingredient/category #:db{:ident :ingredient-category/gemürze},
+      :ingredient/id (str (random-uuid)),
+      :ingredient/name "Lorbeerblatt"}]})
+  (d/transact
+   conn
+   {:tx-data
+    (scrape-recipe conn {:link "https://cookidoo.de/recipes/recipe/de/r673004"
+                         :image "https://assets.tmecosys.com/image/upload/t_web667x528/img/recipe/ras/Assets/c277dd26-4973-4802-8e98-0281491c9ac3/Derivates/ea5f1a84-a9bb-40ed-98c3-598ded6cd11f.jpg"})}))

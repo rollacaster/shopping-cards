@@ -1,13 +1,13 @@
-{"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver" "½TL Paprikapulver" "Paprikapulver (edelsüß)"}
+{"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver" "½TL Paprikapulver" "Paprikapulver (edelsüß)" "Paprika edelsüß"}
  "Paprika" #{"Paprikaschote(n), rot" "rote Paprika" "rotePaprika"}
  "Frischkäse" #{"Frischkäse" "Frischkäse, leicht" "Kräuterfrischkäse" }
  "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz" "Fleur de Sel"
-          "Kala Namak (Schwefelsalz)"}
+          "Kala Namak (Schwefelsalz)" "SalzzumKochen"}
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
- "Wasser" #{"Wasser, lauwarm" "Wasser"}
+ "Wasser" #{"Wasser, lauwarm" "Wasser" "Wasser und mehr zum Kochen"}
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
              "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer" "Pfeffer aus der Mühle"
-             "¼ gemahlener Schwarzer Pfeffer"}
+             "¼ gemahlener Schwarzer Pfeffer" "¼ TL Pfeffer"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
         "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"
@@ -46,7 +46,7 @@
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
              "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt" "Zwiebel/n"
              "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)" "Speisezwiebel"
-             "Speisezwiebeln" "Schalotte" "roteZwiebel"}
+             "Speisezwiebeln" "Schalotte" "roteZwiebel" "Zwiebel, halbiert"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche" "Weizenmehl, bei Bedarf auch mehr"
           "Weizenmehl Typ 405"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
@@ -54,7 +54,7 @@
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
  "Champignons" #{"Champignons, frisch, nicht zu groß" "Champignons, frische"
-                 "Pilze (Shiitake, alterntaiv Austernpilze)" "Pilze"}
+                 "Pilze (Shiitake, alterntaiv Austernpilze)" "Pilze" "Pilze, in Scheiben"}
  "Mais" #{"Mais, TK oder 1 Dose" "Mais (310 g)"}
  "Hefe" #{"Trockenhefe oder 1/2 Pck. Frischhefe" "Frischhefe"}
  "Spätzle" #{"Spätzle, frische, aus dem Kühlregal" "Spätzle (Frischprodukt)"}
@@ -75,8 +75,8 @@
  "Semmel" #{"Brötchen" "Weißbrot, altbackenes" "als Beilage Semmeln oder Brot"}
  "Salami" #{"Sucuk"}
  "Piment" #{"Piment, gemahlen"}
- "Karotte" #{"Möhre(n)" "Karotten/Möhren" "Möhre" "Karotten"}
- "Sellerie" #{"Staudensellerie, mit Blättern"}
+ "Karotte" #{"Möhre(n)" "Karotten/Möhren" "Möhre" "Karotten" "Möhren, in Stücken"}
+ "Sellerie" #{"Staudensellerie, mit Blättern" "Sellerie, in Stücken"}
  "Aubergine" #{"Aubergine(n)"}
  "Currypaste" #{"Thai-Currypaste, grün" "rote Currypaste"}
  "Curry" #{"Currypulver"}
@@ -85,7 +85,7 @@
  "Zucker" #{"evtl. Zucker"}
  "Zucchini" #{"Zucchini" "Zucchini (ca. 200g)"}
  "Cabanossi" #{"Cabanossi)"}
- "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet" "Gewürzmischung (Tomatengewürzsalz)"}
+ "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet" "Gewürzmischung (Tomatengewürzsalz)" "2 geh. TL Gewürzpaste für Gemüsebrühe, selbst gemacht"}
  "Tortellini" #{"Tortelloni"}
  "Aufback-Brezeln" #{"Brezeln"}
  "Sojasoße" #{"Soja-Sauce" "Sojasauce"}
@@ -104,8 +104,8 @@
  "Zimt" #{"Zimt, gemahlen"}
  "Kichererbsen" #{"Kichererbsen, Dose od. Glas"}
  "Erbsen" #{"Erbsen, tiefgekühlt" "Erbsen (Konserve)"
-            "Erbsen, tiefgefroren"}
- "Linsen" #{"Linsen, trocken" "rote Linsen"}
+            "Erbsen, tiefgefroren" "Erbsen, TK"}
+ "Linsen" #{"Linsen, trocken" "rote Linsen" "rote Linsen, getrocknet"}
  "Kokosmilch" #{"Kokosmilch, fettreduziert"}
  "Rosmarin" #{"Rosmarin, frisch"}
  "Nüsse" #{"Nüsse, Cashewnüsse, Natur" "Erdnüsse geröstet & ungesalzen" "ein paar Erdnüsse"}
@@ -125,4 +125,5 @@
  "Garam Masala" #{}
  "Thymian" #{"Thymian, frisch"}
  "Salat" #{"Feldsalat"}
- "Harissa" #{"Harissa (als Paste oder Pulver)"}}
+ "Harissa" #{"Harissa (als Paste oder Pulver)"}
+ "Lorbeerblatt" #{"Lorbeerblatt, frisch"}}
