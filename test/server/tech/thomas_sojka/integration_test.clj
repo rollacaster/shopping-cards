@@ -32,14 +32,6 @@
        "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
        "recipe/type" {"db/ident" "recipe-type/fast"}}))))
 
-(deftest ingredients-for-recipes
-  (let [[[{:strs [id]}]] (query-recipes)]
-    (is
-     (= (mapv second (read-string (:body (client/get (url "/ingredients?recipe-ids=" id)))))
-        [#:ingredient{:id "61858d61-a9d0-4ba6-b341-bdcdffec50d1",
-                      :name "Mandarine",
-                      :category #:db{:ident :ingredient-category/obst}}]))))
-
 (deftest get-recipe
   (is (= (-> (client/post (url "/query")
                           {:form-params {:q '[:find (pull ?r
