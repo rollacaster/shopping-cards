@@ -21,7 +21,7 @@
                                               [:ingredient/id]]}]}])
                              :in $ ?recipe-id
                              :where [?r :recipe/id ?recipe-id]]
-                        :params [recipe-id]
+                        :params recipe-id
                         :on-success [:recipes/success-load]
                         :on-failure [:recipes/failure-load recipe-id]}]}))
 

@@ -1,15 +1,18 @@
 (ns tech.thomas-sojka.shopping-cards.main.events
-  (:require [re-frame.core :refer [reg-event-db reg-event-fx]]
+  (:require ["date-fns" :refer [format startOfDay]]
             [ajax.core :as ajax]
             [cljs.reader :refer [read-string]]
-            ["date-fns" :refer (startOfDay format)]))
+            [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
 (reg-event-db
  :main/success-recipes
  (fn [db [_ data]]
    (-> db
        (assoc :app/loading false)
-       (assoc :main/recipes (map (fn [r] (update (first r) :recipe/type :db/ident)) data)))))
+       (assoc :main/recipes (->> data
+                                 (map (fn [r] (-> r
+                                                 first
+                                                 (update :recipe/type :db/ident)))))))))
 
 (reg-event-db
  :main/failure-recipes

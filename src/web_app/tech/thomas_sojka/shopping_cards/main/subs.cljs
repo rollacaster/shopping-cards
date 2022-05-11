@@ -2,8 +2,7 @@
   (:require [re-frame.core :refer [reg-sub]]
             ["date-fns" :refer (addDays startOfDay isAfter getDate getMonth addDays)]))
 
-(reg-sub
- :main/recipes
+(reg-sub :main/recipes
  (fn [db _]
    (:main/recipes db)))
 

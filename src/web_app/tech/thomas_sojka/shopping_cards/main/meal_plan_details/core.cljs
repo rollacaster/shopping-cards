@@ -19,7 +19,7 @@
         [:button.pv2.br3.bg-orange-200.bn.shadow-2.self-start
          {:on-click #(dispatch [:main/remove-meal])}
          [c/icon {:class "dark-gray h2"} :trash-can]]]
-       [:div.flex.justify-between.flex-wrap
+       [:div.flex.justify-between.flex-wrap.flex-column
         [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100
          [:img.w5.br3.ba.b--orange-300 {:src image}]]
         [:div
