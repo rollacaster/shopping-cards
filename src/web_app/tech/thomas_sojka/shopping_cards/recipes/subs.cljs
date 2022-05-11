@@ -2,10 +2,6 @@
   (:require
    [re-frame.core :refer [reg-sub]]))
 
-(reg-sub :recipes/details
- (fn [db [_ id]]
-   (get-in db [:recipes id])))
-
 (reg-sub
  :recipes/recipe-types
  :<- [:main/recipes]
