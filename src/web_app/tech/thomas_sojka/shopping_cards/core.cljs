@@ -49,7 +49,8 @@
      :view :view/recipe
      :parameters {:path {:recipe-id string?}}}]
    ["/ingredients"
-    :route/ingredients]
+    {:name :route/ingredients
+     :view :view/ingredients}]
    ["/ingredient-add"
     {:name :route/new-ingredient
      :view :view/new-ingredient}]])
