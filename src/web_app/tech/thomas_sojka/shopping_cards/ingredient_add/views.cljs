@@ -36,4 +36,4 @@
                                    :ingredient/id (str (random-uuid))}]
                                  :on-success [:ingredient-add/success]
                                  :on-failure [:ingredient-add/failure]}])}
-         "Hinzufuegen"]]])))
+         "Hinzufügen"]]])))

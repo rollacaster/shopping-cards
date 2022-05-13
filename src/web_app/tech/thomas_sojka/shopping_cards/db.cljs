@@ -59,6 +59,7 @@
    :app/loading false
    :app/route {}
    :main/recipes []
+   :main/ingredients []
    :main/meal-plans []
    :main/start-of-week (js/Date.)
    :main/bank-holidays #{}

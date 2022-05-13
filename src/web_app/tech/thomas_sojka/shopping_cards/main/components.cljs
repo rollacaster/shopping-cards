@@ -33,7 +33,7 @@
         [:span.w2.h2.pt1 [icon {:color "white"} :check-mark]]])]]])
 
 (defn ingredient [{:keys [i id class]} children]
-  [:li.mh2.mh5-ns.ph4.pv3.mt3.br2 {:class [class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")]}
+  [:li.mh5-ns.ph4.pv3 {:class [class (if (= (mod i 2) 0) "bg-gray-600 white" "bg-orange-300 gray-700")]}
    [:label.flex.items-center.pointer.f4 {:for id}
     children]])
 

@@ -6,4 +6,4 @@
    [tech.thomas-sojka.shopping-cards.view :as core]))
 
 (defmethod core/content :view/new-ingredient [] [views/new-ingredient])
-(defmethod core/title :view/new-ingredient [] "Neues Rezept")
+(defmethod core/title :view/new-ingredient [] "Neue Zutat")
