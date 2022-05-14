@@ -11,5 +11,6 @@ module.exports = function (config) {
       args: ['shadow.test.karma.init'],
       singleRun: true,
     },
+    customContextFile: 'index.html',
   })
 }
