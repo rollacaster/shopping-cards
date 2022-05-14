@@ -30,14 +30,6 @@
                 meals))
               trello-card-id)
       :headers {"Content-type" "application/edn"}})
-   (POST "/meal-plans" request
-     (let [{:keys [date recipe type]} (:body-params request)]
-       (db/create-meal-plan
-        conn
-        {:inst (read-instant-date date)
-         :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
-         :recipe [:recipe/name (:name recipe)]}))
-     {:status 200})
    (POST "/recipe-add" request
          (let [{:keys [link image]} (:body-params request)]
            (db/transact

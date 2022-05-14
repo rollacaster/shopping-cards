@@ -84,17 +84,20 @@
 (reg-event-fx
  :main/add-meal
  (fn [{:keys [db]} [_ recipe]]
-   {:db (-> db
-            (update :main/meal-plans conj (assoc (:recipe-details/meal db) :recipe recipe))
-            (assoc :recipe-details/meal nil))
-    :app/push-state [:route/main]
-    :http-xhrio {:method :post
-                 :uri "/meal-plans"
-                 :params (assoc (:recipe-details/meal db) :recipe recipe)
-                 :format (ajax/json-request-format)
-                 :response-format (ajax/text-response-format)
-                 :on-success [:main/success-add-meal]
-                 :on-failure [:main/failure-add-meal (:recipe-details/meal db)]}}))
+   ;; TODO Move to interceptor
+   (let [new-id (str (random-uuid))]
+     {:db (-> db
+              (update :main/meal-plans conj (assoc (:recipe-details/meal db)
+                                                   :recipe recipe :id new-id))
+              (assoc :recipe-details/meal nil))
+      :app/push-state [:route/main]
+      :dispatch [:transact {:tx-data [(let [{:keys [date type]} (:recipe-details/meal db)]
+                                        {:meal-plan/id new-id
+                                         :meal-plan/inst date
+                                         :meal-plan/type type
+                                         :meal-plan/recipe [:recipe/id (:id recipe)]})]
+                            :on-success [:main/success-add-meal]
+                            :on-failure [:main/failure-add-meal (:recipe-details/meal db)]}]})))
 
 (reg-event-db
   :main/success-add-meal
