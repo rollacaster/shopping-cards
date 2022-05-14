@@ -5,9 +5,6 @@
 (defn transact [conn tx-data]
   (d/transact conn {:tx-data tx-data}))
 
-(defn retract [conn lookup-ref]
-  (transact conn [[:db/retractEntity lookup-ref]]))
-
 (defn within-next-four-days? [d1 d2]
   (let [i1 (t/instant (t/date-time (str d1 "T00:00")))
         i2 (t/instant d2)]
