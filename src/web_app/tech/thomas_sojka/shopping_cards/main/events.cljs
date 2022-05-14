@@ -1,6 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.main.events
   (:require ["date-fns" :refer [format startOfDay]]
-            [ajax.core :as ajax]
             [cljs.reader :refer [read-string]]
             [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
