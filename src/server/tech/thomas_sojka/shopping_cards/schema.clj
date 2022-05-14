@@ -45,7 +45,8 @@
      [DINNER LUNCH]
 
      MealPlan
-     [^DateTime inst
+     [^{:type String :datomic/unique :db.unique/identity} id
+      ^DateTime inst
       ^MealType type
       ^Recipe recipe]
 
