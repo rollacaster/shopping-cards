@@ -28,20 +28,6 @@
 (defn create-meal-plan [conn meal-plan]
   (transact conn [(map->nsmap meal-plan (create-ns 'meal-plan))]))
 
-(defn delete-meal-plan [conn {:keys [date type]}]
-  (retract
-   conn
-   (ffirst
-    (d/q
-     '[:find ?id
-       :in $ ?date ?type
-       :where
-       [?id :meal-plan/inst ?date]
-       [?id :meal-plan/type ?type]]
-     (d/db conn)
-     date
-     type))))
-
 (defn create-shopping-list [conn meal-plans]
   (transact
    conn

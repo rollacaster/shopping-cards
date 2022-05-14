@@ -36,6 +36,7 @@
               (assoc :app/loading true)
               (assoc :main/start-of-week today))
       :dispatch [:query {:q '[:find (pull ?m [[:meal-plan/inst :as :date]
+                                              [:meal-plan/id :as :id]
                                               {[:meal-plan/type :as :type]
                                                [[:db/ident :as :ref]]}
                                               {[:meal-plan/recipe :as :recipe]
@@ -112,10 +113,8 @@
                   :event [:app/remove-error]
                   :time 2000}}))
 
-(defn remove-meal [meal-plans {:keys [date type]}]
-  (remove (fn [m] (and (= date (:date m))
-                      (= type (:type m))))
-          meal-plans))
+(defn remove-meal [meal-plans {:keys [id]}]
+  (remove (fn [m] (= id (:id m))) meal-plans))
 
 (reg-event-fx
  :main/failure-add-meal
@@ -145,16 +144,12 @@
 (reg-event-fx
  :main/remove-meal
  (fn [{:keys [db]}]
-   (let [{:keys [date type]} (:recipe-details/meal db)]
+   (let [{:keys [id]} (:recipe-details/meal db)]
      {:db (update db :main/meal-plans remove-meal (:recipe-details/meal db))
       :app/push-state [:route/meal-plan]
-      :http-xhrio {:method :delete
-                   :uri "/meal-plans"
-                   :url-params {:date (.toISOString date) :type type}
-                   :format (ajax/json-request-format)
-                   :response-format (ajax/text-response-format)
-                   :on-success [:main/success-remove-meal]
-                   :on-failure [:main/failure-remove-meal (:recipe-details/meal db)]}})))
+      :dispatch [:transact {:tx-data [[:db/retractEntity [:meal-plan/id id]]]
+                            :on-success [:main/success-remove-meal]
+                            :on-failure [:main/failure-remove-meal (:recipe-details/meal db)]}]})))
 
 (reg-event-db
   :main/success-remove-meal

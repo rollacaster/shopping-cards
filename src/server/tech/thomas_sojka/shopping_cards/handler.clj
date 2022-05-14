@@ -4,7 +4,7 @@
                                                                (compojure.api.sweet/PUT)
                                                                (compojure.api.sweet/DELETE)]}}}}
   (:require [clojure.instant :refer [read-instant-date]]
-            [compojure.api.sweet :refer [api DELETE GET POST PUT]]
+            [compojure.api.sweet :refer [api GET POST PUT]]
             [datomic.client.api :as d]
             [muuntaja.middleware :refer [wrap-format]]
             [ring.middleware.params :refer [wrap-params]]
@@ -37,12 +37,6 @@
         {:inst (read-instant-date date)
          :type (case type "lunch" :meal-type/lunch "dinner" :meal-type/dinner)
          :recipe [:recipe/name (:name recipe)]}))
-     {:status 200})
-   (DELETE "/meal-plans" [date type]
-     (db/delete-meal-plan
-      conn
-      {:date (read-instant-date date)
-       :type (case type "meal-type/lunch" :meal-type/lunch "meal-type/dinner" :meal-type/dinner)})
      {:status 200})
    (POST "/recipe-add" request
          (let [{:keys [link image]} (:body-params request)]
