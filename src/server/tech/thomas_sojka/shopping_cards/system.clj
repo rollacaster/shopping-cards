@@ -2,7 +2,7 @@
   (:gen-class)
   (:require [datomic.client.api :as d]
             [integrant.core :as ig]
-            [ring.adapter.jetty :refer [run-jetty]]
+            [org.httpkit.server :as server]
             [tech.thomas-sojka.shopping-cards.handler :refer [app]]
             [tech.thomas-sojka.shopping-cards.trello :as trello]
             [tech.thomas-sojka.shopping-cards.migrate :as migrate]))
@@ -23,10 +23,10 @@
     conn))
 
 (defmethod ig/init-key :adapter/jetty [_ {:keys [trello-client port conn]}]
-  (run-jetty (app {:trello-client trello-client :conn conn}) {:port port :join? false}))
+  (server/run-server (app {:trello-client trello-client :conn conn}) {:port port}))
 
 (defmethod ig/halt-key! :adapter/jetty [_ server]
-  (.stop server))
+  (server :timeout 100))
 
 (defmethod ig/init-key :external/trello-client [_ _]
   {:create-klaka-shopping-card trello/create-klaka-shopping-card})

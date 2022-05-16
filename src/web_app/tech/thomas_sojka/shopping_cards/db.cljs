@@ -1,5 +1,34 @@
 (ns tech.thomas-sojka.shopping-cards.db
-  (:require [clojure.spec.alpha :as s]))
+  (:require [cljs.reader :refer [read-string]]
+            [clojure.spec.alpha :as s]
+            [re-frame.core :refer [dispatch]]
+            [datascript.core :as d]))
+
+(def conn (atom nil))
+
+(def ws (new js/WebSocket (str "ws://" (.-host js/location) "/ws")))
+(defmulti sync-handler (fn [message]
+                         (first message)))
+(defmethod sync-handler :db/schema [[_ schema]]
+  (reset! conn @(d/create-conn schema)))
+(defmethod sync-handler :db/bootstrap [[_ bootstrap-data]]
+  (d/transact! conn bootstrap-data)
+  (dispatch [:query
+             {:q '[:find (pull ?r [[:recipe/id :as :id]
+                                   [:recipe/name :as :name]
+                                   [:recipe/image :as :image]
+                                   [:recipe/link :as :link]
+                                   {:recipe/type [[:db/ident]]}])
+                   :where
+                   [?r :recipe/id ]]
+              :on-success [:main/success-recipes]
+              :on-failure [:main/failure-recipes]}])
+  (dispatch [:main/init-meal-plans (js/Date.)]))
+(.addEventListener ws "message" (fn [event] (sync-handler (read-string (.-data event)))))
+(.addEventListener ws "open"
+                     (fn []
+                       (.send ws [:db/schema])
+                       (.send ws [:db/bootstrap])))
 
 (s/def :app/route map?)
 (s/def :app/loading boolean?)

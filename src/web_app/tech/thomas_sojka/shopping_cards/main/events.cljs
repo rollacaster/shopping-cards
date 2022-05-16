@@ -34,7 +34,7 @@
      {:db (-> db
               (assoc :app/loading true)
               (assoc :main/start-of-week today))
-      :dispatch [:query {:q '[:find (pull ?m [[:meal-plan/inst :as :date]
+      :db/datascript [:query {:q '[:find (pull ?m [[:meal-plan/inst :as :date]
                                               [:meal-plan/id :as :id]
                                               {[:meal-plan/type :as :type]
                                                [[:db/ident :as :ref]]}
@@ -46,9 +46,7 @@
                                                 [:recipe/link :as :link]]}
                                               [:shopping-list/_meals :as :shopping-list]])
                               :in $ ?date
-                              :where
-                              [?m :meal-plan/inst ?d]
-                              [(tech.thomas-sojka.shopping-cards.db/within-next-four-days? ?date ?d)]]
+                              :where [?m :meal-plan/inst ?d]]
                          :params (format today "yyyy-MM-dd")
                          :on-success [:main/success-meal-plans]
                          :on-failure [:main/failure-meal-plans]}]})))

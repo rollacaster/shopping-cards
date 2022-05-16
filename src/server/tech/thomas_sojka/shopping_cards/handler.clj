@@ -1,20 +1,28 @@
 (ns tech.thomas-sojka.shopping-cards.handler
-  {:clj-kondo/config '{:linters {:unresolved-symbol {:exclude [(compojure.api.sweet/GET)
-                                                               (compojure.api.sweet/POST)
-                                                               (compojure.api.sweet/PUT)
-                                                               (compojure.api.sweet/DELETE)]}}}}
-  (:require [clojure.instant :refer [read-instant-date]]
-            [compojure.api.sweet :refer [api GET POST PUT]]
-            [datomic.client.api :as d]
-            [muuntaja.middleware :refer [wrap-format]]
-            [ring.middleware.params :refer [wrap-params]]
-            [ring.middleware.resource :refer [wrap-resource]]
-            [ring.util.response :as util.response]
-            [tech.thomas-sojka.shopping-cards.db :as db]
-            [tech.thomas-sojka.shopping-cards.scrape :as scrape]))
+  #:clj-kondo{:config
+              '{:linters
+                {:unresolved-symbol
+                 {:exclude
+                  [(compojure.api.sweet/GET)
+                   (compojure.api.sweet/POST)
+                   (compojure.api.sweet/PUT)
+                   (compojure.api.sweet/DELETE)]}}}}
+  (:require
+   [clojure.instant :refer [read-instant-date]]
+   [compojure.api.sweet :refer [api GET POST PUT]]
+   [datomic.client.api :as d]
+   [muuntaja.middleware :refer [wrap-format]]
+   [ring.middleware.params :refer [wrap-params]]
+   [ring.middleware.resource :refer [wrap-resource]]
+   [ring.util.response :as util.response]
+   [tech.thomas-sojka.shopping-cards.db :as db]
+   [tech.thomas-sojka.shopping-cards.db-sync :as db-sync]
+   [tech.thomas-sojka.shopping-cards.scrape :as scrape]))
+
 
 (defn app-routes [trello-client conn]
   (api
+   (GET "/ws" request (#'db-sync/channel conn request))
    (GET "/" [] (util.response/resource-response "index.html" {:root "public"}))
    (POST "/shopping-card" request
      {:status 201

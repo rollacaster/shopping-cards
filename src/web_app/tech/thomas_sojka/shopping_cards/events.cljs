@@ -46,14 +46,10 @@
 (reg-event-fx :query
   (fn [{:keys [db]} [_ {:keys [q params on-success on-failure]}]]
     {:db (assoc db :app/loading true)
-     :http-xhrio {:method :post
-                  :uri "/query"
-                  :params {:q q
-                           :params params}
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success on-success
-                  :on-failure on-failure}}))
+     :db/datascript [:query {:q q
+                             :params params
+                             :on-success on-success
+                             :on-failure on-failure}]}))
 
 (reg-event-fx :query/log
   (fn [_ [_ props]]
@@ -68,10 +64,6 @@
 (reg-event-fx :transact
   (fn [{:keys [db]} [_ {:keys [tx-data on-success on-failure]}]]
     {:db (assoc db :app/loading true)
-     :http-xhrio {:method :put
-                  :uri "/transact"
-                  :params tx-data
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/raw-response-format)
-                  :on-success on-success
-                  :on-failure on-failure}}))
+     :db/datascript [:transact {:tx-data tx-data
+                                :on-success on-success
+                                :on-failure on-failure}]}))

@@ -1,9 +1,9 @@
 {:deps {cheshire/cheshire {:mvn/version "5.10.2"}
         clj-fuzzy/clj-fuzzy {:mvn/version "0.4.1"}
         hickory/hickory {:mvn/version "0.7.1"}
-        hodur/datomic-schema {:mvn/version "0.1.0"}
-        hodur/engine {:mvn/version "0.1.8"}
-        hodur/graphviz-schema {:mvn/version "0.1.1"}
+        hodur/datomic-schema {:mvn/version "0.1.1"}
+        hodur/engine {:mvn/version "0.1.9"}
+        hodur/graphviz-schema {:mvn/version "0.1.3"}
         integrant/integrant {:mvn/version "0.8.0"}
         metosin/compojure-api {:mvn/version "1.1.13"}
         metosin/muuntaja {:mvn/version "0.6.6"}
@@ -11,11 +11,12 @@
         org.clojure/core.async {:mvn/version "1.5.648"}
         org.clojure/math.combinatorics {:mvn/version "0.1.6"}
         ring/ring {:mvn/version "1.9.5"}
-        ring/ring-jetty-adapter {:mvn/version "1.9.5"}
         tick/tick {:mvn/version "0.4.23-alpha"}
         clj-http/clj-http {:mvn/version "3.10.1"}
         com.google.guava/guava {:mvn/version "31.0.1-jre"}
-        fork/fork {:mvn/version "2.4.2"}}
+        fork/fork {:mvn/version "2.4.2"}
+        datascript/datascript {:mvn/version "1.3.13"}
+        http-kit/http-kit {:mvn/version "2.5.3"}}
  :paths ["src/server" "src/web_app" "test/web_app" "classes" "resources"
          "src/shared"]
  :aliases {:fe {:extra-deps {thheller/shadow-cljs {:mvn/version "2.18.0"}

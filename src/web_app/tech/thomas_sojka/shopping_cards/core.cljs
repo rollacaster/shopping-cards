@@ -61,18 +61,7 @@
    (fn [m]
      (dispatch [:app/navigate m]))
    {:use-fragment true})
-  (dom/render [app] (.getElementById js/document "app"))
-  (dispatch [:query
-             {:q '[:find (pull ?r [[:recipe/id :as :id]
-                                   [:recipe/name :as :name]
-                                   [:recipe/image :as :image]
-                                   [:recipe/link :as :link]
-                                   {:recipe/type [[:db/ident]]}])
-                   :where
-                   [?r :recipe/id ]]
-              :on-success [:main/success-recipes]
-              :on-failure [:main/failure-recipes]}])
-  (dispatch [:main/init-meal-plans (js/Date.)]))
+  (dom/render [app] (.getElementById js/document "app")))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []
