@@ -17,6 +17,15 @@
             [tech.thomas-sojka.shopping-cards.subs]
             [tech.thomas-sojka.shopping-cards.view :refer [app]]))
 
+(defn register-service-worker []
+  (when (.-serviceWorker js/navigator)
+    (try
+      (.register js/navigator.serviceWorker "/service-worker.js")
+      (catch :default e
+        (js/console.error "Registration failed with" e)))))
+
+(register-service-worker)
+
 (def routes
   [[["/" {:name :route/main
           :view :view/main}]

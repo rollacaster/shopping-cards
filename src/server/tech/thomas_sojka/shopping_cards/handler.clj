@@ -12,6 +12,7 @@
    [compojure.api.sweet :refer [api GET POST PUT]]
    [datomic.client.api :as d]
    [muuntaja.middleware :refer [wrap-format]]
+   [ring.middleware.content-type :refer [wrap-content-type]]
    [ring.middleware.params :refer [wrap-params]]
    [ring.middleware.resource :refer [wrap-resource]]
    [ring.util.response :as util.response]
@@ -23,7 +24,8 @@
 (defn app-routes [trello-client conn]
   (api
    (GET "/ws" request (#'db-sync/channel conn request))
-   (GET "/" [] (util.response/resource-response "index.html" {:root "public"}))
+   (GET "/" []
+     (util.response/content-type (util.response/resource-response "index.html" {:root "public"}) "text/html"))
    (POST "/shopping-card" request
      {:status 201
       :body (let [{:keys [create-klaka-shopping-card]} trello-client
@@ -57,4 +59,5 @@
   (-> (app-routes trello-client conn)
       wrap-format
       wrap-params
-      (wrap-resource "public")))
+      (wrap-resource "public")
+      wrap-content-type))
