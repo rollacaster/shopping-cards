@@ -24,6 +24,10 @@
 (defn app-routes [trello-client conn]
   (api
    (GET "/ws" request (#'db-sync/channel conn request))
+   (GET "/schema" request {:status 200
+                           :body (db-sync/datascript-schema)})
+   (GET "/bootstrap" request {:status 200
+                              :body (db-sync/bootstrap conn)})
    (GET "/" []
      (util.response/content-type (util.response/resource-response "index.html" {:root "public"}) "text/html"))
    (POST "/shopping-card" request

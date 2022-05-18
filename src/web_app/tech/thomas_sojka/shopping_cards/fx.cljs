@@ -1,10 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.fx
   (:require
    [datascript.core :as d]
-   [re-frame.core :refer [dispatch reg-fx]]
+   [re-frame.core :refer [dispatch reg-fx subscribe]]
    [reagent.core :as r]
-   [reitit.frontend.easy :as rfe]
-   [tech.thomas-sojka.shopping-cards.db :refer [conn]]))
+   [reitit.frontend.easy :as rfe]))
 
 (reg-fx :app/push-state
         (fn [route]
@@ -17,21 +16,27 @@
 (reg-fx :db/datascript
         (fn [[type params]]
           (case type
+            :schema
+            (dispatch [:db/conn (d/create-conn params)])
             :query
             (dispatch
              (conj (:on-success params)
                    (if (:params params)
                      (d/q (:q params)
-                          @conn
+                          (deref @(subscribe [:db/conn]))
                           (:params params))
                      (d/q (:q params)
-                          @conn))))
+                          (deref @(subscribe [:db/conn]))))))
             :transact
-            (dispatch
-             (conj (:on-success params)
-                   (d/transact!
-                    conn
-                    (:tx-dat params)))))))
+            (if (:on-success params)
+              (dispatch
+               (conj (:on-success params)
+                     (d/transact!
+                      @(subscribe [:db/conn])
+                      (:tx-dat params))))
+              (d/transact!
+               @(subscribe [:db/conn])
+               (:tx-data params))))))
 
 (defonce timeouts (r/atom {}))
 

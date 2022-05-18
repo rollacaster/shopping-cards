@@ -41,8 +41,6 @@
                  :on-success [:main/success-bank-holidays]
                  :on-failure [:main/failure-bank-holidays]}}))
 
-
-
 (reg-event-fx :query
   (fn [{:keys [db]} [_ {:keys [q params on-success on-failure]}]]
     {:db (assoc db :app/loading true)
@@ -67,3 +65,44 @@
      :db/datascript [:transact {:tx-data tx-data
                                 :on-success on-success
                                 :on-failure on-failure}]}))
+
+(reg-event-fx :db/schema
+  (fn []
+    {:http-xhrio {:method :get
+                  :uri "/schema"
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:db/success-schema]
+                  :on-failure [:db/failure-schema]}}))
+
+
+
+(reg-event-fx :db/bootstrap
+  (fn []
+    {:http-xhrio {:method :get
+                  :uri "/bootstrap"
+                  :response-format (ajax/transit-response-format)
+                  :on-success [:db/success-bootstrap]
+                  :on-failure [:db/failure-bootstrap]}}))
+
+(reg-event-fx :db/success-bootstrap
+  (fn [_ [_ bootstrap-data]]
+    {:dispatch-n [[:transact {:tx-data bootstrap-data}]
+                  [:query
+                   {:q '[:find (pull ?r [[:recipe/id :as :id]
+                                         [:recipe/name :as :name]
+                                         [:recipe/image :as :image]
+                                         [:recipe/link :as :link]
+                                         {:recipe/type [[:db/ident]]}])
+                         :where
+                         [?r :recipe/id ]]
+                    :on-success [:main/success-recipes]
+                    :on-failure [:main/failure-recipes]}]
+                  #_[:main/init-meal-plans (js/Date.)]]}))
+
+(reg-event-fx :db/success-schema
+  (fn [_ [_ schema]]
+    {:db/datascript [:schema schema]}))
+
+(reg-event-db :db/conn
+  (fn [db [_ conn]]
+    (assoc db :db/conn conn)))

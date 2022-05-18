@@ -17,7 +17,7 @@
                                                         id)))))
                  datoms))
 
-(defn- datascript-schema []
+(defn datascript-schema []
     (->> meta-db
          hodur-datomic/schema
          (filter (fn [{:db/keys [valueType cardinality]}]
@@ -30,7 +30,7 @@
                                  :cardinality cardinality})))
          (apply merge)))
 
-(defn- bootstrap [conn]
+(defn bootstrap [conn]
   (->> (d/datoms (d/db conn) {:index :eavt :limit -1})
        (map :e)
        distinct
@@ -42,10 +42,6 @@
 (defmulti sync-handler (fn [message _ _]
                          (prn :message message)
                          (first message)))
-(defmethod sync-handler :db/schema [_ ch _]
-  (kit/send! ch (prn-str [:db/schema (datascript-schema)])))
-(defmethod sync-handler :db/bootstrap [_ ch conn]
-  (kit/send! ch (prn-str [:db/bootstrap (bootstrap conn)])))
 
 (defn on-receive [conn ch message]
   (prn message)

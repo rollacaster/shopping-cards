@@ -9,7 +9,7 @@
             [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.events]
             [tech.thomas-sojka.shopping-cards.fx]
-            tech.thomas-sojka.shopping-cards.ingredient-add.core
+            [tech.thomas-sojka.shopping-cards.ingredient-add.core]
             [tech.thomas-sojka.shopping-cards.ingredients.core]
             [tech.thomas-sojka.shopping-cards.main.core]
             [tech.thomas-sojka.shopping-cards.recipe-add.core]
@@ -70,6 +70,8 @@
    (fn [m]
      (dispatch [:app/navigate m]))
    {:use-fragment true})
+  (dispatch-sync [:db/schema])
+  (dispatch-sync [:db/bootstrap])
   (dom/render [app] (.getElementById js/document "app")))
 
 (defn ^:dev/after-load clear-cache-and-render!

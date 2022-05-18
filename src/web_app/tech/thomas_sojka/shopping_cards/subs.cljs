@@ -15,3 +15,8 @@
  :app/loading
  (fn [db _]
    (:app/loading db)))
+
+(reg-sub
+ :db/conn
+ (fn [db _]
+   (:db/conn db)))
