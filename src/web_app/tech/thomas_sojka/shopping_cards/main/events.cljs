@@ -1,5 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.main.events
   (:require ["date-fns" :refer [format startOfDay]]
+            [ajax.core :as ajax]
             [cljs.reader :refer [read-string]]
             [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
@@ -35,7 +36,6 @@
               (assoc :app/loading true)
               (assoc :main/start-of-week today))
       :dispatch [:query {:q '[:find (pull ?m [[:meal-plan/inst :as :date]
-                                              [:meal-plan/id :as :id]
                                               {[:meal-plan/type :as :type]
                                                [[:db/ident :as :ref]]}
                                               {[:meal-plan/recipe :as :recipe]
@@ -83,20 +83,17 @@
 (reg-event-fx
  :main/add-meal
  (fn [{:keys [db]} [_ recipe]]
-   ;; TODO Move to interceptor
-   (let [new-id (str (random-uuid))]
-     {:db (-> db
-              (update :main/meal-plans conj (assoc (:recipe-details/meal db)
-                                                   :recipe recipe :id new-id))
-              (assoc :recipe-details/meal nil))
-      :app/push-state [:route/main]
-      :dispatch [:transact {:tx-data [(let [{:keys [date type]} (:recipe-details/meal db)]
-                                        {:meal-plan/id new-id
-                                         :meal-plan/inst date
-                                         :meal-plan/type type
-                                         :meal-plan/recipe [:recipe/id (:id recipe)]})]
-                            :on-success [:main/success-add-meal]
-                            :on-failure [:main/failure-add-meal (:recipe-details/meal db)]}]})))
+   {:db (-> db
+            (update :main/meal-plans conj (assoc (:recipe-details/meal db) :recipe recipe))
+            (assoc :recipe-details/meal nil))
+    :app/push-state [:route/main]
+    :http-xhrio {:method :post
+                 :uri "/meal-plans"
+                 :params (assoc (:recipe-details/meal db) :recipe recipe)
+                 :format (ajax/json-request-format)
+                 :response-format (ajax/text-response-format)
+                 :on-success [:main/success-add-meal]
+                 :on-failure [:main/failure-add-meal (:recipe-details/meal db)]}}))
 
 (reg-event-db
   :main/success-add-meal
@@ -115,8 +112,10 @@
                   :event [:app/remove-error]
                   :time 2000}}))
 
-(defn remove-meal [meal-plans {:keys [id]}]
-  (remove (fn [m] (= id (:id m))) meal-plans))
+(defn remove-meal [meal-plans {:keys [date type]}]
+  (remove (fn [m] (and (= date (:date m))
+                      (= type (:type m))))
+          meal-plans))
 
 (reg-event-fx
  :main/failure-add-meal
@@ -146,12 +145,16 @@
 (reg-event-fx
  :main/remove-meal
  (fn [{:keys [db]}]
-   (let [{:keys [id]} (:recipe-details/meal db)]
+   (let [{:keys [date type]} (:recipe-details/meal db)]
      {:db (update db :main/meal-plans remove-meal (:recipe-details/meal db))
       :app/push-state [:route/meal-plan]
-      :dispatch [:transact {:tx-data [[:db/retractEntity [:meal-plan/id id]]]
-                            :on-success [:main/success-remove-meal]
-                            :on-failure [:main/failure-remove-meal (:recipe-details/meal db)]}]})))
+      :http-xhrio {:method :delete
+                   :uri "/meal-plans"
+                   :url-params {:date (.toISOString date) :type type}
+                   :format (ajax/json-request-format)
+                   :response-format (ajax/text-response-format)
+                   :on-success [:main/success-remove-meal]
+                   :on-failure [:main/failure-remove-meal (:recipe-details/meal db)]}})))
 
 (reg-event-db
   :main/success-remove-meal

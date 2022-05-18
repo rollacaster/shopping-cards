@@ -90,7 +90,9 @@
 (defn- populate []
   (let [client (d/client {:server-type :dev-local :system "dev"})
         conn (d/connect client {:db-name db-name})]
-    (db/transact conn (concat ingredients recipes cooked-with))))
+    (db/transact conn ingredients)
+    (db/transact conn recipes)
+    (db/transact conn cooked-with)))
 
 (defn db-setup [test-run]
   (ig-repl/set-prep! (fn [] config))
