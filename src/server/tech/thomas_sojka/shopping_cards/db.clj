@@ -5,42 +5,12 @@
 (defn transact [conn tx-data]
   (d/transact conn {:tx-data tx-data}))
 
-(defn retract [conn lookup-ref]
-  (transact conn [[:db/retractEntity lookup-ref]]))
-
 (defn within-next-four-days? [d1 d2]
   (let [i1 (t/instant (t/date-time (str d1 "T00:00")))
         i2 (t/instant d2)]
     (and
      (t/>= i2 i1)
      (t/< i2 (t/+ i1 (t/new-duration 4 :days))))))
-
-(defn map->nsmap
-  [m n]
-  (reduce-kv (fn [acc k v]
-               (let [new-kw (if (and (keyword? k)
-                                     (not (qualified-keyword? k)))
-                              (keyword (str n) (name k))
-                              k) ]
-                 (assoc acc new-kw v)))
-             {} m))
-
-(defn create-meal-plan [conn meal-plan]
-  (transact conn [(map->nsmap meal-plan (create-ns 'meal-plan))]))
-
-(defn delete-meal-plan [conn {:keys [date type]}]
-  (retract
-   conn
-   (ffirst
-    (d/q
-     '[:find ?id
-       :in $ ?date ?type
-       :where
-       [?id :meal-plan/inst ?date]
-       [?id :meal-plan/type ?type]]
-     (d/db conn)
-     date
-     type))))
 
 (defn create-shopping-list [conn meal-plans]
   (transact
