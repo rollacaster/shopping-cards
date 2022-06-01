@@ -6,7 +6,9 @@
   there is any failure. Otherwise exits with a zero exit code."
   []
   (println "Create mockServiceWorker.js")
-  (shell/sh "npx" "msw" "init" "target/test/ci")
+  (let [{:keys [out err]} (shell/sh "npx" "msw" "init" "target/test/browser")]
+    (println out)
+    (println err))
   (flush)
   (print "Compiling tests...")
   (flush)

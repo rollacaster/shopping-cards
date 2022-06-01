@@ -1,10 +1,11 @@
 (ns shadow
-  (:require [org.httpkit.server :as http]
+  (:require [babashka.fs :as fs]
+            [org.httpkit.server :as http]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.file :refer [wrap-file]]
+            [ring.util.response :as response]
             [shadow.cljs.devtools.api :as shadow]
-            [shadow.cljs.devtools.server :as server]
-            [ring.util.response :as response]))
+            [shadow.cljs.devtools.server :as server]))
 (def server (atom nil))
 
 (defn handler [req]
@@ -21,6 +22,7 @@
                         (shadow/repl-runtimes :app))]
     (shadow/repl-runtime-select :app dom-runtime-id))
   (shadow/watch :test)
+  (fs/copy "resources/test/index.html" "target/test/browser/index.html" {:replace-existing true})
   (reset! server (http/run-server (-> #'handler
                                       (wrap-file "target/test/browser" {:prefer-handler? true})
                                       wrap-content-type)

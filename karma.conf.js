@@ -1,7 +1,7 @@
 module.exports = function (config) {
   config.set({
     browsers: ['ChromeHeadless'],
-    basePath: 'target/test/ci',
+    basePath: 'target/test/browser',
     files: ['karma.js', 'mockServiceWorker.js'],
     frameworks: ['cljs-test'],
     plugins: ['karma-cljs-test', 'karma-chrome-launcher'],

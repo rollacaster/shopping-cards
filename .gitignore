@@ -1,9 +1,7 @@
 /.cpcache/
 /.nrepl-port
 /.creds.edn
-/target/test/ci/karma.js
-/target/test/browser/js
-/target/shopping-cards.jar
+/target
 /node_modules/
 /classes/
 /resources/public/cljs-out/
@@ -13,7 +11,5 @@
 /.shadow-cljs/
 /resources/public/js/
 /resources/public/css/react-big-calendar.css
-/out/test/js
 /resources/public/js/
 /resources/public/tachyons.css
-/target/test/ci/cljs-runtime/

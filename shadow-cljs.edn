@@ -12,5 +12,5 @@
          :test-dir "target/test/browser"
          :compiler-options {:output-feature-set :es-next}}
   :ci {:target :karma
-       :output-to "target/test/ci/karma.js"
+       :output-to "target/test/browser/karma.js"
        :compiler-options {:output-feature-set :es-next}}}}

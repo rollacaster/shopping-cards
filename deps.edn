@@ -32,6 +32,7 @@
                     :extra-deps {integrant/repl {:mvn/version "0.3.2"}
                                  com.datomic/dev-local {:mvn/version "1.0.243"}}}
            :fe/dev {:extra-paths ["dev/fe"]
+                    :extra-deps {babashka/fs {:mvn/version "0.1.6"}}
                     :main-opts ["-m" "shadow"]}
            :be/release {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}
                                      com.datomic/dev-local {:mvn/version "1.0.243"}}
