@@ -4,7 +4,7 @@
         http-kit/http-kit {:mvn/version "2.5.3"}
         thheller/shadow-cljs {:mvn/version "2.18.0"}}
  :paths ["classes" "resources" "src/shared"]
- :aliases {:be {:extra-paths ["src/server"]
+ :aliases {:be {:extra-paths ["src/be"]
                 :extra-deps {clj-http/clj-http {:mvn/version "3.10.1"}
                              com.google.guava/guava {:mvn/version "31.0.1-jre"}
                              hickory/hickory {:mvn/version "0.7.1"}
@@ -16,7 +16,7 @@
                              ring/ring {:mvn/version "1.9.5"}
                              tick/tick {:mvn/version "0.4.23-alpha"}
                              cheshire/cheshire {:mvn/version "5.10.2"}}}
-           :fe {:extra-paths ["src/web_app"]
+           :fe {:extra-paths ["src/fe"]
                 :extra-deps {day8.re-frame/http-fx {:mvn/version "0.2.4"}
                              metosin/reitit-frontend {:mvn/version "0.4.2"}
                              metosin/reitit-spec {:mvn/version "0.4.2"}
@@ -28,20 +28,20 @@
                                 cider/cider-nrepl {:mvn/version "0.28.3"}
                                 refactor-nrepl/refactor-nrepl {:mvn/version "3.5.2"}}}
            :be/dev {:main-opts ["-m" "system-repl" "--middleware" "[refactor-nrepl.middleware/wrap-refactor,cider.nrepl/cider-middleware]"]
-                    :extra-paths ["dev/server"]
+                    :extra-paths ["dev/be"]
                     :extra-deps {integrant/repl {:mvn/version "0.3.2"}
                                  com.datomic/dev-local {:mvn/version "1.0.243"}}}
-           :fe/dev {:extra-paths ["dev/web_app"]
+           :fe/dev {:extra-paths ["dev/fe"]
                     :main-opts ["-m" "shadow"]}
            :be/release {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}
                                      com.datomic/dev-local {:mvn/version "1.0.243"}}
                         :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.system"]}
-           :fe/test {:extra-paths ["src/mocks" "test/web_app"]
+           :fe/test {:extra-paths ["src/mocks" "test/fe"]
                      :extra-deps {com.cognitect/transit-cljs {:mvn/version "0.8.269"}
                                   funcool/promesa {:mvn/version "8.0.450"}
                                   cljs-bean/cljs-bean {:mvn/version "1.8.0"}}}
            :be/test-run
-           {:extra-paths ["test/server"]
+           {:extra-paths ["test/be"]
             :extra-deps  {com.cognitect/test-runner
                           {:git/url "https://github.com/cognitect-labs/test-runner.git"
                            :sha     "f7ef16dc3b8332b0d77bc0274578ad5270fbfedd"}
@@ -50,7 +50,7 @@
                           org.clojure/test.check {:mvn/version "1.1.1"}}
             :main-opts   ["-m" "cognitect.test-runner"]}
            :be/test
-           {:extra-paths ["test/server"]
+           {:extra-paths ["test/be"]
             :extra-deps  {com.datomic/dev-local {:mvn/version "1.0.243"}
                           integrant/repl {:mvn/version "0.3.2"}
                           org.clojure/test.check {:mvn/version "1.1.1"}}}}}
