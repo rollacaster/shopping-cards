@@ -12,5 +12,8 @@
     "karma-cljs-test": "^0.1.0",
     "msw": "^0.40.0",
     "shadow-cljs": "^2.16.12"
+  },
+  "msw": {
+    "workerDirectory": "target/test/ci"
   }
 }

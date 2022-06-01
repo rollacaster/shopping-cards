@@ -11,7 +11,6 @@ module.exports = function (config) {
       args: ['shadow.test.karma.init'],
       singleRun: true,
     },
-    customContextFile: 'index.html',
     proxies: {
       '/mockServiceWorker.js': '/base/mockServiceWorker.js',
     },
