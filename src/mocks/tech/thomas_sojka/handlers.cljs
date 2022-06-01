@@ -63,4 +63,4 @@
                              (fn [_ res ctx]
                                (res
                                 (.status ctx 200)
-                                (.text ctx (handlers/bank-holidays)))))])
+                                (.text ctx "#{}"))))])
