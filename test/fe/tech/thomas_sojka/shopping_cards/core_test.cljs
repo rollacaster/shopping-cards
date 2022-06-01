@@ -5,7 +5,7 @@
    [cljs.test :as t :include-macros true]
    [clojure.string :as str]
    [promesa.core :as p]
-   [tech.thomas-sojka.browser :as browser-mocks]
+   [tech.thomas-sojka.shopping-cards.browser :as browser-mocks]
    [tech.thomas-sojka.shopping-cards.core :as sut]))
 
 (def screen (js/document.createElement "div"))

@@ -37,7 +37,7 @@
            :be/release {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}
                                      com.datomic/dev-local {:mvn/version "1.0.243"}}
                         :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.system"]}
-           :fe/test {:extra-paths ["src/mocks" "test/fe"]
+           :fe/test {:extra-paths ["test/fe"]
                      :extra-deps {com.cognitect/transit-cljs {:mvn/version "0.8.269"}
                                   funcool/promesa {:mvn/version "8.0.450"}
                                   cljs-bean/cljs-bean {:mvn/version "1.8.0"}}}

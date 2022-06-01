@@ -1,10 +1,8 @@
-(ns tech.thomas-sojka.handlers
+(ns tech.thomas-sojka.shopping-cards.handlers
   (:require ["msw" :as msw]
             [cognitect.transit :as t]
             [tech.thomas-sojka.shopping-cards.fixtures :as fixtures]
-            [tech.thomas-sojka.shopping-cards.queries :as queries])
-  (:require-macros [tech.thomas-sojka.handlers :as handlers]))
-
+            [tech.thomas-sojka.shopping-cards.queries :as queries]))
 
 (def recipes
   [[{:id "2aa44c10-bf40-476b-b95f-3bbe96a3835f",
