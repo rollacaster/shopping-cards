@@ -2,8 +2,7 @@
   (:require
    [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
-(reg-event-fx
-  :recipes/load
+(reg-event-fx :recipes/load
   (fn [_ [_ recipe-id]]
     {:dispatch [:query {:q '[:find (pull ?r
                                          [[:recipe/id]
@@ -25,21 +24,18 @@
                         :on-success [:recipes/success-load]
                         :on-failure [:recipes/failure-load recipe-id]}]}))
 
-(reg-event-fx
- :recipes/show-recipe
- (fn [_ [_ id]]
-   {:app/push-state [:route/edit-recipe {:recipe-id id}]}))
+(reg-event-fx :recipes/show-recipe
+  (fn [_ [_ id]]
+    {:app/push-state [:route/edit-recipe {:recipe-id id}]}))
 
-(reg-event-fx
-  :recipes/success-update
+(reg-event-fx :recipes/success-update
   (fn [{:keys [db]} [_ recipe-id]]
     {:db (-> db
              (assoc :app/loading false)
              (update :recipes dissoc recipe-id))
      :app/push-state [:route/edit-recipes]}))
 
-(reg-event-fx
-  :recipes/failure-update
+(reg-event-fx :recipes/failure-update
   (fn [{:keys [db]} _]
     {:db (assoc db
                 :app/loading false
@@ -48,19 +44,17 @@
                    :event [:app/remove-error]
                    :time 2000}}))
 
-(reg-event-db
- :recipes/success-load
- (fn [db [_ [[recipe]]]]
-   (-> db
-       (assoc :app/loading false)
-       (assoc-in [:recipes (:recipe/id recipe)] recipe))))
+(reg-event-db :recipes/success-load
+  (fn [db [_ [[recipe]]]]
+    (-> db
+        (assoc :app/loading false)
+        (assoc-in [:recipes (:recipe/id recipe)] recipe))))
 
-(reg-event-db
- :recipes/failure-load
- (fn [db [_ id]]
-   (-> db
-       (assoc :app/loading false)
-       (assoc-in [:recipes id] :ERROR))))
+(reg-event-db :recipes/failure-load
+  (fn [db [_ id]]
+    (-> db
+        (assoc :app/loading false)
+        (assoc-in [:recipes id] :ERROR))))
 
 (reg-event-fx :recipes/new
   (fn []
