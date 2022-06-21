@@ -1,5 +1,14 @@
 (ns tech.thomas-sojka.shopping-cards.queries)
 
+(def load-recipes
+  '[:find (pull ?r [[:recipe/id :as :id]
+                   [:recipe/name :as :name]
+                   [:recipe/image :as :image]
+                   [:recipe/link :as :link]
+                   {:recipe/type [[:db/ident]]}])
+   :where
+   [?r :recipe/id ]])
+
 (def load-ingredients-by-recipe-id
   '[:find
     (pull ?c [:cooked-with/id

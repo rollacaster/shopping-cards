@@ -6,7 +6,7 @@
         :output-dir "resources/public/js"
         :asset-path "/js"
         :compiler-options {:output-feature-set :es6}
-        :modules {:main {:entries [tech.thomas-sojka.shopping-cards.core]}}}
+        :modules {:main {:init-fn tech.thomas-sojka.shopping-cards.core/init!}}}
   :test {:target :browser-test
          :test-dir "out/test"
          :compiler-options {:output-feature-set :es-next}}

@@ -21,7 +21,6 @@
    (shadow/watch build-id)
    (shadow/nrepl-select build-id)))
 
-(ig-repl/go)
 (comment
   (ig-repl/go)
   (ig-repl/halt)

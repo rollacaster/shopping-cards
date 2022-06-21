@@ -12,6 +12,7 @@
             tech.thomas-sojka.shopping-cards.ingredient-add.core
             [tech.thomas-sojka.shopping-cards.ingredients.core]
             [tech.thomas-sojka.shopping-cards.main.core]
+            [tech.thomas-sojka.shopping-cards.queries :as queries]
             [tech.thomas-sojka.shopping-cards.recipe-add.core]
             [tech.thomas-sojka.shopping-cards.recipes.core]
             [tech.thomas-sojka.shopping-cards.subs]
@@ -55,30 +56,24 @@
     {:name :route/new-ingredient
      :view :view/new-ingredient}]])
 
-(defn init! []
-  (rfe/start!
-   (rf/router routes {:data {:coercion rss/coercion}})
-   (fn [m]
-     (dispatch [:app/navigate m]))
-   {:use-fragment true})
-  (dom/render [app] (.getElementById js/document "app"))
-  (dispatch [:query
-             {:q '[:find (pull ?r [[:recipe/id :as :id]
-                                   [:recipe/name :as :name]
-                                   [:recipe/image :as :image]
-                                   [:recipe/link :as :link]
-                                   {:recipe/type [[:db/ident]]}])
-                   :where
-                   [?r :recipe/id ]]
-              :on-success [:main/success-recipes]
-              :on-failure [:main/failure-recipes]}])
-  (dispatch [:main/init-meal-plans (js/Date.)]))
+(defn init!
+  ([]
+   (init! {:container (.getElementById js/document "app")}))
+  ([{:keys [container]}]
+   (rfe/start!
+    (rf/router routes {:data {:coercion rss/coercion}})
+    (fn [m]
+      (dispatch [:app/navigate m]))
+    {:use-fragment true})
+   (dispatch-sync [:app/initialise (.getFullYear (js/Date.))])
+   (dispatch-sync [:query
+                   {:q queries/load-recipes
+                    :on-success [:main/success-recipes]
+                    :on-failure [:main/failure-recipes]}])
+   (dispatch-sync [:main/init-meal-plans (js/Date.)])
+   (dom/render [app] container)))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []
   (clear-subscription-cache!)
   (init!))
-
-(defonce start-up (do (dispatch-sync [:app/initialise (.getFullYear (js/Date.))]) true))
-
-(init!)
