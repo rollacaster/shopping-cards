@@ -25,6 +25,6 @@ jobs:
     - name: npm install
       run: npm install
     - name: Build Tests
-      run: npx shadow-cljs -Afe compile ci
+      run: npx shadow-cljs -Afe:test compile ci
     - name: Run FE Tests
       run: npx karma start --single-run;

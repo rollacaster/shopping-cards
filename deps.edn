@@ -25,12 +25,12 @@
                              metosin/reitit-spec {:mvn/version "0.4.2"}
                              day8.re-frame/http-fx {:mvn/version "0.2.4"}}}
            :release {:extra-deps {com.datomic/dev-local {:mvn/version "1.0.243"}}}
-           :dev {:extra-paths ["dev" "src/mocks"]
+           :dev {:extra-paths ["dev"]
                  :extra-deps {integrant/repl {:mvn/version "0.3.2"}
                               com.datomic/dev-local {:mvn/version "1.0.243"}}}
            :uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
                       :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.system"]}
-           :test {:extra-paths ["test/server"]
+           :test {:extra-paths ["test/server" "src/mocks"]
                   :extra-deps {com.cognitect/transit-cljs {:mvn/version "0.8.269"}}}
            :test-runner-cognitect
            {:extra-paths ["test/server"]
