@@ -16,3 +16,4 @@
 /out/test/js
 /resources/public/js/
 /resources/public/tachyons.css
+/target/test/ci/cljs-runtime/

@@ -33,7 +33,7 @@
 (t/deftest create-shopping-card []
   (t/async done
            (p/do
-             (wait-for #(get-all-by-role screen "button" {:name "Mittagessen"}))
+             (wait-for #(get-all-by-role screen "button" {:name "Mittagessen"}) #js {:timeout 10000})
              (.click (first (get-all-by-role screen "button" {:name "Mittagessen"})))
 
              (wait-for #(get-by-role screen "button" {:name "Soup"}))

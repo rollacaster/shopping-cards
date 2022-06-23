@@ -10,9 +10,10 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install clojure tools
-      uses: DeLaGuardo/setup-clojure@3.7
+      uses: DeLaGuardo/setup-clojure@5.0
       with:
         cli: 1.10.1.693
+        bb: 0.7.8
     - uses: DeLaGuardo/setup-clj-kondo@master
       with:
         version: '2022.01.15'
@@ -21,10 +22,8 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v1
       with:
-        node-version: 16
+        node-version: 14.19.1
     - name: npm install
       run: npm install
-    - name: Build Tests
-      run: npx shadow-cljs -Afe:test compile ci
     - name: Run FE Tests
-      run: npx karma start --single-run;
+      run: bb test:fe
