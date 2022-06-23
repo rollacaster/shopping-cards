@@ -17,8 +17,7 @@
   (js/document.body.appendChild screen)
   (-> (.start browser-mocks/worker)
       (.then (fn []
-               (sut/init! {:service-worker false
-                           :container screen})))))
+               (sut/init! {:container screen})))))
 
 (defn teardown-app []
   (.remove screen)
