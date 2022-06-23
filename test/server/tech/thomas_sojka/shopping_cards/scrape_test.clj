@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.scrape-test
+(ns tech.thomas-sojka.shopping-cards.scrape-test
   (:require  [clojure.test :as t]
              [tech.thomas-sojka.shopping-cards.scrape :as sut]))
 

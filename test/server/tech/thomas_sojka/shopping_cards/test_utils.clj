@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.test-utils
+(ns tech.thomas-sojka.shopping-cards.test-utils
   (:require
    [datomic.client.api :as d]
    [integrant.core :as ig]

@@ -1,9 +1,9 @@
-(ns tech.thomas-sojka.core-test
+(ns tech.thomas-sojka.shopping-cards.core-test
   (:require
    [clj-http.client :as client]
    [clojure.test :refer [deftest is use-fixtures]]
    [clojure.walk :as walk]
-   [tech.thomas-sojka.test-utils :as utils :refer [url]]))
+   [tech.thomas-sojka.shopping-cards.test-utils :as utils :refer [url]]))
 
 (use-fixtures :each utils/db-setup)
 
