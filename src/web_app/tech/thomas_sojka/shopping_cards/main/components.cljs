@@ -59,6 +59,7 @@
         [icon :check-mark]]])
     [:img.br2-ns.w-100.h-100 {:style {:object-fit "cover"} :src image :class (when selected? "o-40")}]]
    [:div.bg-gray-700.absolute.pa2.mh2.mb2.bottom-0.o-50.br2.dn.db-ns
+    {:aria-hidden "true"}
     [:span.f4 name]]
    [:div.absolute-ns.pa2.mb2-ns.mh2.bottom-0.w-80.w-auto-ns
     {:class (when selected? "o-40")}
@@ -68,7 +69,7 @@
   [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
    (map
     (fn [[recipe-type recipe-type-recipes]]
-      [:div {:key recipe-type}
+      [:div.w-100 {:key recipe-type}
        (when (not= (ffirst recipes) recipe-type)
          (get-title recipe-type))
        [:div.flex.flex-wrap

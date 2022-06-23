@@ -8,8 +8,8 @@
         :compiler-options {:output-feature-set :es6}
         :modules {:main {:init-fn tech.thomas-sojka.shopping-cards.core/init!}}}
   :test {:target :browser-test
-         :test-dir "out/test"
+         :test-dir "target/test/browser"
          :compiler-options {:output-feature-set :es-next}}
   :ci {:target :karma
-       :output-to "target/ci.js"
+       :output-to "target/test/ci/karma.js"
        :compiler-options {:output-feature-set :es-next}}}}

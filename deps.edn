@@ -15,7 +15,8 @@
         tick/tick {:mvn/version "0.4.23-alpha"}
         clj-http/clj-http {:mvn/version "3.10.1"}
         com.google.guava/guava {:mvn/version "31.0.1-jre"}
-        fork/fork {:mvn/version "2.4.2"}}
+        fork/fork {:mvn/version "2.4.2"}
+        cljs-bean/cljs-bean {:mvn/version "1.8.0"}}
  :paths ["src/server" "src/web_app" "test/web_app" "classes" "resources"
          "src/shared"]
  :aliases {:fe {:extra-deps {thheller/shadow-cljs {:mvn/version "2.18.0"}
@@ -30,8 +31,9 @@
                               com.datomic/dev-local {:mvn/version "1.0.243"}}}
            :uberdeps {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}}
                       :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.system"]}
-           :test {:extra-paths ["test/server" "src/mocks"]
-                  :extra-deps {com.cognitect/transit-cljs {:mvn/version "0.8.269"}}}
+           :test {:extra-paths ["src/mocks"]
+                  :extra-deps {com.cognitect/transit-cljs {:mvn/version "0.8.269"}
+                               funcool/promesa {:mvn/version "8.0.450"}}}
            :test-runner-cognitect
            {:extra-paths ["test/server"]
             :extra-deps  {com.cognitect/test-runner

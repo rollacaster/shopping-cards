@@ -1,8 +1,8 @@
 /.cpcache/
 /.nrepl-port
 /.creds.edn
-/target/ci.js
-/target/cljs-runtime/
+/target/test/ci/karma.js
+/target/test/browser/js
 /target/shopping-cards.jar
 /node_modules/
 /classes/

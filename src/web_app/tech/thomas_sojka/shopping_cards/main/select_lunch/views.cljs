@@ -5,5 +5,5 @@
 (defn select-lunch []
   (let [recipes @(subscribe [:main/lunch-recipes])]
     [c/select-recipe {:recipes recipes
-                    :get-title (fn [recipe-type]
-                                 [c/recipe-type-title recipe-type])}]))
+                      :get-title (fn [recipe-type]
+                                   [c/recipe-type-title recipe-type])}]))

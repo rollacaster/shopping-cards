@@ -29,57 +29,15 @@
    #:db{:ident :recipe-type/rare}])
 
 (def ingredients
-  [#:ingredient{:id "690fdb5c-711b-4b1b-918b-148d2a4eb355",
-                :name "Spinat",
-                :category :ingredient-category/tiefkühl}
-   #:ingredient{:id "2afef478-85f4-4e5c-baeb-b04f48e4a945",
-                :name "Spätzle",
-                :category :ingredient-category/milch&co}
-   #:ingredient{:id "2a647d9b-4a02-4853-bad4-ca0f9201ed8b",
-                :name "Eier",
-                :category :ingredient-category/eier}
-   #:ingredient{:id "be78e544-68c8-4a06-89ba-6def6d88152d",
-                :name "Sonnenblumenkerne",
-                :category :ingredient-category/müsli&co}
-   #:ingredient{:id "e6ce2fbe-8f6b-442e-a9e3-cdb67a1c90a1",
-                :name "Mehl",
-                :category :ingredient-category/backen}
-   #:ingredient{:id "2dee32c2-1b68-4eea-a80d-5c5668a24d45",
-                :name "Nachos",
-                :category :ingredient-category/süßigkeiten}
-   #:ingredient{:id "6175d1a2-0af7-43fb-8a53-212af7b72c9c",
-                :name "Wasser",
-                :category :ingredient-category/getränke}
-   #:ingredient{:id "cfc2741b-c361-4d05-b71e-a2a118881400",
-                :name "Mandeln",
-                :category :ingredient-category/obst}
-   #:ingredient{:id "f365f293-4adc-4cdc-bcca-389425f3e2e6",
-                :name "Lasagneplatten",
-                :category :ingredient-category/beilage}
-   #:ingredient{:id "e0f74a51-d1b7-46f5-b0ad-d5b64de3d24b",
-                :name "Salami",
-                :category :ingredient-category/wursttheke}
-   #:ingredient{:id "dc1b7bdc-9f9e-4751-b935-468919d39030",
-                :name "Porree",
+  [#:ingredient{:id "dc1b7bdc-9f9e-4751-b935-468919d39030",
+                :name "Carrot",
                 :category :ingredient-category/gemüse}
-   #:ingredient{:id "24a03356-60cd-4f92-9f79-4cc511dd6d7e",
-                :name "Gorgonzola",
-                :category :ingredient-category/käse&co}
-   #:ingredient{:id "9edc6e43-a040-4829-88f8-de0eaa0a5209",
-                :name "Currypaste",
-                :category :ingredient-category/gewürze}
-   #:ingredient{:id "f29557a1-d028-4efa-860d-562ad6fe8c56",
-                :name "Wraps",
-                :category :ingredient-category/brot&co}
-   #:ingredient{:id "5eef57be-bc04-4f19-9d58-9c6eb2a5eddd",
-                :name "Passierte Tomaten",
-                :category :ingredient-category/konserven}
-   #:ingredient{:id "c31b04d7-8009-4a63-935e-6185b226280e",
-                :name "Hackfleisch",
-                :category :ingredient-category/fleisch}
-   #:ingredient{:id "61858d61-a9d0-4ba6-b341-bdcdffec50d1"
-                :name "Mandarine",
-                :category :ingredient-category/obst}])
+   #:ingredient{:id "bbaba432-0330-4043-90c6-3d3df2fac57b",
+                :name "Onion",
+                :category :ingredient-category/gemüse}
+   #:ingredient{:id "e0fb50e5-ec7f-4b80-9456-e9f9d2fbd68f",
+                :name "Mushroom",
+                :category :ingredient-category/gemüse}])
 
 (def recipes
   [[{:id "2aa44c10-bf40-476b-b95f-3bbe96a3835f",
@@ -88,12 +46,22 @@
      :image
      "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
      :recipe/type {:db/ident :recipe-type/fast},
-     :name "Misosuppe mit Gemüse und Tofu2"}]])
+     :name "Soup"}]])
 
-(def cooked-with [#:cooked-with{:ingredient [:ingredient/name "Mandarine"],
+(def cooked-with [#:cooked-with{:ingredient [:ingredient/name "Carrot"],
                                 :id "ab52a4b5-46c3-4d1e-9e42-a66a02e19ba9",
-                                :recipe [:recipe/name "Misosuppe mit Gemüse und Tofu2"],
-                                :amount-desc "1 große",
+                                :recipe [:recipe/name "Soup"],
+                                :amount-desc "1",
+                                :amount 1.0}
+                  #:cooked-with{:ingredient [:ingredient/name "Onion"],
+                                :id "3541b429-879e-419b-8597-e2451f1d4acf",
+                                :recipe [:recipe/name "Soup"],
+                                :amount-desc "1",
+                                :amount 1.0}
+                  #:cooked-with{:ingredient [:ingredient/name "Mushroom"],
+                                :id "60e71736-c2b2-4108-8a17-a5894a213786",
+                                :recipe [:recipe/name "Soup"],
+                                :amount-desc "1",
                                 :amount 1.0}])
 
 (def w (t/writer :json))
@@ -101,23 +69,43 @@
 
 (def handlers [(msw/rest.post "/query" (fn [req res ctx]
                                          (let [query (:q (t/read r (js/JSON.stringify (.-body req))))]
+                                           (js/console.log "query" query)
                                            (cond
                                              (= query queries/load-recipes)
                                              (res
                                               (.status ctx 200)
                                               (.text ctx (t/write w recipes)))
+                                             (= query queries/load-ingredients-by-recipe-id)
+                                             (res
+                                              (.status ctx 200)
+                                              (.text ctx
+                                                     (t/write w (mapv
+                                                                 (fn [{:cooked-with/keys [amount amount-desc id unit ingredient]}]
+                                                                   [(cond->
+                                                                        {:cooked-with/amount amount
+                                                                         :cooked-with/amount-desc amount-desc
+                                                                         :cooked-with/id id}
+                                                                      unit (assoc :cooked-with/unit unit))
+                                                                    (let [{:ingredient/keys [category name id]}
+                                                                          (some #(when (= (:ingredient/name %) (second ingredient)) %) ingredients)]
+                                                                      {:ingredient/name name
+                                                                       :ingredient/category category
+                                                                       :ingredient/id id})])
+                                                                 cooked-with))))
                                              :else
                                              (res
                                               (.status ctx 200))))))
-               (msw/rest.get "/styles.css" (fn [_ res ctx]
-                                              (res
-                                               (.status ctx 200)
-                                               (.text ctx (handlers/styles)))))
-               (msw/rest.get "https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css"
-                             (fn [_ res ctx]
-                               (res
-                                (.status ctx 200)
-                                (.text ctx (handlers/tachyons-css)))))
+               (msw/rest.put "/transact"
+                             (fn [req res ctx]
+                               (let [tx-data (t/read r (js/JSON.stringify (.-body req)))]
+                                 (js/console.log "transact" tx-data)
+                                 (res
+                                  (.status ctx 200)))))
+               (msw/rest.post "/shopping-card"
+                              (fn [_ res ctx]
+                                (res
+                                 (.status ctx 200)
+                                 (.text ctx "fake-trello-card-id"))))
                (msw/rest.get (str "https://raw.githubusercontent.com/lambdaschmiede/freitag/master/resources/com/lambdaschmiede/freitag/de/"
                                   (.getFullYear (js/Date.))
                                   ".edn")

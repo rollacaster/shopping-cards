@@ -2,7 +2,7 @@ set -e;
 mkdir -p classes;
 clojure -M:test-runner-cognitect;
 npm i;
-shadow-cljs -Afe compile ci;
+shadow-cljs -Afe:test compile ci;
 npx karma start --single-run;
 clojure -Sdeps '{:deps {com.datomic/dev-local {:mvn/version "1.0.243"}}}' -e "(compile 'tech.thomas-sojka.shopping-cards.system)";
 shadow-cljs -Afe release app;

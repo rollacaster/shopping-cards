@@ -1,42 +1,53 @@
 (ns tech.thomas-sojka.shopping-cards.core-test
-    (:require [tech.thomas-sojka.shopping-cards.core :as sut]
-              [cljs.test :as t :include-macros true]
-              ["@testing-library/dom" :as tld]
-              [tech.thomas-sojka.browser :as browser-mocks]))
+  (:require
+   [tech.thomas-sojka.shopping-cards.testing-library :refer [wait-for get-all-by-role get-by-role]]
+   [cljs-bean.core :refer [bean]]
+   [cljs.test :as t :include-macros true]
+   [clojure.string :as str]
+   [promesa.core :as p]
+   [tech.thomas-sojka.browser :as browser-mocks]
+   [tech.thomas-sojka.shopping-cards.core :as sut]))
 
-(def tachyons-link-node (js/document.createElement "link"))
-(def style-link-node (js/document.createElement "link"))
-(def container (js/document.createElement "div"))
+(def screen (js/document.createElement "div"))
+
 (defn setup-app []
+  (set! (.-href js/location) "#")
+  (set! (.-id screen) "app")
+  (set! (.-className screen) "h-100")
+  (js/document.body.appendChild screen)
   (-> (.start browser-mocks/worker)
       (.then (fn []
-               (set! (.-href js/location) "#")
-               (set! (.-rel tachyons-link-node) "stylesheet")
-               (set! (.-href tachyons-link-node) "https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css")
-               (set! (.-rel style-link-node) "stylesheet")
-               (set! (.-href style-link-node) "./styles.css")
-               (set! (.-id container) "app")
-               (js/document.head.appendChild tachyons-link-node)
-               (js/document.head.appendChild style-link-node)
-               (js/document.body.appendChild container)
-               (sut/init! {:container container})))))
+               (sut/init! {:service-worker false
+                           :container screen})))))
 
 (defn teardown-app []
-  (.remove container)
-  (.remove tachyons-link-node)
-  (.remove style-link-node)
+  (.remove screen)
   (.stop browser-mocks/worker)
   (set! (.-href js/location) "#"))
 
 (t/use-fixtures :each
   {:before setup-app
    :after teardown-app})
-
-(t/deftest load-app []
+(comment
+  (setup-app))
+(t/deftest create-shopping-card []
   (t/async done
-           (-> (tld/waitFor #(tld/getAllByText container "Mittagessen"))
-               (.then #(.click (first (tld/getAllByText container "Mittagessen"))))
-               (.then #(tld/waitFor (fn [] (tld/getByText container "Mittag auswählen"))))
-               (.then (fn []
-                        (t/is (tld/getByText container "Mittag auswählen"))
-                        (done))))))
+           (p/do
+             (wait-for #(get-all-by-role screen "button" {:name "Mittagessen"}))
+             (.click (first (get-all-by-role screen "button" {:name "Mittagessen"})))
+
+             (wait-for #(get-by-role screen "button" {:name "Soup"}))
+             (.click (get-by-role screen "button" {:name "Soup"}))
+
+             (wait-for #(get-by-role screen "button" {:name "Fertig!"}))
+             (.click (get-by-role screen "button" {:name "Fertig!"}))
+
+             (wait-for #(get-by-role screen "checkbox" {:name "1 Carrot"}))
+             (.click (get-by-role screen "checkbox" {:name "1 Carrot"}))
+
+             (wait-for #(get-by-role screen "button" {:name "Fertig!"}))
+             (.click (get-by-role screen "button" {:name "Fertig!"}))
+
+             (wait-for #(get-by-role screen "link" {:name "In Trello anzeigen"}))
+             (t/is (str/includes? (:hash (bean js/document.location)) "fake-trello-card-id"))
+             (done))))
