@@ -25,14 +25,12 @@
     (is
      (=
       (dissoc recipe "id")
-      {"name" "Misosuppe mit Gemüse und Tofu2",
+      {"name" "Soup",
        "image"
        "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
        "link"
        "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
        "recipe/type" {"db/ident" "recipe-type/fast"}}))))
-
-
 
 (deftest get-recipe
   (is (= (-> (client/post (url "/query")
@@ -57,7 +55,7 @@
                            :as :transit+json})
              :body)
          [[{"recipe/id" "2aa44c10-bf40-476b-b95f-3bbe96a3835f",
-            "recipe/name" "Misosuppe mit Gemüse und Tofu2",
+            "recipe/name" "Soup",
             "recipe/image"
             "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
             "recipe/link"
@@ -66,10 +64,22 @@
             "cooked-with/_recipe"
             [{"cooked-with/id" "ab52a4b5-46c3-4d1e-9e42-a66a02e19ba9",
               "cooked-with/amount" 1.0,
-              "cooked-with/amount-desc" "1 große",
+              "cooked-with/amount-desc" "1",
               "cooked-with/ingredient"
-              {"ingredient/name" "Mandarine",
-               "ingredient/id" "61858d61-a9d0-4ba6-b341-bdcdffec50d1"}}]}]])))
+              {"ingredient/name" "Carrot",
+               "ingredient/id" "dc1b7bdc-9f9e-4751-b935-468919d39030"}}
+             {"cooked-with/id" "3541b429-879e-419b-8597-e2451f1d4acf",
+              "cooked-with/amount" 1.0,
+              "cooked-with/amount-desc" "1",
+              "cooked-with/ingredient"
+              {"ingredient/name" "Onion",
+               "ingredient/id" "bbaba432-0330-4043-90c6-3d3df2fac57b"}}
+             {"cooked-with/id" "60e71736-c2b2-4108-8a17-a5894a213786",
+              "cooked-with/amount" 1.0,
+              "cooked-with/amount-desc" "1",
+              "cooked-with/ingredient"
+              {"ingredient/name" "Mushroom",
+               "ingredient/id" "e0fb50e5-ec7f-4b80-9456-e9f9d2fbd68f"}}]}]])))
 
 (def remove-ids (partial walk/postwalk (fn [a] (cond-> a (get a "db/id") (dissoc a "db/id")))))
 
@@ -87,6 +97,6 @@
             "https://img.chefkoch-cdn.de/rezepte/1073731213081387/bilder/1319791/crop-360x240/misosuppe-mit-gemuese-und-tofu.jpg",
             "recipe/link"
             "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
-            "recipe/name" "Misosuppe mit Gemüse und Tofu2",
+            "recipe/name" "Soup",
             "recipe/type" {"db/ident" "recipe-type/fast"}}]]
          res))))

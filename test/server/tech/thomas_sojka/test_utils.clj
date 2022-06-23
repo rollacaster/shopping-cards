@@ -3,7 +3,7 @@
    [datomic.client.api :as d]
    [integrant.core :as ig]
    [integrant.repl :as ig-repl]
-   [tech.thomas-sojka.fixtures :as fixtures]
+   [tech.thomas-sojka.shopping-cards.fixtures :as fixtures]
    [tech.thomas-sojka.shopping-cards.db :as db]
    [tech.thomas-sojka.shopping-cards.system]))
 
