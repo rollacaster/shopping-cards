@@ -1,11 +1,11 @@
-(ns tech.thomas-sojka.integration-test
+(ns tech.thomas-sojka.core-test
   (:require
    [clj-http.client :as client]
    [clojure.test :refer [deftest is use-fixtures]]
    [clojure.walk :as walk]
-   [tech.thomas-sojka.fixtures :as fixtures :refer [url]]))
+   [tech.thomas-sojka.test-utils :as utils :refer [url]]))
 
-(use-fixtures :each fixtures/db-setup)
+(use-fixtures :each utils/db-setup)
 
 (defn query-recipes []
   (-> (client/post (url "/query")
@@ -31,6 +31,8 @@
        "link"
        "https://www.chefkoch.de/rezepte/1073731213081387/Misosuppe-mit-Gemuese-und-Tofu.html",
        "recipe/type" {"db/ident" "recipe-type/fast"}}))))
+
+
 
 (deftest get-recipe
   (is (= (-> (client/post (url "/query")

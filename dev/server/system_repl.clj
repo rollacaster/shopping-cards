@@ -1,7 +1,8 @@
 (ns system-repl
   (:require [integrant.core :as ig]
             [integrant.repl :as ig-repl]
-            [tech.thomas-sojka.shopping-cards.system :as system]))
+            [tech.thomas-sojka.shopping-cards.system :as system]
+            [nrepl.cmdline :as nrepl]))
 
 (ig-repl/set-prep! (fn [] system/config))
 
@@ -11,7 +12,8 @@
                                  "mock")})
 
 (defn -main [& _args]
-  (ig-repl/go))
+  (ig-repl/go)
+  (nrepl/-main))
 
 (comment
   (ig-repl/go)

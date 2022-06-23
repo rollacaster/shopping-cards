@@ -2,11 +2,11 @@
  :tasks
  {dev (run '-dev {:parallel true})
   -dev {:depends [dev:fe dev:be]}
-  dev:fe (clojure "-Mfe:fe/dev" "-J-XX:-OmitStackTraceInFastThrow")
-  dev:be (clojure "-Mbe:be/dev" "-J-XX:-OmitStackTraceInFastThrow")
+  dev:fe (clojure "-Mfe:fe/dev:fe/test" "-J-XX:-OmitStackTraceInFastThrow")
+  dev:be (clojure "-Mcider:be:be/dev:be/test" "-J-XX:-OmitStackTraceInFastThrow")
   test (run '-test {:parallel true})
   -test {:depends [test:fe test:be]}
-  test:be (clojure "-Mbe:be/test")
+  test:be (clojure "-Mbe:be/test-run")
   test:fe {:requires ([test-fe :as test-fe])
            :task (test-fe/run-test-suite!)}
   release {:depends [release:fe release:be]}
