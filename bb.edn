@@ -8,4 +8,7 @@
   -test {:depends [test:fe test:be]}
   test:be (clojure "-Mbe:be/test")
   test:fe {:requires ([test-fe :as test-fe])
-           :task (test-fe/run-test-suite!)}}}
+           :task (test-fe/run-test-suite!)}
+  release {:depends [release:fe release:be]}
+  release:fe (shell "shadow-cljs" "-Afe" "release" "app")
+  release:be (clojure "-Mbe/release" "--aliases" "be:release")}}
