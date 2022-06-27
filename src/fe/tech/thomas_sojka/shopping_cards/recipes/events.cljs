@@ -17,7 +17,8 @@
                                             [:cooked-with/amount-desc]
                                             {[:cooked-with/ingredient]
                                              [[:ingredient/name]
-                                              [:ingredient/id]]}]}])
+                                              [:ingredient/id]
+                                              {[:ingredient/category] [[:db/ident]]}]}]}])
                              :in $ ?recipe-id
                              :where [?r :recipe/id ?recipe-id]]
                         :params recipe-id

@@ -1,6 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.main.meal-plan-details.views
   (:require [re-frame.core :refer [dispatch subscribe]]
-            [tech.thomas-sojka.shopping-cards.components :as c]))
+            [tech.thomas-sojka.shopping-cards.components :as c]
+            [tech.thomas-sojka.shopping-cards.ingredients-processing :as ingredients-processing]))
 
 (defn meal-plan-details []
   (fn []
@@ -21,10 +22,15 @@
         [:div
          [:h2.fw6.mb3 "Zutaten"]
          [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-          (map
-           (fn [{:cooked-with/keys [id ingredient amount-desc]}]
-             [:li.mb2.f4 {:key id} (str amount-desc " " (:ingredient/name ingredient))])
-           (:cooked-with/_recipe recipe))]]]
+          (->> (:cooked-with/_recipe recipe)
+               (sort-by
+                (comp :db/ident :ingredient/category :cooked-with/ingredient)
+                (fn [category1 category2]
+                  (< (.indexOf ingredients-processing/penny-order category1)
+                     (.indexOf ingredients-processing/penny-order category2))))
+               (map
+                (fn [{:cooked-with/keys [id ingredient amount-desc]}]
+                  [:li.mb2.f4 {:key id} (str amount-desc " " (:ingredient/name ingredient))])))]]]
        (when-not (empty? link)
          [:div.flex.justify-center
           [:a.link.shadow-3.bn.pv2.ph3.br2.bg-orange-400.f3.gray-800
