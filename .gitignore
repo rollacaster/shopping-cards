@@ -4,12 +4,6 @@
 /target
 /node_modules/
 /classes/
-/resources/public/cljs-out/
-/resources/public/dev/
 /resources/.creds.edn
-/dist/
 /.shadow-cljs/
 /resources/public/js/
-/resources/public/css/react-big-calendar.css
-/resources/public/js/
-/resources/public/tachyons.css
