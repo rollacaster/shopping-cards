@@ -11,4 +11,8 @@
            :task (test-fe/run-test-suite!)}
   release {:depends [release:fe release:be]}
   release:fe (shell "shadow-cljs" "-Afe" "release" "app")
-  release:be (clojure "-Mbe/release" "--aliases" "be:release")}}
+  release:be (clojure "-Mbe/release" "--aliases" "be:release")
+  deploy {:depends [release deploy:raspi]}
+  deploy:raspi (do
+                 (shell "scp" "target/shopping-cards.jar" "pi@ubi-hub:/home/pi")
+                 (shell "ssh" "pi@ubi-hub" "sudo" "systemctl" "restart" "shoppinglist.service"))}}
