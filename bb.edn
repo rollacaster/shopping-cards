@@ -15,4 +15,5 @@
   deploy {:depends [release deploy:raspi]}
   deploy:raspi (do
                  (shell "scp" "target/shopping-cards.jar" "pi@ubi-hub:/home/pi")
-                 (shell "ssh" "pi@ubi-hub" "sudo" "systemctl" "restart" "shoppinglist.service"))}}
+                 (shell "ssh" "pi@ubi-hub" "sudo" "systemctl" "restart" "shoppinglist.service"))
+  deploy:restart (shell "ssh" "pi@ubi-hub" "sudo" "systemctl" "restart" "shoppinglist.service")}}
