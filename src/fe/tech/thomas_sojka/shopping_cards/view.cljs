@@ -1,5 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.view
-  (:require [re-frame.core :refer [subscribe]]))
+  (:require [re-frame.core :refer [subscribe]]
+            [tech.thomas-sojka.shopping-cards.auth :refer [user]]
+            [tech.thomas-sojka.shopping-cards.main.components :as components]))
 
 (defmulti title :view)
 (defmethod title :default [] nil)
@@ -23,9 +25,12 @@
        [header]
        [:main.flex-auto
         [:div.mw9.center.bg-gray-200.h-100
-         [content
-          {:view (:view (:data route))}
-          @(subscribe [:app/route])]]]
+         (case @user
+           :loading [:div.flex.justify-center.items-center.h-100
+                     [components/spinner]]
+           [content
+            {:view (if (not= @user :noauth) (:view (:data route)) :view/login)}
+            @(subscribe [:app/route])])]]
        (when error
          [:div.absolute.white.flex.justify-center.w-100.mb4
           {:style {:bottom "3rem"}}

@@ -12,6 +12,7 @@
             tech.thomas-sojka.shopping-cards.ingredient-add.core
             [tech.thomas-sojka.shopping-cards.ingredients.core]
             [tech.thomas-sojka.shopping-cards.main.core]
+            [tech.thomas-sojka.shopping-cards.login]
             [tech.thomas-sojka.shopping-cards.queries :as queries]
             [tech.thomas-sojka.shopping-cards.recipe-add.core]
             [tech.thomas-sojka.shopping-cards.recipes.core]
@@ -21,8 +22,10 @@
 (def routes
   [[["/" {:name :route/main
           :view :view/main}]
-   ["/meal-plan" {:name :route/meal-plan
-                  :view :view/main}]]
+    ["/login" {:name :route/login
+               :view :view/login}]
+    ["/meal-plan" {:name :route/meal-plan
+                   :view :view/main}]]
    ["/meal-plan-details"
     {:name :route/meal-plan-details
      :view :view/meal-plan-details}]
