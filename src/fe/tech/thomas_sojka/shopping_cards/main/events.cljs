@@ -8,10 +8,7 @@
  (fn [db [_ data]]
    (-> db
        (assoc :app/loading false)
-       (assoc :main/recipes (->> data
-                                 (map (fn [r] (-> r
-                                                 first
-                                                 (update :recipe/type :db/ident)))))))))
+       (assoc :main/recipes (map first data)))))
 
 (reg-event-db
  :main/failure-recipes

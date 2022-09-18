@@ -30,8 +30,7 @@
        (group-by :recipe/type)
        (sort-recipes [:recipe-type/fast  :recipe-type/new :recipe-type/normal :recipe-type/misc  :recipe-type/rare])))
 
-(reg-sub
- :main/lunch-recipes
+(reg-sub :main/lunch-recipes
  :<- [:main/recipes]
  lunch-recipes)
 

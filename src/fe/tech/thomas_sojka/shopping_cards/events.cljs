@@ -1,7 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.events
   (:require
    [ajax.core :as ajax]
+   [cljs.reader :refer [read-string]]
    [cljs.spec.alpha :as s]
+   [datascript.core :as d]
    [re-frame.core
     :refer [after
             reg-event-db
@@ -41,19 +43,22 @@
                  :on-success [:main/success-bank-holidays]
                  :on-failure [:main/failure-bank-holidays]}}))
 
+;; TODO move to cofx
+(def conn (atom nil))
 
+(-> (js/fetch "./datascript-export.edn" )
+      (.then (fn [res] (.text res)))
+      (.then (fn [res] (reset! conn (read-string res))))
+      (.catch js/console.log))
 
 (reg-event-fx :query
   (fn [{:keys [db]} [_ {:keys [q params on-success on-failure]}]]
     {:db (assoc db :app/loading true)
-     :http-xhrio {:method :post
-                  :uri "/query"
-                  :params {:q q
-                           :params params}
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/transit-response-format)
-                  :on-success on-success
-                  :on-failure on-failure}}))
+     :dispatch (conj
+                on-success
+                (if params
+                  (d/q q @conn params)
+                  (d/q q @conn)))}))
 
 (reg-event-fx :query/log
   (fn [_ [_ props]]
