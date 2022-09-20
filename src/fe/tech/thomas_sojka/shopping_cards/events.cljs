@@ -7,9 +7,11 @@
    [re-frame.core
     :refer [after
             reg-event-db
+            inject-cofx
             reg-event-fx
             reg-global-interceptor]]
-   [tech.thomas-sojka.shopping-cards.db :refer [default-db]]))
+   [tech.thomas-sojka.shopping-cards.db :refer [default-db]]
+   [tech.thomas-sojka.shopping-cards.queries :as queries]))
 
 (defn check-and-throw
   "Throws an exception if `db` doesn't match the Spec `a-spec`."
@@ -31,11 +33,9 @@
  :app/remove-error
  (fn [db] (assoc db :app/error nil)))
 
-(reg-event-fx
- :app/initialise
+(reg-event-fx :app/init-holidays
  (fn [_ [_ year]]
-   {:db default-db
-    :http-xhrio {:method :get
+   {:http-xhrio {:method :get
                  :uri (str "https://raw.githubusercontent.com/lambdaschmiede/freitag/master/resources/com/lambdaschmiede/freitag/de/"
                            year
                            ".edn")
@@ -43,22 +43,46 @@
                  :on-success [:main/success-bank-holidays]
                  :on-failure [:main/failure-bank-holidays]}}))
 
-;; TODO move to cofx
-(def conn (atom nil))
+(reg-event-fx :app/success-init-db
+  (fn [_ [_ now res]]
+    {:app/set-conn (read-string res)
+     :dispatch-n [[:query
+                   {:q queries/load-recipes
+                    :on-success [:main/success-recipes]
+                    :on-failure [:main/failure-recipes]}]
+                  [:main/init-meal-plans now]]}))
 
-(-> (js/fetch "./datascript-export.edn" )
-      (.then (fn [res] (.text res)))
-      (.then (fn [res] (reset! conn (read-string res))))
-      (.catch js/console.log))
+(reg-event-fx :app/failure-init-db
+  (fn [{:keys [db]} _]
+    {:db (assoc db :app/error "Fehler: Datenbank konnte nicht geladen werden")
+     :app/timeout {:id :app/error-removal
+                   :event [:app/remove-error]
+                   :time 2000}}))
+
+(reg-event-fx :app/init-db
+  (fn [_ [_ now]]
+    {:http-xhrio {:method :get
+                  :uri "./datascript-export.edn"
+                  :response-format (ajax/text-response-format)
+                  :on-success [:app/success-init-db now]
+                  :on-failure [:app/failure-init-db]}}))
+
+(reg-event-fx
+ :app/initialise
+ (fn [_ [_ now]]
+   {:db default-db
+    :dispatch-n [[:app/init-holidays (.getFullYear now)]
+                 [:app/init-db now]]}))
 
 (reg-event-fx :query
-  (fn [{:keys [db]} [_ {:keys [q params on-success on-failure]}]]
+  [(inject-cofx :app/conn)]
+  (fn [{:keys [conn db]} [_ {:keys [q params on-success on-failure]}]]
     {:db (assoc db :app/loading true)
      :dispatch (conj
                 on-success
                 (if params
-                  (d/q q @conn params)
-                  (d/q q @conn)))}))
+                  (d/q q conn params)
+                  (d/q q conn)))}))
 
 (reg-event-fx :query/log
   (fn [_ [_ props]]
@@ -71,12 +95,7 @@
     (js/console.log d)))
 
 (reg-event-fx :transact
-  (fn [{:keys [db]} [_ {:keys [tx-data on-success on-failure]}]]
+  [(inject-cofx :app/conn)]
+  (fn [{:keys [conn db]} [_ {:keys [tx-data on-success on-failure]}]]
     {:db (assoc db :app/loading true)
-     :http-xhrio {:method :put
-                  :uri "/transact"
-                  :params tx-data
-                  :format (ajax/transit-request-format)
-                  :response-format (ajax/raw-response-format)
-                  :on-success on-success
-                  :on-failure on-failure}}))
+     :dispatch (conj on-success (d/transact! conn tx-data))}))

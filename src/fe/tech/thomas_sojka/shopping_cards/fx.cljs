@@ -1,6 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.fx
   (:require
-   [re-frame.core :refer [dispatch reg-fx]]
+   [re-frame.core :refer [dispatch reg-fx reg-cofx]]
    [reagent.core :as r]
    [reitit.frontend.easy :as rfe]))
 
@@ -26,3 +26,13 @@
              (fn []
                (dispatch event))
              time)))))
+
+(def conn (atom nil))
+
+(reg-cofx :app/conn
+  (fn [coeffects]
+    (assoc coeffects :conn @conn)))
+
+(reg-fx :app/set-conn
+  (fn [connection]
+    (reset! conn connection)))
