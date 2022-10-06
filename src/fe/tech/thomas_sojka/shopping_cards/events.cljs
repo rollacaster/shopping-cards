@@ -45,7 +45,7 @@
 
 (reg-event-fx :app/success-init-db
   (fn [_ [_ now res]]
-    {:app/set-conn (read-string res)
+    {:app/init-datoms (read-string res)
      :dispatch-n [[:query
                    {:q queries/load-recipes
                     :on-success [:main/success-recipes]
@@ -81,8 +81,8 @@
      :dispatch (conj
                 on-success
                 (if params
-                  (d/q q conn params)
-                  (d/q q conn)))}))
+                  (d/q q @conn params)
+                  (d/q q @conn)))}))
 
 (reg-event-fx :query/log
   (fn [_ [_ props]]

@@ -5,7 +5,7 @@
                     [:recipe/name :as :name]
                     [:recipe/title :as :title]
                     [:recipe/image :as :image]
-                    [:recipe/kind :as :recipe/type]
+                    [:recipe/type :as :recipe/type]
                     [:recipe/link :as :link]])
    :where
    [?r :recipe/id ]])

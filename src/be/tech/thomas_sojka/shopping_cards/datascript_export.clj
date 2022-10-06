@@ -4,18 +4,27 @@
             [hodur-datomic-schema.core :as hodur-datomic]
             [tech.thomas-sojka.shopping-cards.schema :as schema]))
 
+(defn domain-attrs [conn]
+  (->>  (d/datoms (d/db conn) {:index :eavt :limit -1})
+        (mapv (fn [[_ a]] a)) set
+        (d/q
+         '[:find ?v
+           :in $ [?attr-id ...]
+           :where [?attr-id ?a ?v]]
+         (d/db conn))
+        (mapcat set)
+        (filter keyword?)
+        (filter #(contains?
+                  #{"recipe" "cooked-with" "meal-plan" "ingredient" "shopping-list"}
+                  (namespace %)))
+        sort))
 (defn all-datams-seq [conn]
-  (mapv
-   (fn [[e a v tx added]]
-     [e a v tx added])
-   (d/datoms (d/db conn) {:index :eavt :limit -1})))
-
-(defn- attr [datomic-datoms id]
-    (let [[_ _ v] (first (filter (fn [[e]] (= e id)) datomic-datoms))]
-      (assert (keyword? v))
-      (case v
-        :recipe/type :recipe/kind
-        v)))
+  (d/q
+   '[:find ?e ?attr-name ?v ?tx ?b
+     :in $ [?attr-name ...]
+     :where [?e ?attr-name ?v ?tx ?b]]
+   (d/db conn)
+   (domain-attrs conn)))
 
 (defn- id-munging  [id]
     (if (> id 2147483647)
@@ -26,22 +35,41 @@
       id))
 
 (defmacro datascript-schema []
-    (->> schema/meta-db
-         hodur-datomic/schema
-         (filter (fn [{:db/keys [valueType cardinality unique]}]
-                   (or valueType cardinality unique)))
-         (mapv
-          (fn [{:db/keys [ident valueType cardinality unique]}]
-            (hash-map ident
-                      (cond-> #:db{:cardinality cardinality }
-                        (or (= valueType :db.type/ref)
-                            (= valueType :db.type/tuple))
-                        (assoc :db/valueType valueType)
-                        unique (assoc :db/unique unique)))))
-         (apply merge)))
+  (dissoc
+   (->> schema/meta-db
+        hodur-datomic/schema
+        (filter (fn [{:db/keys [valueType cardinality unique]}]
+                  (or valueType cardinality unique)))
+        (mapv
+         (fn [{:db/keys [ident valueType cardinality unique]}]
+           (hash-map ident
+                     (cond-> #:db{:cardinality cardinality }
+                       (or (= valueType :db.type/ref)
+                           (= valueType :db.type/tuple))
+                       (assoc :db/valueType valueType)
+                       unique (assoc :db/unique unique)))))
+        (apply merge))
+   :meal-plan/type
+   :recipe/type))
 
 (def conn (d/connect (d/client {:server-type :dev-local :system "dev"})
-                       {:db-name "shopping-cards"}))
+                     {:db-name "shopping-cards"}))
+
+(d/q
+ '[:find ?m ?r ?n
+   :in $
+   :where
+   [?m :meal-plan/recipe ?r]
+   [?r :recipe/name ?n]]
+ (d/db conn))
+
+83562883712034
+(d/q
+ '[:find (pull ?m [:meal-plan/inst
+                   :meal-plan/recipe
+                   :meal-plan/type])
+   :where [?m :meal-plan/id]]
+ (d/db conn))
 
 (defn enum-map [conn]
   (->> @schema/meta-db
@@ -69,36 +97,22 @@
 (defn datascript-db-file [conn]
   (let [datomic-datoms (all-datams-seq conn)
         enums (enum-map conn)]
-    {:schema {:ingredient/name #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
-              :ingredient/category #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref},
-              :meal-plan/id #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
-              :ingredient/id #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
-              :recipe/id #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
-              :recipe/link #:db{:cardinality :db.cardinality/one},
-              :cooked-with/ingredient #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref},
-              :cooked-with/amount-desc #:db{:cardinality :db.cardinality/one},
-              :cooked-with/id #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
-              :recipe/image #:db{:cardinality :db.cardinality/one},
-              :cooked-with/unit #:db{:cardinality :db.cardinality/one},
-              :cooked-with/recipe #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref},
-              :cooked-with/amount #:db{:cardinality :db.cardinality/one},
-              :meal-plan/recipe #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref},
-              :meal-plan/inst #:db{:cardinality :db.cardinality/one},
-              :shopping-list/meals #:db{:cardinality :db.cardinality/many, :valueType :db.type/ref},
-              :recipe/type #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref},
-              :recipe/name #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
-              :meal-plan/type #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref}}
+    {:schema (datascript-schema)
      :datoms
      (->> datomic-datoms
           (mapv
-           (fn [[e a v tx r]]
+           (fn [[e a v _ _]]
              [(inc (id-munging e))
-              (attr datomic-datoms a)
-              (or (enums v) v)
-              tx
-              r])))}))
+              a
+              (or (enums v)
+                  (cond (int? v) (inc (id-munging v))
+                        (and (coll? v) (every? int? v)) (mapv #(inc (id-munging %)) v)
+                        :else v))]))
+          (remove (fn [[_ a]] (or (= a :cooked-with/recipe+ingredient)
+                                 (= a :meal-plan/inst+type))))
+          (sort-by first))}))
 
 (comment
   (spit
    "resources/public/datascript-export.edn"
-   (str "#datascript/DB " (datascript-db-file conn))))
+   (:datoms (datascript-db-file conn))))

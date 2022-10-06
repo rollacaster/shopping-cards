@@ -3,8 +3,7 @@
             [cljs.reader :refer [read-string]]
             [re-frame.core :refer [reg-event-db reg-event-fx]]))
 
-(reg-event-db
- :main/success-recipes
+(reg-event-db :main/success-recipes
  (fn [db [_ data]]
    (-> db
        (assoc :app/loading false)
@@ -24,8 +23,7 @@
        (some #(= today %))))
 
 (reg-event-fx
- :main/init-meal-plans
- (fn [{:keys [db]} [_ today]]
+ :main/init-meal-plans (fn [{:keys [db]} [_ today]]
    (if (meal-plans-loaded-for-today? db today)
      {:db (assoc db :main/start-of-week (startOfDay today))}
      {:db (-> db
@@ -33,37 +31,27 @@
               (assoc :main/start-of-week today))
       :dispatch [:query {:q '[:find (pull ?m [[:meal-plan/inst :as :date]
                                               [:meal-plan/id :as :id]
-                                              {[:meal-plan/type :as :type]
-                                               [[:db/ident :as :ref]]}
+                                              [:meal-plan/type :as :type]
                                               {[:meal-plan/recipe :as :recipe]
                                                [[:recipe/id :as :id]
                                                 [:recipe/name :as :name]
-                                                {:recipe/type [[:db/ident]]}
+                                                [:recipe/type]
                                                 [:recipe/image :as :image]
                                                 [:recipe/link :as :link]]}
                                               [:shopping-list/_meals :as :shopping-list]])
                               :in $ ?date
                               :where
-                              [?m :meal-plan/inst ?d]
-                              [(tech.thomas-sojka.shopping-cards.db/within-next-four-days? ?date ?d)]]
+                              [?m :meal-plan/inst ?d]]
                          :params (format today "yyyy-MM-dd")
                          :on-success [:main/success-meal-plans]
                          :on-failure [:main/failure-meal-plans]}]})))
 
 (reg-event-db
- :main/success-meal-plans
- (fn [db [_ data]]
-   (-> db
-       (assoc :app/loading false)
-       (update :main/meal-plans
-               concat
-               (map (fn [meal-plan]
-                      (-> meal-plan
-                          first
-                          (update :type :ref)
-                          (update :date #(js/Date. %))
-                          (update-in [:recipe :recipe/type] :db/ident)))
-                    data)))))
+  :main/success-meal-plans
+  (fn [db [_ data]]
+    (-> db
+        (assoc :app/loading false)
+        (update :main/meal-plans concat (map first data)))))
 
 (reg-event-fx
  :main/failure-meal-plans
