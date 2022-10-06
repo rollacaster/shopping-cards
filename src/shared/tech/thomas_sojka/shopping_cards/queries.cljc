@@ -18,7 +18,7 @@
               :cooked-with/amount])
     (pull ?i [:ingredient/id
               :ingredient/name
-              {:ingredient/category [:db/ident]}])
+              :ingredient/category])
     :in $ [?recipe-id ...]
     :where
     [?r :recipe/id ?recipe-id]

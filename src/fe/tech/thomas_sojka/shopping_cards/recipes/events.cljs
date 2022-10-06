@@ -9,7 +9,7 @@
                                           [:recipe/name]
                                           [:recipe/image]
                                           [:recipe/link]
-                                          {[:recipe/type] [[:db/ident]]}
+                                          [:recipe/type]
                                           {[:cooked-with/_recipe]
                                            [[:cooked-with/id]
                                             [:cooked-with/amount]
@@ -18,7 +18,7 @@
                                             {[:cooked-with/ingredient]
                                              [[:ingredient/name]
                                               [:ingredient/id]
-                                              {[:ingredient/category] [[:db/ident]]}]}]}])
+                                              [:ingredient/category]]}]}])
                              :in $ ?recipe-id
                              :where [?r :recipe/id ?recipe-id]]
                         :params recipe-id
