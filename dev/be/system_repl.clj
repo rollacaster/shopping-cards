@@ -11,9 +11,9 @@
                                  (prn "New Card" ingredients)
                                  "mock")})
 
-(defn -main [& _args]
+(defn -main [& args]
   (ig-repl/go)
-  (nrepl/-main))
+  (apply nrepl/-main args))
 
 (comment
   (ig-repl/go)
