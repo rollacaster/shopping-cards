@@ -1,5 +1,44 @@
 (ns tech.thomas-sojka.shopping-cards.db
-  (:require [clojure.spec.alpha :as s]))
+  (:require [clojure.spec.alpha :as s]
+            [datascript.core :as d]))
+
+(defonce conn (d/create-conn {:ingredient/name
+                              #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
+                              :meal-plan/id
+                              #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
+                              :ingredient/id
+                              #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
+                              :recipe/id
+                              #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
+                              :recipe/link #:db{:cardinality :db.cardinality/one},
+                              :cooked-with/ingredient
+                              #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref},
+                              :cooked-with/amount-desc #:db{:cardinality :db.cardinality/one},
+                              :cooked-with/id
+                              #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity},
+                              :recipe/image #:db{:cardinality :db.cardinality/one},
+                              :cooked-with/unit #:db{:cardinality :db.cardinality/one},
+                              :cooked-with/recipe
+                              #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref},
+                              :cooked-with/amount #:db{:cardinality :db.cardinality/one},
+                              :meal-plan/recipe
+                              #:db{:cardinality :db.cardinality/one, :valueType :db.type/ref},
+                              :meal-plan/inst #:db{:cardinality :db.cardinality/one},
+                              :shopping-list/meals
+                              #:db{:cardinality :db.cardinality/many, :valueType :db.type/ref},
+                              :recipe/name
+                              #:db{:cardinality :db.cardinality/one, :unique :db.unique/identity}
+                              :cooked-with/recipe+ingredient
+                              #:db{:valueType :db.type/tuple
+                                   :tupleAttrs [:cooked-with/ingredient :cooked-with/recipe]
+                                   :cardinality :db.cardinality/one
+                                   :unique :db.unique/identity}
+                              :meal-plan/inst+type
+                              #:db{:valueType :db.type/tuple
+                                   :tupleAttrs [:meal-plan/inst :meal-plan/type]
+                                   :cardinality :db.cardinality/one
+                                   :unique :db.unique/identity}}))
+
 
 (s/def :app/route map?)
 (s/def :app/loading boolean?)

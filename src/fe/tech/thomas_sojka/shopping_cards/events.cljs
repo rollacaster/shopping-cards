@@ -45,7 +45,7 @@
 
 (reg-event-fx :app/success-init-db
   (fn [_ [_ now res]]
-    {:app/init-datoms (read-string res)
+    {:app/init-datoms res
      :dispatch-n [[:query
                    {:q queries/load-recipes
                     :on-success [:main/success-recipes]
@@ -61,11 +61,10 @@
 
 (reg-event-fx :app/init-db
   (fn [_ [_ now]]
-    {:http-xhrio {:method :get
-                  :uri "./datascript-export.edn"
-                  :response-format (ajax/text-response-format)
-                  :on-success [:app/success-init-db now]
-                  :on-failure [:app/failure-init-db]}}))
+    {:firestore/doc {:path "snapshots"
+                     :key "2023-01-24"
+                     :on-success [:app/success-init-db now]
+                     :on-failure [:app/failure-init-db]}}))
 
 (reg-event-fx
  :app/initialise

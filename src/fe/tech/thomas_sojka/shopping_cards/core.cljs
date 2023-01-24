@@ -8,11 +8,12 @@
             [reitit.frontend :as rf]
             [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.events]
+            [tech.thomas-sojka.shopping-cards.firestore]
             [tech.thomas-sojka.shopping-cards.fx]
             tech.thomas-sojka.shopping-cards.ingredient-add.core
             [tech.thomas-sojka.shopping-cards.ingredients.core]
-            [tech.thomas-sojka.shopping-cards.main.core]
             [tech.thomas-sojka.shopping-cards.login]
+            [tech.thomas-sojka.shopping-cards.main.core]
             [tech.thomas-sojka.shopping-cards.recipe-add.core]
             [tech.thomas-sojka.shopping-cards.recipes.core]
             [tech.thomas-sojka.shopping-cards.subs]
