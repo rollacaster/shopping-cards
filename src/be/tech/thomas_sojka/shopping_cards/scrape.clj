@@ -339,6 +339,26 @@
        html/parse
        html/as-hickory))
 
+(defn dedupe-by
+  "Returns a lazy sequence of the elements of coll, removing any **consecutive**
+  elements that return duplicate values when passed to a function f. Returns a
+  transducer when no collection is provided."
+  ([f]
+   (fn [rf]
+     (let [pv (volatile! ::none)]
+       (fn
+         ([] (rf))
+         ([result] (rf result))
+         ([result x]
+          (let [prior @pv
+                fx    (f x)]
+            (vreset! pv fx)
+            (if (= prior fx)
+              result
+              (rf result x))))))))
+  ([f coll]
+   (sequence (dedupe-by f) coll)))
+
 (defn scrape-recipe [conn {:keys [link type name image] :or {type :recipe-type/normal}}]
   (if (s/includes? link "kptncook")
     (let [{:keys [name ingredients]} (parse-string (:out (sh "node" "src/js/scrape.js" link)) true)]
@@ -353,18 +373,21 @@
           name (or name
                    (when (s/includes? link "docs.google")
                          (fetch-gdrive-title link))
-                   (recipe-name link recipe-hickory))]
-      (conj (->> recipe-hickory
-                (add-ingredients link)
-                (if (s/includes? link "docs.google") (fetch-gdrive-ingredients link))
-                (dedup-ingredients (d/q queries/load-ingredients (d/db conn)))
-                (map (fn [{:keys [amount-desc unit id]}]
-                       (cond->
-                           #:cooked-with{:id (str (random-uuid))
-                                         :ingredient [:ingredient/id id]
-                                         :recipe name}
-                         amount-desc (assoc :cooked-with/amount-desc amount-desc)
-                         unit (assoc :cooked-with/unit unit)))))
+                   (recipe-name link recipe-hickory))
+          ingredients (->> recipe-hickory
+                           (add-ingredients link)
+                           (if (s/includes? link "docs.google") (fetch-gdrive-ingredients link))
+                           (dedup-ingredients (d/q queries/load-ingredients (d/db conn)))
+                           (map (fn [{:keys [amount-desc unit id]}]
+                                  (cond->
+                                      #:cooked-with{:id (str (random-uuid))
+                                                    :ingredient [:ingredient/id id]
+                                                    :recipe name}
+                                    amount-desc (assoc :cooked-with/amount-desc amount-desc)
+                                    unit (assoc :cooked-with/unit unit))))
+                           (sort-by #(get-in % [:cooked-with/ingredient 1]))
+                           (dedupe-by #(get-in % [:cooked-with/ingredient 1])))]
+      (conj ingredients
            (->
             {:db/id name
              :recipe/id (str (random-uuid))

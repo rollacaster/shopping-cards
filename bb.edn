@@ -14,6 +14,6 @@
   release:be (clojure "-Mbe/release" "--aliases" "be:release")
   deploy {:depends [release deploy:raspi]}
   deploy:raspi (do
-                 (shell "scp" "target/shopping-cards.jar" "pi@ubi-hub:/home/pi")
-                 (shell "ssh" "pi@ubi-hub" "sudo" "systemctl" "restart" "shoppinglist.service"))
-  deploy:restart (shell "ssh" "pi@ubi-hub" "sudo" "systemctl" "restart" "shoppinglist.service")}}
+                 (shell "scp" "target/shopping-cards.jar" "pi@192.168.0.202:/home/pi")
+                 (shell "ssh" "pi@192.168.0.202" "sudo" "systemctl" "restart" "shoppinglist.service"))
+  deploy:restart (shell "ssh" "pi@192.168.0.202" "sudo" "systemctl" "restart" "shoppinglist.service")}}

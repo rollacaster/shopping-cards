@@ -1,18 +1,18 @@
 {"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver" "½TL Paprikapulver" "Paprikapulver (edelsüß)" "Paprika edelsüß" "edelsüßes Paprikapulver"}
- "Paprika" #{"Paprikaschote(n), rot" "rote Paprika" "rotePaprika"}
+ "Paprika" #{"Paprikaschote(n), rot" "rote Paprika" "rotePaprika" "Paprikaschote"}
  "Frischkäse" #{"Frischkäse" "Frischkäse, leicht" "Kräuterfrischkäse" }
  "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz" "Fleur de Sel"
-          "Kala Namak (Schwefelsalz)" "SalzzumKochen"}
+          "Kala Namak (Schwefelsalz)" "SalzzumKochen" "Salz nach Geschmack"}
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
  "Wasser" #{"Wasser, lauwarm" "Wasser" "Wasser und mehr zum Kochen" "Tasse(n) Wasser"}
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
              "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer" "Pfeffer aus der Mühle"
-             "¼ gemahlener Schwarzer Pfeffer" "¼ TL Pfeffer"}
+             "¼ gemahlener Schwarzer Pfeffer" "¼ TL Pfeffer" "Pfeffer, weiß"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
         "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"
         "gutes Olivenöl*" "Olivenöl oder Butterschmalz zum braten" "Sesamöl" "Rapsöl"
-        "kaltgepresstes Rapskernöl (zum Anbraten)"}
+        "kaltgepresstes Rapskernöl (zum Anbraten)" "Sesamöl, geröstetes (optional)"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form" "Margarine (ggf. vegan)"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln" "Vollkorn-Penne"
             "Muschelnudeln" "Nudeln, trocken, jede Sorte" "Tagliatelle Nudeln" "Linguine"}
@@ -27,18 +27,18 @@
                      "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                      "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
                      "Emmentaler, gerieben" "Käse, gerieben, 30 % Fett i. Tr." "Gouda, gerieben"}
- "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen" "egg(s)" "Ei"}
+ "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen" "egg(s)" "Ei" "Ei(er), leicht verquirlt"}
  "Reis" #{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis" "Basmatireis"
-          "Basmati Reis" "Basmati_Reis"}
+          "Basmati Reis" "Basmati_Reis" "Reis, ungekocht, z.B. Jasminreis"}
  "Schinken" #{"Kochschinken"}
  "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'" "Kartoffel(n), festkochend" "Kartoffeln, festkochend"
-                "potato(es)"}
+                "potato(es)" "Karotte(n), kleingeschnitten"}
  "Parmesan" #{"handvoll geriebener Parmesan" "Parmesan, frisch gerieben" "fein geriebener Parmesan" "Parmesan, gerieben"
               "Parmesan, frisch geriebener" "gehobelter Parmesan" "Parmesan gehobelt"}
  "Knoblauch" #{"Knoblauch" "Knoblauchzehen" "Knoblauchzehe(n), gepresster"
                "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt" "Knoblauchzehe(n), fein gewürfelt"
                "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe" "Knoblauchzehe(n), klein gehackt"
-               "Zehe(n)Knoblauch"}
+               "Zehe(n)Knoblauch" "Knoblauchzehe(n), gehackt"}
  "Limettensaft" #{"Limettensaft" "Saft von halben Limette" "Limette(n), Schale und Saft" "Limette(n)"}
  "Spinat" #{"Blattspinat, TK oder frisch" "frischer Babyspinat"
             "Spinat, TK oder frisch dann blanchiert" "Blattspinat, frisch" "Blattspinat, tiefgefroren"
@@ -46,7 +46,7 @@
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
              "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt" "Zwiebel/n"
              "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)" "Speisezwiebel"
-             "Speisezwiebeln" "Schalotte" "roteZwiebel" "Zwiebel, halbiert" "Zwiebeln"}
+             "Speisezwiebeln" "Schalotte" "roteZwiebel" "Zwiebel, halbiert" "Zwiebeln" "Zwiebel(n), rote"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche" "Weizenmehl, bei Bedarf auch mehr"
           "Weizenmehl Typ 405"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
@@ -66,7 +66,7 @@
  "Chili" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"
            "Chili nach Geschmack" "rote Chili" "Chilipulver" "Chilischote(n)"
            "Chiliflocken, getrocknete" "Chiliflocken" "Chillipulver" "Chiliflocke"
-           "Chilischote"}
+           "Chilischote" "Chilischote(n), in Ringe geschnitten (optional)"}
  "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK" "Romanesco" "Broccoli"}
  "Zitrone" #{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon" "Saft einer halben Zitrone"
              "Bio-Zitronenschale, fein geriebene" "Bio-Zitrone" "SpritzerZitronensaft"}
@@ -88,12 +88,12 @@
  "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet" "Gewürzmischung (Tomatengewürzsalz)" "2 geh. TL Gewürzpaste für Gemüsebrühe, selbst gemacht"}
  "Tortellini" #{"Tortelloni"}
  "Aufback-Brezeln" #{"Brezeln"}
- "Sojasoße" #{"Soja-Sauce" "Sojasauce"}
+ "Sojasoße" #{"Soja-Sauce" "Sojasauce" "Sojasauce (Kecap Manis)"}
  "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt" "Joghurt, Magermilchjoghurt, Natur, bis 0,5 % Fett" "Sojajoghurt (zum Servieren)"}
  "Griechischer Joghurt" #{"Griechischer_Joghurt"}
  "Quark" #{"Quark 0,2%"}
  "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten" "Frühlingszwiebel(n)" "Lauch (dünne Stange)"
-                      "onion(s), yellow" "Lauch"}
+                      "onion(s), yellow" "Lauch" "Lauchzwiebel(n), in Ringe geschnitten"}
  "Avocado" #{"reife Avocado" "reifeAvocados" "Avocados"}
  "Kümmel" #{"Kreuzkümmelpulver" "Kreuzkümmel, gemahlen" "Kreuzkümmel (Cumin), gemahlen"}
  "Bohnen" #{"Kidneybohnen (440 g)" "Kidney-Bohnen" "schwarze Bohnen" "Kidneybohnen aus der Dose"}
@@ -130,4 +130,7 @@
  "Kürbis" #{"Hokkaidokürbis(se)"}
  "Hartweizen" #{"Tasse(n) vorgegarter Weizen"}
  "Buttergemüse" #{"gemischtes TK-Gemüse"}
- "Gouda" #{"mittelalter Gouda"}}
+ "Gouda" #{"mittelalter Gouda"}
+ "Hähnchenfleisch" #{"Fleisch, z.B. dünne Hähnchenfleisch-Scheibchen"}
+ "Shrimps" #{"Shrimps, kleine (optional)"}
+ "Wraps" #{"Vollkorn-Tortillafladen"}}
