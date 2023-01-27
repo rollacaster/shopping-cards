@@ -4,7 +4,7 @@
  "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz" "Fleur de Sel"
           "Kala Namak (Schwefelsalz)" "SalzzumKochen"}
  "Lasagneplatten" #{"Lasagneplatte(n)" "Lasagneplatte(n), nach Bedarf"}
- "Wasser" #{"Wasser, lauwarm" "Wasser" "Wasser und mehr zum Kochen"}
+ "Wasser" #{"Wasser, lauwarm" "Wasser" "Wasser und mehr zum Kochen" "Tasse(n) Wasser"}
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
              "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer" "Pfeffer aus der Mühle"
              "¼ gemahlener Schwarzer Pfeffer" "¼ TL Pfeffer"}
@@ -127,4 +127,7 @@
  "Salat" #{"Feldsalat"}
  "Harissa" #{"Harissa (als Paste oder Pulver)"}
  "Lorbeerblatt" #{"Lorbeerblatt, frisch"}
- "Kürbis" #{"Hokkaidokürbis(se)"}}
+ "Kürbis" #{"Hokkaidokürbis(se)"}
+ "Hartweizen" #{"Tasse(n) vorgegarter Weizen"}
+ "Buttergemüse" #{"gemischtes TK-Gemüse"}
+ "Gouda" #{"mittelalter Gouda"}}
