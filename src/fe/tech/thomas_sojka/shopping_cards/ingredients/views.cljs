@@ -4,12 +4,7 @@
    [tech.thomas-sojka.shopping-cards.main.components :as c]))
 
 (defn ingredients []
-  (dispatch [:query {:q '[:find (pull ?i [:ingredient/id
-                                          :ingredient/name
-                                          :ingredient/category])
-                              :where [?i :ingredient/name]]
-                     :on-success [:ingredients/success]
-                     :on-failure [:ingredients/failure]}])
+  (dispatch [:ingredients/load])
   (fn []
     (let [ingredients @(subscribe [:ingredients/all])]
       [:div.bg-gray-200
