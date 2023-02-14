@@ -1,13 +1,14 @@
 (ns tech.thomas-sojka.shopping-cards.main.events
   (:require ["date-fns" :refer [format startOfDay]]
             [cljs.reader :refer [read-string]]
-            [re-frame.core :refer [reg-event-db reg-event-fx]]))
+            [re-frame.core :refer [reg-event-db reg-event-fx]]
+            [tech.thomas-sojka.shopping-cards.recipes.core :as recipes]))
 
 (reg-event-db :main/success-recipes
  (fn [db [_ data]]
    (-> db
        (assoc :app/loading false)
-       (assoc :main/recipes (map first data)))))
+       (assoc :main/recipes (map recipes/->recipe data)))))
 
 (reg-event-db
  :main/failure-recipes

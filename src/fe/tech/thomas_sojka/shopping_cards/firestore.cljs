@@ -63,6 +63,17 @@
         (.then (fn [doc-snap] (dispatch (conj on-success (.data doc-snap)))))
         (.catch (fn [err] (dispatch (conj on-failure err)))))))
 
+(reg-fx :firestore/snapshot
+  (fn [{:keys [path on-success on-failure]}]
+    (firestore/onSnapshot
+     (firestore/query (firestore/collection db path))
+     (fn [snapshot]
+       (let [data (volatile! [])]
+         (.forEach snapshot (fn [doc] (vswap! data conj (-> doc .data (js->clj :keywordize-keys true)))))
+         (dispatch (conj on-success @data))))
+     (fn [error]
+       (dispatch (conj on-failure error))))))
+
 (comment
   (firestore/onSnapshot
    (firestore/query (firestore/collection db "datoms"))

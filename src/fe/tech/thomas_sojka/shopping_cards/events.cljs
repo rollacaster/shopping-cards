@@ -45,12 +45,10 @@
 
 (reg-event-fx :app/success-init-db
   (fn [_ [_ now res]]
-    {:app/init-datoms res
-     :dispatch-n [[:query
-                   {:q queries/load-recipes
-                    :on-success [:main/success-recipes]
-                    :on-failure [:main/failure-recipes]}]
-                  [:main/init-meal-plans now]]}))
+    {:firestore/snapshot {:path "recipes"
+                          :on-success [:main/success-recipes]
+                          :on-failure [:main/failure-recipes]}
+     :dispatch-n [[:main/init-meal-plans now]]}))
 
 (reg-event-fx :app/failure-init-db
   (fn [{:keys [db]} _]
