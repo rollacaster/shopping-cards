@@ -34,7 +34,7 @@
                                    [:recipe/image]
                                    [:recipe/link]
                                    [:recipe/type]
-                                   {[:cooked-with/_recipe :as :ingredients]
+                                   {[:cooked-with/_recipe :as :recipe/cooked-with]
                                     [[:cooked-with/amount]
                                      [:cooked-with/unit]
                                      [:cooked-with/amount-desc]

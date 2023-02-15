@@ -18,7 +18,7 @@
       (set/rename-keys {:id :ingredient/id
                         :name :ingredient/name
                         :category :ingredient/category})
-      (update :ingredient/category keyword)))
+      (update :ingredient/category (fn [c] (keyword "ingredient-category" c)))))
 
 (reg-event-db :ingredients/success
   (fn [db [_ ingredients]]
