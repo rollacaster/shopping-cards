@@ -11,9 +11,10 @@
 (defmethod core/title :view/recipes [] "Rezepte bearbeiten")
 
 (defn ->recipe [firestore-recipe]
-  (-> firestore-recipe
-      (set/rename-keys {:type :recipe/type})
-      (update :recipe/type (fn [t] (keyword "recipe-type" t)))
+  (cond-> firestore-recipe
+      :always (set/rename-keys {:type :recipe/type})
+      :always(update :recipe/type (fn [t] (keyword "recipe-type" t)))
+      (:ingredients firestore-recipe)
       (update :ingredients (fn [cooked-with]
                              (map
                               (fn [{:keys [ingredient] :as c}]
