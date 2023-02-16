@@ -2,7 +2,7 @@
   (:require [day8.re-frame.http-fx]
             [re-frame.core
              :refer
-             [clear-subscription-cache! dispatch dispatch-sync]]
+             [clear-subscription-cache! dispatch dispatch-sync subscribe]]
             [reagent.dom :as dom]
             [reitit.coercion.spec :as rss]
             [reitit.frontend :as rf]
@@ -68,7 +68,8 @@
     (fn [m]
       (dispatch [:app/navigate m]))
     {:use-fragment true})
-   (dispatch-sync [:app/initialise (js/Date.)])
+   (when (empty? @(subscribe [:main/recipes]))
+     (dispatch-sync [:app/initialise (js/Date.)]))
    (dom/render [app] container)))
 
 (defn ^:dev/after-load clear-cache-and-render!

@@ -43,8 +43,8 @@
                  :on-success [:main/success-bank-holidays]
                  :on-failure [:main/failure-bank-holidays]}}))
 
-(reg-event-fx :app/success-init-db
-  (fn [_ [_ now res]]
+(reg-event-fx :app/init-db
+  (fn [_ [_ now]]
     {:firestore/snapshot {:path "recipes"
                           :on-success [:main/success-recipes]
                           :on-failure [:main/failure-recipes]}
@@ -57,15 +57,14 @@
                    :event [:app/remove-error]
                    :time 2000}}))
 
-(reg-event-fx :app/init-db
+#_(reg-event-fx :app/init-db
   (fn [_ [_ now]]
     {:firestore/doc {:path "snapshots"
                      :key "2023-01-24"
                      :on-success [:app/success-init-db now]
                      :on-failure [:app/failure-init-db]}}))
 
-(reg-event-fx
- :app/initialise
+(reg-event-fx :app/initialise
  (fn [_ [_ now]]
    {:db default-db
     :dispatch-n [[:app/init-holidays (.getFullYear now)]

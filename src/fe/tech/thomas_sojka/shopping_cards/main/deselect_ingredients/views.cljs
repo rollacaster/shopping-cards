@@ -36,6 +36,5 @@
           [icon :add]]
          "Zutat hinzufügen"]]]]
      [:div.fixed.bottom-0.w-100.z-2
-      [c/footer {:on-click #(dispatch [:shopping-card/create
-                                       meals-without-shopping-list])
+      [c/footer {:on-click #(dispatch [:shopping-card/create meals-without-shopping-list])
                  :app/loading loading}]]]))

@@ -43,34 +43,16 @@
     (partial toggle-map id))))
 
 ;; TODO is the the :shopping-card entry?
-(reg-event-fx
- :shopping-card/load-ingredients-for-meals
+(reg-event-fx :shopping-card/load-ingredients-for-meals
  (fn [{:keys [db]} [_ meals-without-shopping-list]]
-   {:db (assoc db :app/loading true)
-    :dispatch [:query {:q queries/load-ingredients-by-recipe-id
-                       :params (map (comp :id :recipe) meals-without-shopping-list)
-                       :on-success [:shopping-card/success-load-ingredients-for-selected-recipes]
-                       :on-failure [:shopping-card/failure-load-ingredients-for-selected-recipes]}]}))
-
-(defn add-water [ingredients]
-  (conj ingredients "6175d1a2-0af7-43fb-8a53-212af7b72c9c"))
-
-(reg-event-fx
- :shopping-card/success-load-ingredients-for-selected-recipes
- (fn [{:keys [db]} [_ res]]
    {:app/push-state [:route/deselect-ingredients]
     :app/scroll-to [0 0]
     :db
-    (let [data (ingredients/process-ingredients res)]
+    (let [data (ingredients/process-ingredients
+                (mapcat (comp :ingredients :recipe) meals-without-shopping-list))]
       (-> db
           (assoc :shopping-card/ingredients (vec data))
-          (assoc :app/loading false)
-          (assoc :shopping-card/selected-ingredient-ids (add-water (set (map first data))))))}))
-
-(reg-event-db
- :shopping-card/failure-load-ingredients-for-selected-recipes
- (fn [db _]
-   (assoc db :shopping-card/ingredients :ERROR)))
+          (assoc :shopping-card/selected-ingredient-ids (set (map first data)))))}))
 
 (defn shopping-card-ingredients [db]
   (let [{:keys [shopping-card/ingredients shopping-card/selected-ingredient-ids]}
@@ -79,8 +61,7 @@
          (filter #(contains? selected-ingredient-ids (first %)))
          (map second))))
 
-(reg-event-fx
- :shopping-card/create
+(reg-event-fx :shopping-card/create
  (fn [{:keys [db]} [_ meals-without-shopping-list]]
    {:db (assoc db :app/loading true)
     :http-xhrio {:method :post
