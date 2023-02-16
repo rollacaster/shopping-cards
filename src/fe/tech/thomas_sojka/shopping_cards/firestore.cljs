@@ -63,6 +63,14 @@
         (.then (fn [doc-snap] (dispatch (conj on-success (.data doc-snap)))))
         (.catch (fn [err] (dispatch (conj on-failure err)))))))
 
+(reg-fx :firestore/add-docs
+  (fn [{:keys [path data on-success on-failure]}]
+    (doseq [{:keys [id] :as d} data]
+      (-> (firestore/setDoc (firestore/doc (firestore/collection db path) id)
+                            (clj->js d))
+          (.then (fn [] (when on-success (dispatch (conj on-success data)))))
+          (.catch (fn [err] (when on-failure (dispatch (conj on-failure err)))))))))
+
 (reg-fx :firestore/snapshot
   (fn [{:keys [path on-success on-failure]}]
     (firestore/onSnapshot

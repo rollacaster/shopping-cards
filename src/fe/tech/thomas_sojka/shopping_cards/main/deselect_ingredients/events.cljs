@@ -63,12 +63,6 @@
 
 (reg-event-fx :shopping-card/create
  (fn [{:keys [db]} [_ meals-without-shopping-list]]
-   {:db (assoc db :app/loading true)
-    :http-xhrio {:method :post
-                 :uri "/shopping-card"
-                 :params {:ingredients (shopping-card-ingredients db)
-                          :meals meals-without-shopping-list}
-                 :format (ajax/json-request-format)
-                 :response-format (ajax/text-response-format)
-                 :on-success [:shopping-card/success-shopping-card meals-without-shopping-list]
-                 :on-failure [:shopping-card/failure-shopping-card]}}))
+   {:db db
+    :firestore/add-docs {:path "meal-plans"
+                         :data (map (fn [meal] (update meal :recipe dissoc :ingredients)) meals-without-shopping-list)}}))
