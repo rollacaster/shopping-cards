@@ -52,7 +52,7 @@
 
 (defn- attach-ingredients [db meal]
   (assoc meal :recipe (first
-                       (get (->> (:main/recipes db) (group-by :id))
+                       (get (->> (:recipes db) (group-by :id))
                             (:id (:recipe meal))))))
 
 (reg-event-fx :shopping-list/possible-ingredients

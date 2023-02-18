@@ -9,7 +9,7 @@
 
 (reg-sub :recipes
  (fn [db _]
-   (:main/recipes db)))
+   (:recipes db)))
 
 (reg-sub :recipes/details
   :<- [:recipes]
@@ -19,7 +19,7 @@
      recipes)))
 
 (reg-sub :recipes/recipe-types
- :<- [:main/recipes]
+ :<- [:recipes]
  (fn [recipes]
    (set (map :recipe/type recipes))))
 
@@ -112,8 +112,8 @@
 
 (reg-event-db :recipes/load-success
  (fn [db [_ data]]
-   (assoc db :main/recipes (map ->recipe data))))
+   (assoc db :recipes (map ->recipe data))))
 
 (reg-event-db :main/failure-recipes
  (fn [db _]
-   (assoc db :main/recipes :ERROR)))
+   (assoc db :recipes :ERROR)))

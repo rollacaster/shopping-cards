@@ -19,7 +19,7 @@
                               :req [:recipe/type ]
                               :opt-un [:recipe/link :recipe/inactive
                                        :recipe/ingredients]))
-(s/def :main/recipes (s/coll-of :recipe/recipe))
+(s/def :recipe/recipes (s/coll-of :recipe/recipe))
 
 (s/def :meal-plan/date inst?)
 (s/def :meal-plan/type #{:meal-type/dinner :meal-type/lunch})
@@ -81,11 +81,11 @@
                              :app/route
                              :app/start-of-week
                              :main/ingredients
-                             :main/recipes
                              :meals-plans/meals
                              :shopping-card/selected-ingredient-ids
                              :shopping-card/ingredients]
-                       :req-un [:bank-holidays/bank-holidays]))
+                       :req-un [:bank-holidays/bank-holidays
+                                :recipe/recipes]))
 
 (def default-db
   {:app/error nil
@@ -93,7 +93,7 @@
    :app/route {}
    :app/start-of-week (js/Date.)
    :main/ingredients []
-   :main/recipes []
+   :recipes []
    :meals-plans/meals []
    :shopping-card/selected-ingredient-ids #{}
    :shopping-card/ingredients []
