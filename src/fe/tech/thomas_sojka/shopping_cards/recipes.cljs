@@ -59,9 +59,8 @@
                            :on-failure [:recipes/add-failure]}})))
 
 (reg-event-fx :recipes/add-success
-  (fn [{:keys [db]}]
-    {:db (assoc db :recipe-details/meal nil)
-     :app/push-state [:route/main]}))
+  (fn []
+    {:app/push-state [:route/main]}))
 
 (reg-event-fx :recipes/add-failure
  (fn [{:keys [db]}]

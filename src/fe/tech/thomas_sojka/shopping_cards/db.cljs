@@ -28,11 +28,12 @@
 (s/def :meal-plan/meal
   (s/keys :req-un [:meal-plan/date :meal-plan/type]
           :opt-un [:meal-plan/recipe :meal-plan/shopping-list]))
-(s/def :main/meal-plans (s/coll-of :meal-plan/meal))
+(s/def :meals-plans/meals (s/coll-of :meal-plan/meal))
 
 
-(s/def :main/start-of-week inst?)
-(s/def :main/bank-holidays (s/coll-of map? :kind set?))
+
+(s/def :app/start-of-week inst?)
+(s/def :bank-holidays/bank-holidays (s/coll-of map? :kind set?))
 
 (def ingredient-categorys
   #{:ingredient-category/obst
@@ -57,6 +58,7 @@
 (s/def :ingredient/name string?)
 (s/def :ingredient/ingredient (s/keys :req [:ingredient/id :ingredient/name
                                             :ingredient/category]))
+(s/def :main/ingredients (s/coll-of :ingredient/ingredient))
 
 (s/def :cooked-with/ingredient :ingredient/ingredient)
 (s/def :cooked-with/id :app/id)
@@ -74,31 +76,30 @@
 (s/def :shopping-card/ingredients (s/coll-of :shopping-card/read-ingredient))
 (s/def :shopping-card/selected-ingredient-ids (s/coll-of :ingredient/id :kind set?))
 
-(s/def :recipe-details/ingredients (s/coll-of :shopping-card/read-ingredient))
-(s/def :recipe-details/meal (s/nilable :meal-plan/meal))
-
 (s/def :app/db (s/keys :req [:app/error
                              :app/loading
                              :app/route
-                             :shopping-card/selected-ingredient-ids
-                             :shopping-card/ingredients
-                             :extra-ingredients/filter
-                             :recipe-details/ingredients
-                             :recipe-details/meal
+                             :app/start-of-week
+                             :main/ingredients
                              :main/recipes
-                             :main/meal-plans
-                             :main/start-of-week]))
+                             :meals-plans/meals
+                             :shopping-card/selected-ingredient-ids
+                             :shopping-card/ingredients]
+                       :req-un [:bank-holidays/bank-holidays]))
 
 (def default-db
   {:app/error nil
    :app/loading false
    :app/route {}
-   :main/recipes []
+   :app/start-of-week (js/Date.)
    :main/ingredients []
-   :main/meal-plans []
-   :main/start-of-week (js/Date.)
-   :main/bank-holidays #{}
+   :main/recipes []
+   :meals-plans/meals []
    :shopping-card/selected-ingredient-ids #{}
    :shopping-card/ingredients []
-   :recipe-details/ingredients []
-   :recipe-details/meal nil})
+   :bank-holidays #{}})
+
+(comment
+  (do
+    (def db @re-frame.db/app-db)
+    (tap> db)))

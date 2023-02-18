@@ -49,7 +49,7 @@
     meals-plans)))
 
 (reg-event-fx :meal/add
-  (fn [ [_ meal]]
+  (fn [_ [_ meal]]
     (let [new-id (str (random-uuid))]
       {:firestore/add-doc {:path "meal-plans"
                            :data (-> meal
@@ -59,9 +59,8 @@
                            :on-failure [:meal/add-failure]}})))
 
 (reg-event-fx :meal/add-success
-  (fn [{:keys [db]}]
-    {:db (assoc db :recipe-details/meal nil)
-     :app/push-state [:route/main]}))
+  (fn []
+    {:app/push-state [:route/main]}))
 
 (reg-event-fx :meal/add-failure
  (fn [{:keys [db]}]
