@@ -55,22 +55,6 @@
 (def conn (d/connect (d/client {:server-type :dev-local :system "dev"})
                      {:db-name "shopping-cards"}))
 
-(d/q
- '[:find ?m ?r ?n
-   :in $
-   :where
-   [?m :meal-plan/recipe ?r]
-   [?r :recipe/name ?n]]
- (d/db conn))
-
-83562883712034
-(d/q
- '[:find (pull ?m [:meal-plan/inst
-                   :meal-plan/recipe
-                   :meal-plan/type])
-   :where [?m :meal-plan/id]]
- (d/db conn))
-
 (defn enum-map [conn]
   (->> @schema/meta-db
        (datascript.core/q '[:find
