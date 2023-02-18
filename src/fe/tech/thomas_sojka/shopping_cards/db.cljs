@@ -74,9 +74,6 @@
 (s/def :shopping-card/ingredients (s/coll-of :shopping-card/read-ingredient))
 (s/def :shopping-card/selected-ingredient-ids (s/coll-of :ingredient/id :kind set?))
 
-(s/def :extra-ingredients/filter string?)
-(s/def :extra-ingredients/ingredients (s/coll-of :ingredient/ingredient))
-
 (s/def :recipe-details/ingredients (s/coll-of :shopping-card/read-ingredient))
 (s/def :recipe-details/meal (s/nilable :meal-plan/meal))
 
@@ -103,7 +100,5 @@
    :main/bank-holidays #{}
    :shopping-card/selected-ingredient-ids #{}
    :shopping-card/ingredients []
-   :extra-ingredients/filter ""
-   :extra-ingredients/ingredients []
    :recipe-details/ingredients []
    :recipe-details/meal nil})

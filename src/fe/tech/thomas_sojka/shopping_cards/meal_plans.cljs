@@ -49,8 +49,7 @@
     meals-plans)))
 
 (reg-event-fx :meal/add
-  (fn [{:keys [db]} [_ meal]]
-    (def meal meal)
+  (fn [ [_ meal]]
     (let [new-id (str (random-uuid))]
       {:firestore/add-doc {:path "meal-plans"
                            :data (-> meal

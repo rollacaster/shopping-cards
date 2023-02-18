@@ -1,6 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.views.deselect-ingredients
   (:require [re-frame.core :refer [dispatch subscribe]]
-            [tech.thomas-sojka.shopping-cards.components :as c :refer [icon]]))
+            [tech.thomas-sojka.shopping-cards.components :as c]))
 
 (defn ingredient-select [{:keys [i id selected? on-change]} children]
   [c/ingredient {:i i :id id}
@@ -26,14 +26,7 @@
                          :on-change
                          #(dispatch [:shopping-card/toggle-selected-ingredients id])})
                       content])
-                   ingredients)
-      [:button.bn.bg-transparent.w-100.pa0
-       {:on-click #(dispatch [:extra-ingredients/show])}
-       [c/ingredient {:i (count ingredients) :id "add-ingredient" :class "ba b--dashed"}
-        [:div.flex.items-center
-         [:div.w2.flex.items-center.mr3
-          [icon :add]]
-         "Zutat hinzufügen"]]]]
+                   ingredients)]
      [:div.fixed.bottom-0.w-100.z-2
       [c/footer {:on-click #(dispatch [:shopping-card/create meals-without-shopping-list])
                  :app/loading loading}]]]))
