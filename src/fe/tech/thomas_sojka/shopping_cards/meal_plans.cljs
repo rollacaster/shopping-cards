@@ -18,11 +18,11 @@
     {:app/push-state [:route/main]}))
 
 (reg-event-fx :meal/add-failure
- (fn [{:keys [db]}]
-   {:db (assoc db :app/error "Fehler: Speichern fehlgeschlagen")
-    :app/timeout {:id :app/error-removal
-                  :event [:app/remove-error]
-                  :time 2000}}))
+  (fn [{:keys [db]}]
+    {:db (assoc db :app/error "Fehler: Speichern fehlgeschlagen")
+     :app/timeout {:id :app/error-removal
+                   :event [:app/remove-error]
+                   :time 2000}}))
 
 (reg-event-fx :meal/remove
   (fn [_ [_ meal-plan-id]]
@@ -32,11 +32,11 @@
                             :on-failure [:meal/remove-failure]}}))
 
 (reg-event-fx :meal/remove-failure
- (fn [{:keys [db]}]
-   {:db (assoc db :app/error "Fehler: Löschen fehlgeschlagen")
-    :app/timeout {:id :app/error-removal
-                  :event [:app/remove-error]
-                  :time 2000}}))
+  (fn [{:keys [db]}]
+    {:db (assoc db :app/error "Fehler: Löschen fehlgeschlagen")
+     :app/timeout {:id :app/error-removal
+                   :event [:app/remove-error]
+                   :time 2000}}))
 
 (defn- meal-plans-loaded-for-today? [db today]
   (->> (:meals db)
@@ -44,11 +44,11 @@
        (some #(= today %))))
 
 (reg-event-fx :meals/load (fn [{:keys [db]} [_ today]]
-   (if (meal-plans-loaded-for-today? db today)
-     {:db db}
-     {:firestore/snapshot {:path "meal-plans"
-                           :on-success [:meal/load-success]
-                           :on-failure [:meal/load-failure]}})))
+                            (if (meal-plans-loaded-for-today? db today)
+                              {:db db}
+                              {:firestore/snapshot {:path "meal-plans"
+                                                    :on-success [:meal/load-success]
+                                                    :on-failure [:meal/load-failure]}})))
 
 (defn- ->meal-plan [firestore-meal-plan]
   (-> firestore-meal-plan
@@ -60,19 +60,19 @@
   (fn [db [_ data]]
     (assoc db :meals (map ->meal-plan data))))
 
-(reg-event-fx :meals/load-failure
- (fn [{:keys [db]} _]
-   {:db
-    (assoc db
-           :app/error "Fehler: Essen nicht geladen."
-           :meals [])
-    :app/timeout {:id :app/error-removal
-                  :event [:app/remove-error]
-                  :time 2000}}))
+(reg-event-fx :meal/load-failure
+  (fn [{:keys [db]}]
+    {:db
+     (assoc db
+            :app/error "Fehler: Essen nicht geladen."
+            :meals [])
+     :app/timeout {:id :app/error-removal
+                   :event [:app/remove-error]
+                   :time 2000}}))
 
 (reg-sub :meals
- (fn [db _]
-   (:meals db)))
+  (fn [db _]
+    (:meals db)))
 
 (defn group-meal-plans [meal-plans]
   (->> meal-plans
@@ -101,15 +101,15 @@
      (range 4))))
 
 (reg-sub :meals-without-shopping-list
- :<- [:meals]
- (fn [meals-plans]
-   (filter
-    (fn [{:keys [date shopping-list]}]
-      (and
-       (not shopping-list)
-       (or (isAfter (startOfDay date) (startOfDay (js/Date.)))
-           (isEqual (startOfDay date) (startOfDay (js/Date.))))))
-    meals-plans)))
+  :<- [:meals]
+  (fn [meals-plans]
+    (filter
+     (fn [{:keys [date shopping-list]}]
+       (and
+        (not shopping-list)
+        (or (isAfter (startOfDay date) (startOfDay (js/Date.)))
+            (isEqual (startOfDay date) (startOfDay (js/Date.))))))
+     meals-plans)))
 
 ;; TODO Rearrange data?
 (defn- attach-ingredients [recipes meal]

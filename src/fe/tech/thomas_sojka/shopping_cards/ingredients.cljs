@@ -43,6 +43,6 @@
  (fn [db [_ data]]
    (assoc db :ingredients (map ->ingredient data))))
 
-(reg-event-db :main/failure-ingredients
+(reg-event-db :ingredients/load-failure
  (fn [db _]
    (assoc db :ingredients :ERROR)))
