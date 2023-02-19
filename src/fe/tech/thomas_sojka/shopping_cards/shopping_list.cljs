@@ -2,6 +2,25 @@
   (:require [clojure.string :as str]
             [re-frame.core :refer [reg-event-fx reg-sub]]))
 
+(reg-event-fx :shopping-list/deselect-ingredients
+ (fn []
+   {:app/push-state [:route/deselect-ingredients]
+    :app/scroll-to [0 0]}))
+
+(reg-event-fx :shopping-card/create
+ (fn [{:keys [db]} [_ ingredients selected-ingredients]]
+   (js/console.log ingredients selected-ingredients)
+   {:db db}
+   #_{:db (assoc db :app/loading true)
+    :http-xhrio {:method :post
+                 :uri "/shopping-card"
+                 :params {:ingredients (shopping-card-ingredients db)
+                          :meals meals-without-shopping-list}
+                 :format (ajax/json-request-format)
+                 :response-format (ajax/text-response-format)
+                 :on-success [:shopping-card/success-shopping-card meals-without-shopping-list]
+                 :on-failure [:shopping-card/failure-shopping-card]}}))
+
 (def penny-order
   [:ingredient-category/obst
    :ingredient-category/gemüse
@@ -63,22 +82,3 @@
      (->> meals-plans
           (map (partial attach-ingredients recipes))
           (mapcat (comp :ingredients :recipe))))))
-
-(reg-event-fx :shopping-list/deselect-ingredients
- (fn []
-   {:app/push-state [:route/deselect-ingredients]
-    :app/scroll-to [0 0]}))
-
-(reg-event-fx :shopping-card/create
- (fn [{:keys [db]} [_ ingredients selected-ingredients]]
-   (js/console.log ingredients selected-ingredients)
-   {:db db}
-   #_{:db (assoc db :app/loading true)
-    :http-xhrio {:method :post
-                 :uri "/shopping-card"
-                 :params {:ingredients (shopping-card-ingredients db)
-                          :meals meals-without-shopping-list}
-                 :format (ajax/json-request-format)
-                 :response-format (ajax/text-response-format)
-                 :on-success [:shopping-card/success-shopping-card meals-without-shopping-list]
-                 :on-failure [:shopping-card/failure-shopping-card]}}))
