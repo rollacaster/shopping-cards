@@ -85,8 +85,3 @@
    :recipes []
    :meals []
    :bank-holidays #{}})
-
-(comment
-  (do
-    (def db @re-frame.db/app-db)
-    (tap> db)))

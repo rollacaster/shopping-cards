@@ -1,6 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.schema
-  (:require [hodur-engine.core :as hodur]
-            [hodur-graphviz-schema.core :as hodur-graphviz]))
+  (:require [hodur-engine.core :as hodur]))
 
 (def meta-db
   (hodur/init-schema
@@ -56,8 +55,3 @@
      ShoppingList
      [^{:type MealPlan :cardinality [1 n]}
       meals]]))
-
-(comment
-  (do
-    (spit "resources/schema.dot" (hodur-graphviz/schema meta-db))
-    (clojure.java.shell/sh "dot" "-Tpng" "-oresources/schema.png" "resources/schema.dot")))
