@@ -7,9 +7,9 @@
   (fn [_ [_ meal-id]]
     {:app/push-state [:route/meal-plan-details {:meal-id meal-id}]}))
 
-(reg-sub :meals-plans/meals
+(reg-sub :meals
  (fn [db _]
-   (:meals-plans/meals db)))
+   (:meals db)))
 
 (defn group-meal-plans [meal-plans]
   (->> meal-plans
@@ -21,7 +21,7 @@
        (apply merge)))
 
 (reg-sub :meal-plans/weekly
-  :<- [:meals-plans/meals]
+  :<- [:meals]
   :<- [:app/start-of-week]
   (fn [[meal-plans start-date]]
     (map
@@ -37,8 +37,8 @@
                    :type :meal-type/dinner})]))
      (range 4))))
 
-(reg-sub :meals-plans/meals-without-shopping-list
- :<- [:meals-plans/meals]
+(reg-sub :meals-without-shopping-list
+ :<- [:meals]
  (fn [meals-plans]
    (filter
     (fn [{:keys [date shopping-list]}]
@@ -88,7 +88,7 @@
                   :time 2000}}))
 
 (defn- meal-plans-loaded-for-today? [db today]
-  (->> (:meals-plans/meals db)
+  (->> (:meals db)
        (map #(:date %))
        (some #(= today %))))
 
@@ -102,7 +102,7 @@
     (some
      (fn [{:keys [id] :as meal-plan}] (when (= id meal-id)
                                        (attach-ingredients db meal-plan)))
-     (:meals-plans/meals db))))
+     (:meals db))))
 
 (reg-event-fx :meal-plans/select-meal
  (fn [_ [_ meal]]
@@ -123,7 +123,7 @@
 
 (reg-event-db :meal/load-success
   (fn [db [_ data]]
-    (assoc db :meals-plans/meals (->> data
+    (assoc db :meals (->> data
                                       (map (fn [meal-plan]
                                              (-> meal-plan
                                                  (update :date (fn [date] (.toDate date)))
@@ -135,7 +135,7 @@
    {:db
     (assoc db
            :app/error "Fehler: Essen nicht geladen."
-           :meals-plans/meals [])
+           :meals [])
     :app/timeout {:id :app/error-removal
                   :event [:app/remove-error]
                   :time 2000}}))

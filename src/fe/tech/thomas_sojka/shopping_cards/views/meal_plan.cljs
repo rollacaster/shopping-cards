@@ -33,7 +33,7 @@
 (defn main []
   (let [meals-plans @(subscribe [:meal-plans/weekly])
         start-of-week @(subscribe [:app/start-of-week])
-        meals-without-shopping-list @(subscribe [:meals-plans/meals-without-shopping-list])]
+        meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
     [:div.ph5-ns.flex.flex-column.h-100
      [:div.flex.items-center.justify-between
       [:div.pv2.flex

@@ -57,7 +57,7 @@
 
 (reg-sub :shopping-list/possible-ingredients
   :<- [:recipes]
-  :<- [:meals-plans/meals-without-shopping-list]
+  :<- [:meals-without-shopping-list]
   (fn [[recipes meals-plans]]
     (ingredients
      (->> meals-plans
