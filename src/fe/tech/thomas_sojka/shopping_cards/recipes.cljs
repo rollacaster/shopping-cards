@@ -1,13 +1,26 @@
 (ns tech.thomas-sojka.shopping-cards.recipes
-  (:require [clojure.set :as set]
-            [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]
+  (:require [cljs.reader :as reader]
+            [clojure.set :as set]
+            [re-frame.core :refer [inject-cofx reg-cofx reg-event-db
+                                   reg-event-fx reg-fx reg-sub]]
             [tech.thomas-sojka.shopping-cards.ingredients :as ingredients]))
 
+(def localstorage-recipes-key "recipes")
+
+(reg-cofx :local-store-recipes
+  (fn [cofx]
+    (assoc cofx :local-store-recipes
+           (some->> (.getItem js/localStorage localstorage-recipes-key)
+                    (reader/read-string)))))
+
 (reg-event-fx :recipes/load
-  (fn []
-    {:firestore/snapshot {:path "recipes"
-                          :on-success [:recipes/load-success]
-                          :on-failure [:recipes/load-failure]}}))
+  [(inject-cofx :local-store-recipes)]
+  (fn [{:keys [local-store-recipes db]}]
+    (if (empty? local-store-recipes)
+      {:firestore/snapshot {:path "recipes"
+                            :on-success [:recipes/load-success]
+                            :on-failure [:recipes/load-failure]}}
+      {:db (assoc db :recipes local-store-recipes)})))
 
 (defn ->recipe [firestore-recipe]
   (cond-> firestore-recipe
@@ -25,9 +38,14 @@
                                  (ingredients/->ingredient ingredient)])
                               cooked-with)))))
 
-(reg-event-db :recipes/load-success
- (fn [db [_ data]]
-   (assoc db :recipes (map ->recipe data))))
+(reg-fx :recipes/store
+  (fn [recipes]
+    (.setItem js/localStorage localstorage-recipes-key (str recipes))))
+
+(reg-event-fx :recipes/load-success
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :recipes (map ->recipe data))
+     :recipes/store (map ->recipe data)}))
 
 (reg-event-db :recipes/load-failure
  (fn [db _]

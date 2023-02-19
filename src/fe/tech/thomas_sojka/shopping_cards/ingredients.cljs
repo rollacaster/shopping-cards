@@ -1,10 +1,20 @@
 (ns tech.thomas-sojka.shopping-cards.ingredients
-  (:require [clojure.set :as set]
-            [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
+  (:require [cljs.reader :as reader]
+            [clojure.set :as set]
+            [re-frame.core :refer [inject-cofx reg-cofx reg-event-db
+                                   reg-event-fx reg-fx reg-sub]]))
 
 (reg-sub :ingredients
   (fn [db]
     (:ingredients db)))
+
+(def localstorage-ingredients-key "ingredients")
+
+(reg-cofx :local-store-ingredients
+  (fn [cofx]
+    (assoc cofx :local-store-ingredients
+           (some->> (.getItem js/localStorage localstorage-ingredients-key)
+                    (reader/read-string)))))
 
 (reg-event-fx :ingredients/add
   (fn [_ [_ ingredient]]
@@ -27,10 +37,13 @@
                   :time 2000}}))
 
 (reg-event-fx :ingredients/load
-  (fn []
-    {:firestore/snapshot {:path "ingredients"
-                          :on-success [:ingredients/load-success]
-                          :on-failure [:ingredients/load-failure]}}))
+  [(inject-cofx :local-store-ingredients)]
+  (fn [{:keys [db local-store-ingredients]}]
+    (if (empty? local-store-ingredients)
+      {:firestore/snapshot {:path "ingredients"
+                            :on-success [:ingredients/load-success]
+                            :on-failure [:ingredients/load-failure]}}
+      {:db (assoc db :ingredients local-store-ingredients)})))
 
 (defn ->ingredient [firestore-ingredient]
   (-> firestore-ingredient
@@ -39,9 +52,14 @@
                         :category :ingredient/category})
       (update :ingredient/category (fn [c] (keyword "ingredient-category" c)))))
 
-(reg-event-db :ingredients/load-success
- (fn [db [_ data]]
-   (assoc db :ingredients (map ->ingredient data))))
+(reg-fx :ingredients/store
+  (fn [ingredients]
+    (.setItem js/localStorage localstorage-ingredients-key (str ingredients))))
+
+(reg-event-fx :ingredients/load-success
+  (fn [{:keys [db]} [_ data]]
+    {:db (assoc db :ingredients (map ->ingredient data))
+     :ingredients/store (map ->ingredient data)}))
 
 (reg-event-db :ingredients/load-failure
  (fn [db _]
