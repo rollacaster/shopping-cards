@@ -12,15 +12,12 @@
             [tech.thomas-sojka.shopping-cards.shopping-list]
             [tech.thomas-sojka.shopping-cards.views.main :as main]))
 
-
-
 (defn init!
   ([]
    (init! {:container (.getElementById js/document "app")}))
   ([{:keys [container]}]
-
    (when (empty? @(subscribe [:recipes]))
-     (dispatch-sync [:app/initialise (js/Date.)]))
+     (dispatch-sync [:app/init (js/Date.)]))
    (dom/render [main/app (router/init)] container)))
 
 (defn ^:dev/after-load clear-cache-and-render!

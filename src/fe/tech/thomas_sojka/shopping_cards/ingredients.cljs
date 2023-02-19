@@ -2,11 +2,7 @@
   (:require [clojure.set :as set]
             [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
 
-(reg-event-fx :ingredients/new
-  (fn []
-    {:app/push-state [:route/new-ingredient]}))
-
-(reg-sub :ingredients/all
+(reg-sub :ingredients
   (fn [db]
     (:ingredients db)))
 

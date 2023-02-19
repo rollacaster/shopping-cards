@@ -25,14 +25,14 @@
                   :event [:app/remove-error]
                   :time 2000}}))
 
-(reg-sub :bank-holidays/local
+(reg-sub :bank-holidays/bavaria
  (fn [db]
    (filter
     #(or (nil? (:states %)) ((:states %) :by))
     (:bank-holidays db))))
 
 (reg-sub :bank-holiday
- :<- [:bank-holidays/local]
+ :<- [:bank-holidays/bavaria]
  (fn [bank-holidays [_ date]]
    (let [c-day (getDate date)
          c-month (getMonth date)]

@@ -1,6 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.views.ingredient-add
-  (:require [re-frame.core :refer [dispatch subscribe]]
-            [reagent.core :as r]))
+  (:require [re-frame.core :refer [dispatch]]
+            [reagent.core :as r]
+            [tech.thomas-sojka.shopping-cards.db :as db]))
 
 (defn main []
   (let [ingredient-name (r/atom "")
@@ -21,7 +22,7 @@
            :name "ingredient-category"
            :on-change #(reset! ingredient-category (keyword (str "ingredient-category/" ^js  (.-target.value %))))}
           (map (fn [category] ^{:key category} [:option {:value category} (name category)])
-               @(subscribe [:ingredient/categories]))]]
+               db/ingredient-categorys)]]
         [:button.bg-orange-500.white.ph3.pv2.bn.shadow-5.br3
          {:on-click #(dispatch [:transact
                                 {:tx-data

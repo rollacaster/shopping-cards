@@ -8,7 +8,7 @@
             [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.db :refer [default-db]]))
 
-(reg-event-fx :app/initialise
+(reg-event-fx :app/init
  (fn [_ [_ now]]
    {:db (assoc default-db :app/start-of-week (startOfDay now))
     :dispatch-n [[:bank-holidays/load (.getFullYear now)]
@@ -22,7 +22,6 @@
 
 (reg-event-db :app/remove-error
  (fn [db] (assoc db :app/error nil)))
-
 
 (reg-sub :app/error
  (fn [db _]
@@ -41,11 +40,11 @@
    (:app/start-of-week db)))
 
 (reg-fx :app/push-state
-        (fn [route] (apply rfe/push-state route)))
+  (fn [route] (apply rfe/push-state route)))
 
 (reg-fx :app/scroll-to
-        (fn [[x y]]
-          (.scrollTo js/window x y)))
+  (fn [[x y]]
+    (.scrollTo js/window x y)))
 
 (defonce timeouts (r/atom {}))
 
