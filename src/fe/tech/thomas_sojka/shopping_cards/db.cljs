@@ -58,7 +58,7 @@
 (s/def :ingredient/name string?)
 (s/def :ingredient/ingredient (s/keys :req [:ingredient/id :ingredient/name
                                             :ingredient/category]))
-(s/def :main/ingredients (s/coll-of :ingredient/ingredient))
+(s/def :ingredient/ingredients (s/coll-of :ingredient/ingredient))
 
 (s/def :cooked-with/ingredient :ingredient/ingredient)
 (s/def :cooked-with/id :app/id)
@@ -72,31 +72,23 @@
                 :cooked-with/unit
                 :cooked-with/amount]))
 
-(s/def :shopping-card/read-ingredient (s/tuple :ingredient/id :ingredient/name))
-(s/def :shopping-card/ingredients (s/coll-of :shopping-card/read-ingredient))
-(s/def :shopping-card/selected-ingredient-ids (s/coll-of :ingredient/id :kind set?))
-
 (s/def :app/db (s/keys :req [:app/error
                              :app/loading
                              :app/route
                              :app/start-of-week
-                             :main/ingredients
-                             :meals-plans/meals
-                             :shopping-card/selected-ingredient-ids
-                             :shopping-card/ingredients]
+                             :meals-plans/meals]
                        :req-un [:bank-holidays/bank-holidays
-                                :recipe/recipes]))
+                                :recipe/recipes
+                                :ingredient/ingredients]))
 
 (def default-db
   {:app/error nil
    :app/loading false
    :app/route {}
    :app/start-of-week (js/Date.)
-   :main/ingredients []
+   :ingredients []
    :recipes []
    :meals-plans/meals []
-   :shopping-card/selected-ingredient-ids #{}
-   :shopping-card/ingredients []
    :bank-holidays #{}})
 
 (comment

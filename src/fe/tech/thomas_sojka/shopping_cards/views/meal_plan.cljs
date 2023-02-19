@@ -69,4 +69,4 @@
               [meal dinner]]]))
         meals-plans))]
      (when (seq meals-without-shopping-list)
-       [c/footer {:on-click #(dispatch [:shopping-list/possible-ingredients meals-without-shopping-list])}])]))
+       [c/footer {:on-click #(dispatch [:shopping-list/deselect-ingredients])}])]))

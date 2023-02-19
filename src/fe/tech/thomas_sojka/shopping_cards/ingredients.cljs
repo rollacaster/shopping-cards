@@ -8,7 +8,7 @@
 
 (reg-sub :ingredients/all
   (fn [db]
-    (:main/ingredients db)))
+    (:ingredients db)))
 
 (reg-event-fx :ingredients/add
   (fn [_ [_ ingredient]]
@@ -45,8 +45,8 @@
 
 (reg-event-db :ingredients/load-success
  (fn [db [_ data]]
-   (assoc db :main/ingredients (map ->ingredient data))))
+   (assoc db :ingredients (map ->ingredient data))))
 
 (reg-event-db :main/failure-ingredients
  (fn [db _]
-   (assoc db :main/ingredients :ERROR)))
+   (assoc db :ingredients :ERROR)))
