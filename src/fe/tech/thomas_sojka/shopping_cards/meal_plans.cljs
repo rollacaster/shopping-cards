@@ -1,11 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.meal-plans
-  (:require ["date-fns" :refer (addDays startOfDay isAfter addDays isEqual format)]
+  (:require ["date-fns" :refer (addDays startOfDay isAfter addDays isEqual)]
             [re-frame.core :refer [reg-event-db reg-event-fx reg-sub reg-sub]]
             [tech.thomas-sojka.shopping-cards.recipes :as recipe]))
-
-(reg-event-fx :meal-plans/show-details
-  (fn [_ [_ meal-id]]
-    {:app/push-state [:route/meal-plan-details {:meal-id meal-id}]}))
 
 (reg-sub :meals
  (fn [db _]
@@ -103,16 +99,6 @@
      (fn [{:keys [id] :as meal-plan}] (when (= id meal-id)
                                        (attach-ingredients db meal-plan)))
      (:meals db))))
-
-(reg-event-fx :meal-plans/select-meal
- (fn [_ [_ meal]]
-   (let [query-param-meal (-> meal
-                              (update :date (fn [d] (format d "yyyy-MM-dd")))
-                              (update :type name))]
-     {:app/push-state
-      (if (= (:type meal) :meal-type/lunch)
-        [:route/select-lunch nil query-param-meal]
-        [:route/select-dinner nil query-param-meal])})))
 
 (reg-event-fx :meals/load (fn [{:keys [db]} [_ today]]
    (if (meal-plans-loaded-for-today? db today)

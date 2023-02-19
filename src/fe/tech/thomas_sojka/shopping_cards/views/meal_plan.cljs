@@ -3,6 +3,7 @@
             ["date-fns/locale" :refer [de]]
             [re-frame.core :refer [dispatch subscribe]]
             [reagent.core :as r]
+            [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.components :as c :refer [icon]]))
 
 (defn meal-name [meal-plan]
@@ -12,13 +13,20 @@
       :meal-type/lunch "Mittagessen"
       :meal-type/dinner "Abendessen")))
 
+(defn- meal-query-params [meal-plan]
+  (-> meal-plan
+      (update :date (fn [d] (format d "yyyy-MM-dd")))
+      (update :type name)))
+
 (defn meal [meal-plan]
   (let [has-recipe? (:recipe meal-plan)]
-    [:button.pt2.ph2.h-50.bg-transparent.bn.w-100.relative
-     {:on-click #(dispatch
-                  (if has-recipe?
-                    [:meal-plans/show-details (:id meal-plan)]
-                    [:meal-plans/select-meal meal-plan]))}
+    [:a.db.pt2.ph2.h-50.bg-transparent.bn.w-100.relative.tc
+     {:href (cond
+              has-recipe? (rfe/href :route/meal-plan-details {:meal-id (:id meal-plan)})
+              (= (:type meal-plan) :meal-type/dinner)
+              (rfe/href :route/select-dinner nil (meal-query-params meal-plan))
+              (= (:type meal-plan) :meal-type/lunch)
+              (rfe/href :route/select-lunch nil (meal-query-params meal-plan)))}
      [:div.h-100.br3.bg-center.cover.relative
       {:style {:background-image (if has-recipe? (str "url(" (:image (:recipe meal-plan)) ")") "")}}
       (when has-recipe? [:div.o-40.bg-orange.absolute.h-100.w-100.br3])
