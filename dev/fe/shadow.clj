@@ -1,6 +1,5 @@
 (ns shadow
   (:require [babashka.fs :as fs]
-            [clojure.java.shell :as shell]
             [org.httpkit.server :as http]
             [ring.middleware.content-type :refer [wrap-content-type]]
             [ring.middleware.file :refer [wrap-file]]
@@ -15,7 +14,6 @@
     (assoc req :status 404)))
 
 (defn -main [& _args]
-  (shell/sh "npx" "msw" "init" "target/test/browser")
   (server/start!)
   (shadow/watch :app)
   (let [dom-runtime-id (some

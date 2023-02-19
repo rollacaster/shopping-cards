@@ -23,9 +23,7 @@
        (case @user
          :loading [:div.flex.justify-center.items-center.h-100
                    [components/spinner]]
-         (if (not= @user :noauth)
-           [(:view (:data route)) route]
-           :view/login))]]
+         [(:view (:data route)) route])]]
      (when error
        [:div.absolute.white.flex.justify-center.w-100.mb4
         {:style {:bottom "3rem"}}

@@ -8,9 +8,8 @@
     :app/scroll-to [0 0]}))
 
 (reg-event-fx :shopping-card/create
- (fn [{:keys [db]} [_ ingredients selected-ingredients]]
-   (js/console.log ingredients selected-ingredients)
-   {:db db}
+ (fn []
+   {:app/push-state [:route/finish {:card-id "fake-trello-card-id"}]}
    #_{:db (assoc db :app/loading true)
     :http-xhrio {:method :post
                  :uri "/shopping-card"
