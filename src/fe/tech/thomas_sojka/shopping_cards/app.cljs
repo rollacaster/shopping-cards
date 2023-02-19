@@ -20,10 +20,6 @@
  (fn [{:keys [db]} [_ start]]
    {:db (assoc db :app/start-of-week start)}))
 
-(reg-event-db :app/navigate
- (fn [db [_ match]]
-   (assoc db :app/route match)))
-
 (reg-event-db :app/remove-error
  (fn [db] (assoc db :app/error nil)))
 

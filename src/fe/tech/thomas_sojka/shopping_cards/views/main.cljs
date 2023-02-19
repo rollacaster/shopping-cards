@@ -13,8 +13,8 @@
      [:h1.ma0.gray-800.ml2-ns.truncate
       title]]]])
 
-(defn app []
-  (let [route @(subscribe [:app/route])
+(defn app [match]
+  (let [route @match
         error @(subscribe [:app/error])]
     [:div.sans-serif.flex.flex-column.h-100
      [header {:title (:title (:data route))}]

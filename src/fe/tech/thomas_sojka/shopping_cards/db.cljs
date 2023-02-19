@@ -2,7 +2,6 @@
   (:require [clojure.spec.alpha :as s]
             [clojure.test.check.generators]))
 
-(s/def :app/route map?)
 (s/def :app/loading boolean?)
 (s/def :app/error (s/nilable string?))
 (s/def :app/start-of-week inst?)
@@ -72,7 +71,6 @@
 
 (s/def :app/db (s/keys :req [:app/error
                              :app/loading
-                             :app/route
                              :app/start-of-week]
                        :req-un [:bank-holidays/bank-holidays
                                 :recipe/recipes
@@ -82,7 +80,6 @@
 (def default-db
   {:app/error nil
    :app/loading false
-   :app/route {}
    :app/start-of-week (js/Date.)
    :ingredients []
    :recipes []
