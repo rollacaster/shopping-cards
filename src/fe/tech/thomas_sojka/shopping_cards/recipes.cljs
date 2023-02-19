@@ -3,10 +3,6 @@
             [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]
             [tech.thomas-sojka.shopping-cards.ingredients :as ingredients]))
 
-(reg-event-fx :recipes/show-recipe
-  (fn [_ [_ id]]
-    {:app/push-state [:route/edit-recipe {:recipe-id id}]}))
-
 (reg-sub :recipes
  (fn [db _]
    (:recipes db)))

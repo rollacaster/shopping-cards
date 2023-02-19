@@ -1,10 +1,11 @@
 (ns tech.thomas-sojka.shopping-cards.views.recipes
   (:require [re-frame.core :refer [dispatch subscribe]]
+            [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.components :refer [icon]]))
 
-(defn recipe [{:keys [even name image selected? on-click]}]
-  [:button.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-trbg-gray-600-ns.white-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns
-   {:on-click on-click :class (if even "bg-gray-600 white" "bg-gray-300")}
+(defn recipe [{:keys [even name image selected? details-link]}]
+  [:a.no-underline.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-gray-600-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns
+   {:href details-link :class (if even "bg-gray-600 white" "bg-gray-300 gray-900")}
    [:div.w5-ns.h5-ns.h-100.shadow-3-ns.w-20.z-1
     (when selected?
       [:<>
@@ -26,10 +27,11 @@
     [:div.pb6.bg-gray-300
      (->> recipes
           (sort-by :name)
-          (map
-           (fn [{:keys [id name image]}]
+          (map-indexed
+           (fn [idx {:keys [id name image]}]
              ^{:key id}
-             [recipe {:name name :image image :on-click #(dispatch [:recipes/show-recipe id])}])))
+             [recipe {:name name :image image :details-link (rfe/href :route/edit-recipe {:recipe-id id})
+                      :even (even? idx)}])))
      [:button.fixed.bottom-0.right-0.bg-orange-500.ma4.pa4.z-1.br-100.relative.shadow-5.bn
       {:type "button"
        :on-click #(dispatch [:recipes/new])}
