@@ -35,16 +35,15 @@
     {:class "w-2/3"
      :style {:margin-top 68.8 :height "calc(100% - 68.8px)"}}
     [:nav
-     (let [{:shopping-card/keys [id]} @(subscribe [:shopping-list/current])]
-       [:ul.list.pl0.ma0
-        [nav-link {:toggle-menu toggle-menu
-                   :link (rfe/href :route/main)
-                   :title "Home"
-                   :even? true}]
-        [nav-link {:toggle-menu toggle-menu
-                   :link (rfe/href :route/shoppping-card {:card-id id})
-                   :title "Einkaufsliste"
-                   :even? false}]])]]
+     [:ul.list.pl0.ma0
+      [nav-link {:toggle-menu toggle-menu
+                 :link (rfe/href :route/main)
+                 :title "Home"
+                 :even? true}]
+      [nav-link {:toggle-menu toggle-menu
+                 :link (rfe/href :route/shoppping-card)
+                 :title "Einkaufsliste"
+                 :even? false}]]]]
    [:div {:on-click toggle-menu :class "w-1/3 h-full"}]])
 
 (defn app []

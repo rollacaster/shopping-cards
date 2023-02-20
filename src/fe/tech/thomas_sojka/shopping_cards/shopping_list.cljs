@@ -3,7 +3,7 @@
             [clojure.string :as str]
             [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
 
-(def firestore-path "shoppping-cards")
+(def firestore-path "shopping-entries")
 
 (reg-event-fx :shopping-list/deselect-ingredients
  (fn []
@@ -12,21 +12,22 @@
 
 (reg-event-fx :shopping-card/create
  (fn [_ [_ {:keys [items selected-items]}]]
-   (let [new-id (str (random-uuid))]
-     {:firestore/add-doc {:path firestore-path
-                          :data {:entries (->> items
-                                               (filter (fn [[ingredient-id]] (selected-items ingredient-id)))
-                                               (map (fn [[ingredient-id text]]
-                                                      {:shopping-entry/ingredient-id ingredient-id
-                                                       :shopping-entry/item text
-                                                       :shopping-entry/status :open})))
-                                 :id new-id}
-                          :on-success [:shopping-card/add-success new-id]
-                          :on-failure [:shopping-card/add-failure]}})))
+   {:firestore/add-docs {:path firestore-path
+                         :id :shopping-entry/id
+                         :data (->> items
+                                    (filter (fn [[ingredient-id]] (selected-items ingredient-id)))
+                                    (map (fn [[ingredient-id text]]
+                                           {:shopping-entry/ingredient-id ingredient-id
+                                            :shopping-entry/id (str (random-uuid))
+                                            :shopping-entry/item text
+                                            :shopping-entry/status :open
+                                            :shopping-entry/created-at (js/Date.)})))
+                         :on-success [:shopping-card/add-success]
+                         :on-failure [:shopping-card/add-failure]}}))
 
 (reg-event-fx :shopping-card/add-success
- (fn [_ [_ card-id]]
-   {:app/push-state [:route/shoppping-card {:card-id card-id}]}))
+ (fn []
+   {:app/push-state [:route/shoppping-card]}))
 
 (reg-event-fx :shopping-card/add-failure
   (fn [{:keys [db]}]
@@ -44,19 +45,16 @@
 (defn- ->shopping-entry [firestore-shopping-entry]
   (-> firestore-shopping-entry
       (update :status keyword)
+      (update :created-at (fn [date] (.toDate date)))
       (set/rename-keys {:ingredient-id :shopping-entry/ingredient-id
                         :status :shopping-entry/status
-                        :item :shopping-entry/item})))
-
-(defn- ->shopping-card [firestore-shopping-card]
-  (-> firestore-shopping-card
-      (update :entries (fn [entries] (map ->shopping-entry entries)))
-      (set/rename-keys {:entries :shopping-card/entries
-                        :id :shopping-card/id})))
+                        :item :shopping-entry/item
+                        :created-at :shopping-entry/created-at
+                        :id :shopping-entry/id})))
 
 (reg-event-db :shopping-card/load-success
   (fn [db [_ data]]
-    (assoc db :shopping-cards (map ->shopping-card data))))
+    (assoc db :shopping-entries (map ->shopping-entry data))))
 
 (reg-event-fx :shopping-card/load-failure
   (fn [{:keys [db]}]
@@ -130,29 +128,6 @@
           (map (partial attach-ingredients recipes))
           (mapcat (comp :ingredients :recipe))))))
 
-(reg-sub :shopping-cards
+(reg-sub :shopping-entries
   (fn [db]
-    (:shopping-cards db)))
-
-(reg-sub :shopping-cards/active
-  :<- [:shopping-cards]
-  (fn [shopping-cards]
-    ;; TODO filter active
-    shopping-cards))
-
-(reg-sub :shopping-list/current
-  :<- [:shopping-cards/active]
-  (fn [shopping-cards]
-    (some
-     (fn [shopping-card]
-       ;; TODO check for active
-       (when shopping-card shopping-card))
-     shopping-cards)))
-
-(reg-sub :shopping-list/shopping-card
-  :<- [:shopping-cards]
-  (fn [shopping-cards [_ card-id]]
-   (some
-     (fn [{:shopping-card/keys [id] :as shopping-card}]
-       (when (= id card-id) shopping-card))
-     shopping-cards)))
+    (:shopping-entries db)))

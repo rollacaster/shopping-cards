@@ -69,23 +69,23 @@
           :opt-un [:meal-plan/recipe :meal-plan/shopping-list]))
 (s/def :meal-plan/meals (s/coll-of :meal-plan/meal))
 
+(s/def :shopping-entry/id :app/id)
 (s/def :shopping-entry/ingredient-id :app/id)
 (s/def :shopping-entry/status #{:open :done})
 (s/def :shopping-entry/item (s/and string? #(> (count %) 0)))
+(s/def :shopping-entry/created-at inst?)
 (s/def :shopping-entry/shopping-entry (s/keys :req [:shopping-entry/ingredient-id
+                                                    :shopping-entry/id
                                                     :shopping-entry/status
-                                                    :shopping-entry/item]))
+                                                    :shopping-entry/item
+                                                    :shopping-entry/created-at]))
 
-(s/def :shopping-card/id :app/id)
-(s/def :shopping-card/entries (s/coll-of :shopping-entry/shopping-entry))
-(s/def :shopping-card/shopping-card (s/keys :req [:shopping-card/id
-                                                  :shopping-card/entries]))
-(s/def :shopping-card/shopping-cards (s/coll-of :shopping-card/shopping-card))
+(s/def :shopping-card/shopping-entries (s/coll-of :shopping-entry/shopping-entry))
 
 (s/def :app/db (s/keys :req [:app/error
                              :app/loading
                              :app/start-of-week]
-                       :opt-un [:shopping-card/shopping-cards]
+                       :opt-un [:shopping-card/shopping-entries]
                        :req-un [:bank-holidays/bank-holidays
                                 :recipe/recipes
                                 :ingredient/ingredients

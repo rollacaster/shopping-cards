@@ -59,10 +59,9 @@
    ["/ingredient-add" {:name :route/new-ingredient
                        :title "Neue Zutat"
                        :view ingredient-add/main}]
-   ["/shopping-card/:card-id" {:name :route/shoppping-card
-                               :title "Einkaufsliste"
-                               :view shopping-card/main
-                               :parameters {:path {:card-id string?}}}]])
+   ["/shopping-card" {:name :route/shoppping-card
+                      :title "Einkaufsliste"
+                      :view shopping-card/main}]])
 (defn init []
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})

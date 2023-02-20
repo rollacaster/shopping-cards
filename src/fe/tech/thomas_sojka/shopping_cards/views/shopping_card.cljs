@@ -11,9 +11,7 @@
     children]])
 
 (defn main [match]
-  (let [{:keys [path]} (:parameters match)
-        {:keys [card-id]} path
-        {:shopping-card/keys [entries]} @(subscribe [:shopping-list/shopping-card card-id])]
+  (let [entries @(subscribe [:shopping-entries])]
     [:ul.list.mv0.pa0
      (map-indexed
       (fn [idx {:shopping-entry/keys [ingredient-id item status]}]
