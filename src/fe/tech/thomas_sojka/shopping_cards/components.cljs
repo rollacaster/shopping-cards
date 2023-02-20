@@ -54,7 +54,7 @@
     :recipe-type/rare [:h2.mv3.tc "Selten"]))
 
 (defn recipe [{:keys [even name image selected? on-click]}]
-  [:button.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-trbg-gray-600-ns.white-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns
+  [:button.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-gray-600-ns.white-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns
    {:on-click on-click :class (if even "bg-gray-600 white" "bg-gray-300")}
    [:div.w5-ns.h5-ns.h-100.shadow-3-ns.w-20.z-1
     (when selected?

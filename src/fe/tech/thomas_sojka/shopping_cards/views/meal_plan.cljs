@@ -43,7 +43,7 @@
         start-of-week @(subscribe [:app/start-of-week])
         meals-without-shopping-list @(subscribe [:meals-without-shopping-list])]
     [:div.ph5-ns.flex.flex-column.h-100
-     [:div.flex.items-center.justify-between
+     [:div.flex.items-center.justify-between.pl2
       [:div.pv2.flex
        [:button.pv2.w3.bg-gray-600.ba.br3.br--left.white.b--white.tc.flex.justify-center
         {:on-click

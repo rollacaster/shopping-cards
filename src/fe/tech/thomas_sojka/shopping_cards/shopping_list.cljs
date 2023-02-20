@@ -134,6 +134,21 @@
   (fn [db]
     (:shopping-cards db)))
 
+(reg-sub :shopping-cards/active
+  :<- [:shopping-cards]
+  (fn [shopping-cards]
+    ;; TODO filter active
+    shopping-cards))
+
+(reg-sub :shopping-list/current
+  :<- [:shopping-cards/active]
+  (fn [shopping-cards]
+    (some
+     (fn [shopping-card]
+       ;; TODO check for active
+       (when shopping-card shopping-card))
+     shopping-cards)))
+
 (reg-sub :shopping-list/shopping-card
   :<- [:shopping-cards]
   (fn [shopping-cards [_ card-id]]
