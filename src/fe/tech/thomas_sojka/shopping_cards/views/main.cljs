@@ -53,7 +53,6 @@
       (let [route @match
             error @(subscribe [:app/error])
             toggle-menu #(swap! menu-visible? not)]
-        (prn menu-visible?)
         [:div.sans-serif.flex.flex-column.h-100
          [header {:title (:title (:data route)) :toggle-menu toggle-menu}]
          [menu {:visible? @menu-visible? :toggle-menu toggle-menu :match match}]
