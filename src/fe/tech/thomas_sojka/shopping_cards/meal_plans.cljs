@@ -43,12 +43,13 @@
        (map #(:date %))
        (some #(= today %))))
 
-(reg-event-fx :meals/load (fn [{:keys [db]} [_ today]]
-                            (if (meal-plans-loaded-for-today? db today)
-                              {:db db}
-                              {:firestore/snapshot {:path "meal-plans"
-                                                    :on-success [:meal/load-success]
-                                                    :on-failure [:meal/load-failure]}})))
+(reg-event-fx :meals/load
+  (fn [{:keys [db]} [_ today]]
+    (if (meal-plans-loaded-for-today? db today)
+      {:db db}
+      {:firestore/snapshot {:path "meal-plans"
+                            :on-success [:meal/load-success]
+                            :on-failure [:meal/load-failure]}})))
 
 (defn- ->meal-plan [firestore-meal-plan]
   (-> firestore-meal-plan

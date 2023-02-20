@@ -14,7 +14,8 @@
     :dispatch-n [[:bank-holidays/load (.getFullYear now)]
                  [:recipes/load]
                  [:meals/load now]
-                 [:ingredients/load]]}))
+                 [:ingredients/load]
+                 [:shopping-cards/load]]}))
 
 (reg-event-fx :app/start-of-week
  (fn [{:keys [db]} [_ start]]

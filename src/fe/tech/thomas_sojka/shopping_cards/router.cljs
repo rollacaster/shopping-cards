@@ -4,7 +4,6 @@
             [reitit.frontend :as rf]
             [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.views.deselect-ingredients :as deselect-ingredients]
-            [tech.thomas-sojka.shopping-cards.views.finish :as finish]
             [tech.thomas-sojka.shopping-cards.views.ingredient-add :as ingredient-add]
             [tech.thomas-sojka.shopping-cards.views.ingredients :as ingredients]
             [tech.thomas-sojka.shopping-cards.views.login :as login]
@@ -14,7 +13,8 @@
             [tech.thomas-sojka.shopping-cards.views.recipe-details :as recipe-details]
             [tech.thomas-sojka.shopping-cards.views.recipes :as recipes]
             [tech.thomas-sojka.shopping-cards.views.select-dinner :as select-dinner]
-            [tech.thomas-sojka.shopping-cards.views.select-lunch :as select-lunch]))
+            [tech.thomas-sojka.shopping-cards.views.select-lunch :as select-lunch]
+            [tech.thomas-sojka.shopping-cards.views.shopping-card :as shopping-card]))
 
 (defonce match (r/atom nil))
 
@@ -35,10 +35,6 @@
    ["/deselect-ingredients" {:name :route/deselect-ingredients
                              :title "Zutaten auswählen"
                              :view deselect-ingredients/main}]
-   ["/finish/:card-id" {:name :route/finish
-                        :title "Einkaufszettel erstellt"
-                        :view finish/main
-                        :parameters {:path {:card-id string?}}}]
    ["/select-lunch" {:name :route/select-lunch
                      :title "Mittag auswählen"
                      :view select-lunch/main
@@ -62,7 +58,11 @@
                     :view ingredients/main}]
    ["/ingredient-add" {:name :route/new-ingredient
                        :title "Neue Zutat"
-                       :view ingredient-add/main}]])
+                       :view ingredient-add/main}]
+   ["/shopping-card/:card-id" {:name :route/shoppping-card
+                               :title "Einkaufsliste"
+                               :view shopping-card/main
+                               :parameters {:path {:card-id string?}}}]])
 (defn init []
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})
