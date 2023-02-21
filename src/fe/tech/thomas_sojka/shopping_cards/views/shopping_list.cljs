@@ -16,11 +16,11 @@
     [:ul.list.mv0.pa0
      (map-indexed
       (fn [idx {:shopping-entry/keys [ingredient-id item status] :as entry}]
-        [:li {:key ingredient-id}
-         [item-select {:i idx
-                       :entry entry
-                       :selected? (= status :done)
-                       :on-change (fn [selected?]
-                                    (dispatch [:shopping-entry/update (assoc entry :shopping-entry/status (if selected? :done :open))]))}
-          item]])
+        ^{:key ingredient-id}
+        [item-select {:i idx
+                      :entry entry
+                      :selected? (= status :done)
+                      :on-change (fn [selected?]
+                                   (dispatch [:shopping-entry/update (assoc entry :shopping-entry/status (if selected? :done :open))]))}
+         item])
       entries)]))
