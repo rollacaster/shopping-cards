@@ -66,6 +66,12 @@
                    :event [:app/remove-error]
                    :time 2000}}))
 
+(reg-event-fx :shopping-card/update
+  (fn [_ [_ {:shopping-entry/keys [id] :as entry}]]
+    {:firestore/update-doc {:path firestore-path
+                            :key id
+                            :data entry}}))
+
 (def penny-order
   [:ingredient-category/obst
    :ingredient-category/gemüse

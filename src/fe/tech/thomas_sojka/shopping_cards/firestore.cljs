@@ -5,12 +5,6 @@
 
 (def db (.getFirestore firestore firebase/app))
 
-(reg-fx :firestore/doc
-  (fn [{:keys [path key on-success on-failure]}]
-    (-> (firestore/getDoc (firestore/doc db path key))
-        (.then (fn [doc-snap] (dispatch (conj on-success (.data doc-snap)))))
-        (.catch (fn [err] (dispatch (conj on-failure err)))))))
-
 (reg-fx :firestore/add-docs
   (fn [{:keys [path data id on-success on-failure]}]
     (doseq [d data]
@@ -24,6 +18,12 @@
     (-> (firestore/setDoc (firestore/doc (firestore/collection db path) (:id data))
                           (clj->js data))
         (.then (fn [] (when on-success (dispatch (conj on-success data)))))
+        (.catch (fn [err] (when on-failure (dispatch (conj on-failure err))))))))
+
+(reg-fx :firestore/update-doc
+  (fn [{:keys [path key data on-success on-failure]}]
+    (-> (firestore/updateDoc (firestore/doc db path key) (clj->js data))
+        (.then (fn [] (when on-success (dispatch on-success))))
         (.catch (fn [err] (when on-failure (dispatch (conj on-failure err))))))))
 
 (reg-fx :firestore/remove-doc
