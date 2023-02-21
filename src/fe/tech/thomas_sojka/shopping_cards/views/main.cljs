@@ -19,14 +19,14 @@
      [:h1.ma0.gray-800.ml2-ns.truncate
       title]]]])
 
-(defn- nav-link [{:keys [link title toggle-menu even?]}]
+(defn- nav-link [{:keys [link title toggle-menu active?]}]
   [:li.ph4.pv3
-   {:class (if even? "bg-gray-600 white" "bg-gray-300")}
+   {:class (when active? "bg-orange-500 white")}
    [:a.link {:href link :on-click toggle-menu
-             :class (if even? "white" "gray-900")}
+             :class (if active? "white" "gray-900")}
     title]])
 
-(defn menu [{:keys [visible? toggle-menu]}]
+(defn menu [{:keys [visible? toggle-menu match]}]
   [:div.absolute.left0.top0.h-100.z-2.flex
    {:style
     {:left (if visible? "0%" "-100%")
@@ -39,11 +39,11 @@
       [nav-link {:toggle-menu toggle-menu
                  :link (rfe/href :route/main)
                  :title "Home"
-                 :even? true}]
+                 :active? (= (:name (:data @match)) :route/main)}]
       [nav-link {:toggle-menu toggle-menu
                  :link (rfe/href :route/shoppping-card)
                  :title "Einkaufsliste"
-                 :even? false}]]]]
+                 :active? (= (:name (:data @match)) :route/shoppping-card)}]]]]
    [:div {:on-click toggle-menu :class "w-1/3 h-full"}]])
 
 (defn app []
