@@ -1,4 +1,4 @@
-(ns tech.thomas-sojka.shopping-cards.views.shopping-card
+(ns tech.thomas-sojka.shopping-cards.views.shopping-list
   (:require [re-frame.core :refer [dispatch subscribe]]
             [tech.thomas-sojka.shopping-cards.components :as c]))
 

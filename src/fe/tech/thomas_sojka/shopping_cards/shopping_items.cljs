@@ -27,7 +27,7 @@
 
 (reg-event-fx :shopping-entry/add-success
  (fn []
-   {:app/push-state [:route/shoppping-card]}))
+   {:app/push-state [:route/shoppping-list]}))
 
 (reg-event-fx :shopping-entry/add-failure
   (fn [{:keys [db]}]

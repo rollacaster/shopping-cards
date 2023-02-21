@@ -41,9 +41,9 @@
                  :title "Home"
                  :active? (= (:name (:data @match)) :route/main)}]
       [nav-link {:toggle-menu toggle-menu
-                 :link (rfe/href :route/shoppping-card)
+                 :link (rfe/href :route/shoppping-list)
                  :title "Einkaufsliste"
-                 :active? (= (:name (:data @match)) :route/shoppping-card)}]]]]
+                 :active? (= (:name (:data @match)) :route/shoppping-list)}]]]]
    [:div {:on-click toggle-menu :class "w-1/3 h-full"}]])
 
 (defn app []

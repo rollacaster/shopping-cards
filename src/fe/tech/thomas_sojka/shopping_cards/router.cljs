@@ -14,7 +14,7 @@
             [tech.thomas-sojka.shopping-cards.views.recipes :as recipes]
             [tech.thomas-sojka.shopping-cards.views.select-dinner :as select-dinner]
             [tech.thomas-sojka.shopping-cards.views.select-lunch :as select-lunch]
-            [tech.thomas-sojka.shopping-cards.views.shopping-card :as shopping-card]))
+            [tech.thomas-sojka.shopping-cards.views.shopping-list :as shopping-list]))
 
 (defonce match (r/atom nil))
 
@@ -59,9 +59,9 @@
    ["/ingredient-add" {:name :route/new-ingredient
                        :title "Neue Zutat"
                        :view ingredient-add/main}]
-   ["/shopping-card" {:name :route/shoppping-card
+   ["/shopping-list" {:name :route/shoppping-list
                       :title "Einkaufsliste"
-                      :view shopping-card/main}]])
+                      :view shopping-list/main}]])
 (defn init []
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})
