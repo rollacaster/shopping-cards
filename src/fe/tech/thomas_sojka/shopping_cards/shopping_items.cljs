@@ -2,61 +2,61 @@
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
-(prn :load)
-(def firestore-path "shopping-entries")
 
-(reg-event-fx :shopping-entry/deselect-ingredients
+(def firestore-path "shopping-items")
+
+(reg-event-fx :shopping-item/deselect-ingredients
  (fn []
    {:app/push-state [:route/deselect-ingredients]
     :app/scroll-to [0 0]}))
 
-(reg-event-fx :shopping-entry/create
+(reg-event-fx :shopping-item/create
  (fn [_ [_ {:keys [items selected-items]}]]
    {:firestore/add-docs {:path firestore-path
-                         :id :shopping-entry/id
+                         :id :shopping-item/id
                          :data (->> items
                                     (filter (fn [[ingredient-id]] (selected-items ingredient-id)))
                                     (map (fn [[ingredient-id text]]
-                                           {:shopping-entry/ingredient-id ingredient-id
-                                            :shopping-entry/id (str (random-uuid))
-                                            :shopping-entry/item text
-                                            :shopping-entry/status :open
-                                            :shopping-entry/created-at (js/Date.)})))
-                         :on-success [:shopping-entry/add-success]
-                         :on-failure [:shopping-entry/add-failure]}}))
+                                           {:shopping-item/ingredient-id ingredient-id
+                                            :shopping-item/id (str (random-uuid))
+                                            :shopping-item/content text
+                                            :shopping-item/status :open
+                                            :shopping-item/created-at (js/Date.)})))
+                         :on-success [:shopping-item/add-success]
+                         :on-failure [:shopping-item/add-failure]}}))
 
-(reg-event-fx :shopping-entry/add-success
+(reg-event-fx :shopping-item/add-success
  (fn []
    {:app/push-state [:route/shoppping-list]}))
 
-(reg-event-fx :shopping-entry/add-failure
+(reg-event-fx :shopping-item/add-failure
   (fn [{:keys [db]}]
     {:db (assoc db :app/error "Fehler: Speichern fehlgeschlagen")
      :app/timeout {:id :app/error-removal
                    :event [:app/remove-error]
                    :time 2000}}))
 
-(reg-event-fx :shopping-entry/load
+(reg-event-fx :shopping-item/load
   (fn []
     {:firestore/snapshot {:path firestore-path
-                          :on-success [:shopping-entry/load-success]
-                          :on-failure [:shopping-entry/load-failure]}}))
+                          :on-success [:shopping-item/load-success]
+                          :on-failure [:shopping-item/load-failure]}}))
 
 (defn- ->shopping-entry [firestore-shopping-entry]
   (-> firestore-shopping-entry
       (update :status keyword)
       (update :created-at (fn [date] (.toDate date)))
-      (set/rename-keys {:ingredient-id :shopping-entry/ingredient-id
-                        :status :shopping-entry/status
-                        :item :shopping-entry/item
-                        :created-at :shopping-entry/created-at
-                        :id :shopping-entry/id})))
+      (set/rename-keys {:ingredient-id :shopping-item/ingredient-id
+                        :status :shopping-item/status
+                        :content :shopping-item/content
+                        :created-at :shopping-item/created-at
+                        :id :shopping-item/id})))
 
-(reg-event-db :shopping-entry/load-success
+(reg-event-db :shopping-item/load-success
   (fn [db [_ data]]
     (assoc db :shopping-entries (map ->shopping-entry data))))
 
-(reg-event-fx :shopping-entry/load-failure
+(reg-event-fx :shopping-item/load-failure
   (fn [{:keys [db]}]
     {:db
      (assoc db
@@ -66,8 +66,8 @@
                    :event [:app/remove-error]
                    :time 2000}}))
 
-(reg-event-fx :shopping-entry/update
-  (fn [_ [_ {:shopping-entry/keys [id] :as entry}]]
+(reg-event-fx :shopping-item/update
+  (fn [_ [_ {:shopping-item/keys [id] :as entry}]]
     {:firestore/update-doc {:path firestore-path
                             :key id
                             :data entry}}))
@@ -125,7 +125,7 @@
                        (get (->> recipes (group-by :id))
                             (:id (:recipe meal))))))
 
-(reg-sub :shopping-entry/possible-items
+(reg-sub :shopping-item/possible-items
   :<- [:recipes]
   :<- [:meals-without-shopping-list]
   (fn [[recipes meals-plans]]
