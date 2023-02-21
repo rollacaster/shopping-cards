@@ -15,7 +15,7 @@
                  [:recipes/load]
                  [:meals/load now]
                  [:ingredients/load]
-                 [:shopping-cards/load]]}))
+                 [:shopping-entry/load]]}))
 
 (reg-event-fx :app/start-of-week
  (fn [{:keys [db]} [_ start]]

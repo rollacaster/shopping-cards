@@ -9,7 +9,7 @@
             [tech.thomas-sojka.shopping-cards.meal-plans]
             [tech.thomas-sojka.shopping-cards.recipes]
             [tech.thomas-sojka.shopping-cards.router :as router]
-            [tech.thomas-sojka.shopping-cards.shopping-list]
+            [tech.thomas-sojka.shopping-cards.shopping-items]
             [tech.thomas-sojka.shopping-cards.views.main :as main]))
 
 (defn init!

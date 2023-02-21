@@ -14,11 +14,11 @@
   ((if (m k) disj conj) m k))
 
 (defn main []
-  (let [ingredients @(subscribe [:shopping-list/possible-items])
+  (let [ingredients @(subscribe [:shopping-entry/possible-items])
         selected-items (r/atom (set (map first ingredients)))]
     (fn []
       (let [loading @(subscribe [:app/loading])
-            items @(subscribe [:shopping-list/possible-items])]
+            items @(subscribe [:shopping-entry/possible-items])]
         [:<>
          [:ul.list.pl0.mv0.pb6
           (doall
@@ -34,7 +34,7 @@
                            content])
                         items))]
          [:div.fixed.bottom-0.w-100.z-2
-          [c/footer {:on-click #(dispatch [:shopping-card/create
+          [c/footer {:on-click #(dispatch [:shopping-entry/create
                                            {:items items
                                             :selected-items @selected-items}])
                      :app/loading loading}]]]))))

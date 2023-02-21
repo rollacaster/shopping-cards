@@ -21,6 +21,6 @@
                        :entry entry
                        :selected? (= status :done)
                        :on-change (fn [selected?]
-                                    (dispatch [:shopping-card/update (assoc entry :shopping-entry/status (if selected? :done :open))]))}
+                                    (dispatch [:shopping-entry/update (assoc entry :shopping-entry/status (if selected? :done :open))]))}
           item]])
       entries)]))

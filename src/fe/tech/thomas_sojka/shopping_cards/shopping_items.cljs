@@ -1,16 +1,16 @@
-(ns tech.thomas-sojka.shopping-cards.shopping-list
+(ns tech.thomas-sojka.shopping-cards.shopping-items
   (:require [clojure.set :as set]
             [clojure.string :as str]
             [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
-
+(prn :load)
 (def firestore-path "shopping-entries")
 
-(reg-event-fx :shopping-list/deselect-ingredients
+(reg-event-fx :shopping-entry/deselect-ingredients
  (fn []
    {:app/push-state [:route/deselect-ingredients]
     :app/scroll-to [0 0]}))
 
-(reg-event-fx :shopping-card/create
+(reg-event-fx :shopping-entry/create
  (fn [_ [_ {:keys [items selected-items]}]]
    {:firestore/add-docs {:path firestore-path
                          :id :shopping-entry/id
@@ -22,25 +22,25 @@
                                             :shopping-entry/item text
                                             :shopping-entry/status :open
                                             :shopping-entry/created-at (js/Date.)})))
-                         :on-success [:shopping-card/add-success]
-                         :on-failure [:shopping-card/add-failure]}}))
+                         :on-success [:shopping-entry/add-success]
+                         :on-failure [:shopping-entry/add-failure]}}))
 
-(reg-event-fx :shopping-card/add-success
+(reg-event-fx :shopping-entry/add-success
  (fn []
    {:app/push-state [:route/shoppping-card]}))
 
-(reg-event-fx :shopping-card/add-failure
+(reg-event-fx :shopping-entry/add-failure
   (fn [{:keys [db]}]
     {:db (assoc db :app/error "Fehler: Speichern fehlgeschlagen")
      :app/timeout {:id :app/error-removal
                    :event [:app/remove-error]
                    :time 2000}}))
 
-(reg-event-fx :shopping-cards/load
+(reg-event-fx :shopping-entry/load
   (fn []
     {:firestore/snapshot {:path firestore-path
-                          :on-success [:shopping-card/load-success]
-                          :on-failure [:shopping-card/load-failure]}}))
+                          :on-success [:shopping-entry/load-success]
+                          :on-failure [:shopping-entry/load-failure]}}))
 
 (defn- ->shopping-entry [firestore-shopping-entry]
   (-> firestore-shopping-entry
@@ -52,11 +52,11 @@
                         :created-at :shopping-entry/created-at
                         :id :shopping-entry/id})))
 
-(reg-event-db :shopping-card/load-success
+(reg-event-db :shopping-entry/load-success
   (fn [db [_ data]]
     (assoc db :shopping-entries (map ->shopping-entry data))))
 
-(reg-event-fx :shopping-card/load-failure
+(reg-event-fx :shopping-entry/load-failure
   (fn [{:keys [db]}]
     {:db
      (assoc db
@@ -66,7 +66,7 @@
                    :event [:app/remove-error]
                    :time 2000}}))
 
-(reg-event-fx :shopping-card/update
+(reg-event-fx :shopping-entry/update
   (fn [_ [_ {:shopping-entry/keys [id] :as entry}]]
     {:firestore/update-doc {:path firestore-path
                             :key id
@@ -125,7 +125,7 @@
                        (get (->> recipes (group-by :id))
                             (:id (:recipe meal))))))
 
-(reg-sub :shopping-list/possible-items
+(reg-sub :shopping-entry/possible-items
   :<- [:recipes]
   :<- [:meals-without-shopping-list]
   (fn [[recipes meals-plans]]

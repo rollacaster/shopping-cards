@@ -80,12 +80,12 @@
                                                     :shopping-entry/item
                                                     :shopping-entry/created-at]))
 
-(s/def :shopping-card/shopping-entries (s/coll-of :shopping-entry/shopping-entry))
+(s/def :shopping-entry/shopping-entries (s/coll-of :shopping-entry/shopping-entry))
 
 (s/def :app/db (s/keys :req [:app/error
                              :app/loading
                              :app/start-of-week]
-                       :opt-un [:shopping-card/shopping-entries]
+                       :opt-un [:shopping-entry/shopping-entries]
                        :req-un [:bank-holidays/bank-holidays
                                 :recipe/recipes
                                 :ingredient/ingredients

@@ -16,26 +16,6 @@
            (some->> (.getItem js/localStorage localstorage-ingredients-key)
                     (reader/read-string)))))
 
-(reg-event-fx :ingredients/add
-  (fn [_ [_ ingredient]]
-    (let [new-id (str (random-uuid))]
-      {:firestore/add-doc {:path "ingredients"
-                           :data (assoc ingredient :id new-id)
-                           :on-success [:ingredients/add-success]
-                           :on-failure [:ingredients/add-failure]}})))
-
-(reg-event-fx :ingredients/add-success
-  (fn [{:keys [db]}]
-    {:db (assoc db :ingredient-details/meal nil)
-     :app/push-state [:route/main]}))
-
-(reg-event-fx :ingredients/add-failure
- (fn [{:keys [db]}]
-   {:db (assoc db :app/error "Fehler: Speichern fehlgeschlagen")
-    :app/timeout {:id :app/error-removal
-                  :event [:app/remove-error]
-                  :time 2000}}))
-
 (reg-event-fx :ingredients/load
   [(inject-cofx :local-store-ingredients)]
   (fn [{:keys [db local-store-ingredients]}]
