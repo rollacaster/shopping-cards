@@ -3,10 +3,12 @@
             [re-frame.core :refer [reg-event-db reg-event-fx reg-sub reg-sub]]
             [tech.thomas-sojka.shopping-cards.recipes :as recipe]))
 
+(def firestore-path "meal-plans")
+
 (reg-event-fx :meal/add
   (fn [_ [_ meal]]
     (let [new-id (str (random-uuid))]
-      {:firestore/add-doc {:path "meal-plans"
+      {:firestore/add-doc {:path firestore-path
                            :data (-> meal
                                      (assoc :id new-id)
                                      (update :recipe dissoc :ingredients))
@@ -27,7 +29,7 @@
 (reg-event-fx :meal/remove
   (fn [_ [_ meal-plan-id]]
     {:app/push-state [:route/meal-plan]
-     :firestore/remove-doc {:path "meal-plans"
+     :firestore/remove-doc {:path firestore-path
                             :key meal-plan-id
                             :on-failure [:meal/remove-failure]}}))
 
@@ -47,7 +49,7 @@
   (fn [{:keys [db]} [_ today]]
     (if (meal-plans-loaded-for-today? db today)
       {:db db}
-      {:firestore/snapshot {:path "meal-plans"
+      {:firestore/snapshot {:path firestore-path
                             :on-success [:meal/load-success]
                             :on-failure [:meal/load-failure]}})))
 

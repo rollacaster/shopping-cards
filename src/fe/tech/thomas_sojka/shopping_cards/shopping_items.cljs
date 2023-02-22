@@ -1,7 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.shopping-items
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [re-frame.core :refer [reg-event-fx reg-sub]]))
+            [re-frame.core :refer [inject-cofx reg-event-fx reg-sub]]
+            [tech.thomas-sojka.shopping-cards.meal-plans :as meal-plans]
+            [vimsical.re-frame.cofx.inject :as inject]))
 
 (def firestore-path "shopping-items")
 
@@ -11,19 +13,23 @@
     :app/scroll-to [0 0]}))
 
 (reg-event-fx :shopping-item/create
- (fn [_ [_ {:keys [items selected-items]}]]
-   {:firestore/add-docs {:path firestore-path
-                         :id :shopping-item/id
-                         :data (->> items
-                                    (filter (fn [[ingredient-id]] (selected-items ingredient-id)))
-                                    (map (fn [[ingredient-id text]]
-                                           {:shopping-item/ingredient-id ingredient-id
-                                            :shopping-item/id (str (random-uuid))
-                                            :shopping-item/content text
-                                            :shopping-item/status :open
-                                            :shopping-item/created-at (js/Date.)})))
-                         :on-success [:shopping-item/add-success]
-                         :on-failure [:shopping-item/add-failure]}}))
+  [(inject-cofx ::inject/sub [:meals-without-shopping-list])]
+  (fn [{:keys [meals-without-shopping-list]} [_ {:keys [items selected-items]}]]
+    {:firestore/add-docs {:path firestore-path
+                          :id :shopping-item/id
+                          :data (->> items
+                                     (filter (fn [[ingredient-id]] (selected-items ingredient-id)))
+                                     (map (fn [[ingredient-id text]]
+                                            {:shopping-item/ingredient-id ingredient-id
+                                             :shopping-item/id (str (random-uuid))
+                                             :shopping-item/content text
+                                             :shopping-item/status :open
+                                             :shopping-item/created-at (js/Date.)})))
+                          :on-success [:shopping-item/add-success]
+                          :on-failure [:shopping-item/add-failure]}
+     :firestore/update-docs {:path meal-plans/firestore-path
+                             :id :id
+                             :data (map #(assoc % :shopping-list true) meals-without-shopping-list)}}))
 
 (reg-event-fx :shopping-item/add-success
  (fn []
@@ -111,8 +117,11 @@
                       " " name
                       " (" (str/join ", " amount-descs) ")")))))
 
-(defn ingredients [recipes]
-  (->> recipes
+(defn ingredients [cooked-with+ingredient]
+  (->> cooked-with+ingredient
+       (remove (fn [[_ {:keys [ingredient/category]}]]
+                 (#{:ingredient-category/backen :ingredient-category/gewürze}
+                  category)))
        (group-by (comp :ingredient/id second))
        (sort-by (fn [[_ [_ {:keys [ingredient/category]}]]] category)
                 (fn [category1 category2]
@@ -130,6 +139,8 @@
   :<- [:recipes]
   :<- [:meals-without-shopping-list]
   (fn [[recipes meals-plans]]
+    (def meals-plans meals-plans)
+    (def recipes recipes)
     (ingredients
      (->> meals-plans
           (map (partial attach-ingredients recipes))
