@@ -26,6 +26,13 @@
         (.then (fn [] (when on-success (dispatch on-success))))
         (.catch (fn [err] (when on-failure (dispatch (conj on-failure err))))))))
 
+(reg-fx :firestore/update-docs
+  (fn [{:keys [path data id on-success on-failure]}]
+    (doseq [d data]
+      (-> (firestore/updateDoc (firestore/doc db path (id d)) (clj->js d))
+          (.then (fn [] (when on-success (dispatch on-success))))
+          (.catch (fn [err] (when on-failure (dispatch (conj on-failure err)))))))))
+
 (reg-fx :firestore/remove-doc
   (fn [{:keys [path key on-success on-failure]}]
     (-> (firestore/deleteDoc (firestore/doc db path key))

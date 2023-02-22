@@ -71,7 +71,7 @@
 
 (s/def :shopping-item/id :app/id)
 (s/def :shopping-item/ingredient-id :app/id)
-(s/def :shopping-item/status #{:open :done})
+(s/def :shopping-item/status #{:open :done :archive})
 (s/def :shopping-item/content (s/and string? #(> (count %) 0)))
 (s/def :shopping-item/created-at inst?)
 (s/def :shopping-item/shopping-entry (s/keys :req [:shopping-item/ingredient-id

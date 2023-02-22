@@ -1,10 +1,10 @@
 (ns tech.thomas-sojka.shopping-cards.core
   (:require [day8.re-frame.http-fx]
-            [re-frame.core :refer [clear-subscription-cache! dispatch-sync
-                                   subscribe]]
+            [re-frame.core :refer [clear-subscription-cache! dispatch-sync]]
             [reagent.dom :as dom]
             [tech.thomas-sojka.shopping-cards.app]
             [tech.thomas-sojka.shopping-cards.bank-holidays]
+            [tech.thomas-sojka.shopping-cards.dev-utils :as dev-utils]
             [tech.thomas-sojka.shopping-cards.firestore]
             [tech.thomas-sojka.shopping-cards.meal-plans]
             [tech.thomas-sojka.shopping-cards.recipes]
@@ -16,11 +16,13 @@
   ([]
    (init! {:container (.getElementById js/document "app")}))
   ([{:keys [container]}]
-   (when (empty? @(subscribe [:recipes]))
+   (when-not @dev-utils/restarting
      (dispatch-sync [:app/init (js/Date.)]))
    (dom/render [main/app (router/init)] container)))
 
 (defn ^:dev/after-load clear-cache-and-render!
   []
+  (reset! dev-utils/restarting true)
   (clear-subscription-cache!)
-  (init!))
+  (init!)
+  (reset! dev-utils/restarting false))

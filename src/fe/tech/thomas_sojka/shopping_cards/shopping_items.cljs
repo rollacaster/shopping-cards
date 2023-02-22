@@ -1,7 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.shopping-items
   (:require [clojure.set :as set]
             [clojure.string :as str]
-            [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
+            [re-frame.core :refer [reg-event-fx reg-sub]]))
 
 (def firestore-path "shopping-items")
 
@@ -52,9 +52,10 @@
                         :created-at :shopping-item/created-at
                         :id :shopping-item/id})))
 
-(reg-event-db :shopping-item/load-success
-  (fn [db [_ data]]
-    (assoc db :shopping-entries (map ->shopping-entry data))))
+(reg-event-fx :shopping-item/load-success
+  (fn [{:keys [db]} [_ data]]
+    (cond-> {:db (assoc db :shopping-entries (map ->shopping-entry data))}
+      (empty? (:shopping-entries db)) (assoc :dispatch [:shopping-items/archive]))))
 
 (reg-event-fx :shopping-item/load-failure
   (fn [{:keys [db]}]
@@ -136,4 +137,13 @@
 
 (reg-sub :shopping-entries
   (fn [db]
-    (:shopping-entries db)))
+    (remove (fn [{:keys [shopping-item/status]}] (= status :archive))
+            (:shopping-entries db))))
+
+(reg-event-fx :shopping-items/archive
+  (fn [{{:keys [shopping-entries]} :db}]
+    {:firestore/update-docs {:path firestore-path
+                             :id :shopping-item/id
+                             :data (->> shopping-entries
+                                        (filter (fn [{:keys [shopping-item/status]}] (= status :done)))
+                                        (map (fn [i] (assoc i :shopping-item/status :archive))))}}))
