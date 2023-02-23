@@ -9,60 +9,83 @@
 (defmulti title :view)
 (defmethod title :default [] nil)
 
-(defn header [{:keys [title toggle-menu]}]
+(defonce menu-visible? (r/atom false))
+(def toggle-menu #(swap! menu-visible? not))
+(defn- menu-button []
+  [:button.bg-transparent.white.f2.bn.pa0.ma0.w2.h2
+      {:on-click toggle-menu :style {:transform "translateY(-2px)"}}
+      [components/icon {:color "white"} :menu]])
+
+(defn header [{:keys [title]}]
   [:header.bg-orange-400.z-3
    [:div.mw9.center
-    [:div.pv3.ph5-ns.ph2.flex.gap-8.w-100.items-center {:style {:gap 12}}
-     [:button.bg-transparent.white.f2.bn.pa0.ma0.w2.h2
-      {:on-click toggle-menu :style {:transform "translateY(-2px)"}}
-      [components/icon {:color "white"} :menu]]
+    [:div.pv3.ph5-ns.ph3.flex.gap-8.w-100.items-center {:style {:gap 12}}
+     [menu-button]
      [:h1.ma0.gray-800.ml2-ns.truncate
       title]]]])
 
-(defn- nav-link [{:keys [link title toggle-menu active?]}]
-  [:li.ph4.pv3
-   {:class (when active? "bg-orange-500 white")}
-   [:a.link {:href link :on-click toggle-menu
-             :class (if active? "white" "gray-900")}
+(defn- nav-link [{:keys [link title on-click active? class]}]
+  [:li.flex.justify-center {:class class}
+   [:a.link.ph4.pv3.w-100.tc
+    {:href link :on-click on-click :class (if active? "bg-orange-400 white" "bg-orange-100 gray-900")}
     title]])
 
-(defn menu [{:keys [visible? toggle-menu match]}]
+(defn menu [{:keys [shopping-entries? route-name]}]
   [:div.absolute.left0.top0.h-100.z-2.flex
    {:style
-    {:left (if visible? "0%" "-100%")
+    {:left (if @menu-visible? "0%" "-100%")
      :transition "all 300ms"}}
    [:div.bg-orange-400
     {:class "w-2/3"
      :style {:margin-top 68.8 :height "calc(100% - 68.8px)"}}
     [:nav
      [:ul.list.pl0.ma0
-      [nav-link {:toggle-menu toggle-menu
-                 :link (rfe/href :route/main)
-                 :title "Home"
-                 :active? (= (:name (:data @match)) :route/main)}]
-      [nav-link {:toggle-menu toggle-menu
-                 :link (rfe/href :route/shoppping-list)
-                 :title "Einkaufsliste"
-                 :active? (= (:name (:data @match)) :route/shoppping-list)}]]]]
-   [:div {:on-click toggle-menu :class "w-1/3 h-full"}]])
+      [nav-link {:link (rfe/href :route/main)
+                 :title "Essensplan"
+                 :active? (= route-name :route/main)
+                 :on-click toggle-menu}]
+      (when shopping-entries?
+        [nav-link {:link (rfe/href :route/shoppping-list)
+                   :title "Einkaufsliste"
+                   :active? (= route-name :route/shoppping-list)
+                   :on-click toggle-menu}])
+      [nav-link {:link (rfe/href :route/edit-recipes)
+                 :title "Rezepte"
+                 :active? (= route-name :route/edit-recipes)
+                 :on-click toggle-menu}]
+      [nav-link {:link (rfe/href :route/ingredients)
+                 :title "Zutaten"
+                 :active? (= route-name :route/ingredients)
+                 :on-click toggle-menu}]]]]])
 
-(defn app []
-  (let [menu-visible? (r/atom false)]
-    (fn [match]
-      (let [route @match
-            error @(subscribe [:app/error])
-            toggle-menu #(swap! menu-visible? not)]
-        [:div.sans-serif.flex.flex-column.h-100
-         [header {:title (:title (:data route)) :toggle-menu toggle-menu}]
-         [menu {:visible? @menu-visible? :toggle-menu toggle-menu :match match}]
-         [:main.flex-auto
-          [:div.mw9.center.bg-gray-200.h-100
-           (case @user
-             :loading [:div.flex.justify-center.items-center.h-100
-                       [components/spinner]]
-             [(:view (:data route)) route])]]
-         (when error
-           [:div.absolute.white.flex.justify-center.w-100.mb4
-            {:style {:bottom "3rem"}}
-            [:div.w-80.bg-light-red.ph3.pv2.br2.ba.b--white
-             error]])]))))
+(defn app [match]
+  (let [route @match
+        error @(subscribe [:app/error])
+        shopping-entries? @(subscribe [:shopping-entries?])
+        route-name (:name (:data route))]
+    [:div.sans-serif.flex.flex-column.h-100
+     [header {:title (:title (:data route))}]
+     [menu {:route-name route-name :shopping-entries? shopping-entries?}]
+     [:main.flex-auto
+      [:div.mw9.center.bg-gray-200.h-100
+       (case @user
+         :loading [:div.flex.justify-center.items-center.h-100
+                   [components/spinner]]
+         [(:view (:data route)) route])]]
+     (when (and shopping-entries? (or (= route-name :route/main) (= route-name :route/shoppping-list)))
+       [:div
+        [:nav
+         [:ul.flex.list.pl0.ma0
+          [nav-link {:link (rfe/href :route/main)
+                     :title "Essensplan"
+                     :active? (= route-name :route/main)
+                     :class "w-50"}]
+          [nav-link {:link (rfe/href :route/shoppping-list)
+                     :title "Einkaufsliste"
+                     :active? (= route-name :route/shoppping-list)
+                     :class "w-50"}]]]])
+     (when error
+       [:div.absolute.white.flex.justify-center.w-100.mb4
+        {:style {:bottom "3rem"}}
+        [:div.w-80.bg-light-red.ph3.pv2.br2.ba.b--white
+         error]])]))

@@ -20,7 +20,7 @@
                               (when-not @dev-utils/restarting
                                  (dispatch [:shopping-items/archive])))
     :reagent-render (fn [match]
-                      (let [entries @(subscribe [:shopping-entries match])]
+                      (let [entries @(subscribe [:shopping-entries])]
                         [:ul.list.mv0.pa0
                          (map-indexed
                           (fn [idx {:shopping-item/keys [ingredient-id content status] :as entry}]

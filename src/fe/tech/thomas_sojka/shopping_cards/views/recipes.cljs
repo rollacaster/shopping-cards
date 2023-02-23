@@ -1,5 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.views.recipes
-  (:require [re-frame.core :refer [dispatch subscribe]]
+  (:require [re-frame.core :refer [subscribe]]
             [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.components :refer [icon]]))
 
@@ -32,9 +32,8 @@
              ^{:key id}
              [recipe {:name name :image image :details-link (rfe/href :route/edit-recipe {:recipe-id id})
                       :even (even? idx)}])))
-     [:button.fixed.bottom-0.right-0.bg-orange-500.ma4.pa4.z-1.br-100.relative.shadow-5.bn
-      {:type "button"
-       :on-click #(dispatch [:recipes/new])}
+     [:a.fixed.bottom-0.right-0.bg-orange-500.ma4.pa4.z-1.br-100.relative.shadow-5.bn
+      {:href (rfe/href :route/new-recipe)}
       [:span.absolute.f1.white.lh-solid.flex.align-items.justify-center
        {:style {:top "45%"
                 :left "50%"

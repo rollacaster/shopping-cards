@@ -151,6 +151,11 @@
     (remove (fn [{:keys [shopping-item/status]}] (= status :archive))
             (:shopping-entries db))))
 
+(reg-sub :shopping-entries?
+  :<- [:shopping-entries]
+  (fn [shopping-entries]
+    (seq shopping-entries)))
+
 (reg-event-fx :shopping-items/archive
   (fn [{{:keys [shopping-entries]} :db}]
     {:firestore/update-docs {:path firestore-path
