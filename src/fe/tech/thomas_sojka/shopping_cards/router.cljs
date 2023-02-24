@@ -3,6 +3,7 @@
             [reitit.coercion.spec :as rss]
             [reitit.frontend :as rf]
             [reitit.frontend.easy :as rfe]
+            [tech.thomas-sojka.shopping-cards.views.add-item :as add-item]
             [tech.thomas-sojka.shopping-cards.views.deselect-ingredients :as deselect-ingredients]
             [tech.thomas-sojka.shopping-cards.views.ingredient-add :as ingredient-add]
             [tech.thomas-sojka.shopping-cards.views.ingredients :as ingredients]
@@ -25,9 +26,6 @@
    ["/login" {:name :route/login
               :title "Login"
               :view login/main}]
-   ["/meal-plan" {:name :route/meal-plan
-                  :title "Essensplan"
-                  :view meal-plan/main}]
    ["/meal-plan-details/:meal-id" {:name :route/meal-plan-details
                           :title "Rezept"
                           :view meal-plan-details/base
@@ -61,7 +59,10 @@
                        :view ingredient-add/main}]
    ["/shopping-list" {:name :route/shoppping-list
                       :title "Einkaufsliste"
-                      :view shopping-list/main}]])
+                      :view shopping-list/main}]
+   ["/add-item" {:name :route/add-item
+                 :title "Artikel hinzufügen"
+                 :view add-item/main}]])
 (defn init []
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})

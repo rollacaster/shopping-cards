@@ -25,17 +25,39 @@
                                              :shopping-item/content text
                                              :shopping-item/status :open
                                              :shopping-item/created-at (js/Date.)})))
-                          :on-success [:shopping-item/add-success]
-                          :on-failure [:shopping-item/add-failure]}
+                          :on-success [:shopping-item/create-success]
+                          :on-failure [:shopping-item/create-failure]}
      :firestore/update-docs {:path meal-plans/firestore-path
                              :id :id
                              :data (map #(assoc % :shopping-list true) meals-without-shopping-list)}}))
+
+(reg-event-fx :shopping-item/add
+  (fn [_ [_ {:keys [ingredient-id content]}]]
+    {:firestore/add-doc {:path firestore-path
+                         :data {:id (str (random-uuid))
+                                :shopping-item/ingredient-id ingredient-id
+                                :shopping-item/content content
+                                :shopping-item/status :open
+                                :shopping-item/created-at (js/Date.)}
+                          :on-success [:shopping-item/add-success]
+                          :on-failure [:shopping-item/add-failure]}}))
 
 (reg-event-fx :shopping-item/add-success
  (fn []
    {:app/push-state [:route/shoppping-list]}))
 
 (reg-event-fx :shopping-item/add-failure
+  (fn [{:keys [db]}]
+    {:db (assoc db :app/error "Fehler: Speichern fehlgeschlagen")
+     :app/timeout {:id :app/error-removal
+                   :event [:app/remove-error]
+                   :time 2000}}))
+
+(reg-event-fx :shopping-item/create-success
+ (fn []
+   {:app/push-state [:route/shoppping-list]}))
+
+(reg-event-fx :shopping-item/create-failure
   (fn [{:keys [db]}]
     {:db (assoc db :app/error "Fehler: Speichern fehlgeschlagen")
      :app/timeout {:id :app/error-removal
