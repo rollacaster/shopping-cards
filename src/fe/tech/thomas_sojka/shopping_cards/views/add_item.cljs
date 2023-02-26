@@ -1,18 +1,16 @@
 (ns tech.thomas-sojka.shopping-cards.views.add-item
   (:require [clojure.string :as str]
             [re-frame.core :refer [dispatch subscribe]]
-            [reagent.core :as r]))
+            [reagent.core :as r]
+            [tech.thomas-sojka.shopping-cards.components :as c]))
 
 (defn main []
   (let [filter-value (r/atom "")]
     (fn []
       (let [ingredients @(subscribe [:ingredients])]
         [:div.bg-gray-200
-         [:div.w-100
-          [:input.pv3.bn.pl4.w-100.border-box.bg-orange-100.f4
-           {:placeholder "Suche ..."
-            :value @filter-value
-            :on-change (fn [event] (reset! filter-value ^js (.-target.value event)))}]]
+         [c/search-filter {:value @filter-value
+                           :on-change (fn [event] (reset! filter-value ^js (.-target.value event)))}]
          [:ul.pl0.mv0
           (doall
            (->> ingredients

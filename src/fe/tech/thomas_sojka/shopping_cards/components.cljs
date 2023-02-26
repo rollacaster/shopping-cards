@@ -1,6 +1,8 @@
 (ns tech.thomas-sojka.shopping-cards.components
   (:require ["date-fns" :refer (startOfDay)]
+            [clojure.string :as str]
             [re-frame.core :refer [dispatch]]
+            [reagent.core :as r]
             [tech.thomas-sojka.shopping-cards.icons :as icons]))
 
 (defn icon
@@ -73,26 +75,41 @@
     {:class (when selected? "o-40")}
     [:span.f4 name]]])
 
-(defn select-recipe [{:keys [recipes get-title type date]}]
+(defn search-filter [{:keys [value on-change]}]
+  [:div.w-100
+   [:input.pv3.bn.pl4.w-100.border-box.bg-orange-100.f4
+    {:placeholder "Suche ..."
+     :value value
+     :on-change on-change}]])
 
-  [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
-   (map
-    (fn [[recipe-type recipe-type-recipes]]
-      [:div.w-100 {:key recipe-type}
-       (when (not= (ffirst recipes) recipe-type)
-         (get-title recipe-type))
-       [:div.flex.flex-wrap
-        (map-indexed
-         (fn [idx {:keys [id link image] :as r}]
-           [recipe {:key id
-                    :even (even? idx)
-                    :name (:name r)
-                    :link link
-                    :image image
-                    :on-click (fn []
-                                (dispatch [:meal/add {:recipe r
-                                                      :type (name type)
-                                                      :date (startOfDay (js/Date. date))}]))}])
-         recipe-type-recipes)]])
-    (->> recipes
-         (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))))])
+(defn select-recipe []
+  (let [filter-value (r/atom "")]
+    (fn [{:keys [recipes get-title type date]}]
+      [:<>
+       [search-filter {:value @filter-value
+                       :on-change (fn [event] (reset! filter-value ^js (.-target.value event)))}]
+       [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
+        (doall
+         (->> recipes
+              (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))
+              (map
+               (fn [[recipe-type recipe-type-recipes]]
+                 [:div.w-100 {:key recipe-type}
+                  (when (not= (ffirst recipes) recipe-type)
+                    (get-title recipe-type))
+                  [:div.flex.flex-wrap
+                   (doall
+                    (->> recipe-type-recipes
+                         (filter (fn [{:keys [name]}]
+                                   (str/includes? (str/lower-case name) (str/lower-case @filter-value))))
+                         (map-indexed
+                          (fn [idx {:keys [id link image] :as r}]
+                            [recipe {:key id
+                                     :even (even? idx)
+                                     :name (:name r)
+                                     :link link
+                                     :image image
+                                     :on-click (fn []
+                                                 (dispatch [:meal/add {:recipe r
+                                                                       :type (name type)
+                                                                       :date (startOfDay (js/Date. date))}]))}]))))]]))))]])))

@@ -1,6 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.views.recipes
-  (:require [re-frame.core :refer [subscribe]]
+  (:require [clojure.string :as str]
+            [re-frame.core :refer [subscribe]]
+            [reagent.core :as r]
             [reitit.frontend.easy :as rfe]
+            [tech.thomas-sojka.shopping-cards.components :as c]
             [tech.thomas-sojka.shopping-cards.components :refer [icon]]))
 
 (defn recipe [{:keys [even name image selected? details-link]}]
@@ -23,12 +26,21 @@
     [:span.f4 name]]])
 
 (defn main []
-  (let [recipes @(subscribe [:recipes])]
-    [:div.pb6.bg-gray-300
-     (->> recipes
-          (sort-by :name)
-          (map-indexed
-           (fn [idx {:keys [id name image]}]
-             ^{:key id}
-             [recipe {:name name :image image :details-link (rfe/href :route/edit-recipe {:recipe-id id})
-                      :even (even? idx)}])))]))
+  (let [filter-value (r/atom "")]
+    (fn []
+      (let [recipes @(subscribe [:recipes])]
+        [:<>
+         [c/search-filter {:value @filter-value
+                           :on-change (fn [event] (reset! filter-value ^js (.-target.value event)))}]
+         [:div.pb6.bg-gray-300
+          (doall
+           (->> recipes
+                (sort-by :name)
+                (filter (fn [{:keys [name]}]
+                          (str/includes? (str/lower-case name)
+                                         (str/lower-case @filter-value))))
+                (map-indexed
+                 (fn [idx {:keys [id name image]}]
+                   ^{:key id}
+                   [recipe {:name name :image image :details-link (rfe/href :route/edit-recipe {:recipe-id id})
+                            :even (even? idx)}]))))]]))))
