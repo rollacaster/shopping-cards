@@ -130,5 +130,5 @@
   (let [{:keys [path]} (:parameters match)
         {:keys [recipe-id]} path
         recipe @(subscribe [:recipes/details recipe-id])]
-
-    [recipe-details {:recipe (update recipe :ingredients vec)}]))
+    (when recipe
+      [recipe-details {:recipe (update recipe :ingredients vec)}])))

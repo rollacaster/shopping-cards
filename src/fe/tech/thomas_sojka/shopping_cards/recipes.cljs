@@ -18,7 +18,7 @@
     {:firestore/update-doc {:path firestore-path
                             :key id
                             :data (->firestore-recipe recipe)}
-     :app/push-state [:route/recipes]}))
+     :app/push-state [:route/edit-recipes]}))
 
 (reg-event-fx :recipes/load
   (fn []
