@@ -4,7 +4,7 @@
             [re-frame.core :refer [dispatch subscribe]]
             [tech.thomas-sojka.shopping-cards.components :as c :refer [icon]]))
 
-(defn cooked-with-c [a {:fieldarray/keys [fields remove insert handle-blur set-handle-change]}]
+(defn cooked-with-c [_ {:fieldarray/keys [fields remove insert handle-blur set-handle-change]}]
   [:<>
    (doall
     (map-indexed
@@ -20,13 +20,11 @@
                 {:on-change (fn [^js e]
                               (set-handle-change
                                {:value (first
-                                        (get
-                                         (set/index
-                                          (set @(subscribe [:ingredients]))
-                                          [:ingredient/id])
-                                         {:ingredient/id e.target.value}))
+                                        (get (set/index (set ingredients) [:ingredient/id])
+                                             {:ingredient/id e.target.value}))
                                 :path [:ingredients idx 1]}))}
                 (->> ingredients
+                     (filter (fn [ingredient] (not ((set (map second fields)) ingredient))))
                      (sort-by :ingredient/name)
                      (map
                       (fn [{:keys [ingredient/name ingredient/id]}]
