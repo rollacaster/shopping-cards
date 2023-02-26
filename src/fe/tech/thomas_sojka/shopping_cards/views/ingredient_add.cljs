@@ -24,11 +24,7 @@
           (map (fn [category] ^{:key category} [:option {:value category} (name category)])
                db/ingredient-categorys)]]
         [:button.bg-orange-500.white.ph3.pv2.bn.shadow-5.br3
-         {:on-click #(dispatch [:transact
-                                {:tx-data
-                                 [{:ingredient/name @ingredient-name
-                                   :ingredient/category {:db/ident @ingredient-category}
-                                   :ingredient/id (str (random-uuid))}]
-                                 :on-success [:ingredient-add/success]
-                                 :on-failure [:ingredient-add/failure]}])}
+         {:on-click #(dispatch [:ingredients/add
+                                {:ingredient/name @ingredient-name
+                                 :ingredient/category @ingredient-category}])}
          "Hinzufügen"]]])))
