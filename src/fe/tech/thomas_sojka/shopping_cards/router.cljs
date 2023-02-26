@@ -10,7 +10,6 @@
             [tech.thomas-sojka.shopping-cards.views.login :as login]
             [tech.thomas-sojka.shopping-cards.views.meal-plan :as meal-plan]
             [tech.thomas-sojka.shopping-cards.views.meal-plan-details :as meal-plan-details]
-            [tech.thomas-sojka.shopping-cards.views.recipe-add :as recipe-add]
             [tech.thomas-sojka.shopping-cards.views.recipe-details :as recipe-details]
             [tech.thomas-sojka.shopping-cards.views.recipes :as recipes]
             [tech.thomas-sojka.shopping-cards.views.select-dinner :as select-dinner]
@@ -44,9 +43,6 @@
    ["/recipes" {:name :route/edit-recipes
                 :title "Rezepte bearbeiten"
                 :view recipes/main}]
-   ["/recipe-add" {:name :route/new-recipe
-                   :title "Neues Rezept"
-                   :view recipe-add/main}]
    ["/recipes/:recipe-id" {:name :route/edit-recipe
                            :title "Rezept bearbeiten"
                            :view recipe-details/main
