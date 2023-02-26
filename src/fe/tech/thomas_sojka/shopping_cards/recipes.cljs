@@ -5,6 +5,23 @@
                                    reg-event-fx reg-fx reg-sub]]
             [tech.thomas-sojka.shopping-cards.ingredients :as ingredients]))
 
+(def firestore-path "recipes")
+
+(defn ->firestore-recipe [recipe]
+  (update recipe :ingredients
+          (fn [ingredients]
+            (map
+             (fn [[cooked-with ingredient]]
+               (assoc cooked-with :ingredient ingredient))
+             ingredients))))
+
+(reg-event-fx :recipes/update
+  (fn [_ [_ {:keys [id] :as recipe}]]
+    {:firestore/update-doc {:path firestore-path
+                            :key id
+                            :data (->firestore-recipe recipe)}
+     :app/push-state [:route/recipes]}))
+
 (def localstorage-recipes-key "recipes")
 
 (reg-cofx :local-store-recipes
@@ -17,7 +34,7 @@
   [(inject-cofx :local-store-recipes)]
   (fn [{:keys [local-store-recipes db]}]
     (if (empty? local-store-recipes)
-      {:firestore/snapshot {:path "recipes"
+      {:firestore/snapshot {:path firestore-path
                             :on-success [:recipes/load-success]
                             :on-failure [:recipes/load-failure]}}
       {:db (assoc db :recipes local-store-recipes)})))
