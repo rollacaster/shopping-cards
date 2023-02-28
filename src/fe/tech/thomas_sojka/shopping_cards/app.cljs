@@ -9,8 +9,12 @@
             [tech.thomas-sojka.shopping-cards.db :refer [default-db]]))
 
 (reg-event-fx :app/init
- (fn [_ [_ now]]
-   {:db (assoc default-db :app/start-of-week (startOfDay now))
+ (fn []
+   {:db default-db}))
+
+(reg-event-fx :app/load
+ (fn [{:keys [db]} [_ now]]
+   {:db (assoc db :app/start-of-week (startOfDay now))
     :dispatch-n [[:bank-holidays/load (.getFullYear now)]
                  [:recipes/load]
                  [:meals/load now]
@@ -58,7 +62,7 @@
       (swap! timeouts assoc id
              (js/setTimeout
               (fn []
-                (dispatch event))
+               (dispatch event))
               time)))))
 
 (defn check-and-throw

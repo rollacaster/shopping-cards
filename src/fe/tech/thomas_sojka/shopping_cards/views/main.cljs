@@ -1,9 +1,10 @@
 (ns tech.thomas-sojka.shopping-cards.views.main
-  (:require [cljs.core :as c]
+  (:require ["firebase/auth" :as auth]
+            [cljs.core :as c]
             [re-frame.core :refer [subscribe]]
             [reagent.core :as r]
             [reitit.frontend.easy :as rfe]
-            [tech.thomas-sojka.shopping-cards.auth :refer [user]]
+            [tech.thomas-sojka.shopping-cards.auth :refer [auth user]]
             [tech.thomas-sojka.shopping-cards.components :as components]))
 
 (defmulti title :view)
@@ -56,7 +57,12 @@
       [nav-link {:link (rfe/href :route/ingredients)
                  :title "Zutaten"
                  :active? (= route-name :route/ingredients)
-                 :on-click toggle-menu}]]]]])
+                 :on-click toggle-menu}]
+      [nav-link {:title "Logout"
+                 :active? (= route-name :route/ingredients)
+                 :on-click (fn []
+                             (auth/signOut auth)
+                             (toggle-menu))}]]]]])
 
 (defn app [match]
   (let [route @match
@@ -71,6 +77,7 @@
        (case @user
          :loading [:div.flex.justify-center.items-center.h-100
                    [components/spinner]]
+         :noauth [(:view (:data route)) route]
          [(:view (:data route)) route])]]
      (when (and shopping-entries? (or (= route-name :route/main) (= route-name :route/shoppping-list)))
        [:div

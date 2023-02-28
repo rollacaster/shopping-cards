@@ -26,4 +26,4 @@
   (reset! server (http/run-server (-> #'handler
                                       (wrap-file "target/test/browser" {:prefer-handler? true})
                                       wrap-content-type)
-                                  {:port 9001})))
+                                  {:port 9004})))

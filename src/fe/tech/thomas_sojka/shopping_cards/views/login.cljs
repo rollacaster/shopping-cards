@@ -1,5 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.views.login
   (:require ["firebase/auth" :as auth]
+            [re-frame.core :refer [dispatch]]
             [reagent.core :as r]
             [tech.thomas-sojka.shopping-cards.auth :refer [auth]]))
 
@@ -11,14 +12,15 @@
                  (.preventDefault e)
                  (-> (let [{:strs [email password]} (apply hash-map (mapcat identity (.entries (new js/FormData ^js (.-target e)))))]
                        (auth/signInWithEmailAndPassword auth email password))
-                     (.then #(reset! err nil))
+                     (.then (fn []
+                              (reset! err nil)
+                              (dispatch [:auth/logged-in])))
                      (.catch (fn [error]
                                (prn (.-code error))
                                (reset! err
                                        (case (.-code error)
                                          ("auth/user-not-found" "auth/wrong-password" "auth/internal-error")
-                                         "Ungültie Email-Adresse oder Password")))))
-                 (js/console.log (new js/FormData ^js (.-target e))))}
+                                         "Ungültie Email-Adresse oder Password"))))))}
    [:div.pb4
     [:label.db.mb3 {:for "email"} "Email"]
     [:input.w-100.pv3.bn.br1.shadow-1

@@ -16,8 +16,9 @@
   ([]
    (init! {:container (.getElementById js/document "app")}))
   ([{:keys [container]}]
-   (when-not @dev-utils/restarting
-     (dispatch-sync [:app/init (js/Date.)]))
+   (let [now (js/Date.)]
+     (when-not @dev-utils/restarting
+       (dispatch-sync [:app/init now])))
    (dom/render [main/app (router/init)] container)))
 
 (defn ^:dev/after-load clear-cache-and-render!
