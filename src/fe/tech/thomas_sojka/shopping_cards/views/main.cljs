@@ -11,7 +11,9 @@
 (defmethod title :default [] nil)
 
 (defonce menu-visible? (r/atom false))
-(def toggle-menu #(swap! menu-visible? not))
+(def toggle-menu (fn []
+                   (js/document.body.classList.toggle "overflow-hidden")
+                   (swap! menu-visible? not)))
 (defn- menu-button []
   [:button.bg-transparent.white.f2.bn.pa0.ma0.w2.h2
       {:on-click toggle-menu :style {:transform "translateY(-2px)"}}
@@ -32,13 +34,13 @@
     title]])
 
 (defn menu [{:keys [shopping-entries? route-name]}]
-  [:div.absolute.left0.top0.h-100.z-2.flex
+  [:div.absolute.left0.top0.h-100.z-2.flex.w-100
    {:style
     {:left (if @menu-visible? "0%" "-100%")
      :transition "all 300ms"}}
-   [:div.bg-orange-400
-    {:class "w-2/3"
-     :style {:margin-top 68.8 :height "calc(100% - 68.8px)"}}
+   [:div.bg-orange-400.shadow-1
+    {:class "h-100"
+     :style {:margin-top 68.8}}
     [:nav
      [:ul.list.pl0.ma0
       [nav-link {:link (rfe/href :route/main)
@@ -59,10 +61,13 @@
                  :active? (= route-name :route/ingredients)
                  :on-click toggle-menu}]
       [nav-link {:title "Logout"
-                 :active? (= route-name :route/ingredients)
                  :on-click (fn []
                              (auth/signOut auth)
-                             (toggle-menu))}]]]]])
+                             (toggle-menu))}]]]]
+   [:button.bg-transparent.bn
+    {:class "flex-auto"
+     :on-click toggle-menu
+     :style {:margin-top 68.8 :height "calc(100% - 68.8px)"}}]])
 
 (defn app [match]
   (let [route @match
