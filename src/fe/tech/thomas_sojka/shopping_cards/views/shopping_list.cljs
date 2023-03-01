@@ -20,10 +20,11 @@
     :component-will-unmount (fn []
                               (when-not @dev-utils/restarting
                                  (dispatch [:shopping-items/archive])))
-    :reagent-render (fn [match]
+    :reagent-render (fn []
                       (let [entries @(subscribe [:shopping-entries])]
                         [:<>
-                         [:ul.list.mv0.pa0
+                         [:ul.list.mv0.pt0.pl0
+                          {:style {:padding-bottom 50}}
                           (map-indexed
                            (fn [idx {:shopping-item/keys [ingredient-id content status] :as entry}]
                              ^{:key ingredient-id}

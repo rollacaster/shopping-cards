@@ -78,6 +78,7 @@
      [header {:title (:title (:data route))}]
      [menu {:route-name route-name :shopping-entries? shopping-entries?}]
      [:main.flex-auto
+      {:style {:margin-bottom 50}}
       [:div.mw9.center.bg-gray-200.h-100
        (case @user
          :loading [:div.flex.justify-center.items-center.h-100
@@ -85,17 +86,17 @@
          :noauth [(:view (:data route)) route]
          [(:view (:data route)) route])]]
      (when (and shopping-entries? (or (= route-name :route/main) (= route-name :route/shoppping-list)))
-       [:div
-        [:nav
-         [:ul.flex.list.pl0.ma0
-          [nav-link {:link (rfe/href :route/main)
-                     :title "Essensplan"
-                     :active? (= route-name :route/main)
-                     :class "w-50"}]
-          [nav-link {:link (rfe/href :route/shoppping-list)
-                     :title "Einkaufsliste"
-                     :active? (= route-name :route/shoppping-list)
-                     :class "w-50"}]]]])
+       [:nav.fixed.bottom-0.w-100
+        [:ul.flex.list.pl0.ma0
+
+         [nav-link {:link (rfe/href :route/main)
+                    :title "Essensplan"
+                    :active? (= route-name :route/main)
+                    :class "w-50"}]
+         [nav-link {:link (rfe/href :route/shoppping-list)
+                    :title "Einkaufsliste"
+                    :active? (= route-name :route/shoppping-list)
+                    :class "w-50"}]]])
      (when error
        [:div.absolute.white.flex.justify-center.w-100.mb4
         {:style {:bottom "3rem"}}
