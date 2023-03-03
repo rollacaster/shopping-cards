@@ -82,6 +82,33 @@
      :value value
      :on-change on-change}]])
 
+(def input-class "border-box ph2 pv3 w-100 mb3 bn br2")
+
+(defn input-box [& children]
+  [:div.flex.flex-column.mb3 {:style {:gap "1rem"}}
+   children])
+
+(defn label [{:keys [for]} children]
+  [:label.w-100.fw6.db {:for for} children])
+
+(defn input [{:keys [type autoComplete required value name on-change]}]
+  [:input.border-box.ph2.pv3.w-100.bn.br2
+   {:value value
+    :name name
+    :on-change on-change
+    :class input-class
+    :type type
+    :autoComplete autoComplete
+    :required required}])
+
+(defn select [{:keys [value name on-change]} children]
+  [:select
+   {:value value
+    :name name
+    :on-change on-change
+    :class input-class}
+   children])
+
 (defn select-recipe []
   (let [filter-value (r/atom "")]
     (fn [{:keys [recipes get-title type date]}]
@@ -113,3 +140,11 @@
                                                  (dispatch [:meal/add {:recipe r
                                                                        :type (name type)
                                                                        :date (startOfDay (js/Date. date))}]))}]))))]]))))]])))
+(defn button
+  ([children]
+   [button {} children])
+  ([{:keys [on-click type]} children]
+   [:button.bg-orange-400.bn.ph4.pv3.br2.shadow-5.fw6
+    {:on-click on-click
+     :type type}
+    children]))

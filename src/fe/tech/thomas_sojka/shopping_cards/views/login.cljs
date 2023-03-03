@@ -2,7 +2,8 @@
   (:require ["firebase/auth" :as auth]
             [re-frame.core :refer [dispatch]]
             [reagent.core :as r]
-            [tech.thomas-sojka.shopping-cards.auth :refer [auth]]))
+            [tech.thomas-sojka.shopping-cards.auth :refer [auth]]
+            [tech.thomas-sojka.shopping-cards.components :as c]))
 
 (defonce err (r/atom nil))
 
@@ -21,15 +22,20 @@
                                        (case (.-code error)
                                          ("auth/user-not-found" "auth/wrong-password" "auth/internal-error")
                                          "Ungültie Email-Adresse oder Password"))))))}
-   [:div.pb4
-    [:label.db.mb3 {:for "email"} "Email"]
-    [:input.w-100.pv3.bn.br1.shadow-1
-     {:type "email" :name "email" :autoComplete "username" :required true}]]
-   [:div.pb4
-    [:label.db.mb3 {:for "password"} "Passwort"]
-    [:input.w-100.pv3.bn.br1.shadow-1
-     {:type "password" :name "password" :autoComplete "current-password"}]]
+   [c/input-box
+    [c/label {:for "email"} "Email"]
+    [c/input
+     {:type "email"
+      :name "email"
+      :autoComplete "username"
+      :required true}]]
+   [c/input-box
+    [c/label {:for "password"} "Passwort"]
+    [c/input
+     {:type "password" :name
+      "password"
+      :autoComplete "current-password"}]]
    [:div.flex.items-center
-    [:button.bg-orange-400.bn.ph5.pv3.br2.shadow-5.fw6
+    [c/button
      "Login"]
     [:span.db.red.ml3 @err]]])
