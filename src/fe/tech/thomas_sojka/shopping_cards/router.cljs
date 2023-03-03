@@ -6,7 +6,6 @@
             [tech.thomas-sojka.shopping-cards.views.add-item :as add-item]
             [tech.thomas-sojka.shopping-cards.views.deselect-ingredients :as deselect-ingredients]
             [tech.thomas-sojka.shopping-cards.views.ingredient-add :as ingredient-add]
-            [tech.thomas-sojka.shopping-cards.views.ingredients :as ingredients]
             [tech.thomas-sojka.shopping-cards.views.login :as login]
             [tech.thomas-sojka.shopping-cards.views.meal-plan :as meal-plan]
             [tech.thomas-sojka.shopping-cards.views.meal-plan-details :as meal-plan-details]
@@ -47,12 +46,10 @@
                            :title "Rezept bearbeiten"
                            :view recipe-details/main
                            :parameters {:path {:recipe-id string?}}}]
-   ["/ingredients" {:name :route/ingredients
-                    :title "Zutaten"
-                    :view ingredients/main}]
-   ["/ingredient-add" {:name :route/new-ingredient
-                       :title "Neue Zutat"
-                       :view ingredient-add/main}]
+   ["/ingredient-add/:ingredient-name" {:name :route/new-ingredient
+                                        :title "Neue Zutat"
+                                        :view ingredient-add/main
+                                        :parameters {:path {:ingredient-name string?}}}]
    ["/shopping-list" {:name :route/shoppping-list
                       :title "Einkaufsliste"
                       :view shopping-list/main}]

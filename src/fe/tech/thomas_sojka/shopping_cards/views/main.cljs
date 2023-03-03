@@ -56,10 +56,6 @@
                  :title "Rezepte"
                  :active? (= route-name :route/edit-recipes)
                  :on-click toggle-menu}]
-      [nav-link {:link (rfe/href :route/ingredients)
-                 :title "Zutaten"
-                 :active? (= route-name :route/ingredients)
-                 :on-click toggle-menu}]
       [nav-link {:title "Logout"
                  :on-click (fn []
                              (auth/signOut auth)
@@ -74,12 +70,12 @@
         error @(subscribe [:app/error])
         shopping-entries? @(subscribe [:shopping-entries?])
         route-name (:name (:data route))]
-    [:div.sans-serif.flex.flex-column.h-100
+    [:div.sans-serif.flex.flex-column.h-100.bg-gray-200
      [header {:title (:title (:data route))}]
      [menu {:route-name route-name :shopping-entries? shopping-entries?}]
      [:main.flex-auto
       {:style {:margin-bottom 50}}
-      [:div.mw9.center.bg-gray-200.h-100
+      [:div.mw9.center.h-100
        (case @user
          :loading [:div.flex.justify-center.items-center.h-100
                    [components/spinner]]

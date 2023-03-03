@@ -25,7 +25,8 @@
     :ingredient-category/käse&co
     :ingredient-category/süßigkeiten
     :ingredient-category/eier
-    :ingredient-category/getränke})
+    :ingredient-category/getränke
+    :ingredient-category/kosmetik})
 
 (s/def :ingredient/id :app/id)
 (s/def :ingredient/category ingredient-categorys)
