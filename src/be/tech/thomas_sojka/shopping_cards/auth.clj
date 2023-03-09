@@ -9,7 +9,7 @@
             [tick.core :as t]))
 
 (def creds-file (read-string (slurp (io/resource ".creds.edn"))))
-(def oauth-creds-path (str (System/getProperty "user.home") "/.google-oauth-creds"))
+(def oauth-creds-path "resources/.google-oauth-creds.gpg")
 (def oauth-creds
   (try
     (read-string (slurp oauth-creds-path))
