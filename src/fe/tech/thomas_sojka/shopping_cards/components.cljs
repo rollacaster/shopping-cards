@@ -84,22 +84,24 @@
 
 (def input-class "border-box ph2 pv3 w-100 mb3 bn br2")
 
-(defn input-box [& children]
+(defn input-box [label input]
   [:div.flex.flex-column.mb3 {:style {:gap "1rem"}}
-   children])
+   label
+   input])
 
 (defn label [{:keys [for]} children]
   [:label.w-100.fw6.db {:for for} children])
 
 (defn input [{:keys [type autoComplete required value name on-change]}]
   [:input.border-box.ph2.pv3.w-100.bn.br2
-   {:value value
-    :name name
-    :on-change on-change
-    :class input-class
-    :type type
-    :autoComplete autoComplete
-    :required required}])
+   (cond->
+       {:name name
+        :class input-class
+        :type type
+        :autoComplete autoComplete
+        :required required}
+       value (assoc :value value)
+       on-change (assoc :on-change on-change))])
 
 (defn select [{:keys [value name on-change]} children]
   [:select
