@@ -41,10 +41,13 @@
 (s/def :recipe/image string?)
 (s/def :recipe/link (s/nilable string?))
 (s/def :recipe/inactive boolean?)
-(s/def :recipe/ingredients (s/coll-of (s/tuple :cooked-with/cooked-with :ingredient/ingredient)))
+(s/def :recipe/ingredients (s/coll-of (s/merge :cooked-with/cooked-with
+                                               (s/keys :req [:ingredient/ingredient]))))
 
-(s/def :recipe/recipe (s/keys :req-un [:recipe/name :recipe/image]
-                              :req [:recipe/type ]
+(s/def :recipe/recipe (s/keys :req [:recipe/type
+                                    :recipe/id
+                                    :recipe/name
+                                    :recipe/image]
                               :opt-un [:recipe/link :recipe/inactive
                                        :recipe/ingredients]))
 (s/def :recipe/recipes (s/coll-of :recipe/recipe))

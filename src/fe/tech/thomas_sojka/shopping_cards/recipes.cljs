@@ -28,20 +28,24 @@
 
 (defn ->recipe [firestore-recipe]
   (cond-> firestore-recipe
-      :always (set/rename-keys {:type :recipe/type})
+      :always (set/rename-keys {:id :recipe/id
+                                :name :recipe/name
+                                :type :recipe/type
+                                :image :recipe/image
+                                :link :recipe/link
+                                :ingredients :recipe/ingredients})
       :always (update :recipe/type (fn [t] (keyword "recipe-type" t)))
       (:ingredients firestore-recipe)
-      (update :ingredients (fn [cooked-with]
-                             (map
-                              (fn [{:keys [ingredient] :as c}]
-                                [(-> c
-                                     (set/rename-keys {:unit :cooked-with/unit
-                                                       :amount-desc :cooked-with/amount-desc
-                                                       :amount :cooked-with/amount})
-                                     (dissoc :ingredient))
-                                 (ingredients/->ingredient ingredient)])
-                              cooked-with)))))
-
+      (update :recipe/ingredients (fn [cooked-with]
+                                    (mapv
+                                     (fn [c]
+                                       (-> c
+                                           (set/rename-keys {:unit :cooked-with/unit
+                                                             :amount-desc :cooked-with/amount-desc
+                                                             :amount :cooked-with/amount
+                                                             :ingredient :ingredient/ingredient})
+                                           (update :ingredient/ingredient ingredients/->ingredient)))
+                                     cooked-with)))))
 (reg-event-fx :recipes/load-success
   (fn [{:keys [db]} [_ data]]
     {:db (assoc db :recipes (map ->recipe data))}))
