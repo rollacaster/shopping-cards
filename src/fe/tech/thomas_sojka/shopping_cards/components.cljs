@@ -120,7 +120,8 @@
        [:div.flex.db-ns.flex-wrap.justify-center.justify-start-ns.ph5-ns.pb6.pt3-ns
         (doall
          (->> recipes
-              (map (fn [[recipe-type recipes]] [recipe-type (sort-by :name recipes)]))
+              (map (fn [[recipe-type recipe-type-recipes]]
+                     [recipe-type (sort-by :recipe/name recipe-type-recipes)]))
               (map
                (fn [[recipe-type recipe-type-recipes]]
                  [:div.w-100 {:key recipe-type}
@@ -129,13 +130,13 @@
                   [:div.flex.flex-wrap
                    (doall
                     (->> recipe-type-recipes
-                         (filter (fn [{:keys [name]}]
+                         (filter (fn [{:keys [recipe/name]}]
                                    (str/includes? (str/lower-case name) (str/lower-case @filter-value))))
                          (map-indexed
-                          (fn [idx {:keys [id link image] :as r}]
+                          (fn [idx {:recipe/keys [id link image] :as r}]
                             [recipe {:key id
                                      :even (even? idx)
-                                     :name (:name r)
+                                     :name (:recipe/name r)
                                      :link link
                                      :image image
                                      :on-click (fn []
