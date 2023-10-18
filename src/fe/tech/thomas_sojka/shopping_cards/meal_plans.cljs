@@ -11,7 +11,7 @@
       {:firestore/add-doc {:path firestore-path
                            :data (-> meal
                                      (assoc :id new-id)
-                                     (update :recipe dissoc :ingredients))
+                                     (update :recipe dissoc :recipe/ingredients))
                            :on-success [:meal/add-success]
                            :on-failure [:meal/add-failure]}})))
 

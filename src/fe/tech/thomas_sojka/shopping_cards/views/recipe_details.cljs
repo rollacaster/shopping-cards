@@ -84,7 +84,7 @@
        "Add ingredient"]])])
 
 (defn recipe-details [{:keys [recipe]}]
-  (let [{:keys [name image]} recipe]
+  (let [{:recipe/keys [name image]} recipe]
     [:div.ph5-ns.pt4.pb6.ml2-ns.bg-gray-200
      [:div.ph3
       [:h1.mb3.mt0 name]

@@ -8,7 +8,7 @@
     (let [{:keys [path]} (:parameters match)
           {:keys [meal-id]} path
           {:keys [id recipe]} @(subscribe [:meal/details meal-id])
-          {:keys [name link image]} recipe]
+          {:recipe/keys [name link image]} recipe]
       [:div.ph5-ns.ph3.pv4.ml2-ns.bg-gray-200
        [:div.flex.justify-between.items
         [:a.link.near-black.mb3.mb0-ns.db
@@ -24,15 +24,17 @@
         [:div
          [:h2.fw6.mb3 "Zutaten"]
          [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-          (->> (:ingredients recipe)
+          (->> (:recipe/ingredients recipe)
                (sort-by
                 (comp :ingredient/category second)
                 (fn [category1 category2]
                   (< (.indexOf ingredients-processing/penny-order category1)
                      (.indexOf ingredients-processing/penny-order category2))))
                (map
-                (fn [[{:cooked-with/keys [amount-desc]} {:ingredient/keys [id name]}]]
-                  [:li.mb2.f4 {:key id} (str amount-desc " " name)])))]]]
+                (fn [cooked-with]
+                  [:li.mb2.f4 {:key id} (str (:cooked-with/amount-desc cooked-with)
+                                             " "
+                                             (:ingredient/name (:ingredient/ingredient cooked-with)))])))]]]
        (when-not (empty? link)
          [:div.flex.justify-center
           [:a.link.shadow-3.bn.pv2.ph3.br2.bg-orange-400.f3.gray-800
