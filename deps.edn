@@ -27,19 +27,19 @@
                              reagent/reagent {:mvn/version "1.1.0"}
                              fork/fork {:mvn/version "2.4.2"}
                              datascript/datascript {:mvn/version "1.3.15"}}}
-           :release {:extra-deps {com.datomic/dev-local {:mvn/version "1.0.243"}}}
+           :release {:extra-deps {com.datomic/local {:mvn/version "1.0.267"}}}
            :cider {:extra-deps {nrepl/nrepl {:mvn/version "1.0.0"}
                                 cider/cider-nrepl {:mvn/version "0.29.0"}
                                 refactor-nrepl/refactor-nrepl {:mvn/version "3.6.0"}}}
            :be/dev {:main-opts ["-m" "system-repl" "--middleware" "[refactor-nrepl.middleware/wrap-refactor,cider.nrepl/cider-middleware]"]
                     :extra-paths ["dev/be"]
                     :extra-deps {integrant/repl {:mvn/version "0.3.2"}
-                                 com.datomic/dev-local {:mvn/version "1.0.243"}}}
+                                 com.datomic/local {:mvn/version "1.0.267"}}}
            :fe/dev {:extra-paths ["dev/fe"]
                     :extra-deps {babashka/fs {:mvn/version "0.1.6"}}
                     :main-opts ["-m" "shadow"]}
            :be/release {:extra-deps {uberdeps/uberdeps {:mvn/version "0.1.10"}
-                                     com.datomic/dev-local {:mvn/version "1.0.243"}}
+                                     com.datomic/local {:mvn/version "1.0.267"}}
                         :main-opts ["-m" "uberdeps.uberjar" "--main-class" "tech.thomas_sojka.shopping_cards.system"]}
            :fe/test {:extra-paths ["test/fe"]
                      :extra-deps {com.cognitect/transit-cljs {:mvn/version "0.8.269"}
@@ -50,12 +50,12 @@
             :extra-deps  {com.cognitect/test-runner
                           {:git/url "https://github.com/cognitect-labs/test-runner.git"
                            :sha     "f7ef16dc3b8332b0d77bc0274578ad5270fbfedd"}
-                          com.datomic/dev-local {:mvn/version "1.0.243"}
+                          com.datomic/local {:mvn/version "1.0.267"}
                           integrant/repl {:mvn/version "0.3.2"}
                           org.clojure/test.check {:mvn/version "1.1.1"}}
             :main-opts   ["-m" "cognitect.test-runner"]}
            :be/test
            {:extra-paths ["test/be"]
-            :extra-deps  {com.datomic/dev-local {:mvn/version "1.0.243"}
+            :extra-deps  {com.datomic/local {:mvn/version "1.0.267"}
                           integrant/repl {:mvn/version "0.3.2"}
                           org.clojure/test.check {:mvn/version "1.1.1"}}}}}
