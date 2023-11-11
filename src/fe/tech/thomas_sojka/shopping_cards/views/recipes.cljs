@@ -35,12 +35,12 @@
          [:div.pb6.bg-gray-300
           (doall
            (->> recipes
-                (sort-by :name)
-                (filter (fn [{:keys [name]}]
+                (sort-by :recipe/name)
+                (filter (fn [{:recipe/keys [name]}]
                           (str/includes? (str/lower-case name)
                                          (str/lower-case @filter-value))))
                 (map-indexed
-                 (fn [idx {:keys [id name image]}]
+                 (fn [idx {:recipe/keys [id name image]}]
                    ^{:key id}
                    [recipe {:name name :image image :details-link (rfe/href :route/edit-recipe {:recipe-id id})
                             :even (even? idx)}]))))]]))))

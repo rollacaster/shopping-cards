@@ -1,6 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.ingredients
-  (:require [clojure.set :as set]
-            [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
+  (:require [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
 
 (def firestore-path "ingredients")
 
@@ -33,15 +32,13 @@
                           :on-failure [:ingredients/load-failure]}}))
 
 (defn ->ingredient [firestore-ingredient]
-  (-> firestore-ingredient
-      (set/rename-keys {:id :ingredient/id
-                        :name :ingredient/name
-                        :category :ingredient/category})
-      (update :ingredient/category (fn [c] (keyword "ingredient-category" c)))))
+  (update firestore-ingredient :ingredient/category keyword))
 
 (reg-event-fx :ingredients/load-success
   (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :ingredients (map ->ingredient data))}))
+    (let [ingredients (map ->ingredient data)]
+      {:db (assoc db :ingredients (map ->ingredient data))
+       :dispatch [:recipes/load ingredients]})))
 
 (reg-event-db :ingredients/load-failure
  (fn [db _]

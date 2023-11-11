@@ -8,69 +8,69 @@
   [:<>
    (doall
     (map-indexed
-     (fn [idx [{:cooked-with/keys [amount-desc amount unit]} ingredient]]
-       (let [ingredient-id (str (random-uuid))]
-         ^{:key (or (:ingredient/id ingredient) ingredient-id)}
-         [:div.bg-gray-700.white.pa2.mb3.br2
-          [:div.flex.justify-between.items-center.mb3
-           (if (:ingredient/name ingredient)
-             [:div.f3.fw3.mr2.w-90 (:ingredient/name ingredient)]
-             (let [ingredients @(subscribe [:ingredients])]
-               [:select.pa1.w-100.mr4
-                {:on-change (fn [^js e]
-                              (set-handle-change
-                               {:value (first
-                                        (get (set/index (set ingredients) [:ingredient/id])
-                                             {:ingredient/id e.target.value}))
-                                :path [:ingredients idx 1]}))}
-                (->> ingredients
-                     (filter (fn [ingredient] (not ((set (map second fields)) ingredient))))
-                     (sort-by :ingredient/name)
-                     (map
-                      (fn [{:keys [ingredient/name ingredient/id]}]
-                        ^{:key id}
-                        [:option {:value id} name]))
-                     (cons ^{:key "none"}
-                           [:option {:value ""} "Zutat auswählen"]))]))
-           [:button.bn.bg-orange-200.shadow-1.pa2.br3.w-10
-            {:on-click #(remove idx)
-             :type :button}
-            [icon {:class "h1"} :trash-can]]]
-          [:div.flex.flex-column
-           [:div.flex.mb1.items-center
-            [:label.w-40 {:for "amount-desc"} "Beschreibung"]
-            [:input.pa1.w-60.br1.border-box.bn
-             {:value amount-desc
-              :autoComplete "off"
-              :name "cooked-with/amount-desc"
-              :on-change (fn [^js e]
-                           (set-handle-change
-                            {:value (.-target.value e)
-                             :path [:ingredients idx 0 :cooked-with/amount-desc]}))
-              :on-blur #(handle-blur % idx)}]]
-           [:div.flex.mb1.items-center
-            [:label.w-40 {:for "amount"} "Menge"]
-            [:input.pa1.w-60.br1.border-box.bn
-             {:value amount
-              :autoComplete "off"
-              :type "number"
-              :name "cooked-with/amount"
-              :on-change (fn [^js e]
-                           (set-handle-change
-                            {:value (.-target.value e)
-                             :path [:ingredients idx 0 :cooked-with/amount]}))
-              :on-blur #(handle-blur % idx)}]]
-           [:div.flex.mb1.items-center
-            [:label.w-40 {:for "unit"} "Einheit"]
-            [:input.pa1.w-60.br1.border-box.bn
-             {:value unit
-              :autoComplete "off"
-              :name "cooked-with/unit"
-              :on-change (fn [^js e]
-                           (set-handle-change
-                            {:value (.-target.value e)
-                             :path [:ingredients idx 0 :cooked-with/unit]}))
-              :on-blur #(handle-blur % idx)}]]]]))
+     (fn [idx {:cooked-with/keys [amount-desc amount unit]
+              :ingredient/keys [id name]}]
+       ^{:key id}
+       [:div.bg-gray-700.white.pa2.mb3.br2
+        [:div.flex.justify-between.items-center.mb3
+         (if name
+           [:div.f3.fw3.mr2.w-90 name]
+           (let [ingredients @(subscribe [:ingredients])]
+             [:select.pa1.w-100.mr4
+              {:on-change (fn [^js e]
+                            (set-handle-change
+                             {:value (first
+                                      (get (set/index (set ingredients) [:ingredient/id])
+                                           {:ingredient/id e.target.value}))
+                              :path [:ingredients idx 1]}))}
+              (->> ingredients
+                   (filter (fn [ingredient] (not ((set (map second fields)) ingredient))))
+                   (sort-by :ingredient/name)
+                   (map
+                    (fn [{:keys [ingredient/name ingredient/id]}]
+                      ^{:key id}
+                      [:option {:value id} name]))
+                   (cons ^{:key "none"}
+                         [:option {:value ""} "Zutat auswählen"]))]))
+         [:button.bn.bg-orange-200.shadow-1.pa2.br3.w-10
+          {:on-click #(remove idx)
+           :type :button}
+          [icon {:class "h1"} :trash-can]]]
+        [:div.flex.flex-column
+         [:div.flex.mb1.items-center
+          [:label.w-40 {:for "amount-desc"} "Beschreibung"]
+          [:input.pa1.w-60.br1.border-box.bn
+           {:value amount-desc
+            :autoComplete "off"
+            :name "cooked-with/amount-desc"
+            :on-change (fn [^js e]
+                         (set-handle-change
+                          {:value (.-target.value e)
+                           :path [:ingredients idx 0 :cooked-with/amount-desc]}))
+            :on-blur #(handle-blur % idx)}]]
+         [:div.flex.mb1.items-center
+          [:label.w-40 {:for "amount"} "Menge"]
+          [:input.pa1.w-60.br1.border-box.bn
+           {:value amount
+            :autoComplete "off"
+            :type "number"
+            :name "cooked-with/amount"
+            :on-change (fn [^js e]
+                         (set-handle-change
+                          {:value (.-target.value e)
+                           :path [:ingredients idx 0 :cooked-with/amount]}))
+            :on-blur #(handle-blur % idx)}]]
+         [:div.flex.mb1.items-center
+          [:label.w-40 {:for "unit"} "Einheit"]
+          [:input.pa1.w-60.br1.border-box.bn
+           {:value unit
+            :autoComplete "off"
+            :name "cooked-with/unit"
+            :on-change (fn [^js e]
+                         (set-handle-change
+                          {:value (.-target.value e)
+                           :path [:recipe/ingredients idx 0 :cooked-with/unit]}))
+            :on-blur #(handle-blur % idx)}]]]])
      fields))
 
    (when (every? (comp :ingredient/id second) fields)
@@ -117,10 +117,11 @@
              @(subscribe [:recipes/recipe-types]))]]
           [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
            [fork/field-array {:props props
-                              :name :ingredients}
+                              :name :recipe/cooked-with}
             cooked-with-c]]]
          (when (and dirty
-                    (every? (comp :ingredient/id second)(:ingredients values)))
+                    (every? (comp :ingredient/id second)
+                            (:recipe/cooked-with values)))
            [:div.fixed.bottom-0.w-100.z-2
             [c/footer {:submit "true" :loading @(subscribe [:app/loading])}]])])]]))
 

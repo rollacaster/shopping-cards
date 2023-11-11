@@ -21,34 +21,27 @@
      :app/push-state [:route/edit-recipes]}))
 
 (reg-event-fx :recipes/load
-  (fn []
-    {:firestore/snapshot {:path firestore-path
-                          :on-success [:recipes/load-success]
-                          :on-failure [:recipes/load-failure]}}))
+  (fn [_ [_ ingredients]]
+    (let [ingredient-id->ingredient (zipmap (map :ingredient/id ingredients) ingredients)]
+      {:firestore/snapshot {:path firestore-path
+                            :on-success [:recipes/load-success ingredient-id->ingredient]
+                            :on-failure [:recipes/load-failure]}})))
 
-(defn ->recipe [firestore-recipe]
-  (cond-> firestore-recipe
-      :always (set/rename-keys {:id :recipe/id
-                                :name :recipe/name
-                                :type :recipe/type
-                                :image :recipe/image
-                                :link :recipe/link
-                                :ingredients :recipe/ingredients})
-      :always (update :recipe/type (fn [t] (keyword "recipe-type" t)))
-      (:ingredients firestore-recipe)
-      (update :recipe/ingredients (fn [cooked-with]
+(defn ->recipe [ingredient-id->ingredient firestore-recipe]
+  (-> firestore-recipe
+      (update :recipe/type keyword)
+      (update :recipe/cooked-with (fn [cooked-with]
                                     (mapv
                                      (fn [c]
                                        (-> c
-                                           (set/rename-keys {:unit :cooked-with/unit
-                                                             :amount-desc :cooked-with/amount-desc
-                                                             :amount :cooked-with/amount
-                                                             :ingredient :ingredient/ingredient})
-                                           (update :ingredient/ingredient ingredients/->ingredient)))
+                                           (dissoc :cooked-with/ingredient)
+                                           (merge (ingredient-id->ingredient
+                                                   (:cooked-with/ingredient c)))))
                                      cooked-with)))))
+
 (reg-event-fx :recipes/load-success
-  (fn [{:keys [db]} [_ data]]
-    {:db (assoc db :recipes (map ->recipe data))}))
+  (fn [{:keys [db]} [_ ingredients data]]
+    {:db (assoc db :recipes (map (partial ->recipe ingredients) data))}))
 
 (reg-event-db :recipes/load-failure
  (fn [db _]
@@ -62,7 +55,7 @@
   :<- [:recipes]
   (fn [recipes [_ recipe-id]]
     (some
-     (fn [{:keys [id] :as recipe}] (when (= id recipe-id) recipe))
+     (fn [{:recipe/keys [id] :as recipe}] (when (= id recipe-id) recipe))
      recipes)))
 
 (reg-sub :recipes/recipe-types
