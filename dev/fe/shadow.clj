@@ -14,6 +14,7 @@
     (assoc req :status 404)))
 
 (defn -main [& _args]
+  (set! *print-namespace-maps* false)
   (server/start!)
   (shadow/watch :app)
   (let [dom-runtime-id (some

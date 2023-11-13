@@ -12,6 +12,7 @@
                                  "mock")})
 
 (defn -main [& args]
+  (set! *print-namespace-maps* false)
   (ig-repl/go)
   (apply nrepl/-main args))
 
