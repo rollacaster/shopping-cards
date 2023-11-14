@@ -22,22 +22,24 @@
 
 (reg-event-fx :recipes/load
   (fn [_ [_ ingredients]]
-    (let [ingredient-id->ingredient (zipmap (map :ingredient/id ingredients) ingredients)]
-      {:firestore/snapshot {:path firestore-path
-                            :on-success [:recipes/load-success ingredient-id->ingredient]
-                            :on-failure [:recipes/load-failure]}})))
+    {:firestore/snapshot {:path firestore-path
+                          :on-success [:recipes/load-success ingredients]
+                          :on-failure [:recipes/load-failure]}}))
 
-(defn ->recipe [ingredient-id->ingredient firestore-recipe]
+(defn- explode-ingredients [cooked-with ingredients]
+  (let [ingredient-id->ingredient (zipmap (map :ingredient/id ingredients)
+                                          ingredients)]
+    (mapv
+     (fn [c]
+       (-> c
+           (dissoc :cooked-with/ingredient)
+           (merge (ingredient-id->ingredient (:cooked-with/ingredient c)))))
+     cooked-with)))
+
+(defn ->recipe [ingredients firestore-recipe]
   (-> firestore-recipe
       (update :recipe/type keyword)
-      (update :recipe/cooked-with (fn [cooked-with]
-                                    (mapv
-                                     (fn [c]
-                                       (-> c
-                                           (dissoc :cooked-with/ingredient)
-                                           (merge (ingredient-id->ingredient
-                                                   (:cooked-with/ingredient c)))))
-                                     cooked-with)))))
+      (update :recipe/cooked-with explode-ingredients ingredients)))
 
 (reg-event-fx :recipes/load-success
   (fn [{:keys [db]} [_ ingredients data]]
@@ -51,12 +53,15 @@
  (fn [db _]
    (:recipes db)))
 
+(defn find-recipe [recipe-id recipes]
+  (some
+   (fn [{:recipe/keys [id] :as recipe}] (when (= id recipe-id) recipe))
+   recipes))
+
 (reg-sub :recipes/details
   :<- [:recipes]
   (fn [recipes [_ recipe-id]]
-    (some
-     (fn [{:recipe/keys [id] :as recipe}] (when (= id recipe-id) recipe))
-     recipes)))
+    (find-recipe recipes recipe-id)))
 
 (reg-sub :recipes/recipe-types
  :<- [:recipes]

@@ -30,8 +30,7 @@
               value-to-test 4
               recipe (->> recipes
                           ;; building recipes on load
-                          (map (partial recipes/->recipe
-                                        (recipes/ingredient-id->ingredient ingredients)))
+                          (map (partial recipes/->recipe ingredients))
                           ;; finding recipes on view
                           (recipes/find-recipe recipe-id))
               data (-> recipe
