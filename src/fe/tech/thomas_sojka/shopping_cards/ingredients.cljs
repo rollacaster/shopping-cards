@@ -26,19 +26,20 @@
                    :time 2000}}))
 
 (reg-event-fx :ingredients/load
-  (fn []
+  (fn [_ [_ today]]
     {:firestore/snapshot {:path firestore-path
-                          :on-success [:ingredients/load-success]
+                          :on-success [:ingredients/load-success today]
                           :on-failure [:ingredients/load-failure]}}))
 
 (defn ->ingredient [firestore-ingredient]
   (update firestore-ingredient :ingredient/category keyword))
 
 (reg-event-fx :ingredients/load-success
-  (fn [{:keys [db]} [_ data]]
+  (fn [{:keys [db]} [_ now data]]
     (let [ingredients (map ->ingredient data)]
       {:db (assoc db :ingredients (map ->ingredient data))
-       :dispatch [:recipes/load ingredients]})))
+       :dispatch-n [[:recipes/load ingredients]
+                    [:meals/load now ingredients]]})))
 
 (reg-event-db :ingredients/load-failure
  (fn [db _]

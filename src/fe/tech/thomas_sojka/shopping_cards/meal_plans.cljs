@@ -46,22 +46,22 @@
        (some #(= today %))))
 
 (reg-event-fx :meals/load
-  (fn [{:keys [db]} [_ today]]
+  (fn [{:keys [db]} [_ today ingredients]]
     (if (meal-plans-loaded-for-today? db today)
       {:db db}
       {:firestore/snapshot {:path firestore-path
-                            :on-success [:meal/load-success]
+                            :on-success [:meal/load-success ingredients]
                             :on-failure [:meal/load-failure]}})))
 
-(defn- ->meal-plan [firestore-meal-plan]
+(defn- ->meal-plan [ingredients firestore-meal-plan]
   (-> firestore-meal-plan
       (update :date (fn [date] (.toDate date)))
       (update :type (fn [t] (keyword "meal-type" t)))
-      (update :recipe recipe/->recipe)))
+      (update :recipe (partial recipe/->recipe ingredients))))
 
 (reg-event-db :meal/load-success
-  (fn [db [_ data]]
-    (assoc db :meals (map ->meal-plan data))))
+  (fn [db [_ ingredients data]]
+    (assoc db :meals (map (partial ->meal-plan ingredients) data))))
 
 (reg-event-fx :meal/load-failure
   (fn [{:keys [db]}]
