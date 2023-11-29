@@ -38,16 +38,16 @@
               :on-change
               (fn [^js e] (swap! !recipe update-ingredient id {:cooked-with/amount e.target.value}))}]]
    [:div.w-30
-    [c/select {:value unit :placeholder "g"
+    [c/select {:value (or unit "") :placeholder "g"
                :disabled (nil? id)
                :on-change
                (fn [^js e] (swap! !recipe update-ingredient id {:cooked-with/unit e.target.value}))}
      (->> @(subscribe [:ingredients/units])
-          #_(cons "")
+          (cons "")
           (map
            (fn [t] ^{:key t} [:option.w-100 {:value t} t])))]]
    [:div.w-40
-    [c/select {:value id :on-change
+    [c/select {:value (or id "") :on-change
                (fn [e]
                  (let [new-ingredient
                        (some
