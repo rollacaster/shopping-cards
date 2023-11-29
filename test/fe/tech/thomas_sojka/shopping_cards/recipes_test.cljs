@@ -1,7 +1,9 @@
-(ns fe.tech.thomas-sojka.shopping-cards.recipe-details
+(ns tech.thomas-sojka.shopping-cards.recipes-test
   (:require  [cljs.test :as t :include-macros true]
              [tech.thomas-sojka.shopping-cards.recipes :as recipes]
-             [tech.thomas-sojka.shopping-cards.firestore :as firestore]))
+             [tech.thomas-sojka.shopping-cards.firestore :as firestore]
+             ["firebase/auth" :as auth]
+             [tech.thomas-sojka.shopping-cards.auth :as my-auth]))
 
 (def recipe-id "dc20d162-3405-4e41-8f58-34ebc7626128")
 (def recipes [{:recipe/id "dc20d162-3405-4e41-8f58-34ebc7626128",
@@ -39,7 +41,8 @@
                        ;; transforming recipes on save
                        recipes/->firestore-recipe)]
           ;; Save to firebase
-          (-> (firestore/update-doc data "recipes" recipe-id)
+          (-> (auth/signInWithEmailAndPassword my-auth/auth "thsojka@web.de" "test123")
+              (.then (fn [] (firestore/update-doc data "recipes" recipe-id)))
               (.then (fn [] (firestore/get-doc "recipes" recipe-id)))
               (.then (fn [recipe] (t/is (= (get-in recipe update-path) value-to-test))))
               (.then (fn [] (firestore/delete-doc "recipes" recipe-id)))

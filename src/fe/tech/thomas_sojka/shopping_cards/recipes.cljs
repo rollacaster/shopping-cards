@@ -1,24 +1,30 @@
 (ns tech.thomas-sojka.shopping-cards.recipes
-  (:require [clojure.set :as set]
-            [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]
-            [tech.thomas-sojka.shopping-cards.ingredients :as ingredients]))
+  (:require [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]
+            [clojure.spec.alpha :as s]))
 
 (def firestore-path "recipes")
 
 (defn ->firestore-recipe [recipe]
-  (update recipe :ingredients
-          (fn [ingredients]
-            (map
-             (fn [[cooked-with ingredient]]
-               (assoc cooked-with :ingredient ingredient))
-             ingredients))))
+  {:post [(s/valid? :recipe/recipe %)]}
+  (-> recipe
+      (update :recipe/cooked-with
+              (fn [cooked-with]
+                (mapv
+                 (fn [c]
+                   (apply dissoc c
+                          (filter
+                           (fn [key]
+                             (and (= (namespace key) "ingredient") (not= key :ingredient/id)))
+                           (keys c))))
+                 cooked-with)))))
 
 (reg-event-fx :recipes/update
-  (fn [_ [_ {:keys [id] :as recipe}]]
+  (fn [_ [_ {:recipe/keys [id] :as recipe}]]
     {:firestore/update-doc {:path firestore-path
                             :key id
                             :data (->firestore-recipe recipe)}
-     :app/push-state [:route/edit-recipes]}))
+     :app/push-state [:route/edit-recipes]
+     :app/scroll-to [0 0]}))
 
 (reg-event-fx :recipes/load
   (fn [_ [_ ingredients]]
@@ -29,12 +35,8 @@
 (defn- explode-ingredients [cooked-with ingredients]
   (let [ingredient-id->ingredient (zipmap (map :ingredient/id ingredients)
                                           ingredients)]
-    (mapv
-     (fn [c]
-       (-> c
-           (dissoc :cooked-with/ingredient)
-           (merge (ingredient-id->ingredient (:cooked-with/ingredient c)))))
-     cooked-with)))
+    (mapv (fn [c] (merge c (ingredient-id->ingredient (:cooked-with/ingredient c))))
+          cooked-with)))
 
 (defn ->recipe [ingredients firestore-recipe]
   (-> firestore-recipe
@@ -61,7 +63,7 @@
 (reg-sub :recipes/details
   :<- [:recipes]
   (fn [recipes [_ recipe-id]]
-    (find-recipe recipes recipe-id)))
+    (find-recipe recipe-id recipes)))
 
 (reg-sub :recipes/recipe-types
  :<- [:recipes]

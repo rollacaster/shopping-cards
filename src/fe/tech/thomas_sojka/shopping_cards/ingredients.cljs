@@ -47,3 +47,11 @@
 (reg-sub :ingredients
   (fn [db]
     (:ingredients db)))
+
+(reg-sub :ingredients/units
+  :<- [:recipes]
+  (fn [recipes]
+    (->> recipes
+         (mapcat :recipe/cooked-with)
+         (keep :cooked-with/unit)
+         set)))

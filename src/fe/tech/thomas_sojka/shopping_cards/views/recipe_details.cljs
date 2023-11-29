@@ -1,133 +1,119 @@
 (ns tech.thomas-sojka.shopping-cards.views.recipe-details
-  (:require [clojure.set :as set]
-            [fork.reagent :as fork]
-            [re-frame.core :refer [dispatch subscribe]]
-            [tech.thomas-sojka.shopping-cards.components :as c :refer [icon]]))
+  (:require [re-frame.core :refer [dispatch subscribe]]
+            [tech.thomas-sojka.shopping-cards.components :as c :refer [icon]]
+            [reagent.core :as r]))
 
-(defn cooked-with-c [_ {:fieldarray/keys [fields remove insert handle-blur set-handle-change]}]
-  [:<>
-   (doall
-    (map-indexed
-     (fn [idx {:cooked-with/keys [amount-desc amount unit]
-              :ingredient/keys [id name]}]
-       ^{:key id}
-       [:div.bg-gray-700.white.pa2.mb3.br2
-        [:div.flex.justify-between.items-center.mb3
-         (if name
-           [:div.f3.fw3.mr2.w-90 name]
-           (let [ingredients @(subscribe [:ingredients])]
-             [:select.pa1.w-100.mr4
-              {:on-change (fn [^js e]
-                            (set-handle-change
-                             {:value (first
-                                      (get (set/index (set ingredients) [:ingredient/id])
-                                           {:ingredient/id e.target.value}))
-                              :path [:ingredients idx 1]}))}
-              (->> ingredients
-                   (filter (fn [ingredient] (not ((set (map second fields)) ingredient))))
-                   (sort-by :ingredient/name)
-                   (map
-                    (fn [{:keys [ingredient/name ingredient/id]}]
-                      ^{:key id}
-                      [:option {:value id} name]))
-                   (cons ^{:key "none"}
-                         [:option {:value ""} "Zutat auswählen"]))]))
-         [:button.bn.bg-orange-200.shadow-1.pa2.br3.w-10
-          {:on-click #(remove idx)
-           :type :button}
-          [icon {:class "h1"} :trash-can]]]
-        [:div.flex.flex-column
-         [:div.flex.mb1.items-center
-          [:label.w-40 {:for "amount-desc"} "Beschreibung"]
-          [:input.pa1.w-60.br1.border-box.bn
-           {:value amount-desc
-            :autoComplete "off"
-            :name "cooked-with/amount-desc"
-            :on-change (fn [^js e]
-                         (set-handle-change
-                          {:value (.-target.value e)
-                           :path [:ingredients idx 0 :cooked-with/amount-desc]}))
-            :on-blur #(handle-blur % idx)}]]
-         [:div.flex.mb1.items-center
-          [:label.w-40 {:for "amount"} "Menge"]
-          [:input.pa1.w-60.br1.border-box.bn
-           {:value amount
-            :autoComplete "off"
-            :type "number"
-            :name "cooked-with/amount"
-            :on-change (fn [^js e]
-                         (set-handle-change
-                          {:value (.-target.value e)
-                           :path [:ingredients idx 0 :cooked-with/amount]}))
-            :on-blur #(handle-blur % idx)}]]
-         [:div.flex.mb1.items-center
-          [:label.w-40 {:for "unit"} "Einheit"]
-          [:input.pa1.w-60.br1.border-box.bn
-           {:value unit
-            :autoComplete "off"
-            :name "cooked-with/unit"
-            :on-change (fn [^js e]
-                         (set-handle-change
-                          {:value (.-target.value e)
-                           :path [:recipe/ingredients idx 0 :cooked-with/unit]}))
-            :on-blur #(handle-blur % idx)}]]]])
-     fields))
+(defn update-ingredient [recipe ingredient-id value]
+  (update recipe :recipe/cooked-with
+          (fn [cooked-with]
+            (mapv
+             (fn [{:keys [ingredient/id] :as c}]
+               (if (= ingredient-id id)
+                 (merge c value)
+                 c))
+             cooked-with))))
 
-   (when (every? (comp :ingredient/id second) fields)
-     [:div.flex.justify-center
-      [:button.button.shadow-3.bn.pv2.ph3.br2.bg-orange-400.f3.gray-800
-       {:type :button
-        :on-click #(insert [{:cooked-with/id (str (random-uuid))
-                             :cooked-with/amount-desc "1"
-                             :cooked-with/amount 1}
-                            nil])}
-       "Add ingredient"]])])
+(defn recipe-ingredient-ids [{:keys [recipe/cooked-with]}]
+  (set (map :ingredient/id cooked-with)))
 
-(defn recipe-details [{:keys [recipe]}]
-  (let [{:recipe/keys [name image]} recipe]
+(defn non-recipe-ingredients [ingredients recipe]
+  (remove (fn [{:keys [:ingredient/id]}] ((recipe-ingredient-ids recipe) id) )
+          ingredients))
+
+(defn remove-ingredient [recipe ingredient-id]
+  (update recipe :recipe/cooked-with
+          (fn [cooked-with]
+            (vec
+             (remove (fn [{:keys [ingredient/id]}] (= id ingredient-id))
+                     cooked-with)))))
+
+(defn add-ingredient [recipe ingredient]
+  (update recipe :recipe/cooked-with conj ingredient))
+
+(defn cooked-with-item [!recipe {:keys [ingredient/id cooked-with/amount cooked-with/unit]} ingredients]
+  [:li.flex.items-center.mb1 {:style {:gap 4}}
+   [:div.w-20
+    [c/input {:value amount :placeholder "200" :class "tr"
+              :disabled (nil? id)
+              :on-change
+              (fn [^js e] (swap! !recipe update-ingredient id {:cooked-with/amount e.target.value}))}]]
+   [:div.w-30
+    [c/select {:value unit :placeholder "g"
+               :disabled (nil? id)
+               :on-change
+               (fn [^js e] (swap! !recipe update-ingredient id {:cooked-with/unit e.target.value}))}
+     (->> @(subscribe [:ingredients/units])
+          #_(cons "")
+          (map
+           (fn [t] ^{:key t} [:option.w-100 {:value t} t])))]]
+   [:div.w-40
+    [c/select {:value id :on-change
+               (fn [e]
+                 (let [new-ingredient
+                       (some
+                        (fn [{:keys [ingredient/id] :as ingredient}] (when (= id e.target.value) ingredient))
+                        (non-recipe-ingredients ingredients @!recipe))]
+                   (if id
+                     (swap! !recipe update-ingredient id new-ingredient)
+                     (swap! !recipe add-ingredient new-ingredient))))}
+     (->> ingredients
+          (sort-by :ingredient/name)
+          (map
+           (fn [{:keys [ingredient/name ingredient/id]}]
+             ^{:key id}
+             [:option {:value id} name]))
+          (cons ^{:key "none"}
+                [:option {:value ""} "Zutat auswählen"])
+          doall)]]
+   [:div.w-10
+    (when id
+      [:button.bn.bg-transparent.w-20
+       {:on-click #(swap! !recipe remove-ingredient id) :type :button}
+       [icon {:class "h1"} :trash-can]])]])
+
+(defn recipe-details [{:keys [!recipe original-recipe]}]
+  (let [{:recipe/keys [name image type cooked-with]} @!recipe
+        ingredients @(subscribe [:ingredients])]
     [:div.ph5-ns.pt4.pb6.ml2-ns.bg-gray-200
      [:div.ph3
       [:h1.mb3.mt0 name]
       [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100.mb3
        [:img.w-100.br3.ba.b--orange-300 {:src image}]]]
-     [fork/form {:key recipe
-                 :initial-values recipe
-                 :prevent-default? true
-                 :keywordize-keys true
-                 :on-submit (fn [{:keys [_ _ values]}]
-                              (dispatch [:recipes/update values]))}
-      (fn [{:keys [form-id handle-submit values set-handle-change handle-blur dirty] :as props}]
-        [:form {:id form-id :on-submit handle-submit}
-         [:div.ph3
-          [:div.w-100.bg-gray-700.white.pa2.flex.items-center.br2
-           [:label.w-40 {:for "recipe-type"}
-            "Rezept-Art"]
-           [:select.pa1.w-60.br1 {:name "recipe/type"
-                                  :id "recipe-type"
-                                  :value (:recipe/type values)
-                                  :on-change (fn [^js e]
-                                               (set-handle-change
-                                                {:value (keyword (str "recipe-type/" (.-target.value e)))
-                                                 :path [:recipe/type]}))
-                                  :on-blur handle-blur}
-            (map
-             (fn [t]
-               ^{:key t}
-               [:option.w-100 {:value t} t])
-             @(subscribe [:recipes/recipe-types]))]]
-          [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-           [fork/field-array {:props props
-                              :name :recipe/cooked-with}
-            cooked-with-c]]]
-         (when (and dirty
-                    (every? (comp :ingredient/id second)
-                            (:recipe/cooked-with values)))
-           [:div.fixed.bottom-0.w-100.z-2
-            [c/footer {:submit "true" :loading @(subscribe [:app/loading])}]])])]]))
+     [:form {:on-submit
+             (fn [^js e]
+               (.preventDefault e)
+               (dispatch [:recipes/update @!recipe]))}
+      [:div.ph3
+       [:div.w-100.bg-gray-700.white.pa2.flex.items-center.br2
+        [:label.w-40 {:for "recipe-type"}
+         "Rezept-Art"]
+        [:select.pa1.w-60.br1 {:name "recipe/type"
+                               :id "recipe-type"
+                               :value type
+                               :on-change (fn [^js e] (swap! !recipe assoc :recipe/type e.target.value))}
+         (map
+          (fn [t]
+            ^{:key t}
+            [:option.w-100 {:value t} t])
+          @(subscribe [:recipes/recipe-types]))]]
+       [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
+        (doall
+         (map
+          (fn [item]
+            ^{:key (:ingredient/id item)}
+            [cooked-with-item !recipe item ingredients])
+          cooked-with))
+        ^{:key (count cooked-with)}
+        [cooked-with-item !recipe {} ingredients]]]
+      (when (not= @!recipe original-recipe)
+        [:div.fixed.bottom-0.w-100.z-2
+         [c/footer {:submit "true" :loading @(subscribe [:app/loading])}]])]]))
 
 (defn main [match]
   (let [{:keys [path]} (:parameters match)
         {:keys [recipe-id]} path
-        recipe @(subscribe [:recipes/details recipe-id])]
-    (when recipe
-      [recipe-details {:recipe (update recipe :ingredients vec)}])))
+        original-recipe @(subscribe [:recipes/details recipe-id]) ]
+    (when original-recipe
+      (let [!recipe (r/atom original-recipe)]
+        [recipe-details {:original-recipe original-recipe
+                         :!recipe !recipe}]))))

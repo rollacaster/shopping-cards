@@ -82,7 +82,8 @@
      :value value
      :on-change on-change}]])
 
-(def input-class "border-box ph2 pv3 w-100 mb3 bn br2")
+(def input-class "border-box ph2 pv3 w-100 bn br2")
+(def disbled-class"bg-gray-400 gray-500")
 
 (defn input-box [label input]
   [:div.flex.flex-column.mb3 {:style {:gap "1rem"}}
@@ -92,23 +93,29 @@
 (defn label [{:keys [for]} children]
   [:label.w-100.fw6.db {:for for} children])
 
-(defn input [{:keys [type autoComplete required value name on-change]}]
+(defn input [{:keys [type autoComplete required value name on-change class style placeholder disabled]}]
   [:input.border-box.ph2.pv3.w-100.bn.br2
    (cond->
        {:name name
-        :class input-class
+        :class (cond-> (str input-class " " class)
+                 disabled (str " " disbled-class))
         :type type
         :autoComplete autoComplete
-        :required required}
+        :required required
+        :style style
+        :placeholder placeholder
+        :disabled disabled}
        value (assoc :value value)
        on-change (assoc :on-change on-change))])
 
-(defn select [{:keys [value name on-change]} children]
+(defn select [{:keys [value name on-change disabled class]} children]
   [:select
    {:value value
     :name name
     :on-change on-change
-    :class input-class}
+    :class (cond-> (str input-class " " class)
+             disabled (str " " disbled-class))
+    :disabled disabled}
    children])
 
 (defn select-recipe []

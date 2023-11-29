@@ -6,6 +6,7 @@
             [tech.thomas-sojka.shopping-cards.bank-holidays]
             [tech.thomas-sojka.shopping-cards.dev-utils :as dev-utils]
             [tech.thomas-sojka.shopping-cards.firestore]
+            [tech.thomas-sojka.shopping-cards.ingredients]
             [tech.thomas-sojka.shopping-cards.meal-plans]
             [tech.thomas-sojka.shopping-cards.recipes]
             [tech.thomas-sojka.shopping-cards.router :as router]
