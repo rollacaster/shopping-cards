@@ -19,7 +19,8 @@
       (case path
         "recipes" (dispatch (conj on-success fixtures/recipes))
         "meal-plans" (dispatch (conj on-success []))
-        "ingredients" (dispatch (conj on-success fixtures/ingredients)))))
+        "ingredients" (dispatch (conj on-success fixtures/ingredients))
+        "shopping-items" (dispatch (conj on-success [])))))
 
   (reg-fx :firestore/add-doc
     (fn [{:keys [path data on-success]}]

@@ -3,6 +3,7 @@
             [re-frame.core :refer [clear-subscription-cache! dispatch-sync]]
             [reagent.dom :as dom]
             [tech.thomas-sojka.shopping-cards.app]
+            [tech.thomas-sojka.shopping-cards.auth :as auth]
             [tech.thomas-sojka.shopping-cards.bank-holidays]
             [tech.thomas-sojka.shopping-cards.dev-utils :as dev-utils]
             [tech.thomas-sojka.shopping-cards.firestore]
@@ -19,7 +20,8 @@
   ([{:keys [container]}]
    (let [now (js/Date.)]
      (when-not @dev-utils/restarting
-       (dispatch-sync [:app/init now])))
+       (dispatch-sync [:app/init now])
+       (auth/user-sync)))
    (dom/render [main/app (router/init)] container)))
 
 (defn ^:dev/after-load clear-cache-and-render!

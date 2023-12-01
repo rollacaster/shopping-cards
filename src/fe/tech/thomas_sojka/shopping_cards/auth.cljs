@@ -7,7 +7,7 @@
 (def auth (auth/getAuth firebase/app))
 
 (defonce user (r/atom :loading))
-(defonce user-sync
+(defn user-sync []
   (auth/onAuthStateChanged auth
                            (fn [firebase-user]
                              (if firebase-user
