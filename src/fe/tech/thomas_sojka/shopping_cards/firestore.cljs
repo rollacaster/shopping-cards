@@ -1,6 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.firestore
   (:require ["firebase/firestore" :as firestore]
             [cljs-bean.core :refer [->js ->clj]]
+            [clojure.spec.alpha :as s]
             [re-frame.core :refer [dispatch reg-fx]]
             [tech.thomas-sojka.shopping-cards.firebase :as firebase]))
 
@@ -14,7 +15,8 @@
   (firestore/deleteDoc (firestore/doc db path id)))
 
 (reg-fx :firestore/add-docs
-  (fn [{:keys [path data id on-success on-failure]}]
+  (fn [{:keys [path data id on-success on-failure spec]}]
+    {:pre [(s/valid? spec data)]}
     (doseq [d data]
       (-> (firestore/setDoc (firestore/doc (firestore/collection db path) (id d))
                             (->js d))
@@ -22,7 +24,8 @@
           (.catch (fn [err] (when on-failure (dispatch (conj on-failure err)))))))))
 
 (reg-fx :firestore/add-doc
-  (fn [{:keys [path data on-success on-failure]}]
+  (fn [{:keys [path data on-success on-failure spec]}]
+    {:pre [(s/valid? spec data)]}
     (-> (firestore/setDoc (firestore/doc (firestore/collection db path) (:id data))
                           (->js data))
         (.then (fn [] (when on-success (dispatch (conj on-success data)))))
@@ -33,13 +36,15 @@
                     (->js data)))
 
 (reg-fx :firestore/update-doc
-  (fn [{:keys [path key data on-success on-failure]}]
+  (fn [{:keys [path key data on-success on-failure spec]}]
+    {:pre [(s/valid? spec data)]}
     (-> (update-doc data path key)
         (.then (fn [] (when on-success (dispatch on-success))))
         (.catch (fn [err] (when on-failure (dispatch (conj on-failure err))))))))
 
 (reg-fx :firestore/update-docs
-  (fn [{:keys [path data id on-success on-failure]}]
+  (fn [{:keys [path data id on-success on-failure spec]}]
+    {:pre [(s/valid? spec data)]}
     (doseq [d data]
       (-> (firestore/updateDoc (firestore/doc db path (id d)) (->js d))
           (.then (fn [] (when on-success (dispatch on-success))))
