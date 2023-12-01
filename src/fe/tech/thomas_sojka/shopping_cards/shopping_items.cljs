@@ -25,11 +25,13 @@
                                              :shopping-item/content text
                                              :shopping-item/status :open
                                              :shopping-item/created-at (js/Date.)})))
+                          :spec :shopping-item/shopping-entries
                           :on-success [:shopping-item/create-success]
                           :on-failure [:shopping-item/create-failure]}
      :firestore/update-docs {:path meal-plans/firestore-path
                              :id :id
-                             :data (map #(assoc % :shopping-list true) meals-without-shopping-list)}}))
+                             :data (map #(assoc % :shopping-list true) meals-without-shopping-list)
+                             :spec :meal-plan/meals}}))
 
 (reg-event-fx :shopping-item/add
   (fn [_ [_ {:keys [ingredient-id content]}]]
@@ -39,8 +41,9 @@
                                 :shopping-item/content content
                                 :shopping-item/status :open
                                 :shopping-item/created-at (js/Date.)}
-                          :on-success [:shopping-item/add-success]
-                          :on-failure [:shopping-item/add-failure]}}))
+                         :spec :shopping-item/shopping-entry
+                         :on-success [:shopping-item/add-success]
+                         :on-failure [:shopping-item/add-failure]}}))
 
 (reg-event-fx :shopping-item/add-success
  (fn []
@@ -72,13 +75,8 @@
 
 (defn- ->shopping-entry [firestore-shopping-entry]
   (-> firestore-shopping-entry
-      (update :status keyword)
-      (update :created-at (fn [date] (.toDate date)))
-      (set/rename-keys {:ingredient-id :shopping-item/ingredient-id
-                        :status :shopping-item/status
-                        :content :shopping-item/content
-                        :created-at :shopping-item/created-at
-                        :id :shopping-item/id})))
+      (update :shopping-item/status keyword)
+      (update :shopping-item/created-at (fn [date] (.toDate date)))))
 
 (reg-event-fx :shopping-item/load-success
   (fn [{:keys [db]} [_ data]]
@@ -99,7 +97,8 @@
   (fn [_ [_ {:shopping-item/keys [id] :as entry}]]
     {:firestore/update-doc {:path firestore-path
                             :key id
-                            :data entry}}))
+                            :data entry
+                            :spec :shopping-item/shopping-entry}}))
 
 (def penny-order
   [:ingredient-category/obst
@@ -120,17 +119,14 @@
    :ingredient-category/getränke])
 
 (defn- ingredient-text [cooked-with]
-  (let [no-unit?
-        (->> cooked-with
-             (map (fn [[{:keys [cooked-with/unit]}]] unit))
-             (every? nil?))
-        amount-descs
-        (map (fn [[{:keys [cooked-with/amount-desc]}]] amount-desc) cooked-with)
-        amounts
-        (map (fn [[{:keys [cooked-with/amount]}]] amount) cooked-with)
+  (let [no-unit? (->> cooked-with
+                      (map (fn [{:keys [cooked-with/unit]}] unit))
+                      (every? nil?))
+        amount-descs (map (fn [{:keys [cooked-with/amount-desc]}] amount-desc) cooked-with)
+        amounts (map (fn [{:keys [cooked-with/amount]}] amount) cooked-with)
         no-amount? (every? nil? amount-descs)
-        {:keys [:cooked-with/amount-desc]} (ffirst cooked-with)
-        {:keys [ingredient/name]} (second (first cooked-with))]
+        {:keys [:cooked-with/amount-desc]} (first cooked-with)
+        {:keys [ingredient/name]} (first cooked-with)]
     (str/trim
      (cond no-amount? name
            (= (count cooked-with) 1) (str amount-desc " " name)
@@ -141,32 +137,22 @@
 
 (defn ingredients [cooked-with+ingredient]
   (->> cooked-with+ingredient
-       (remove (fn [[_ {:keys [ingredient/category]}]]
+       (remove (fn [{:keys [ingredient/category]}]
                  (#{:ingredient-category/backen :ingredient-category/gewürze}
                   category)))
-       (group-by (comp :ingredient/id second))
-       (sort-by (fn [[_ [_ {:keys [ingredient/category]}]]] category)
+       (group-by :ingredient/id)
+       (sort-by (fn [[_ {:keys [ingredient/category]}]] category)
                 (fn [category1 category2]
                   (< (.indexOf penny-order category1)
                      (.indexOf penny-order category2))))
-       (map (fn [[i-id ingredients]]
-              [i-id (ingredient-text ingredients)]))))
-
-(defn- attach-ingredients [recipes meal]
-  (assoc meal :recipe (first
-                       (get (->> recipes (group-by :id))
-                            (:id (:recipe meal))))))
+       (map (fn [[ingredient-id ingredients]]
+              [ingredient-id (ingredient-text ingredients)]))))
 
 (reg-sub :shopping-item/possible-items
-  :<- [:recipes]
   :<- [:meals-without-shopping-list]
-  (fn [[recipes meals-plans]]
-    (def meals-plans meals-plans)
-    (def recipes recipes)
+  (fn [meals-plans]
     (ingredients
-     (->> meals-plans
-          (map (partial attach-ingredients recipes))
-          (mapcat (comp :ingredients :recipe))))))
+     (mapcat (comp :recipe/cooked-with :recipe) meals-plans))))
 
 (reg-sub :shopping-entries
   (fn [db]
@@ -184,4 +170,5 @@
                              :id :shopping-item/id
                              :data (->> shopping-entries
                                         (filter (fn [{:keys [shopping-item/status]}] (= status :done)))
-                                        (map (fn [i] (assoc i :shopping-item/status :archive))))}}))
+                                        (map (fn [i] (assoc i :shopping-item/status :archive))))
+                             :spec :shopping-item/shopping-entries}}))

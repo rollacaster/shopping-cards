@@ -16,9 +16,8 @@
  (fn [{:keys [db]} [_ now]]
    {:db (assoc db :app/start-of-week (startOfDay now))
     :dispatch-n [[:bank-holidays/load (.getFullYear now)]
-                 #_[:meals/load now]
                  [:ingredients/load now]
-                 #_[:shopping-item/load]]}))
+                 [:shopping-item/load]]}))
 
 (reg-event-fx :app/start-of-week
  (fn [{:keys [db]} [_ start]]

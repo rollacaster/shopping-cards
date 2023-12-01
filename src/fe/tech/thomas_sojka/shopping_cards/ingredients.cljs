@@ -9,6 +9,7 @@
           ingredient-data (assoc ingredient :id ingredient-id)]
       {:firestore/add-doc {:path firestore-path
                            :data ingredient-data
+                           :spec :ingredient/ingredient
                            :on-success [:ingredients/add-success ingredient-data]
                            :on-failure [:ingredients/add-failure]}})))
 

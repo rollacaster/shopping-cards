@@ -148,7 +148,7 @@
                                      :image image
                                      :on-click (fn []
                                                  (dispatch [:meal/add {:recipe r
-                                                                       :type (name type)
+                                                                       :type type
                                                                        :date (startOfDay (js/Date. date))}]))}]))))]]))))]])))
 (defn button
   ([children]

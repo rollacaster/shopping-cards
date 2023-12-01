@@ -13,7 +13,8 @@
                                      (assoc :id new-id)
                                      (update :recipe dissoc :recipe/ingredients))
                            :on-success [:meal/add-success]
-                           :on-failure [:meal/add-failure]}})))
+                           :on-failure [:meal/add-failure]
+                           :spec :meal-plan/meal}})))
 
 (reg-event-fx :meal/add-success
   (fn []
@@ -56,7 +57,7 @@
 (defn- ->meal-plan [ingredients firestore-meal-plan]
   (-> firestore-meal-plan
       (update :date (fn [date] (.toDate date)))
-      (update :type (fn [t] (keyword "meal-type" t)))
+      (update :type keyword)
       (update :recipe (partial recipe/->recipe ingredients))))
 
 (reg-event-db :meal/load-success

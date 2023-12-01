@@ -7,7 +7,7 @@
         {:keys [type date]} query
         recipes @(subscribe [:recipes/dinner])]
     [c/select-recipe {:recipes recipes
-                      :type type
+                      :type (keyword "meal-type" type)
                       :date date
                       :get-title (fn [recipe-type]
                                    [c/recipe-type-title recipe-type])}]))

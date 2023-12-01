@@ -1,11 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.recipes
-  (:require [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]
-            [clojure.spec.alpha :as s]))
+  (:require [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
 
 (def firestore-path "recipes")
 
 (defn ->firestore-recipe [recipe]
-  {:post [(s/valid? :recipe/recipe %)]}
   (-> recipe
       (update :recipe/cooked-with
               (fn [cooked-with]
@@ -22,7 +20,8 @@
   (fn [_ [_ {:recipe/keys [id] :as recipe}]]
     {:firestore/update-doc {:path firestore-path
                             :key id
-                            :data (->firestore-recipe recipe)}
+                            :data (->firestore-recipe recipe)
+                            :spec :recipe/recipe}
      :app/push-state [:route/edit-recipes]
      :app/scroll-to [0 0]}))
 
