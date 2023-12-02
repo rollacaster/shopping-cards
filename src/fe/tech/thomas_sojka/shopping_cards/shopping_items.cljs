@@ -1,6 +1,5 @@
 (ns tech.thomas-sojka.shopping-cards.shopping-items
-  (:require [clojure.set :as set]
-            [clojure.string :as str]
+  (:require [clojure.string :as str]
             [re-frame.core :refer [inject-cofx reg-event-fx reg-sub]]
             [tech.thomas-sojka.shopping-cards.meal-plans :as meal-plans]
             [vimsical.re-frame.cofx.inject :as inject]))
@@ -80,7 +79,9 @@
 
 (reg-event-fx :shopping-item/load-success
   (fn [{:keys [db]} [_ data]]
-    (cond-> {:db (assoc db :shopping-entries (map ->shopping-entry data))}
+    {:db (assoc db :shopping-entries (map ->shopping-entry data))}
+    ;; FIXME: Why did I add this archive check here?
+    #_(cond-> {:db (assoc db :shopping-entries (map ->shopping-entry data))}
       (empty? (:shopping-entries db)) (assoc :dispatch [:shopping-items/archive]))))
 
 (reg-event-fx :shopping-item/load-failure

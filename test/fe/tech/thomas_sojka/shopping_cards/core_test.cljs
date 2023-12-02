@@ -1,8 +1,10 @@
 (ns tech.thomas-sojka.shopping-cards.core-test
-  (:require [cljs-bean.core :refer [bean]]
+  (:require ["firebase/auth" :as fire-auth]
+            [cljs-bean.core :refer [bean]]
             [cljs.test :as t :include-macros true]
             [clojure.string :as str]
             [promesa.core :as p]
+            [tech.thomas-sojka.shopping-cards.auth :as auth]
             [tech.thomas-sojka.shopping-cards.core :as sut]
             [tech.thomas-sojka.shopping-cards.mocks :as mocks]
             [tech.thomas-sojka.shopping-cards.testing-library :refer [get-all-by-role
@@ -45,6 +47,7 @@
              (wait-for #(get-by-role screen "button" {:name "Fertig!"}))
              (.click (get-by-role screen "button" {:name "Fertig!"}))
 
-             (wait-for #(get-by-role screen "link" {:name "In Trello anzeigen"}))
-             (t/is (str/includes? (:hash (bean js/document.location)) "fake-trello-card-id"))
+             (wait-for #(get-by-role screen "heading" {:name "Einkaufsliste"}))
+             (get-by-role screen "checkbox" {:name "1 Mushroom"})
+
              (done))))
