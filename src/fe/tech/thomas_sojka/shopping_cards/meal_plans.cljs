@@ -29,7 +29,7 @@
 
 (reg-event-fx :meal/remove
   (fn [_ [_ meal-plan-id]]
-    {:app/push-state [:route/meal-plan]
+    {:app/push-state [:route/main]
      :firestore/remove-doc {:path firestore-path
                             :key meal-plan-id
                             :on-failure [:meal/remove-failure]}}))
