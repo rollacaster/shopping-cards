@@ -24,17 +24,18 @@
         [:div
          [:h2.fw6.mb3 "Zutaten"]
          [:ul.pl0.list.mb4.w-100.w-50-ns.order-0-ns
-          (->> (:recipe/ingredients recipe)
+          (->> (:recipe/cooked-with recipe)
                (sort-by
-                (comp :ingredient/category second)
+                :ingredient/category
                 (fn [category1 category2]
                   (< (.indexOf ingredients-processing/penny-order category1)
                      (.indexOf ingredients-processing/penny-order category2))))
                (map
                 (fn [cooked-with]
-                  [:li.mb2.f4 {:key id} (str (:cooked-with/amount-desc cooked-with)
-                                             " "
-                                             (:ingredient/name (:ingredient/ingredient cooked-with)))])))]]]
+                  [:li.mb2.f4 {:key (:ingredient/id cooked-with)}
+                   (str (:cooked-with/amount-desc cooked-with)
+                        " "
+                        (:ingredient/name cooked-with))])))]]]
        (when-not (empty? link)
          [:div.flex.justify-center
           [:a.link.shadow-3.bn.pv2.ph3.br2.bg-orange-400.f3.gray-800
