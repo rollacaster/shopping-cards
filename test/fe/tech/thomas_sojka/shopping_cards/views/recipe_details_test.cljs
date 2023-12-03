@@ -33,8 +33,6 @@
                    :ingredient/category :ingredient-category/gewürze}])
 
 (t/deftest recipe-editing
-  (t/testing "edit type"
-    (assoc recipe :recipe/type :recipe-type/normal))
   (t/testing "edit cooked-with unit"
     (t/is (= (sut/update-ingredient recipe "5eef57be-bc04-4f19-9d58-9c6eb2a5eddd" {:cooked-with/unit "asdf"})
            {:recipe/id "ad958898-735e-438c-847a-f89504087a89",
