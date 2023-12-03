@@ -35,10 +35,4 @@
                                                         (dispatch [:shopping-item/update (assoc entry :shopping-item/status (if selected? :done :open))]))}
                               content])
                            entries)]
-                         [:a.fixed.bottom-2.right-0.bg-orange-500.ma4.pa4.z-1.br-100.relative.shadow-5.bn
-                          {:href (rfe/href :route/add-item)}
-                          [:span.absolute.f1.white.lh-solid.flex.align-items.justify-center
-                           {:style {:top "45%"
-                                    :left "50%"
-                                    :transform "translate(-50%,-50%)"}}
-                           "+"]]]))}))
+                         [c/add-button {:href (rfe/href :route/add-item)}]]))}))
