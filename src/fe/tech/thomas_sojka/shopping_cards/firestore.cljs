@@ -46,7 +46,7 @@
   (fn [{:keys [path data id on-success on-failure spec]}]
     {:pre [(s/valid? spec data)]}
     (doseq [d data]
-      (-> (firestore/updateDoc (firestore/doc db path (id d)) (->js d))
+      (-> (update-doc d path (id d))
           (.then (fn [] (when on-success (dispatch on-success))))
           (.catch (fn [err] (when on-failure (dispatch (conj on-failure err)))))))))
 
