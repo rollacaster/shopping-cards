@@ -34,15 +34,17 @@
 
 (reg-event-fx :shopping-item/add
   (fn [_ [_ {:keys [ingredient-id content]}]]
-    {:firestore/add-doc {:path firestore-path
-                         :data {:id (str (random-uuid))
-                                :shopping-item/ingredient-id ingredient-id
-                                :shopping-item/content content
-                                :shopping-item/status :open
-                                :shopping-item/created-at (js/Date.)}
-                         :spec :shopping-item/shopping-entry
-                         :on-success [:shopping-item/add-success]
-                         :on-failure [:shopping-item/add-failure]}}))
+    (let [new-id (str (random-uuid))]
+      {:firestore/add-doc {:path firestore-path
+                           :data {:shopping-item/id new-id
+                                  :shopping-item/ingredient-id ingredient-id
+                                  :shopping-item/content content
+                                  :shopping-item/status :open
+                                  :shopping-item/created-at (js/Date.)}
+                           :key new-id
+                           :spec :shopping-item/shopping-entry
+                           :on-success [:shopping-item/add-success]
+                           :on-failure [:shopping-item/add-failure]}})))
 
 (reg-event-fx :shopping-item/add-success
  (fn []
@@ -173,3 +175,13 @@
                                         (filter (fn [{:keys [shopping-item/status]}] (= status :done)))
                                         (map (fn [i] (assoc i :shopping-item/status :archive))))
                              :spec :shopping-item/shopping-entries}}))
+
+;; All ingredients which are not already on the shopping-list
+(reg-sub :shopping-item/possible-ingredients
+  :<- [:ingredients]
+  :<- [:shopping-entries]
+  (fn [[ingredients shopping-entries]]
+    (remove
+     (fn [{:keys [ingredient/id]}]
+       ((set (map :shopping-item/ingredient-id shopping-entries)) id))
+     ingredients)))

@@ -33,9 +33,9 @@
         "shopping-items" (dispatch (conj on-success [])))))
 
   (reg-fx :firestore/add-doc
-    (fn [{:keys [path data on-success spec]}]
+    (fn [{:keys [path data on-success spec key]}]
       {:pre [(s/valid? spec data)]}
-      (js/console.debug :firestore/add-doc path data)
+      (js/console.debug :firestore/add-doc path key data)
       (case path
         "meal-plans" (do
                        (dispatch [:meal/load-success fixtures/ingredients [(->firest-store-meal-plan data)]])

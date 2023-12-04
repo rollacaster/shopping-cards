@@ -8,7 +8,7 @@
 (defn main []
   (let [filter-value (r/atom "")]
     (fn []
-      (let [ingredients @(subscribe [:ingredients])
+      (let [ingredients @(subscribe [:shopping-item/possible-ingredients])
             filtered-ingredients (->> ingredients
                                       (sort-by :ingredient/name)
                                       (filter (fn [{:keys [ingredient/name]}]

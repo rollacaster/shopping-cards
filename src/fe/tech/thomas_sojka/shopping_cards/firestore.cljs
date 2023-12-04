@@ -24,9 +24,9 @@
           (.catch (fn [err] (when on-failure (dispatch (conj on-failure err)))))))))
 
 (reg-fx :firestore/add-doc
-  (fn [{:keys [path data on-success on-failure spec]}]
+  (fn [{:keys [path data on-success on-failure spec key]}]
     {:pre [(s/valid? spec data)]}
-    (-> (firestore/setDoc (firestore/doc (firestore/collection db path) (:id data))
+    (-> (firestore/setDoc (firestore/doc (firestore/collection db path) key)
                           (->js data))
         (.then (fn [] (when on-success (dispatch (conj on-success data)))))
         (.catch (fn [err] (when on-failure (dispatch (conj on-failure err))))))))
