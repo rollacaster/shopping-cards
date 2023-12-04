@@ -76,7 +76,10 @@
         ingredients @(subscribe [:ingredients])]
     [:div.ph5-ns.pt4.pb6.ml2-ns.bg-gray-200
      [:div.ph3
-      [:h1.mb3.mt0 name]
+      [:textarea.w-100.mb3.mt0.f2 {:value name
+                                   :id "recipe-name"
+                                   :on-change (fn [^js e] (swap! !recipe assoc :recipe/name e.target.value))
+                                   :style {:resize "none"}}]
       [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100.mb3
        [:img.w-100.br3.ba.b--orange-300 {:src image}]]]
      [:form {:on-submit
