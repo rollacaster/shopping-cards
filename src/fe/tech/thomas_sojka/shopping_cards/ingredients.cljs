@@ -6,15 +6,16 @@
 (reg-event-fx :ingredients/add
   (fn [_ [_ ingredient]]
     (let [ingredient-id (str (random-uuid))
-          ingredient-data (assoc ingredient :id ingredient-id)]
+          ingredient-data (assoc ingredient :ingredient/id ingredient-id)]
       {:firestore/add-doc {:path firestore-path
+                           :key ingredient-id
                            :data ingredient-data
                            :spec :ingredient/ingredient
                            :on-success [:ingredients/add-success ingredient-data]
                            :on-failure [:ingredients/add-failure]}})))
 
 (reg-event-fx :ingredients/add-success
-  (fn [_ [_ {:keys [id ingredient/name]}]]
+  (fn [_ [_ {:keys [ingredient/id ingredient/name]}]]
     {:app/push-state [:route/shoppping-list]
      :dispatch [:shopping-item/add {:ingredient-id id
                                     :content name}]}))
