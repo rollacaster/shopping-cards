@@ -12,7 +12,7 @@
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
         "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"
         "gutes Olivenöl*" "Olivenöl oder Butterschmalz zum braten" "Sesamöl" "Rapsöl"
-        "kaltgepresstes Rapskernöl (zum Anbraten)" "Sesamöl, geröstetes (optional)"}
+        "kaltgepresstes Rapskernöl (zum Anbraten)" "Sesamöl, geröstetes (optional)" "Öl *"}
  "Butter" #{"Butter zum Fetten der Form" "Butter, für die Form" "Margarine (ggf. vegan)"}
  "Nudeln" #{"Pasta" "Rigatoni oder Penne" "Spiralnudeln" "vegane Vollkornnudeln" "Vollkorn-Penne"
             "Muschelnudeln" "Nudeln, trocken, jede Sorte" "Tagliatelle Nudeln" "Linguine"}
@@ -29,7 +29,7 @@
                      "Emmentaler, gerieben" "Käse, gerieben, 30 % Fett i. Tr." "Gouda, gerieben"}
  "Eier" #{"Ei(er)" "Ei(er) oder 2" "Ei(er) zum Einstreichen" "egg(s)" "Ei" "Ei(er), leicht verquirlt"}
  "Reis" #{"Kritharaki (Nudeln in Reisform), 2 - 3 Esslöffel" "Jasminreis" "Basmatireis"
-          "Basmati Reis" "Basmati_Reis" "Reis, ungekocht, z.B. Jasminreis"}
+          "Basmati Reis" "Basmati_Reis" "Reis, ungekocht, z.B. Jasminreis" "Express Basmati-Reis (je 250 g) *"}
  "Schinken" #{"Kochschinken"}
  "Kartoffeln" #{"Kartoffel(n)" "Kartoffel(n), möglichst 'neue'" "Kartoffel(n), festkochend" "Kartoffeln, festkochend"
                 "potato(es)" "Karotte(n), kleingeschnitten"}
@@ -88,12 +88,13 @@
  "Brühe" #{"Gemüsebouillon/Gemüsebrühe, zubereitet" "Gewürzmischung (Tomatengewürzsalz)" "2 geh. TL Gewürzpaste für Gemüsebrühe, selbst gemacht"}
  "Tortellini" #{"Tortelloni"}
  "Aufback-Brezeln" #{"Brezeln"}
- "Sojasoße" #{"Soja-Sauce" "Sojasauce" "Sojasauce (Kecap Manis)"}
+ "Sojasoße" #{"Soja-Sauce" "Sojasauce" "Sojasauce (Kecap Manis)" "Sojasoße *"}
  "Joghurt" #{"Naturjoghurt bzw. Sojajoghurt" "Joghurt, Magermilchjoghurt, Natur, bis 0,5 % Fett" "Sojajoghurt (zum Servieren)"}
  "Griechischer Joghurt" #{"Griechischer_Joghurt"}
  "Quark" #{"Quark 0,2%"}
  "Frühlingszwiebel" #{"Lauchzwiebel(n), fein geschnitten" "Frühlingszwiebel(n)" "Lauch (dünne Stange)"
-                      "onion(s), yellow" "Lauch" "Lauchzwiebel(n), in Ringe geschnitten"}
+                      "onion(s), yellow" "Lauch" "Lauchzwiebel(n), in Ringe geschnitten"
+                      "Frühlingszwiebeln"}
  "Avocado" #{"reife Avocado" "reifeAvocados" "Avocados"}
  "Kümmel" #{"Kreuzkümmelpulver" "Kreuzkümmel, gemahlen" "Kreuzkümmel (Cumin), gemahlen"}
  "Bohnen" #{"Kidneybohnen (440 g)" "Kidney-Bohnen" "schwarze Bohnen" "Kidneybohnen aus der Dose"}

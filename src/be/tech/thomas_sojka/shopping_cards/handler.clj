@@ -37,7 +37,7 @@
             (scrape/scrape-recipe conn
                                   {:link link
                                    :image image
-                                   :type :recipe-type/new}))))
+                                   :type :recipe-type/fast}))))
    (PUT "/transact" request
      (db/transact conn (mapv (fn [c] (cond-> c (:cooked-with/amount c) (update :cooked-with/amount float))) (:body-params request)))
      {:status 200})
