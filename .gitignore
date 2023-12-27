@@ -7,3 +7,4 @@
 /resources/.creds.edn
 /.shadow-cljs/
 /resources/public/js/
+/.clerk/
