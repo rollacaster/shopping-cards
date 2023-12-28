@@ -116,17 +116,9 @@
             (isEqual (startOfDay date) (startOfDay (js/Date.))))))
      meals-plans)))
 
-;; TODO Rearrange data?
-(defn- attach-ingredients [recipes meal]
-  (assoc meal :recipe (first
-                       (get (->> recipes (group-by :id))
-                            (:id (:recipe meal))))))
-
 (reg-sub :meal/details
-  :<- [:recipes]
   :<- [:meals]
-  (fn [[recipes meals] [_ meal-id]]
+  (fn [meals [_ meal-id]]
     (some
-     (fn [{:keys [id] :as meal-plan}] (when (= id meal-id)
-                                       (attach-ingredients recipes meal-plan)))
+     (fn [meal-plan] (when (= (:id meal-plan) meal-id) meal-plan))
      meals)))
