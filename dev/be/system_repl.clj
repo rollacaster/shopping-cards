@@ -1,8 +1,8 @@
 (ns system-repl
   (:require [integrant.core :as ig]
             [integrant.repl :as ig-repl]
-            [tech.thomas-sojka.shopping-cards.system :as system]
-            [nrepl.cmdline :as nrepl]))
+            [nrepl.cmdline :as nrepl]
+            [tech.thomas-sojka.shopping-cards.system :as system]))
 
 (ig-repl/set-prep! (fn [] system/config))
 
