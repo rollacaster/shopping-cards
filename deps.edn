@@ -35,10 +35,7 @@
            :be/dev {:main-opts ["-m" "system-repl" "--middleware" "[refactor-nrepl.middleware/wrap-refactor,cider.nrepl/cider-middleware]"]
                     :extra-paths ["dev/be" "notebooks"]
                     :extra-deps {integrant/repl {:mvn/version "0.3.2"}
-                                 com.datomic/local {:mvn/version "1.0.267"}
-                                 io.github.nextjournal/clerk {:mvn/version "0.15.957"}
-                                 org.mentat/clerk-utils {:mvn/version "0.6.0"}
-                                 dev.weavejester/medley {:mvn/version "1.7.0"}}}
+                                 com.datomic/local {:mvn/version "1.0.267"}}}
            :fe/dev {:extra-paths ["dev/fe"]
                     :extra-deps {babashka/fs {:mvn/version "0.1.6"}}
                     :main-opts ["-m" "shadow"]}
