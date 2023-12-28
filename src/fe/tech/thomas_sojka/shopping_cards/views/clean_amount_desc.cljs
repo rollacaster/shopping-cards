@@ -304,25 +304,11 @@
 (defn- cooked-with-component [c recipe class]
    [:tr
     {:class class}
-    [:input.border.px-2.w-16
-     {:value (:cooked-with/amount c)
-      :on-change
-      (fn [e]
-        (swap! recipes update-cooked-with
-               (:recipe/id recipe)
-               (:cooked-with/ingredient c)
-               :cooked-with/amount
-               (-> e .-target .-value int)))}]
+    [:div.border.px-2.w-16
+     (:cooked-with/amount c)]
     [:td
-     [:input.border.px-2.w-16
-      {:value (:cooked-with/unit c)
-       :on-change
-       (fn [e]
-         (swap! recipes update-cooked-with
-                (:recipe/id recipe)
-                (:cooked-with/ingredient c)
-                :cooked-with/unit
-                (-> e .-target .-value)))}]]
+     [:div.border.px-2.w-16
+      (:cooked-with/unit c)]]
     [:td [:button {:on-click (fn [] (prn (:cooked-with/ingredient c)))}
           (:ingredient/name (id->ingredient (:cooked-with/ingredient c)))]]
     [:td (:recipe/name recipe)]
@@ -362,6 +348,7 @@
                             (:recipe/cooked-with r))))
             (sort-by (comp :cooked-with/ingredient first))
             (map (fn [[c recipe]]
+                   ^{:key (str (:recipe/id recipe) (:cooked-with/ingredient c))}
                    [:<>
                     (when (not= (-> c
                                     fix-original
