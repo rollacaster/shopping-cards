@@ -5,44 +5,19 @@
             [mentat.clerk-utils.show :refer [show-sci]]
             [nextjournal.clerk :as clerk]))
 
-(def ingredients (json/parse-string (slurp "resources/public/ingredients.json") true))
+(def ingredients (json/parse-string (slurp "resources/ingredients.json") true))
 (show-sci
  (defn index-by [f coll]
-   (persistent! (reduce #(assoc! %1 (f %2) %2) (transient {}) coll)))
- (def id->ingredient (index-by :ingredient/id ingredients)))
+   (persistent! (reduce #(assoc! %1 (f %2) %2) (transient {}) coll))))
+(def id->ingredient (index-by :ingredient/id ingredients))
 
-(clerk/table ingredients)
-(def parsed-recipes (json/parse-string (slurp "resources/public/recipes.json") true))
+(def parsed-recipes (json/parse-string (slurp "resources/recipes.json") true))
 
 ^{::clerk/sync true}
-(defonce !recipes
-  (atom parsed-recipes))
-(comment
-  (reset! !recipes
-          (json/parse-string (slurp "resources/public/recipes.json") true))
-  )
-^{::clerk/sync true}
-(defonce !recipe-updates
-  (atom []))
-(comment
-  (reset! !recipe-updates []))
-(defonce __init
-  (add-watch !recipe-updates :store
-             (fn [_ _ _ new-value]
-               (spit "recipe-updates.edn" (prn-str new-value)))))
+(defonce !recipes (atom parsed-recipes))
 
 ^{::clerk/sync true}
 (defonce !ingredients (atom ingredients))
-
-(clerk/table @!recipes)
-
-#_(clerk/table(mapcat (fn [recipe]
-                      (map
-                       (fn [c] (-> c
-                                  (dissoc :cooked-with/ingredient)
-                                  (assoc :ingredient/name (:ingredient/name (id->ingredient (:cooked-with/ingredient c))))))
-                       (:recipe/cooked-with recipe)))
-                    @!recipes))
 
 (def amount-desc-replacements
    [["kl. Dose/n" "Dose"]
@@ -365,10 +340,7 @@
     [:td [:button {:on-click (fn [] (prn (:cooked-with/ingredient c)))}
           (:ingredient/name (id->ingredient (:cooked-with/ingredient c)))]]
     [:td (:recipe/name recipe)]
-    [:td [:button {:on-click (fn [] (prn c))} "Print"]]
-    [:td [:button {:on-click (fn [] (swap! !recipe-updates conj
-                                          [[(:recipe/id recipe) (:cooked-with/ingredient c)]
-                                           (dissoc c :cooked-with/amount-desc)]))} "Save"]]])
+    [:td [:button {:on-click (fn [] (prn c))} "Print"]]])
 
  (defn change-ingredient [c]
    (cond
@@ -395,8 +367,6 @@
          (sort-by (comp :cooked-with/ingredient first))
          (map (fn [[c recipe]]
                 [:<>
-                 #_[cooked-with-component (-> c) recipe
-                    "bg-gray-200"]
                  (when (not= (-> c
                                  fix-original
                                  fix-issue)
