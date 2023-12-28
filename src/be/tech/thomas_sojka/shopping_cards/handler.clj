@@ -7,8 +7,8 @@
             [compojure.api.sweet :refer [api GET POST PUT]]
             [datomic.client.api :as d]
             [muuntaja.middleware :refer [wrap-format]]
+            [ring.middleware.file :refer [wrap-file]]
             [ring.middleware.params :refer [wrap-params]]
-            [ring.middleware.resource :refer [wrap-resource]]
             [ring.util.response :as util.response]
             [tech.thomas-sojka.shopping-cards.db :as db]
             [tech.thomas-sojka.shopping-cards.scrape :as scrape]))
@@ -49,4 +49,4 @@
   (-> (app-routes trello-client conn)
       wrap-format
       wrap-params
-      (wrap-resource "public")))
+      (wrap-file "public")))
