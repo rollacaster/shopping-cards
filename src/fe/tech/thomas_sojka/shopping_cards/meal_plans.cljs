@@ -9,6 +9,7 @@
   (fn [_ [_ meal]]
     (let [new-id (str (random-uuid))]
       {:firestore/add-doc {:path firestore-path
+                           :key new-id
                            :data (-> meal
                                      (assoc :id new-id)
                                      (update :recipe dissoc :recipe/ingredients))
