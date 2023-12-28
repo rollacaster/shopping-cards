@@ -4,7 +4,7 @@
  :nrepl {:port 9003}
  :builds
  {:app {:target :browser
-        :output-dir "resources/public/js"
+        :output-dir "public/js"
         :asset-path "/js"
         :compiler-options {:output-feature-set :es-next
                            :externs ["datascript/externs.js"]}

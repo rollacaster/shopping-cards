@@ -8,3 +8,5 @@
 /.shadow-cljs/
 /resources/public/js/
 /.clerk/
+.vercel
+/public/js/
