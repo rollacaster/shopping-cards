@@ -1,13 +1,9 @@
 (ns tech.thomas-sojka.shopping-cards.views.clean-amount-desc
   (:require [clojure.string :as str]
-            [re-frame.core :refer [subscribe]]
-            [reagent.core :as r]))
-
-(defonce ingredients (r/atom nil))
+            [re-frame.core :refer [subscribe]]))
 
 (defn index-by [f coll]
    (persistent! (reduce #(assoc! %1 (f %2) %2) (transient {}) coll)))
-(def id->ingredient (index-by :ingredient/id @ingredients))
 
 (def amount-desc-replacements
    [["kl. Dose/n" "Dose"]
@@ -35,11 +31,9 @@
     ["Stück, rot" ""]
     ["Stück, " ""]])
 
-(def ingredient-name->ingredient (index-by :ingredient/name @ingredients))
-
-(defn is-ingredient? [c ingredient-name]
+(defn is-ingredient? [c ingredient]
    (= (:cooked-with/ingredient c)
-      (:ingredient/id (ingredient-name->ingredient ingredient-name))))
+      (:ingredient/id ingredient)))
 
 (defn replace-amount-desc [{:keys [cooked-with/amount-desc] :as c}]
    (if-let [[included  replacement]  (some
@@ -138,56 +132,56 @@
 (def remove-unit-and-amount #{"Kräuter" "Zitrone" "Salat" "Curry" "Salz" "Pfeffer"
                               "Kümmel" "Petersilie" "Currypaste" "Paprikapulver" "Garam Masala"
                               "Kurkuma" "Rosmarin" "Schnittlauch" "Thymian"})
- (defn change-unit [c]
+ (defn change-unit [c ingredient-name->ingredient]
    (cond
-     (and (is-ingredient? c "Tomatenmark")
+     (and (is-ingredient? c (ingredient-name->ingredient "Tomatenmark"))
           (= (:cooked-with/unit c) "g"))
      (-> c
          (assoc :cooked-with/unit "EL")
          (update :cooked-with/amount (fn [amount] (max 1 (int (/ amount 25))))))
 
-     (and (is-ingredient? c "Mehl")
+     (and (is-ingredient? c (ingredient-name->ingredient "Mehl"))
           (= (:cooked-with/unit c) "Tasse"))
      (dissoc c :cooked-with/unit :cooked-with/amount)
 
-     (and (is-ingredient? c "Gnocchi")
+     (and (is-ingredient? c (ingredient-name->ingredient "Gnocchi"))
           (= (:cooked-with/unit c) "Pck"))
      (-> c
          (assoc :cooked-with/unit "g")
          (update :cooked-with/amount (fn [amount] (* 500 amount))))
 
-     (and (is-ingredient? c "Saure Sahne")
+     (and (is-ingredient? c (ingredient-name->ingredient "Saure Sahne"))
           (nil? (:cooked-with/unit c)))
      (dissoc c :cooked-with/amount)
 
-     (and (is-ingredient? c "Erdnussbutter")
+     (and (is-ingredient? c (ingredient-name->ingredient "Erdnussbutter"))
           (nil? (:cooked-with/unit c)))
      (assoc c :cooked-with/amount "EL")
 
-     (and (is-ingredient? c "Sahne")
+     (and (is-ingredient? c (ingredient-name->ingredient "Sahne"))
           (= (:cooked-with/unit c) "Becher"))
      (-> c
          (assoc :cooked-with/amount "ml")
          (update :cooked-with/amount (fn [amount] (* 200 amount))))
 
-     (and (is-ingredient? c "Sahne")
+     (and (is-ingredient? c (ingredient-name->ingredient "Sahne"))
           (= (:cooked-with/unit c) "g"))
      (-> c
          (assoc :cooked-with/amount "ml"))
 
-     (and (is-ingredient? c "Mehl")
+     (and (is-ingredient? c (ingredient-name->ingredient "Mehl"))
           (= (:cooked-with/unit c) "EL"))
      (-> c
          (assoc :cooked-with/unit "g")
          (update :cooked-with/amount (fn [amount] (* amount 10))))
 
-     (and (is-ingredient? c "Bohnen")
+     (and (is-ingredient? c (ingredient-name->ingredient "Bohnen"))
           (= (:cooked-with/unit c) "g"))
      (-> c
          (assoc :cooked-with/unit "Dose")
          (update :cooked-with/amount (fn [amount] (/ amount 500))))
 
-     (and (is-ingredient? c "Mais")
+     (and (is-ingredient? c (ingredient-name->ingredient "Mais"))
           (or (= (:cooked-with/unit c) "g")
               (nil? (:cooked-with/unit c)))
           (:cooked-with/amount c))
@@ -195,149 +189,149 @@
          (assoc :cooked-with/unit "Dose")
          (assoc :cooked-with/amount 1))
 
-     (and (is-ingredient? c "Frühlingszwiebel")
+     (and (is-ingredient? c (ingredient-name->ingredient "Frühlingszwiebel"))
           (= (:cooked-with/unit c) "g"))
      (-> c
          (update :cooked-with/amount #(/ % 50))
          (dissoc :cooked-with/unit ))
 
-     (is-ingredient? c "Frühlingszwiebel")
+     (is-ingredient? c (ingredient-name->ingredient "Frühlingszwiebel"))
      (dissoc c :cooked-with/unit )
 
-     (and (is-ingredient? c "Schmand")
+     (and (is-ingredient? c (ingredient-name->ingredient "Schmand"))
           (= (:cooked-with/unit c) "EL"))
      (-> c
          (assoc :cooked-with/unit "g")
          (update :cooked-with/amount #(* % 15)))
 
-     (and (is-ingredient? c "Parmesan")
+     (and (is-ingredient? c (ingredient-name->ingredient "Parmesan"))
           (= (:cooked-with/unit c) "EL"))
      (-> c
          (assoc :cooked-with/unit "g")
          (update :cooked-with/amount #(* % 5)))
 
-     (and (is-ingredient? c "Linsen")
+     (and (is-ingredient? c (ingredient-name->ingredient "Linsen"))
           (= (:cooked-with/unit c) "EL"))
      (-> c
          (assoc :cooked-with/unit "g")
          (update :cooked-with/amount #(* % 15)))
 
-     (and (is-ingredient? c "Parmesan")
+     (and (is-ingredient? c (ingredient-name->ingredient "Parmesan"))
           (= (:cooked-with/unit c) "Handvoll"))
      (dissoc c :cooked-with/unit :cooked-with/amount)
 
-     (and (is-ingredient? c "Schmand")
+     (and (is-ingredient? c (ingredient-name->ingredient "Schmand"))
           (= (:cooked-with/unit c) "Becher"))
      (-> c
          (assoc :cooked-with/unit "g")
          (update :cooked-with/amount #(* % 200)))
 
-     (and (is-ingredient? c "Karotte")
+     (and (is-ingredient? c (ingredient-name->ingredient "Karotte"))
           (= (:cooked-with/unit c) "g"))
      (-> c
          (dissoc :cooked-with/unit)
          (update :cooked-with/amount #(js/Math.ceil (/ % 200))))
 
-     (and (is-ingredient? c "Reis")
+     (and (is-ingredient? c (ingredient-name->ingredient "Reis"))
           (= (:cooked-with/unit c) "Tasse"))
      (-> c
          (assoc :cooked-with/unit "g")
          (update :cooked-with/amount #(* % 150)))
 
-     (and (is-ingredient? c "Butter")
+     (and (is-ingredient? c (ingredient-name->ingredient "Butter"))
           (= (:cooked-with/unit c) "EL"))
      (dissoc c :cooked-with/unit :cooked-with/amount)
 
-     (and (is-ingredient? c "Semmel")
+     (and (is-ingredient? c (ingredient-name->ingredient "Semmel"))
           (= (:cooked-with/unit c) "g"))
      (-> c
          (dissoc :cooked-with/unit)
          (update :cooked-with/amount (fn [amount] (max 1 (int (/ amount 60))))))
 
-     (and (is-ingredient? c "Wasser")
+     (and (is-ingredient? c (ingredient-name->ingredient "Wasser"))
           (= (:cooked-with/unit c) "g"))
      (assoc c :cooked-with/unit "ml")
 
-     (and (is-ingredient? c "Geriebener Käse")
+     (and (is-ingredient? c (ingredient-name->ingredient "Geriebener Käse"))
           (= (:cooked-with/unit c) "Packung"))
      (-> c
          (assoc :cooked-with/unit "g")
          (assoc :cooked-with/amount 250))
 
-     (and (is-ingredient? c "Spinat")
+     (and (is-ingredient? c (ingredient-name->ingredient "Spinat"))
           (nil? (:cooked-with/unit c))
           (:cooked-with/amount c))
      (-> c
          (assoc :cooked-with/unit "g"))
 
-     (and (is-ingredient? c "Wasser")
+     (and (is-ingredient? c (ingredient-name->ingredient "Wasser"))
           (= (:cooked-with/unit c) "Tasse"))
      (-> c
          (assoc :cooked-with/unit "ml")
          (assoc :cooked-with/amount 250))
 
-     (and (is-ingredient? c "Kokosmilch")
+     (and (is-ingredient? c (ingredient-name->ingredient "Kokosmilch"))
           (= (:cooked-with/unit c) "Dose"))
      (-> c
          (assoc :cooked-with/unit "ml")
          (update :cooked-with/amount (fn [amount] (int (* amount 400)))))
 
-     (and (is-ingredient? c "Zucker")
+     (and (is-ingredient? c (ingredient-name->ingredient "Zucker"))
           (= (:cooked-with/unit c) "Prise"))
      (dissoc c :cooked-with/unit :cooked-with/amount)
 
-     (and (is-ingredient? c "Hefe")
+     (and (is-ingredient? c (ingredient-name->ingredient "Hefe"))
           (= (:cooked-with/unit c) "g"))
      (dissoc c :cooked-with/unit :cooked-with/amount)
 
-     (and (is-ingredient? c "Griechischer Joghurt")
+     (and (is-ingredient? c (ingredient-name->ingredient "Griechischer Joghurt"))
           (nil? (:cooked-with/unit c)))
      (assoc c :cooked-with/unit "g" :cooked-with/amount "200")
 
-     (is-ingredient? c "Nudeln")
+     (is-ingredient? c (ingredient-name->ingredient "Nudeln"))
      (-> c
          (assoc :cooked-with/unit "g"))
 
-     (is-ingredient? c "Mozzarella")
+     (is-ingredient? c (ingredient-name->ingredient "Mozzarella"))
      (-> c
          (assoc :cooked-with/unit "Packung")
          (assoc :cooked-with/amount 1))
 
-     (is-ingredient? c "Kräuter-Frischkäse")
+     (is-ingredient? c (ingredient-name->ingredient "Kräuter-Frischkäse"))
      (-> c
          (assoc :cooked-with/unit "Packung")
          (assoc :cooked-with/amount 1))
 
-     (and (is-ingredient? c "Paprika")
+     (and (is-ingredient? c (ingredient-name->ingredient "Paprika"))
           (= (:cooked-with/unit c) "Stück"))
      (dissoc c :cooked-with/unit)
 
-     (and (is-ingredient? c "Toast")
+     (and (is-ingredient? c (ingredient-name->ingredient "Toast"))
           (= (:cooked-with/unit c) "Stk"))
      (dissoc c :cooked-with/unit)
 
-     (and (is-ingredient? c "Zwiebel")
+     (and (is-ingredient? c (ingredient-name->ingredient "Zwiebel"))
           (= (:cooked-with/unit c) "Stück"))
      (dissoc c :cooked-with/unit)
 
-     (is-ingredient? c "Eier")
+     (is-ingredient? c (ingredient-name->ingredient "Eier"))
      (-> (dissoc c :cooked-with/unit)
          (update :cooked-with/amount js/Math.ceil))
 
-     (and (is-ingredient? c "Kartoffeln")
+     (and (is-ingredient? c (ingredient-name->ingredient "Kartoffeln"))
           (nil? (:cooked-with/unit c))
           (number? (:cooked-with/amount c)))
      (-> c
          (assoc :cooked-with/unit "g")
          (update :cooked-with/amount #(* % 200)))
 
-     (and (is-ingredient? c "Mandeln")
+     (and (is-ingredient? c (ingredient-name->ingredient "Mandeln"))
           (= (:cooked-with/unit c) "Handvoll"))
      (-> c
          (assoc :cooked-with/unit "g")
          (assoc :cooked-with/amount 25))
 
-     (and (is-ingredient? c "Feta")
+     (and (is-ingredient? c (ingredient-name->ingredient "Feta"))
           (nil? (:cooked-with/unit c))
           (number? (:cooked-with/amount c)))
      (-> c
@@ -351,7 +345,7 @@
 
      :else c))
 
-(defn- cooked-with-component [c recipe class]
+(defn- cooked-with-component [c recipe class id->ingredient]
    [:tr.px-2.w-16 {:class class}
     [:td
      (:cooked-with/amount c)]
@@ -362,7 +356,7 @@
     [:td (:recipe/name recipe)]
     [:td [:button {:on-click (fn [] (prn c))} "Print"]]])
 
-(defn change-ingredient [c]
+(defn change-ingredient [c ingredient-name->ingredient]
    (cond
      (and (is-ingredient? c "Milch")
           (= (:cooked-with/unit c) "Liter"))
@@ -372,54 +366,53 @@
      :else c))
 
 (defn main []
-  (-> (js/fetch "/ingredients.json")
-      (.then (fn [res] (.json res)))
-      (.then (fn [res] (reset! ingredients (js->clj res :keywordize-keys true))))
-      (.catch js/console.log))
-  (fn []
-    (let [recipes @(subscribe [:recipes])]
-      [:div.flex.flex-col.w-full
-       [:table
-        [:thead
-         [:tr
-          [:th "Amount"]
-          [:th "Unit"]
-          [:th "Ingredient"]
-          [:th "Recipe"]]]
-        [:tbody
-         (->> recipes
-              (remove (fn [{:keys [deleted]}] deleted))
-              (mapcat (fn [r] (map
-                              (fn [c] [c (dissoc r :recipe/cooked-with)])
-                              (:recipe/cooked-with r))))
-              (sort-by (comp :cooked-with/ingredient first))
-              (map (fn [[c recipe]]
-                     ^{:key (str (:recipe/id recipe) (:cooked-with/ingredient c))}
-                     [:<>
-                      (when (not= (-> c
-                                      fix-original
-                                      fix-issue)
-                                  (-> c
-                                      fix-original
-                                      fix-issue
-                                      change-unit
-                                      change-ingredient))
-                        [cooked-with-component (-> c
-                                                   fix-original
-                                                   fix-issue
-                                                   ) recipe
-                         "bg-red-200"])
-                      [cooked-with-component (-> c
-                                                 fix-original
-                                                 fix-issue
-                                                 change-unit
-                                                 change-ingredient) recipe
-                       (when (not= (-> c
-                                       fix-original
-                                       fix-issue)
-                                   (-> c
-                                       fix-original
-                                       fix-issue
-                                       change-unit
-                                       change-ingredient))
-                         "bg-green-200")]])))]]])))
+  (let [recipes @(subscribe [:recipes])
+        ingredients @(subscribe [:ingredients])
+        id->ingredient (index-by :ingredient/id ingredients)
+        ingredient-name->ingredient (index-by :ingredient/name ingredients)]
+    [:div.flex.flex-col.w-full
+     [:table
+      [:thead
+       [:tr
+        [:th "Amount"]
+        [:th "Unit"]
+        [:th "Ingredient"]
+        [:th "Recipe"]]]
+      [:tbody
+       (->> recipes
+            (remove (fn [{:keys [deleted]}] deleted))
+            (mapcat (fn [r] (map
+                            (fn [c] [c (dissoc r :recipe/cooked-with)])
+                            (:recipe/cooked-with r))))
+            (sort-by (comp :cooked-with/ingredient first))
+            (map (fn [[c recipe]]
+                   ^{:key (str (:recipe/id recipe) (:cooked-with/ingredient c))}
+                   [:<>
+                    (when (not= (-> c
+                                    fix-original
+                                    fix-issue)
+                                (-> c
+                                    fix-original
+                                    fix-issue
+                                    (change-unit ingredient-name->ingredient)
+                                    (change-ingredient ingredient-name->ingredient)))
+                      [cooked-with-component
+                       (-> c fix-original fix-issue)
+                       recipe
+                       "bg-red-200"
+                       id->ingredient])
+                    [cooked-with-component (-> c
+                                               fix-original
+                                               fix-issue
+                                               (change-unit ingredient-name->ingredient)
+                                               (change-ingredient ingredient-name->ingredient)) recipe
+                     (when (not= (-> c
+                                     fix-original
+                                     fix-issue)
+                                 (-> c
+                                     fix-original
+                                     fix-issue
+                                     (change-unit ingredient-name->ingredient)
+                                     (change-ingredient ingredient-name->ingredient)))
+                       "bg-green-200")
+                     id->ingredient]])))]]]))
