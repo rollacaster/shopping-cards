@@ -1,5 +1,4 @@
 (ns tech.thomas-sojka.shopping-cards.views.clean-amount-desc
-
   (:require [clojure.string :as str]
             [re-frame.core :refer [subscribe]]
             [reagent.core :as r]))
@@ -67,6 +66,7 @@
    (cond-> c
      (and amount-desc amount (not unit) (re-find #"[A-Za-zÄÜÖäüö]+" amount-desc))
      (assoc :cooked-with/unit (re-find #"[A-Za-zÄÜÖäüö]+" amount-desc))))
+
 (defn fix-original [{:keys [cooked-with/amount cooked-with/amount-desc cooked-with/unit] :as c}]
    (cond-> c
      ;; no unit in amount-desc
@@ -129,26 +129,15 @@
 
      ;; ingredient name in amount-desc
      (and amount-desc (str/includes? amount-desc (:ingredient/name c)))
-     (assoc :cooked-with/amount-desc (str/trim (str/replace amount-desc (:ingredient/name c) "")))))
+     (assoc :cooked-with/amount-desc (str/trim (str/replace amount-desc (:ingredient/name c) "")))
 
-(defn update-cooked-with [recipes recipe-id ingredient-id field amount]
-   (mapv
-    (fn [recipe]
-      (if (= (:recipe/id recipe) recipe-id)
-        (assoc recipe
-               :recipe/cooked-with
-               (mapv
-                (fn [c]
-                  (if (= (:cooked-with/ingredient c) ingredient-id)
-                    (assoc c field amount)
-                    c))
-                (:recipe/cooked-with recipe)))
-        recipe))
-    recipes))
+     ;; ingredient name in unit
+     (and unit (str/includes? unit (:ingredient/name c)))
+     (assoc :cooked-with/unit (str/trim (str/replace unit (:ingredient/name c) "")))))
 
 (def remove-unit-and-amount #{"Kräuter" "Zitrone" "Salat" "Curry" "Salz" "Pfeffer"
                               "Kümmel" "Petersilie" "Currypaste" "Paprikapulver" "Garam Masala"
-                              "Kurkuma"})
+                              "Kurkuma" "Rosmarin" "Schnittlauch" "Thymian"})
  (defn change-unit [c]
    (cond
      (and (is-ingredient? c "Tomatenmark")
@@ -156,6 +145,47 @@
      (-> c
          (assoc :cooked-with/unit "EL")
          (update :cooked-with/amount (fn [amount] (max 1 (int (/ amount 25))))))
+
+     (and (is-ingredient? c "Mehl")
+          (= (:cooked-with/unit c) "Tasse"))
+     (dissoc c :cooked-with/unit :cooked-with/amount)
+
+     (and (is-ingredient? c "Gnocchi")
+          (= (:cooked-with/unit c) "Pck"))
+     (-> c
+         (assoc :cooked-with/unit "g")
+         (update :cooked-with/amount (fn [amount] (* 500 amount))))
+
+     (and (is-ingredient? c "Saure Sahne")
+          (nil? (:cooked-with/unit c)))
+     (dissoc c :cooked-with/amount)
+
+     (and (is-ingredient? c "Erdnussbutter")
+          (nil? (:cooked-with/unit c)))
+     (assoc c :cooked-with/amount "EL")
+
+     (and (is-ingredient? c "Sahne")
+          (= (:cooked-with/unit c) "Becher"))
+     (-> c
+         (assoc :cooked-with/amount "ml")
+         (update :cooked-with/amount (fn [amount] (* 200 amount))))
+
+     (and (is-ingredient? c "Sahne")
+          (= (:cooked-with/unit c) "g"))
+     (-> c
+         (assoc :cooked-with/amount "ml"))
+
+     (and (is-ingredient? c "Mehl")
+          (= (:cooked-with/unit c) "EL"))
+     (-> c
+         (assoc :cooked-with/unit "g")
+         (update :cooked-with/amount (fn [amount] (* amount 10))))
+
+     (and (is-ingredient? c "Bohnen")
+          (= (:cooked-with/unit c) "g"))
+     (-> c
+         (assoc :cooked-with/unit "Dose")
+         (update :cooked-with/amount (fn [amount] (/ amount 500))))
 
      (and (is-ingredient? c "Mais")
           (or (= (:cooked-with/unit c) "g")
