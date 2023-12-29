@@ -80,6 +80,10 @@
                                    :id "recipe-name"
                                    :on-change (fn [^js e] (swap! !recipe assoc :recipe/name e.target.value))
                                    :style {:resize "none"}}]
+      [:button.bn.bg-transparent.flex.bg-orange-700.white.pa2.br2.shadow-5.mb3
+       {:on-click #(dispatch [:recipes/delete @!recipe]) :type :button}
+       [:span.mr2 "Löschen"]
+       [icon {:class "h1"} :trash-can]]
       [:div.bw1.w-50-ns.order-1-ns.flex.justify-center-ns.h-100.mb3
        [:img.w-100.br3.ba.b--orange-300 {:src image}]]]
      [:form {:on-submit
