@@ -46,7 +46,8 @@
  "Zwiebel" #{"Zwiebel(n), in Würfeln" "Zwiebel" "Lauchzwiebeln" "Zwiebel(n)" "Schalotte(n), gewürfelt"
              "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt" "Zwiebel/n"
              "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)" "Speisezwiebel"
-             "Speisezwiebeln" "Schalotte" "roteZwiebel" "Zwiebel, halbiert" "Zwiebeln" "Zwiebel(n), rote"}
+             "Speisezwiebeln" "Schalotte" "roteZwiebel" "Zwiebel, halbiert" "Zwiebeln" "Zwiebel(n), rote"
+             "kleine rote Zwiebel"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche" "Weizenmehl, bei Bedarf auch mehr"
           "Weizenmehl Typ 405"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
@@ -60,7 +61,8 @@
  "Spätzle" #{"Spätzle, frische, aus dem Kühlregal" "Spätzle (Frischprodukt)"}
  "Kräuter" #{"Kräuter, gemischte, TK" "Kräuter, frische (Basilikum, Petersilie, Oregano)" "eine Prise Oregano"
              "8 Kräuter, TK" "Kräuter der Provence, getrocknet" "Kräuter, gemischte" "Oregano, frisch" "getrockneter Oregano"}
- "Petersilie" #{"Petersilie, gehackt" "Petersilie, glatte" "Petersilie, frisch" "BundPetersilie"}
+ "Petersilie" #{"Petersilie, gehackt" "Petersilie, glatte" "Petersilie, frisch" "BundPetersilie"
+                "gehackte Petersilie"}
  "Ingwer" #{"etwas Ingwer" "gehackter Ingwer"}
  "Tomaten" #{"Tomate(n), getrocknete"}
  "Chili" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"
