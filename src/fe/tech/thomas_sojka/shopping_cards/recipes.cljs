@@ -31,6 +31,15 @@
                           :on-success [:recipes/load-success ingredients]
                           :on-failure [:recipes/load-failure]}}))
 
+(reg-event-fx :recipes/delete
+  (fn [_ [_ recipe]]
+    {:firestore/update-doc {:path firestore-path
+                            :key (:recipe/id recipe)
+                            :data (assoc recipe :deleted true)
+                            :spec :recipe/recipe}
+     :app/push-state [:route/edit-recipes]
+     :app/scroll-to [0 0]}))
+
 (defn- explode-ingredients [cooked-with ingredients]
   (let [ingredient-id->ingredient (zipmap (map :ingredient/id ingredients)
                                           ingredients)]
@@ -52,7 +61,8 @@
 
 (reg-sub :recipes
  (fn [db _]
-   (:recipes db)))
+   (->> (:recipes db)
+        (remove (fn [{:keys [deleted]}] deleted)))))
 
 (defn find-recipe [recipe-id recipes]
   (some
