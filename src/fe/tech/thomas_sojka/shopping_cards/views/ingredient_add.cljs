@@ -2,7 +2,7 @@
   (:require [re-frame.core :refer [dispatch]]
             [reagent.core :as r]
             [tech.thomas-sojka.shopping-cards.components :as c]
-            [tech.thomas-sojka.shopping-cards.db :as db]))
+            [tech.thomas-sojka.shopping-cards.specs :as specs]))
 
 (defn main [match]
   (let [{:keys [path]} (:parameters match)
@@ -23,7 +23,7 @@
            :name "ingredient-category"
            :on-change #(reset! ingredient-category (keyword (str "ingredient-category/" ^js  (.-target.value %))))}
           (map (fn [category] ^{:key category} [:option {:value category} (name category)])
-               db/ingredient-categorys)]]
+               specs/ingredient-categorys)]]
         [c/button
          {:type "button"
           :on-click #(dispatch [:ingredients/add
