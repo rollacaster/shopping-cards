@@ -1,7 +1,6 @@
 (ns tech.thomas-sojka.shopping-cards.views.clean-amount-desc
   (:require [clojure.data :as data]
             [clojure.string :as str]
-            [clojure.set :as set]
             [re-frame.core :refer [subscribe dispatch]]))
 
 (defn index-by [f coll]
@@ -429,18 +428,7 @@
 
      :else c))
 
-(defn- cooked-with-component [c recipe class id->ingredient]
-   [:tr.px-2.w-16 {:class class}
-    [:td
-     (:cooked-with/amount c)]
-    [:td.px-2.w-16
-     (:cooked-with/unit c)]
-    [:td [:button {:on-click (fn [] (prn (:cooked-with/ingredient c)))}
-          (:ingredient/name (id->ingredient (:cooked-with/ingredient c)))]]
-    [:td (:recipe/name recipe)]
-    [:td [:button {:on-click (fn [] (prn c))} "Print"]]])
-
-(defn- cooked-with-component2 [c recipe class id->ingredient children]
+(defn- cooked-with-component2 [c class id->ingredient children]
    [:tr.px-2.w-16 {:class class}
     [:td
      (:cooked-with/amount c)]
@@ -504,7 +492,7 @@
                               [:td (first (map :recipe/name cooked-with))]])
                            (group-by :cooked-with/unit cooked-with))]]])))))]
      [:div
-      (->> @(subscribe [:recipes])
+      (->> recipes
            (map (fn [r]
                   ^{:key (:recipe/id r)}
                   [:div
@@ -521,7 +509,7 @@
                       (map
                        (fn [c]
                          ^{:key (str (:recipe/id r) (:cooked-with/ingredient c))}
-                         [cooked-with-component2 c r nil id->ingredient])
+                         [cooked-with-component2 c nil id->ingredient])
                        (:recipe/cooked-with r))]]
                     [:table
                      [:thead
@@ -540,7 +528,6 @@
                            [:<>
                             [cooked-with-component2
                              cleaned-c
-                             r
                              (when (not= c cleaned-c) "bg-green-200")
                              id->ingredient
                              (when (not= c cleaned-c)
@@ -560,50 +547,4 @@
                                                        (fn [c] (clean-cooked-with c ingredient-name->ingredient))
                                                        cooked-with)))])}
                      "Update"]]])))
-      ]]
-    #_[:div.flex.flex-col.w-full
-       [:table
-        [:thead
-         [:tr
-          [:th "Amount"]
-          [:th "Unit"]
-          [:th "Ingredient"]
-          [:th "Recipe"]]]
-        [:tbody
-         (->> recipes
-              (remove (fn [{:keys [deleted]}] deleted))
-              (mapcat (fn [r] (map
-                              (fn [c] [c (dissoc r :recipe/cooked-with)])
-                              (:recipe/cooked-with r))))
-              (sort-by (comp :cooked-with/ingredient first))
-              (map (fn [[c recipe]]
-                     ^{:key (str (:recipe/id recipe) (:cooked-with/ingredient c))}
-                     [:<>
-                      (when (not= (-> c
-                                      fix-original
-                                      fix-issue)
-                                  (-> c
-                                      fix-original
-                                      fix-issue
-                                      (change-unit ingredient-name->ingredient)
-                                      (change-ingredient ingredient-name->ingredient)))
-                        [cooked-with-component
-                         (-> c fix-original fix-issue)
-                         recipe
-                         "bg-red-200"
-                         id->ingredient])
-                      [cooked-with-component (-> c
-                                                 fix-original
-                                                 fix-issue
-                                                 (change-unit ingredient-name->ingredient)
-                                                 (change-ingredient ingredient-name->ingredient)) recipe
-                       (when (not= (-> c
-                                       fix-original
-                                       fix-issue)
-                                   (-> c
-                                       fix-original
-                                       fix-issue
-                                       (change-unit ingredient-name->ingredient)
-                                       (change-ingredient ingredient-name->ingredient)))
-                         "bg-green-200")
-                       id->ingredient]])))]]]))
+      ]]))
