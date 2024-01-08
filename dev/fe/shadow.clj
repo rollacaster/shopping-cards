@@ -27,4 +27,5 @@
   (reset! server (http/run-server (-> #'handler
                                       (wrap-file "target/test/browser" {:prefer-handler? true})
                                       wrap-content-type)
-                                  {:port 9004})))
+                                  {:port 9004}))
+  (shadow/watch :scrape))

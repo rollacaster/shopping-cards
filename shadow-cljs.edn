@@ -9,6 +9,10 @@
         :compiler-options {:output-feature-set :es-next
                            :externs ["datascript/externs.js"]}
         :modules {:main {:init-fn tech.thomas-sojka.shopping-cards.core/init!}}}
+  :scrape {:target :node-script
+           :output-to "scrape/index.js"
+           :main tech.thomas-sojka.shopping-cards.scrape2/main
+           :compiler-options {:output-feature-set :es-next}}
   :test {:target :browser-test
          :test-dir "target/test/browser"
          :compiler-options {:output-feature-set :es-next}}
