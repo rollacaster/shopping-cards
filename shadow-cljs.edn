@@ -6,8 +6,7 @@
  {:app {:target :browser
         :output-dir "public/js"
         :asset-path "/js"
-        :compiler-options {:output-feature-set :es-next
-                           :externs ["datascript/externs.js"]}
+        :compiler-options {:output-feature-set :es-next}
         :modules {:main {:init-fn tech.thomas-sojka.shopping-cards.core/init!}}}
   :scrape {:target :node-script
            :output-to "scrape/index.js"
