@@ -30,13 +30,11 @@
 (s/def :ingredient/ingredients (s/coll-of :ingredient/ingredient))
 
 (s/def :cooked-with/ingredient :ingredient/id)
-(s/def :cooked-with/id :app/id)
 (s/def :cooked-with/amount float?)
 (s/def :cooked-with/amount-desc string?)
 (s/def :cooked-with/unit string?)
 (s/def :cooked-with/cooked-with
-  (s/keys :req [:cooked-with/ingredient
-                :cooked-with/id]
+  (s/keys :req [:cooked-with/ingredient]
           :opt [:cooked-with/amount-desc
                 :cooked-with/unit
                 :cooked-with/amount]))
