@@ -1,5 +1,6 @@
 {"Paprikapulver" #{"Paprikapulver, edelsüß" "Paprikapulver" "½TL Paprikapulver" "Paprikapulver (edelsüß)" "Paprika edelsüß" "edelsüßes Paprikapulver"}
- "Paprika" #{"Paprikaschote(n), rot" "rote Paprika" "rotePaprika" "Paprikaschote"}
+ "Paprika" #{"Paprikaschote(n), rot" "rote Paprika" "rotePaprika" "Paprikaschote" "Paprikaschote(n), rote"
+             "Paprikaschote(n), gelbe"}
  "Frischkäse" #{"Frischkäse" "Frischkäse, leicht" "Kräuterfrischkäse" }
  "Salz" #{"Salz" "gesalzen" "evtl. Salz" "Meersalz, grobes, etwas gemahlen" "Salz/Jodsalz" "Fleur de Sel"
           "Kala Namak (Schwefelsalz)" "SalzzumKochen" "Salz nach Geschmack"}
@@ -7,7 +8,8 @@
  "Wasser" #{"Wasser, lauwarm" "Wasser" "Wasser und mehr zum Kochen" "Tasse(n) Wasser"}
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
              "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer" "Pfeffer aus der Mühle"
-             "¼ gemahlener Schwarzer Pfeffer" "¼ TL Pfeffer" "Pfeffer, weiß"}
+             "¼ gemahlener Schwarzer Pfeffer" "¼ TL Pfeffer" "Pfeffer, weiß"
+             "Meersalz und Pfeffer, schwarzer, aus der Mühle"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
         "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"
@@ -22,7 +24,8 @@
                "Stiel(e)Basilikum" "Chili con Carne Gewürz"}
  "Passierte Tomaten" #{"Tomate(n), passierte"  "Tomaten, passierte" "Tomaten, passierte oder gehackte"
                        "Tomaten, passiert" "gehackte Tomaten" "Pizzatomaten ( je 400 g)" "passierte Tomaten"
-                       "Tomate(n), feste" "Fleischtomaten" "Tomaten, gestückelt" "stückige Tomaten aus der Dose"}
+                       "Tomate(n), feste" "Fleischtomaten" "Tomaten, gestückelt" "stückige Tomaten aus der Dose"
+                       "Tomaten, geschälte"}
  "Geriebener Käse" #{"Geriebener Käse" "Emmentaler, geriebener" "Emmentaler"
                      "Käse, gerieben (z. B. Gouda oder Emmentaler)" "Käse, gerieben"
                      "Käse (Kasar), gerieben" "Käse (Emmentaler), gerieben" "Käse, geraspelter (z.B. Gouda)"
@@ -47,7 +50,7 @@
              "weiße oder gelbe Zwiebel" "rote Zwiebel" "mittelgroße Zwiebel" "rote Zwiebeln" "Zwiebel(n), klein gehackt" "Zwiebel/n"
              "Schalotten" "Speisezwiebel(n)" "rote Zwiebel(n)" "Speisezwiebel"
              "Speisezwiebeln" "Schalotte" "roteZwiebel" "Zwiebel, halbiert" "Zwiebeln" "Zwiebel(n), rote"
-             "kleine rote Zwiebel"}
+             "kleine rote Zwiebel" "Gemüsezwiebel(n)"}
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche" "Weizenmehl, bei Bedarf auch mehr"
           "Weizenmehl Typ 405"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
@@ -110,7 +113,7 @@
             "Erbsen, tiefgefroren" "Erbsen, TK"}
  "Linsen" #{"Linsen, trocken" "rote Linsen" "rote Linsen, getrocknet" "braune Linsen" "Linsen, rote, braune oder schwarze"}
  "Kokosmilch" #{"Kokosmilch, fettreduziert" "Kokosmilch (400 ml)"}
- "Rosmarin" #{"Rosmarin, frisch"}
+ "Rosmarin" #{"Rosmarin, frisch""Rosmarin, frischer, gehackter"}
  "Nüsse" #{"Nüsse, Cashewnüsse, Natur" "Erdnüsse geröstet & ungesalzen" "ein paar Erdnüsse"}
  "Schnittlauch" #{"Schnittlauch, getrocknet oder frisch"}
  "Saure Sahne" #{"saure Sahne"}
@@ -126,7 +129,7 @@
  "Minze" #{"Minze, frisch"}
  "Tofu" #{"Tofu, natur"}
  "Garam Masala" #{}
- "Thymian" #{"Thymian, frisch"}
+ "Thymian" #{"Thymian, frisch""Thymian, frischer, gehackter"}
  "Salat" #{"Feldsalat"}
  "Harissa" #{"Harissa (als Paste oder Pulver)"}
  "Lorbeerblatt" #{"Lorbeerblatt, frisch"}
@@ -136,4 +139,6 @@
  "Gouda" #{"mittelalter Gouda"}
  "Hähnchenfleisch" #{"Fleisch, z.B. dünne Hähnchenfleisch-Scheibchen"}
  "Shrimps" #{"Shrimps, kleine (optional)"}
- "Wraps" #{"Vollkorn-Tortillafladen"}}
+ "Wraps" #{"Vollkorn-Tortillafladen"}
+ "Salbei" #{"Salbei, frischer, gehackter"}
+ "Lavendelblüten" #{"Lavendelblüten, getrocknete und zerriebene"}}
