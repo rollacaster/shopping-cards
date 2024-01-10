@@ -179,7 +179,7 @@
           (= (:cooked-with/unit c) "ml"))
      (-> c
          (assoc :cooked-with/unit "EL")
-         (update :cooked-with/amount #(/ % 15)))
+         (update :cooked-with/amount #(int (/ % 15))))
 
      (and (is-ingredient? c (ingredient-name->ingredient "Passierte Tomaten"))
           (= (:cooked-with/unit c) "Packung"))
@@ -434,10 +434,16 @@
 
      :else c))
 
+(defn remove-amount [c]
+  (if (nil? (:cooked-with/amount c))
+    (dissoc c :cooked-with/amount)
+    c))
+
 (defn clean [c ingredients]
   (let [ingredient-name->ingredient (index-by :ingredient/name ingredients)]
     (-> c
         fix-original
         fix-issue
         (change-ingredient ingredient-name->ingredient)
-        (change-unit ingredient-name->ingredient))))
+        (change-unit ingredient-name->ingredient)
+        remove-amount)))

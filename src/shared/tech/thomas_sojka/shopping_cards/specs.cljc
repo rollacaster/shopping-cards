@@ -45,12 +45,12 @@
 (s/def :recipe/image string?)
 (s/def :recipe/link (s/nilable string?))
 (s/def :recipe/inactive boolean?)
-(s/def :recipe/ingredients (s/coll-of :cooked-with/cooked-with))
+(s/def :recipe/cooked-with (s/coll-of :cooked-with/cooked-with))
 
 (s/def :recipe/recipe (s/keys :req [:recipe/type
                                     :recipe/id
                                     :recipe/name
                                     :recipe/image]
                               :opt [:recipe/link :recipe/inactive
-                                    :recipe/ingredients]))
+                                    :recipe/cooked-with]))
 (s/def :recipe/recipes (s/coll-of :recipe/recipe))
