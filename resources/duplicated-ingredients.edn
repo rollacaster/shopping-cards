@@ -77,9 +77,10 @@
              "Bio-Zitronenschale, fein geriebene" "Bio-Zitrone" "SpritzerZitronensaft"}
  "Feta" #{"Schafskäse" "Feta-Käse" "feta cheese" "Feta Käse" "Schafskäse, alternativ Feta-Käse"
           "Feta_Käse"}
- "Semmel" #{"Brötchen" "Weißbrot, altbackenes" "als Beilage Semmeln oder Brot"}
+ "Semmel" #{"Brötchen" "Weißbrot, altbackenes" "als Beilage Semmeln oder Brot" "Semmeln"}
  "Salami" #{"Sucuk"}
  "Piment" #{"Piment, gemahlen"}
+ "Brotzeit-Käse" #{"Käse"}
  "Karotte" #{"Möhre(n)" "Karotten/Möhren" "Möhre" "Karotten" "Möhren, in Stücken"}
  "Sellerie" #{"Staudensellerie, mit Blättern" "Sellerie, in Stücken"}
  "Aubergine" #{"Aubergine(n)"}
@@ -130,7 +131,7 @@
  "Tofu" #{"Tofu, natur"}
  "Garam Masala" #{}
  "Thymian" #{"Thymian, frisch""Thymian, frischer, gehackter"}
- "Salat" #{"Feldsalat"}
+ "Salat" #{"Feldsalat" "Eisbergsalat"}
  "Harissa" #{"Harissa (als Paste oder Pulver)"}
  "Lorbeerblatt" #{"Lorbeerblatt, frisch"}
  "Kürbis" #{"Hokkaidokürbis(se)"}
