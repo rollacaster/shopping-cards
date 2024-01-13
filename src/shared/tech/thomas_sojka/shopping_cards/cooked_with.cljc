@@ -439,6 +439,11 @@
     (dissoc c :cooked-with/amount)
     c))
 
+(defn remove-amount-desc [c]
+  (if (nil? (:cooked-with/amount-desc c))
+    (dissoc c :cooked-with/amount-desc)
+    c))
+
 (defn clean [c ingredients]
   (let [ingredient-name->ingredient (index-by :ingredient/name ingredients)]
     (-> c
@@ -446,4 +451,5 @@
         fix-issue
         (change-ingredient ingredient-name->ingredient)
         (change-unit ingredient-name->ingredient)
-        remove-amount)))
+        remove-amount
+        remove-amount-desc)))
