@@ -1,15 +1,15 @@
 (ns tech.thomas-sojka.shopping-cards.core-test
-  (:require ["firebase/auth" :as fire-auth]
-            [cljs-bean.core :refer [bean]]
+  (:require ["firebase/auth" :as auth]
             [cljs.test :as t :include-macros true]
-            [clojure.string :as str]
             [promesa.core :as p]
-            [tech.thomas-sojka.shopping-cards.auth :as auth]
             [tech.thomas-sojka.shopping-cards.core :as sut]
+            [tech.thomas-sojka.shopping-cards.firebase :as firebase]
             [tech.thomas-sojka.shopping-cards.mocks :as mocks]
             [tech.thomas-sojka.shopping-cards.testing-library :refer [get-all-by-role
                                                                       get-by-role wait-for]]))
+
 (def screen (js/document.createElement "div"))
+(def auth (auth/getAuth firebase/app))
 
 (defn setup-app []
   (set! (.-href js/location) "#")
@@ -32,6 +32,7 @@
   (mocks/overwrite-firestore)
   (t/async done
            (p/do
+             (auth/signInWithEmailAndPassword auth "thsojka@web.de" "test123")
              (wait-for #(get-all-by-role screen "link" {:name "Mittagessen"}) #js {:timeout 10000})
              (.click (first (get-all-by-role screen "link" {:name "Mittagessen"})))
 
