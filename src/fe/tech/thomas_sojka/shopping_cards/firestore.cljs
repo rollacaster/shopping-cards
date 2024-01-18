@@ -31,14 +31,14 @@
         (.then (fn [] (when on-success (dispatch (conj on-success data)))))
         (.catch (fn [err] (when on-failure (dispatch (conj on-failure err))))))))
 
-(defn update-doc [data path segment]
+(defn update-doc [data path segment spec]
+  {:pre [(s/valid? spec data)]}
   (firestore/setDoc (firestore/doc (firestore/collection db path) segment)
                     (->js data)))
 
 (reg-fx :firestore/update-doc
   (fn [{:keys [path key data on-success on-failure spec]}]
-    {:pre [(s/valid? spec data)]}
-    (-> (update-doc data path key)
+    (-> (update-doc data path key spec)
         (.then (fn [] (when on-success (dispatch on-success))))
         (.catch (fn [err] (when on-failure (dispatch (conj on-failure err))))))))
 
@@ -46,7 +46,7 @@
   (fn [{:keys [path data id on-success on-failure spec]}]
     {:pre [(s/valid? spec data)]}
     (doseq [d data]
-      (-> (update-doc d path (id d))
+      (-> (update-doc d path (id d) spec)
           (.then (fn [] (when on-success (dispatch on-success))))
           (.catch (fn [err] (when on-failure (dispatch (conj on-failure err)))))))))
 

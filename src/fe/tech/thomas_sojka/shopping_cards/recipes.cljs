@@ -92,11 +92,11 @@
 (reg-sub :recipes/lunch
  :<- [:recipes]
   (fn [recipes]
-    (group-recipes [:recipe-type/fast :recipe-type/new :recipe-type/normal :recipe-type/misc  :recipe-type/rare]
+    (group-recipes [:recipe-type/fast :recipe-type/normal :recipe-type/misc  :recipe-type/rare]
                    recipes)))
 
 (reg-sub :recipes/dinner
  :<- [:recipes]
   (fn [recipes]
-    (group-recipes [:recipe-type/normal :recipe-type/fast :recipe-type/new :recipe-type/misc  :recipe-type/rare]
+    (group-recipes [:recipe-type/normal :recipe-type/fast :recipe-type/misc  :recipe-type/rare]
                    recipes)))

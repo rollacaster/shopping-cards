@@ -411,13 +411,13 @@
    {:tx-data
     (scrape-recipe conn {:link "https://cookidoo.de/recipes/recipe/de/r673004"
                          :image "https://assets.tmecosys.com/image/upload/t_web667x528/img/recipe/ras/Assets/c277dd26-4973-4802-8e98-0281491c9ac3/Derivates/ea5f1a84-a9bb-40ed-98c3-598ded6cd11f.jpg"
-                         :type :recipe-type/new})})
+                         :type :recipe-type/normal})})
   (d/transact
    conn
    {:tx-data
     (scrape-recipe conn {:link "https://www.kitchenstories.com/de/rezepte/chili-sin-carne-de"
                          :image "https://images.kitchenstories.io/recipeImages/C69-photo-final-4x3/C69-photo-final-4x3-medium-landscape-150.jpg"
-                         :type :recipe-type/new})})
+                         :type :recipe-type/normal})})
   (d/transact
    conn
    {:tx-data
@@ -429,4 +429,4 @@
    {:tx-data
     (scrape-recipe conn
                    {:link "https://www.chefkoch.de/rezepte/2051831331801614/Kuerbis-Spinat-Eintopf-mit-Linsen.html?utm_source=com.apple.UIKit.activity.CopyToPasteboard&utm_medium=Social%20Sharing%20CTA&utm_campaign=Sharing-iOS"
-                    :type :recipe-type/new})}))
+                    :type :recipe-type/normal})}))

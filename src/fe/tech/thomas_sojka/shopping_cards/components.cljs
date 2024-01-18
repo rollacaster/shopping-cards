@@ -50,7 +50,6 @@
 (defn recipe-type-title [recipe-type]
   (case recipe-type
     :recipe-type/normal [:h2.mv3.tc "Normale Gerichte"]
-    :recipe-type/new [:h2.mv3.tc "Neue Gerichte"]
     :recipe-type/fast [:h2.mv3.tc "Schnell Gerichte"]
     :recipe-type/misc [:h2.mv3.tc "Keine Gerichte"]
     :recipe-type/rare [:h2.mv3.tc "Selten"]))
