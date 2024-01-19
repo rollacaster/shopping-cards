@@ -13,7 +13,7 @@ jobs:
       uses: DeLaGuardo/setup-clojure@12.3
       with:
         cli: 1.11.1
-        bb: 1.3.78
+        bb: 1.3.188
         clj-kondo: 2023.12.15
     - name: Run clj-kondo
       run: clj-kondo --lint src
