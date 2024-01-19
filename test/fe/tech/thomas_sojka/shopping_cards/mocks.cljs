@@ -1,7 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.mocks
   (:require [clojure.spec.alpha :as s]
             [tech.thomas-sojka.shopping-cards.recipes :as recipe]
-            [re-frame.core :refer [dispatch reg-fx]]
+            [re-frame.core :refer [dispatch reg-fx reg-event-fx]]
             [tech.thomas-sojka.shopping-cards.fixtures :as fixtures]))
 
 (def firestore-inst
@@ -56,4 +56,8 @@
       (case path
         "meal-plans" (dispatch [:meal/load-success fixtures/ingredients (map ->firest-store-meal-plan data)])
         "shopping-items" (dispatch [:shopping-item/load-success (map ->firestore-shopping-item data)]))
-      (when on-success (dispatch on-success)))))
+      (when on-success (dispatch on-success))))
+
+  (reg-event-fx :auth/logged-out
+    (fn []
+      {})))
