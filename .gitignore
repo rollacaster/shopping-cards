@@ -1,7 +1,10 @@
 /.cpcache/
 /.nrepl-port
 /.creds.edn
-/target
+/target/test/browser/cljs-runtime
+/target/test/browser/js
+/target/test/browser/index.html
+/target/test/browser/karma.js
 /node_modules/
 /classes/
 /resources/.creds.edn
