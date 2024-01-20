@@ -9,6 +9,11 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Prepare java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '21'
     - name: Install clojure tools
       uses: DeLaGuardo/setup-clojure@12.3
       with:
