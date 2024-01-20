@@ -7,7 +7,7 @@
   []
   (print "Compiling tests...")
   (flush)
-  (let [{:keys [out err]} (shell/sh "npx" "shadow-cljs" "-A:fe:fe/test" "compile" "ci")]
+  (let [{:keys [out err]} (shell/sh "npx" "shadow-cljs" "-A:test" "compile" "ci")]
     (println " ✅")
     (println out)
     (println err))
