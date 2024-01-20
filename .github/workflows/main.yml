@@ -38,5 +38,5 @@ jobs:
         node-version: 21.3.0
     - name: npm install
       run: npm install
-    - name: Run FE Tests
-      run: bb test:fe
+    - name: Run Tests
+      run: bb test
