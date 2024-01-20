@@ -1,6 +1,6 @@
 {:paths ["scripts"]
  :tasks
- {dev (clojure "-Mfe:fe/dev:fe/test" "-J-XX:-OmitStackTraceInFastThrow")
+ {dev (clojure "-Mdev:test" "-J-XX:-OmitStackTraceInFastThrow")
   test {:requires ([test-fe :as test-fe])
         :task (test-fe/run-test-suite!)}
   release (shell "shadow-cljs" "-Afe" "release" "app")}}
