@@ -6,6 +6,8 @@
 
 (def wait-for tl/waitFor)
 
+(def debug #(.debug tl/screen))
+
 (defn get-by-role [container role options]
   (try
     (tl/getByRole container role (->js options))

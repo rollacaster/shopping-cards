@@ -1,6 +1,7 @@
 (ns tech.thomas-sojka.shopping-cards.core-test
   (:require [cljs.test :as t :include-macros true]
             [promesa.core :as p]
+            [re-frame.core :refer [dispatch-sync]]
             [tech.thomas-sojka.shopping-cards.core :as sut]
             [tech.thomas-sojka.shopping-cards.mocks :as mocks]
             [tech.thomas-sojka.shopping-cards.testing-library :refer [get-all-by-role
@@ -13,7 +14,9 @@
   (set! (.-id screen) "app")
   (set! (.-className screen) "h-100")
   (js/document.body.appendChild screen)
-  (sut/init! {:container screen}))
+  (mocks/overwrite-firestore)
+  (sut/init! {:container screen})
+  (dispatch-sync [:app/load (js/Date.)]))
 
 (defn teardown-app []
   (.remove screen)
@@ -26,7 +29,6 @@
   (setup-app))
 
 (t/deftest create-shopping-card []
-  (mocks/overwrite-firestore)
   (t/async done
            (p/do
              (wait-for #(get-all-by-role screen "link" {:name "Mittagessen"}) #js {:timeout 10000})
