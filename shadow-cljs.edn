@@ -1,6 +1,6 @@
 ;; shadow-cljs configuration
 {:deps true
- :dev-http {9504 {:root "resources/public/"}}
+ :dev-http {3000 {:root "public/"}}
  :nrepl {:port 9003}
  :builds
  {:app {:target :browser
