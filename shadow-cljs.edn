@@ -1,13 +1,17 @@
 ;; shadow-cljs configuration
 {:deps true
- :dev-http {9504 {:root "resources/public/"}}
- :nrepl {:port 9000}
+ :dev-http {3000 {:root "public/"}}
+ :nrepl {:port 9003}
  :builds
  {:app {:target :browser
-        :output-dir "resources/public/js"
+        :output-dir "public/js"
         :asset-path "/js"
-        :compiler-options {:output-feature-set :es6}
+        :compiler-options {:output-feature-set :es-next}
         :modules {:main {:init-fn tech.thomas-sojka.shopping-cards.core/init!}}}
+  :scrape {:target :node-script
+           :output-to "scrape/index.js"
+           :main tech.thomas-sojka.shopping-cards.scrape/main
+           :compiler-options {:output-feature-set :es-next}}
   :test {:target :browser-test
          :test-dir "target/test/browser"
          :compiler-options {:output-feature-set :es-next}}

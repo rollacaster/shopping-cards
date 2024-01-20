@@ -1,19 +1,6 @@
 {:paths ["scripts"]
  :tasks
- {dev (run '-dev {:parallel true})
-  -dev {:depends [dev:fe dev:be]}
-  dev:fe (clojure "-Mfe:fe/dev:fe/test" "-J-XX:-OmitStackTraceInFastThrow")
-  dev:be (clojure "-Mcider:be:be/dev:be/test" "-J-XX:-OmitStackTraceInFastThrow")
-  test (run '-test {:parallel true})
-  -test {:depends [test:fe test:be]}
-  test:be (clojure "-Mbe:be/test-run")
-  test:fe {:requires ([test-fe :as test-fe])
-           :task (test-fe/run-test-suite!)}
-  release {:depends [release:fe release:be]}
-  release:fe (shell "shadow-cljs" "-Afe" "release" "app")
-  release:be (clojure "-Mbe/release" "--aliases" "be:release")
-  deploy {:depends [release deploy:raspi]}
-  deploy:raspi (do
-                 (shell "scp" "target/shopping-cards.jar" "pi@192.168.0.202:/home/pi")
-                 (shell "ssh" "pi@192.168.0.202" "sudo" "systemctl" "restart" "shoppinglist.service"))
-  deploy:restart (shell "ssh" "pi@192.168.0.202" "sudo" "systemctl" "restart" "shoppinglist.service")}}
+ {dev (clojure "-Mdev:test" "-J-XX:-OmitStackTraceInFastThrow")
+  test {:requires ([test-fe :as test-fe])
+        :task (test-fe/run-test-suite!)}
+  release (shell "shadow-cljs" "-Afe" "release" "app")}}
