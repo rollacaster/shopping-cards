@@ -5,6 +5,7 @@
             [reitit.frontend.easy :as rfe]
             [tech.thomas-sojka.shopping-cards.views.add-item :as add-item]
             [tech.thomas-sojka.shopping-cards.views.clean-amount-desc :as clean-amount-desc]
+            [tech.thomas-sojka.shopping-cards.views.sort-ingredients :as sort-ingredients]
             [tech.thomas-sojka.shopping-cards.views.deselect-ingredients :as deselect-ingredients]
             [tech.thomas-sojka.shopping-cards.views.ingredient-add :as ingredient-add]
             [tech.thomas-sojka.shopping-cards.views.login :as login]
@@ -59,7 +60,10 @@
                          :view add-item/main}]]
     goog.DEBUG (conj ["/clean-amount-desc" {:name :route/temp
                                             :title "Clean amount desc"
-                                            :view clean-amount-desc/main}])))
+                                            :view clean-amount-desc/main}])
+    goog.DEBUG (conj ["/sort-ingredients" {:name :route/sort-ingredients
+                                           :title "Sort ingredients"
+                                           :view sort-ingredients/main}])))
 (defn init []
   (rfe/start!
    (rf/router routes {:data {:coercion rss/coercion}})
