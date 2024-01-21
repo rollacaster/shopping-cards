@@ -193,7 +193,7 @@
                       "c181aef6-0e09-43c1-85d1-2aaabdb1ce6a"
                       "3dc8331b-e1bf-4b59-9883-96bb855f9dfd"])))
 
-(defn sort [shopping-items]
+(defn sort-shopping-items [shopping-items]
   (sort-by
    (fn [{:keys [shopping-item/ingredient-id]}]
      (sort-order ingredient-id))

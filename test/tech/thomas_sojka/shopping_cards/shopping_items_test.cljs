@@ -22,7 +22,7 @@
 (deftest shopping-items
   (testing "sorts the shopping items"
     (is
-     (= (sut/sort items)
+     (= (sut/sort-shopping-items items)
         [{:shopping-item/created-at #inst "2024-01-20T12:35:00.341-00:00",
           :shopping-item/content "5 Aufback-Brezeln",
           :shopping-item/status :open,
