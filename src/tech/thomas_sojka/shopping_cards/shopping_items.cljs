@@ -113,6 +113,7 @@
    :ingredient-category/konserven
    :ingredient-category/beilage
    :ingredient-category/backen
+   :ingredient-category/kosmetik
    :ingredient-category/fleisch
    :ingredient-category/wursttheke
    :ingredient-category/milch&co

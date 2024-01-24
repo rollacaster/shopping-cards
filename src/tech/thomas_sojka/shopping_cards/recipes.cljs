@@ -64,6 +64,10 @@
    (->> (:recipes db)
         (remove (fn [{:keys [deleted]}] deleted)))))
 
+(reg-sub :all-recipes
+ (fn [db _]
+   (:recipes db)))
+
 (defn find-recipe [recipe-id recipes]
   (some
    (fn [{:recipe/keys [id] :as recipe}] (when (= id recipe-id) recipe))
