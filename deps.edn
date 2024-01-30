@@ -10,7 +10,10 @@
         re-frame-utils/re-frame-utils {:mvn/version "0.1.0"}
         re-frame/re-frame {:mvn/version "1.2.0"}
         reagent/reagent {:mvn/version "1.1.0"}
-        thheller/shadow-cljs {:mvn/version "2.20.20"}}
+        thheller/shadow-cljs {:mvn/version "2.20.20"}
+        nrepl/nrepl {:mvn/version "1.0.0"}
+        cider/cider-nrepl {:mvn/version "0.42.1"}
+        refactor-nrepl/refactor-nrepl {:mvn/version "3.9.0"}}
  :paths ["src" "resources"]
  :aliases {:dev {:extra-paths ["dev"]
                  :extra-deps {babashka/fs {:mvn/version "0.1.6"}}
