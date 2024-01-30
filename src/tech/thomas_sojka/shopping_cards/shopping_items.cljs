@@ -187,15 +187,12 @@
        ((set (map :shopping-item/ingredient-id shopping-entries)) id))
      ingredients)))
 
-(def sort-order
-  (into {}
-        (map-indexed (fn [idx id] [id idx])
-                     ["d33ad997-4d02-4437-8d35-db8e22fdb4b0"
-                      "c181aef6-0e09-43c1-85d1-2aaabdb1ce6a"
-                      "3dc8331b-e1bf-4b59-9883-96bb855f9dfd"])))
+(defn sort-order-indexes [sort-order]
+  (into {} (map-indexed (fn [idx id] [id idx]) sort-order)))
 
-(defn sort-shopping-items [shopping-items]
-  (sort-by
-   (fn [{:keys [shopping-item/ingredient-id]}]
-     (sort-order ingredient-id))
-   shopping-items))
+(defn sort-shopping-items [shopping-items sort-order]
+  (let [sort-order-map (sort-order-indexes sort-order)]
+    (sort-by
+     (fn [{:keys [shopping-item/ingredient-id]}]
+       (sort-order-map ingredient-id))
+     shopping-items)))

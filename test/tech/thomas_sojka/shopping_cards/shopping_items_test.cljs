@@ -19,10 +19,14 @@
     :shopping-item/id "d727f974-8bad-4b00-8e7a-c568181105da",
     :shopping-item/ingredient-id "d33ad997-4d02-4437-8d35-db8e22fdb4b0"}])
 
+(def sort-order ["d33ad997-4d02-4437-8d35-db8e22fdb4b0"
+                 "c181aef6-0e09-43c1-85d1-2aaabdb1ce6a"
+                 "3dc8331b-e1bf-4b59-9883-96bb855f9dfd"])
+
 (deftest shopping-items
   (testing "sorts the shopping items"
     (is
-     (= (sut/sort-shopping-items items)
+     (= (sut/sort-shopping-items items sort-order)
         [{:shopping-item/created-at #inst "2024-01-20T12:35:00.341-00:00",
           :shopping-item/content "5 Aufback-Brezeln",
           :shopping-item/status :open,
