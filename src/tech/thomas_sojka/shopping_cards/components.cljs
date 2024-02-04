@@ -52,7 +52,8 @@
     :recipe-type/normal [:h2.mv3.tc "Normale Gerichte"]
     :recipe-type/fast [:h2.mv3.tc "Schnell Gerichte"]
     :recipe-type/misc [:h2.mv3.tc "Keine Gerichte"]
-    :recipe-type/rare [:h2.mv3.tc "Selten"]))
+    :recipe-type/rare [:h2.mv3.tc "Selten"]
+    :recipe-type/party-food [:h2.mv3.tc "Party Food"]))
 
 (defn recipe [{:keys [even name image selected? on-click]}]
   [:button.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-gray-600-ns.white-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns

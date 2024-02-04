@@ -41,7 +41,8 @@
 
 (s/def :recipe/id :app/id)
 (s/def :recipe/name string?)
-(s/def :recipe/type #{:recipe-type/normal :recipe-type/misc :recipe-type/fast :recipe-type/rare})
+(s/def :recipe/type #{:recipe-type/normal :recipe-type/misc :recipe-type/fast :recipe-type/rare
+                      :recipe-type/party-food})
 (s/def :recipe/image string?)
 (s/def :recipe/link (s/nilable string?))
 (s/def :recipe/inactive boolean?)

@@ -9,7 +9,7 @@
  "Pfeffer" #{"schwarzer Pfeffer" "Pfeffer" "Salz und Pfeffer" "Salz und Pfeffer, schwarzer"
              "Pfeffer, bunt, aus der Mühle" "Salz, Pfeffer" "Pfeffer aus der Mühle"
              "¼ gemahlener Schwarzer Pfeffer" "¼ TL Pfeffer" "Pfeffer, weiß"
-             "Meersalz und Pfeffer, schwarzer, aus der Mühle"}
+             "Meersalz und Pfeffer, schwarzer, aus der Mühle" "Pfeffer, schwarz, frisch gemahlen"}
  "Öl" #{"Öl, neutral" "Öl, neutrales oder Olivenöl" "Öl, zum Anbraten" "Öl, oder Butter, zum Anbraten"
         "Olivenöl" "Öl, Pflanzenöl, Rapsöl/Sonnenblumenöl" "Butterschmalz" "Knoblauchöl" "Olivenöl + 1TL"
         "Öl zum Braten" "Öl, Erdnussöl" "Sonnenblumenöl" "Öl oder Fett zum Frittieren" "Pflanzenöl"
@@ -41,7 +41,7 @@
  "Knoblauch" #{"Knoblauch" "Knoblauchzehen" "Knoblauchzehe(n), gepresster"
                "Knoblauchzehe(n)" "Knoblauch, sehr fein gehackt" "Knoblauchzehe(n), fein gewürfelt"
                "Knoblauch, getrocknet, aus der Gewürzmühle" "Knoblauchzehe" "Knoblauchzehe(n), klein gehackt"
-               "Zehe(n)Knoblauch" "Knoblauchzehe(n), gehackt"}
+               "Zehe(n)Knoblauch" "Knoblauchzehe(n), gehackt" "Knoblauchzehe(n) oder mehr, nach Belieben"}
  "Limettensaft" #{"Limettensaft" "Saft von halben Limette" "Limette(n), Schale und Saft" "Limette(n)"}
  "Spinat" #{"Blattspinat, TK oder frisch" "frischer Babyspinat"
             "Spinat, TK oder frisch dann blanchiert" "Blattspinat, frisch" "Blattspinat, tiefgefroren"
@@ -71,7 +71,7 @@
  "Chili" #{"Chili oder Pfeffer, einige Umdrehungen aus der Mühle" "Chilischote(n), frisch" "Chilipulver/Chiliflocken"
            "Chili nach Geschmack" "rote Chili" "Chilipulver" "Chilischote(n)"
            "Chiliflocken, getrocknete" "Chiliflocken" "Chillipulver" "Chiliflocke"
-           "Chilischote" "Chilischote(n), in Ringe geschnitten (optional)"}
+           "Chilischote" "Chilischote(n), in Ringe geschnitten (optional)" "Chilischote(n), rot"}
  "Brokkoli" #{"Brokkoli, ca. 350 g" "Brokkoli, TK" "Romanesco" "Broccoli"}
  "Zitrone" #{"Saft von 1 Zitrone" "½ Zitrone(n), Saft davon" "Saft einer halben Zitrone"
              "Bio-Zitronenschale, fein geriebene" "Bio-Zitrone" "SpritzerZitronensaft"}
