@@ -6,7 +6,7 @@
             [tech.thomas-sojka.shopping-cards.auth :as auth]
             [tech.thomas-sojka.shopping-cards.bank-holidays]
             [tech.thomas-sojka.shopping-cards.dev-utils :as dev-utils]
-            [tech.thomas-sojka.shopping-cards.firestore]
+            [tech.thomas-sojka.shopping-cards.firestore :as firestore]
             [tech.thomas-sojka.shopping-cards.ingredients]
             [tech.thomas-sojka.shopping-cards.meal-plans]
             [tech.thomas-sojka.shopping-cards.recipes]
@@ -20,6 +20,7 @@
   ([{:keys [container]}]
    (let [now (js/Date.)]
      (when-not @dev-utils/restarting
+       (firestore/init)
        (dispatch-sync [:app/init now])
        (auth/user-sync)))
    (dom/render [main/app (router/init)] container)))

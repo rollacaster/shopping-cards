@@ -1,6 +1,9 @@
 {:paths ["scripts"]
  :tasks
- {dev (clojure "-Mdev:test" "-J-XX:-OmitStackTraceInFastThrow")
+ {dev (run '-dev {:parallel true})
+  -dev {:depends [dev:emulator dev:fe]}
+  dev:fe (clojure "-Mdev:test" "-J-XX:-OmitStackTraceInFastThrow")
+  dev:emulator (shell "npx firebase emulators:start --import=./dir")
   test {:requires ([test-fe :as test-fe])
         :task (test-fe/run-test-suite!)}
   release (shell "npx" "shadow-cljs" "-Afe" "release" "app")}}
