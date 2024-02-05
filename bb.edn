@@ -3,4 +3,4 @@
  {dev (clojure "-Mdev:test" "-J-XX:-OmitStackTraceInFastThrow")
   test {:requires ([test-fe :as test-fe])
         :task (test-fe/run-test-suite!)}
-  release (shell "shadow-cljs" "-Afe" "release" "app")}}
+  release (shell "npx" "shadow-cljs" "-Afe" "release" "app")}}
