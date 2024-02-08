@@ -122,27 +122,20 @@
                       " " name
                       " (" (str/join ", " amount-descs) ")")))))
 
-(defn sort-order-indexes [sort-order]
-  (into {} (map-indexed (fn [idx id] [id idx]) sort-order)))
-
-(defn sort-shopping-items [sort-order ingredients]
-  (let [sort-order-map (sort-order-indexes sort-order)]
+(defn- sort-shopping-items [sort-order ingredients]
+  (let [sort-order-map (into {} (map-indexed (fn [idx id] [id idx]) sort-order))]
     (sort-by (fn [[id _]] (sort-order-map id)) ingredients)))
 
-(defn prepare-ingredients [sort-order cooked-with+ingredient]
-  (->> cooked-with+ingredient
-       (remove (fn [{:keys [ingredient/category]}]
-                 (#{:ingredient-category/backen :ingredient-category/gewürze}
-                  category)))
-       (group-by :ingredient/id)
-       (sort-shopping-items sort-order)
-       (map (fn [[ingredient-id ingredients]]
-              [ingredient-id (ingredient-text ingredients)]))))
+(defn- no-shoppping-categories []
+  #{:ingredient-category/backen :ingredient-category/gewürze})
 
 (defn create-possible-shopping-items [sort-order meals-plans]
-  (prepare-ingredients
-   sort-order
-   (mapcat (comp :recipe/cooked-with :recipe) meals-plans)))
+  (->> meals-plans
+       (mapcat (comp :recipe/cooked-with :recipe))
+       (remove (fn [{:keys [ingredient/category]}] ((no-shoppping-categories) category)))
+       (group-by :ingredient/id)
+       (sort-shopping-items sort-order)
+       (map (fn [[ingredient-id ingredients]] [ingredient-id (ingredient-text ingredients)]))))
 
 (reg-sub :shopping-item/possible-items
   :<- [:meals-without-shopping-list]
