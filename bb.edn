@@ -3,6 +3,7 @@
  {dev (run '-dev {:parallel true})
   -dev {:depends [dev:emulator dev:fe]}
   dev:fe (clojure "-Mdev:test" "-J-XX:-OmitStackTraceInFastThrow")
+  dev:test (clojure "-M:serve :port 3003 :dir \"./target/test/browser\"")
   dev:emulator (shell "npx firebase emulators:start --import=./dir")
   test {:requires ([test-fe :as test-fe])
         :task (test-fe/run-test-suite!)}

@@ -20,4 +20,7 @@
                  :main-opts ["-m" "shadow"]}
            :test {:extra-paths ["test"]
                   :extra-deps {com.cognitect/transit-cljs {:mvn/version "0.8.269"}
-                               funcool/promesa {:mvn/version "8.0.450"}}}}}
+                               funcool/promesa {:mvn/version "8.0.450"}}}
+           :serve {:deps {org.babashka/http-server {:mvn/version "0.1.12"}}
+                   :main-opts ["-m" "babashka.http-server"]
+                   :exec-fn babashka.http-server/exec}}}
