@@ -1,7 +1,7 @@
 {:paths ["scripts"]
  :tasks
  {dev (run '-dev {:parallel true})
-  -dev {:depends [dev:emulator dev:fe]}
+  -dev {:depends [dev:emulator dev:fe dev:test]}
   dev:fe (clojure "-Mdev:test" "-J-XX:-OmitStackTraceInFastThrow")
   dev:test (clojure "-M:serve :port 3003 :dir \"./target/test/browser\"")
   dev:emulator (shell "npx firebase emulators:start --import=./dir")

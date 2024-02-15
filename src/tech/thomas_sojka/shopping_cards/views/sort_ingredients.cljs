@@ -89,7 +89,7 @@
                                    (fn [category1 category2]
                                      (< (.indexOf kitchen-category-order category1)
                                         (.indexOf kitchen-category-order category2))))
-                          (sory-by-order kitchen-order))))]
+                          (sory-by-order penny-order))))]
     (fn []
       [:> react-beautiful-dnd/DragDropContext {:onDragEnd (fn [result]
                                                             (when (.-destination result)
