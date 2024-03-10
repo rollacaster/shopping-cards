@@ -15,3 +15,6 @@
 /public/js/
 /scrape/
 /dir/
+/firebase-debug.log
+/firestore-debug.log
+/ui-debug.log
