@@ -51,7 +51,11 @@
                (fn [e]
                  (let [new-ingredient
                        (some
-                        (fn [{:keys [ingredient/id] :as ingredient}] (when (= id e.target.value) ingredient))
+                        (fn [{:keys [ingredient/id] :as ingredient}]
+                          (when (= id e.target.value)
+                            ;; TODO This is the result of some weird design that should be changed
+                            (assoc ingredient
+                                   :cooked-with/ingredient id)))
                         (non-recipe-ingredients ingredients @!recipe))]
                    (if id
                      (swap! !recipe update-ingredient id new-ingredient)
