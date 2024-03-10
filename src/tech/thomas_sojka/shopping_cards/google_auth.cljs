@@ -79,13 +79,17 @@
     :else
     (do
       (receive-token)
-      (child-process/exec (str "open -a firefox -g '" (create-authorization-request {:client_id client-id :redirect_uri redirect-uri :scope scope}) "'"))
-      (-> {:client-id client-id :client-secret client-secret :code code}
+      (child-process/exec
+       (str "open -a firefox -g '"
+            (create-authorization-request {:client_id client-id :redirect_uri redirect-uri :scope scope}) "'"))
+      (-> {:client-id client-id :client-secret client-secret :code @code}
           get-access-token
           (js/fetch #js {:method "POST"})
+          (.then (fn [res] (.json res)))
           (.then (fn [drive-api-credentials]
                    (fs/writeFileSync oauth-creds-path (prn-str drive-api-credentials))
-                   (reset-access-token! drive-api-credentials)))))))
+                   (reset-access-token! (js->clj drive-api-credentials :keywordize-keys true))))
+          (.catch js/console.log)))))
 
 (comment
   (access-token {:client-id (:drive-client-id creds-file)
