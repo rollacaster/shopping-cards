@@ -23,11 +23,13 @@
 (s/def :shopping-item/status #{:open :done :archive})
 (s/def :shopping-item/content (s/and string? #(> (count %) 0)))
 (s/def :shopping-item/created-at inst?)
+(s/def :shopping-item/amount int?)
 (s/def :shopping-item/shopping-entry (s/keys :req [:shopping-item/ingredient-id
-                                                    :shopping-item/id
-                                                    :shopping-item/status
-                                                    :shopping-item/content
-                                                    :shopping-item/created-at]))
+                                                   :shopping-item/id
+                                                   :shopping-item/status
+                                                   :shopping-item/content
+                                                   :shopping-item/created-at]
+                                             :opt [:shopping-item/amount]))
 
 (s/def :shopping-item/shopping-entries (s/coll-of :shopping-item/shopping-entry))
 

@@ -87,7 +87,8 @@
 (defn- ->shopping-entry [firestore-shopping-entry]
   (-> firestore-shopping-entry
       (update :shopping-item/status keyword)
-      (update :shopping-item/created-at (fn [date] (.toDate date)))))
+      (update :shopping-item/created-at (fn [date] (.toDate date)))
+      (update :shopping-item/amount (fn [amount] (or amount 1)))))
 
 (reg-event-fx :shopping-item/load-success
   (fn [{:keys [db]} [_ data]]
@@ -156,6 +157,25 @@
   :<- [:shopping-entries]
   (fn [shopping-entries]
     (seq shopping-entries)))
+(reg-event-fx :shopping-items/increase-amount
+              (fn [{{:keys [shopping-entries]} :db} [_ id]]
+                {:firestore/update-doc {:path firestore-path
+                                         :key id
+                                         :data (update
+                                                (some #(when (= id (:shopping-item/id %)) %) shopping-entries)
+                                                :shopping-item/amount
+                                                #(min 9 (inc %)))
+                                         :spec :shopping-item/shopping-entry}}))
+(reg-event-fx :shopping-items/decrease-amount
+              (fn [{{:keys [shopping-entries]} :db} [_ id]]
+                {:firestore/update-doc {:path firestore-path
+                                         :key id
+                                         :data (update
+                                                (some #(when (= id (:shopping-item/id %)) %) shopping-entries)
+                                                :shopping-item/amount
+                                                #(max 1 (dec %)))
+                                         :spec :shopping-item/shopping-entry}}))
+
 
 (reg-event-fx :shopping-items/archive
   (fn [{{:keys [shopping-entries]} :db}]
