@@ -3,17 +3,23 @@
 
 (def firestore-path "recipes")
 
+(defn- parse-amount [c]
+
+  (cond-> c
+    (:cooked-with/amount c) (update :cooked-with/amount (fn [amount] (cond-> amount (string? amount) parse-double)))))
+
 (defn ->firestore-recipe [recipe]
   (-> recipe
       (update :recipe/cooked-with
               (fn [cooked-with]
                 (mapv
                  (fn [c]
-                   (apply dissoc c
-                          (filter
-                           (fn [key]
-                             (and (= (namespace key) "ingredient") (not= key :ingredient/id)))
-                           (keys c))))
+                   (parse-amount
+                    (apply dissoc c
+                           (filter
+                            (fn [key]
+                              (and (= (namespace key) "ingredient") (not= key :ingredient/id)))
+                            (keys c)))))
                  cooked-with)))))
 
 (reg-event-fx :recipes/update

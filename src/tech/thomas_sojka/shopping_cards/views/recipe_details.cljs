@@ -36,16 +36,15 @@
     [c/input {:value amount :placeholder "200" :class "tr"
               :disabled (nil? id)
               :on-change
-              (fn [^js e] (swap! !recipe update-ingredient id {:cooked-with/amount e.target.value}))}]]
+              (fn [^js e] (swap! !recipe update-ingredient id {:cooked-with/amount e.target.value
+                                                              :cooked-with/amount-desc e.target.value}))}]]
    [:div.w-30
     [c/select {:value (or unit "") :placeholder "g"
                :disabled (nil? id)
                :on-change
                (fn [^js e] (swap! !recipe update-ingredient id {:cooked-with/unit e.target.value}))}
      (->> @(subscribe [:ingredients/units])
-          (cons "")
-          (map
-           (fn [t] ^{:key t} [:option.w-100 {:value t} t])))]]
+          (map (fn [t] ^{:key t} [:option.w-100 {:value t} t])))]]
    [:div.w-40
     [c/select {:value (or id "") :on-change
                (fn [e]

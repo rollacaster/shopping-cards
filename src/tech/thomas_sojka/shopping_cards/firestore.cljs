@@ -32,10 +32,6 @@
   (fn [{:keys [path data id on-success on-failure spec]}]
     (add-docs data path id on-success on-failure spec)))
 
-(comment
-
- (prn "HI"))
-
 (reg-fx :firestore/add-doc
   (fn [{:keys [path data on-success on-failure spec key]}]
     {:pre [(s/valid? spec data)]}
