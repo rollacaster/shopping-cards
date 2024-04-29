@@ -10,6 +10,7 @@
 
 (defn ->firestore-recipe [recipe]
   (-> recipe
+      (update :recipe/type #(keyword :recipe-type %))
       (update :recipe/cooked-with
               (fn [cooked-with]
                 (mapv
