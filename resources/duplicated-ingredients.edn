@@ -115,7 +115,8 @@
  "Linsen" #{"Linsen, trocken" "rote Linsen" "rote Linsen, getrocknet" "braune Linsen" "Linsen, rote, braune oder schwarze"}
  "Kokosmilch" #{"Kokosmilch, fettreduziert" "Kokosmilch (400 ml)"}
  "Rosmarin" #{"Rosmarin, frisch""Rosmarin, frischer, gehackter"}
- "Nüsse" #{"Nüsse, Cashewnüsse, Natur" "Erdnüsse geröstet & ungesalzen" "ein paar Erdnüsse"}
+ "Nüsse" #{"Nüsse, Cashewnüsse, Natur" "Erdnüsse geröstet & ungesalzen" "ein paar Erdnüsse"
+           "Nüsse (Erdnuss)"}
  "Schnittlauch" #{"Schnittlauch, getrocknet oder frisch"}
  "Saure Sahne" #{"saure Sahne"}
  "Sahne" #{"Schlagsahne" "Hafersahne" "REWE Bio Sojacreme Cuisine"}
@@ -131,7 +132,7 @@
  "Tofu" #{"Tofu, natur"}
  "Garam Masala" #{}
  "Thymian" #{"Thymian, frisch""Thymian, frischer, gehackter"}
- "Salat" #{"Feldsalat" "Eisbergsalat"}
+ "Salat" #{"Feldsalat" "Eisbergsalat" "Salat Mischung"}
  "Harissa" #{"Harissa (als Paste oder Pulver)"}
  "Lorbeerblatt" #{"Lorbeerblatt, frisch"}
  "Kürbis" #{"Hokkaidokürbis(se)"}
@@ -142,4 +143,6 @@
  "Shrimps" #{"Shrimps, kleine (optional)"}
  "Wraps" #{"Vollkorn-Tortillafladen"}
  "Salbei" #{"Salbei, frischer, gehackter"}
- "Lavendelblüten" #{"Lavendelblüten, getrocknete und zerriebene"}}
+ "Lavendelblüten" #{"Lavendelblüten, getrocknete und zerriebene"}
+ "Rotkohl" #{"geriebener Rotkohl"}
+ "Dressing" #{"Salatsauce"}}

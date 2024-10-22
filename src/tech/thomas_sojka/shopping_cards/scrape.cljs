@@ -2,17 +2,17 @@
   (:require ["firebase/app" :as firebase]
             ["firebase/auth" :as auth]
             ["firebase/firestore" :as firestore]
+            ["fs" :as fs]
             [cljs-bean.core :refer [->clj ->js]]
             [clojure.edn :as edn]
             [clojure.spec.alpha :as s]
             [clojure.string :as str]
             [clojure.walk :as w]
-            [fs :as fs]
             [hickory.core :as html]
             [hickory.select :as select]
             [tech.thomas-sojka.shopping-cards.cooked-with :as cooked-with]
-            [tech.thomas-sojka.shopping-cards.specs]
-            [tech.thomas-sojka.shopping-cards.google-auth :refer [access-token creds-file]]))
+            [tech.thomas-sojka.shopping-cards.google-auth :refer [access-token creds-file]]
+            [tech.thomas-sojka.shopping-cards.specs]))
 
 (def drive-api-url "https://www.googleapis.com/drive/v3")
 (def firebaseConfig
@@ -283,7 +283,8 @@
                                                (.json doc-res)])))
         (.then (fn [[recipe doc]]
                  (-> (js->clj doc :keywordize-keys true)
-                     (assoc :content recipe)))))))
+                     (assoc :content recipe))))
+        (.catch prn))))
 
 (defmethod load-recipe :default [link]
   (as-hickory link))
