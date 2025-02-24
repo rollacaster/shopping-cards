@@ -54,7 +54,8 @@
  "Mehl" #{"Weizenmehl Type 405" "Mehl für die Arbeitsfläche" "Weizenmehl, bei Bedarf auch mehr"
           "Weizenmehl Typ 405"}
  "Schmand" #{"Schmand, ersatzweise Crème fraîche oder Sauerrahm" "Schmand oder Creme fraiche" "Schmand, 24 % Fett" "Schmand oder Crème fraîche"}
- "Crème fraîche" #{"Creme fraiche" "Crème fraîche" "vegane Crème fraîche"}
+ "Crème fraîche" #{"Creme fraiche" "Crème fraîche" "vegane Crème fraîche"
+                   "Cremefraiche"}
  "Peperoni" #{"Peperoni, mittelscharf (nach Geschmack)"}
  "Pizzagewürz" #{"Pizzagewürz oder italienische Kräutermischung"}
  "Champignons" #{"Champignons, frisch, nicht zu groß" "Champignons, frische"

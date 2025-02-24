@@ -1,29 +1,48 @@
 (ns tech.thomas-sojka.shopping-cards.bank-holidays
   (:require ["date-fns" :refer (getDate getMonth)]
-            [ajax.core :as ajax]
-            [cljs.reader :refer [read-string]]
-            [re-frame.core :refer [reg-event-db reg-event-fx reg-sub]]))
+            [re-frame.core :refer [reg-event-db reg-sub]]))
 
-(reg-event-fx :bank-holidays/load
- (fn [_ [_ year]]
-   {:http-xhrio {:method :get
-                 :uri (str "https://raw.githubusercontent.com/lambdaschmiede/freitag/master/resources/com/lambdaschmiede/freitag/de/"
-                           year
-                           ".edn")
-                 :response-format (ajax/text-response-format)
-                 :on-success [:bank-holidays/load-success]
-                 :on-failure [:bank-holidays/load-failure]}}))
-
-(reg-event-db :bank-holidays/load-success
- (fn [db [_ data]]
-   (assoc db :bank-holidays (read-string data))))
-
-(reg-event-fx :bank-holidays/load-failure
- (fn [{:keys [db]} _]
-   {:db (assoc db :app/error "Fehler: Feiertage nicht geladen")
-    :app/timeout {:id :app/error-removal
-                  :event [:app/remove-error]
-                  :time 2000}}))
+(reg-event-db :bank-holidays/init
+ (fn [db]
+   (assoc db :bank-holidays #{{:name "Neujahr"
+                               :month 1
+                               :day 1}
+                              {:name "Heilige drei Könige"
+                               :month 1
+                               :day 6}
+                              {:name "Karfreitag"
+                               :month 4
+                               :day 18}
+                              {:name "Ostermontag"
+                               :month 4
+                               :day 21}
+                              {:name "Tag der Arbeit"
+                               :month 5
+                               :day 1}
+                              {:name "Christi Himmelfahrt"
+                               :month 5
+                               :day 29}
+                              {:name "Pfingstmontag"
+                               :month 6
+                               :day 9}
+                              {:name "Fronleichnam"
+                               :month 6
+                               :day 19}
+                              {:name "Mariä Himmelfahrt"
+                               :month 8
+                               :day 15}
+                              {:name "Tag der deutschen Einheit"
+                               :month 10
+                               :day 3}
+                              {:name "Allerheiligen"
+                               :month 11
+                               :day 1}
+                              {:name "1. Weihnachtsfeiertag"
+                               :month 12
+                               :day 25}
+                              {:name "2. Weihnachtsfeiertag"
+                               :month 12
+                               :day 26}})))
 
 (reg-sub :bank-holidays/bavaria
  (fn [db]
