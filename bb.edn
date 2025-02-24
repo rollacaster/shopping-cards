@@ -7,4 +7,4 @@
   dev:emulator (shell "npx firebase emulators:start --import=./dir")
   test {:requires ([test-fe :as test-fe])
         :task (test-fe/run-test-suite!)}
-  release (shell "npx" "shadow-cljs" "-Afe" "release" "app")}}
+  release (shell "npx" "shadow-cljs" "release" "app")}}
