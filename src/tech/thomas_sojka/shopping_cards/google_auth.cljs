@@ -30,13 +30,17 @@
   (.get (.-searchParams (new js/URL (str "http://localhost" (.-url req)))) "code"))
 
 (defn receive-token []
-  (reset! server (.createServer http
-                                (fn [req res]
-                                  (reset! code (get-code req))
-                                  (.writeHead ^js res 200)
-                                  (.end res)
-                                  (.close @server))))
-  (.listen ^js @server 8080))
+  (let [promise (js/Promise. (fn [resolve]
+                               (reset! server (.createServer http
+                                                             (fn [req res]
+                                                               (prn :reset (get-code req))
+                                                               (reset! code (get-code req))
+                                                               (.writeHead ^js res 200)
+                                                               (.end res)
+                                                               (.close @server)
+                                                               (resolve))))))]
+    (.listen ^js @server 8080)
+    promise))
 
 (defn get-access-token [{:keys [client-id client-secret code]}]
   (str "https://oauth2.googleapis.com/token"
@@ -78,18 +82,19 @@
 
     :else
     (do
-      (receive-token)
       (child-process/exec
        (str "open -a firefox -g '"
             (create-authorization-request {:client_id client-id :redirect_uri redirect-uri :scope scope}) "'"))
-      (-> {:client-id client-id :client-secret client-secret :code @code}
-          get-access-token
-          (js/fetch #js {:method "POST"})
-          (.then (fn [res] (.json res)))
-          (.then (fn [drive-api-credentials]
-                   (fs/writeFileSync oauth-creds-path (prn-str drive-api-credentials))
-                   (reset-access-token! (js->clj drive-api-credentials :keywordize-keys true))))
-          (.catch js/console.log)))))
+      (-> (receive-token)
+          (.then (fn []
+                   (-> {:client-id client-id :client-secret client-secret :code @code}
+                       get-access-token
+                       (js/fetch #js {:method "POST"})
+                       (.then (fn [res] (.json res)))
+                       (.then (fn [drive-api-credentials]
+                                (fs/writeFileSync oauth-creds-path (prn-str drive-api-credentials))
+                                (reset-access-token! (js->clj drive-api-credentials :keywordize-keys true))))
+                       (.catch js/console.log))))))))
 
 (comment
   (access-token {:client-id (:drive-client-id creds-file)

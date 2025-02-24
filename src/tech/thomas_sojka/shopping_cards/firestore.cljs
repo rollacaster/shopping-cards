@@ -18,7 +18,7 @@
 (defn init []
   (reset! db (.getFirestore firestore firebase/app))
   (when goog.DEBUG
-    (firestore/connectFirestoreEmulator @db "127.0.0.1" 8080)))
+    (firestore/connectFirestoreEmulator @db "127.0.0.1" 8081)))
 (defn get-doc [path id]
   (-> (firestore/getDoc (firestore/doc @db path id))
       (.then (fn [snap] (->clj (.data snap))))))
