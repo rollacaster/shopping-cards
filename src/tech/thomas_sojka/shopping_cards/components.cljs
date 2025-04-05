@@ -55,7 +55,16 @@
     :recipe-type/rare [:h2.mv3.tc "Selten"]
     :recipe-type/party-food [:h2.mv3.tc "Party Food"]))
 
-(defn recipe [{:keys [even name image selected? on-click]}]
+(defn recipe-rating [rating]
+  (when rating
+    [:div.absolute.right-1.top-1
+     (case rating
+       "red" [:div.w2.h2.bg-red.ba.b--black {:style {:border-radius "100%"}}]
+       "yellow" [:div.w2.h2.bg-yellow.ba.b--black {:style {:border-radius "100%"}}]
+       "green" [:div.w2.h2.bg-green.ba.b--black {:style {:border-radius "100%"}}]
+       nil)]))
+
+(defn recipe [{:keys [even name image selected? on-click rating]}]
   [:button.relative.w-100.w-auto-ns.flex.db-ns.tl.outline-transparent.bg-gray-600-ns.white-ns.pa0.bt-0.br-0.bl-0.bb-0-ns.bb.b--gray-900.bw1.ml3-ns.mb3-ns.br2-ns.h3.h-auto-ns
    {:on-click on-click :class (if even "bg-gray-600 white" "bg-gray-300")}
    [:div.w5-ns.h5-ns.h-100.shadow-3-ns.w-20.z-1
@@ -71,6 +80,7 @@
    [:div.bg-gray-700.absolute.pa2.mh2.mb2.bottom-0.o-50.br2.dn.db-ns
     {:aria-hidden "true"}
     [:span.f4 name]]
+   [recipe-rating rating]
    [:div.absolute-ns.pa2.mb2-ns.mh2.bottom-0.w-80.w-auto-ns
     {:class (when selected? "o-40")}
     [:span.f4 name]]])
@@ -140,12 +150,13 @@
                          (filter (fn [{:keys [recipe/name]}]
                                    (str/includes? (str/lower-case name) (str/lower-case @filter-value))))
                          (map-indexed
-                          (fn [idx {:recipe/keys [id link image] :as r}]
+                          (fn [idx {:recipe/keys [id link image rating] :as r}]
                             [recipe {:key id
                                      :even (even? idx)
                                      :name (:recipe/name r)
                                      :link link
                                      :image image
+                                     :rating rating
                                      :on-click (fn []
                                                  (dispatch [:meal/add {:recipe r
                                                                        :type type

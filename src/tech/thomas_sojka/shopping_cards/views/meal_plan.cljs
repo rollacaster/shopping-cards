@@ -29,6 +29,7 @@
               (rfe/href :route/select-lunch nil (meal-query-params meal-plan)))}
      [:div.h-100.br3.bg-center.cover.relative
       {:style {:background-image (if has-recipe? (str "url(" (:recipe/image (:recipe meal-plan)) ")") "")}}
+      [c/recipe-rating (:recipe/rating (:recipe meal-plan))]
       (when has-recipe? [:div.o-40.bg-orange.absolute.h-100.w-100.br3])
       [:h4.f4.fw5.mv0.br3.h-100.bw1.overflow-hidden.flex.justify-center.items-center.absolute.w-100
        {:class (r/class-names (if has-recipe? "white" "ba b--gray b--dashed gray"))}
